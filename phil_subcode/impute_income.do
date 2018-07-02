@@ -115,6 +115,7 @@ odbc load, table("paws") clear
 		keep conacct INC
 odbc exec("DROP TABLE IF EXISTS paws_inc;"), dsn("phil")
 odbc insert, table("paws_inc") dsn("phil") create
+odbc exec("CREATE INDEX paws_inc_conacct_ind ON paws_inc (conacct);"), dsn("phil")
 
 
 	rm "${temp}cbms_inc_2008.dta"

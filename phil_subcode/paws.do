@@ -52,5 +52,8 @@ use "${pawsdata}full_sample.dta", clear
 
 odbc exec("DROP TABLE IF EXISTS paws;"), dsn("phil")
 odbc insert, table("paws") dsn("phil") create
+odbc exec("CREATE INDEX paws_conacct_ind ON paws (conacct);"), dsn("phil")
+
+
 
 

@@ -34,8 +34,11 @@ use "${temp}mcf_2015_date_c.dta", clear
 	append using "${temp}mcf_2012_date_c.dta"
 	duplicates drop conacct, force
 
+
 odbc exec("DROP TABLE IF EXISTS date_c;"), dsn("phil")
 odbc insert, table("date_c") dsn("phil") create
+odbc exec("CREATE INDEX date_c_conacct ON date_c (conacct);"), dsn("phil")
+
 
 rm "${temp}mcf_2012_date_c.dta"
 rm "${temp}mcf_2015_date_c.dta"
