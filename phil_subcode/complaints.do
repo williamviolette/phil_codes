@@ -60,6 +60,7 @@
     g break_r = ( regexm(resolution,"break")==1 | regexm(resolution,"damage")==1 ) & regexm(resolution,"pipe")==1
 		replace break_r=0 if regexm(class,"WAAV")==1
 	g LEAK=(ugl_r==1 | leak_r==1 | ugl_i==1 | leak_i==1 | break_i==1 | break_r==1)
+		
 		* browse if LEAK==1
 		* browse if regexm(resolution,"downgrade")==1
 		* browse if regexm(issue,"neighbor")==1
@@ -67,7 +68,7 @@
 		* browse if regexm(resolution,"fetch")==1
 		* browse if regexm(resolution,"famil")==1
 		
-		g neigh=regexm(issue,"neigh")==1 
+		g neigh=regexm(issue,"neigh")==1
 		g nei_reso=regexm(resolution,"neigh")==1 
 		
 		*tab neigh LEAK
@@ -75,6 +76,24 @@
 			
 	drop resolution issue
 	destring year month, force replace
+
+	g date = ym(year,month)
+
+	keep conacct date ugl* leak* break* LEAK
+	keep if LEAK==1
+	
+	sort conacct date
+	by conacct: g id=_n
+	keep if id==1
+	drop id
+		** quite a few repeat complaints unfortunately ... 
+
+** PUT INTO A TABLE !!
+
+	odbc exec("DROP TABLE IF EXISTS cc;"), dsn("phil")
+	odbc insert, table("cc") dsn("phil") create
+	odbc exec("CREATE INDEX cc_conacct_ind ON cc (conacct);"), dsn("phil")
+
 
 
 *	save non_payment_exploration/temp/full_cc.dta, replace
