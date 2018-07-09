@@ -32,7 +32,7 @@ prog define load_data
 	*odbc exec("DELETE FROM billing_`1' WHERE ROWID NOT IN (SELECT min(ROWID) FROM billing_`1' GROUP BY conacct, date);"), dsn("phil")
 end
 
-/*
+*
 load_data 1 tondo 
 load_data 2 pasay 
 load_data 3 val 
@@ -45,7 +45,7 @@ load_data 9 so_cal
 load_data 10 cal_1000 
 load_data 11 muntin 
 load_data 12 para
-*/
+*
 
 cap program drop addindex
 prog define addindex

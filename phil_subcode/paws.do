@@ -48,7 +48,9 @@ use "${pawsdata}full_sample.dta", clear
 			replace SHO=30 if SHO>30
 			replace SHH=3 if SHH>3
 		
-		keep conacct barangay_id wave house_1 house_2 age hhemp hhsize low_skill SHH SHO
+		keep conacct barangay_id wave $paws_vars
+		order conacct barangay_id wave $paws_vars
+		* house_1 house_2 age hhemp hhsize low_skill SHH SHO
 
 odbc exec("DROP TABLE IF EXISTS paws;"), dsn("phil")
 odbc insert, table("paws") dsn("phil") create
