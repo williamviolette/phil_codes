@@ -1,6 +1,6 @@
 
 ** input: cc data
-** output: non_payment_exploration/temp/full_cc.dta
+** output: table cc
 	 
 	 
 	use "${complaintdata}cc_12_2012_all.dta", clear
@@ -84,8 +84,9 @@
 	
 	sort conacct date
 	by conacct: g id=_n
-	keep if id==1
-	drop id
+	by conacct: g idN=_N
+	keep if id==idN
+	drop id idN
 		** quite a few repeat complaints unfortunately ... 
 
 ** PUT INTO A TABLE !!
@@ -95,7 +96,5 @@
 	odbc exec("CREATE INDEX cc_conacct_ind ON cc (conacct);"), dsn("phil")
 
 
-
-*	save non_payment_exploration/temp/full_cc.dta, replace
 
 

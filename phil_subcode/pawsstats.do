@@ -42,15 +42,15 @@ foreach v in $paws_vars {
 	}
 }
 
-
 odbc load, exec("SELECT barangay_id, $vtempavg FROM paws AS P GROUP BY P.barangay_id") clear
 save "${temp}paws_barangay.dta", replace
-
-
 
 odbc load, exec("SELECT A.conacct, A.conacctp, A.distance, B.barangay_id, $vtemp FROM pneighbor AS A JOIN (SELECT * FROM paws GROUP BY conacct HAVING MIN(ROWID) ORDER BY ROWID) AS B ON A.conacctp = B.conacct") clear
 merge m:1 barangay_id using "${temp}paws_barangay.dta", nogen keep(3)
 
+gentable pawsstats
+
+erase "${temp}paws_barangay.dta"
 
 
 

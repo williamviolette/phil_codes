@@ -61,25 +61,42 @@ if "`run_meterseri_prep'" == "1" {
 	merge_to_mcf `v'
 	}
 	drop if conacct==.
+
 	save "${temp}meterseri.dta", replace
 }
 
 
+
 odbc load, exec("SELECT OGC_FID, meter_seri, account_no AS conacctm FROM meter") clear  dsn("phil")
 destring conacctm, replace force
+
 	replace meter_seri = subinstr(meter_seri,"-","",.)
 	replace meter_seri = strtrim(meter_seri)
 merge m:1 meter_seri using "${temp}meterseri.dta", keep(1 3) nogen
-replace conacctm = conacct if (conacctm==. | conacctm==0) & conacct!=.
+
+g conacct_total = conacctm
+replace conacct_total = conacct if (conacctm==. | conacctm==0) & conacct!=.
+	duplicates tag conacct_total, g(D)
+	replace conacct_total = 0 if conacctm!=conacct & D>0
+	drop D
+
+** 1) some accounts have two meters
+** 2) sometimes the meter serial number is not unique to accounts (get rid of these)
 
 sort OGC_FID
-keep OGC_FID conacctm
-ren conacctm conacct
+keep OGC_FID conacct_total
+ren conacct_total conacct
 replace conacct=0 if conacct==.
 
+** This part generates the conacctseri table!
 gentable conacctseri
 odbc exec("CREATE INDEX seri_ogc_ind ON conacctseri (OGC_FID);"), dsn("phil")
-odbc exec("CREATE INDEX meter_ogc_ind ON meter (OGC_FID);"), dsn("phil")
+
+
+*************************************
+** this runs for the meter table!! **
+	odbc exec("CREATE INDEX meter_ogc_ind ON meter (OGC_FID);"), dsn("phil")
+*************************************
 
 if "`run_here'"=="0" {
 exit, STATA clear

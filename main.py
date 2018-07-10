@@ -44,7 +44,7 @@ _1_b_NEIGHBORS     = 0
 _1_c_EXPORT_STATA  = 0
 _1_d_PAWNEAR   	   = 0   ## NEED TO IMPORT PAWS FIRST BEFORE RUNNING PAWNEAR
 
-_2_a_BAREA 		= 1
+_2_a_BAREA 		   = 0
 
 
 
@@ -181,6 +181,10 @@ if _1_d_PAWNEAR == 1:
     	'''
 	cur.execute(qry)
 	mat = np.array(cur.fetchall())
+	
+	#print '\n', 'first matrix', '\n'
+	#print mat
+	#print '\n'
 
 	qry = '''
         SELECT DISTINCT st_x(e.GEOMETRY) AS x, st_y(e.GEOMETRY) AS y,
@@ -193,6 +197,10 @@ if _1_d_PAWNEAR == 1:
 	cur.execute(qry)
 	mat_paws = np.array(cur.fetchall())
 
+	#print '\n', 'PAWS matrix', '\n'
+	#print mat_paws
+	#print '\n'
+
 	def dist_calc(in_mat,targ_mat):
 
 	    nbrs = NearestNeighbors(n_neighbors=1, algorithm='auto').fit(targ_mat)
@@ -202,6 +210,10 @@ if _1_d_PAWNEAR == 1:
 
 	res=dist_calc(mat[:,:2], mat_paws[:,:2])
 
+	#print '\n', 'RESULTS of distance matrix', '\n'
+	#print res
+	#print '\n'	
+
 	cur.execute('DROP TABLE IF EXISTS {};'.format(tablename))
 	cur.execute(''' CREATE TABLE {} (
 	                conacct     INTEGER,
@@ -210,8 +222,11 @@ if _1_d_PAWNEAR == 1:
 
 	rowsqry = '''INSERT INTO {} VALUES (?,?,?);'''.format(tablename)
 
+	#print 'final results:'
+
 	for i in range(0,len(mat)):
 		cur.execute(rowsqry, [mat[i][2],mat_paws[res[1][i][0]][2],res[0][i][0]])		
+		#print [mat[i][2],mat_paws[res[1][i][0]][2],res[0][i][0]]
 
 	cur.execute('''CREATE INDEX {}_conacct_ind ON {} (conacct);'''.format(tablename,tablename))
 	cur.execute('''CREATE INDEX {}_conacctp_ind ON {} (conacctp);'''.format(tablename,tablename))

@@ -1,6 +1,5 @@
 
 
-*local run_here "0"
 
 ******************
 **** SETTINGS ****
@@ -20,10 +19,5 @@ global complaintdata = "${phil_folder}data/cc/"
 
 	** variable macros **
 global paws_vars     	   = "SHH SHO house_1 house_2 age hhemp hhsize low_skill"
-*** PAWS_STATS RUNS BY HAND
 
-
-*if "`run_here'"=="0" {
-*exit, STATA clear
-*}
 
