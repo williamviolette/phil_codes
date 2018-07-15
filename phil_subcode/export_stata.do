@@ -13,18 +13,19 @@ else {
 	do "setmacros.do"	
 }
 
-global account_date_go    = 0
-global paws_go  		  = 0
-global impute_income_go   = 0
-global census_clean_go    = 0
-global paws_density_go    = 0
-global billing_go   	  = 0
-global ar_go 			  = 0
-global complaints_go      = 0
+global account_date_go        = 0
+global paws_go  		      = 0
+global impute_income_go       = 0
+global census_clean_go        = 0
+global paws_density_go        = 0
+global billing_go   	      = 0
+global ar_go 			  	  = 0
+global complaints_go      	  = 0
+global censusbarangaymerge_go = 0
+
 
 
 cd "${phil_folder}"
-
 
 if $account_date_go == 1 {
 	** global: $temp, $database  ** input:  database/clean/mcf/..  ** output: TABLE date_c
@@ -48,8 +49,7 @@ if $census_clean_go == 1 {
 
 if $billing_go == 1 {
 	** global: $billingdata input: DTA $billingdata(all regions)_billing_2008_2015.dta, ** output: TABLE billing_1 through 12
-	* issues : 1.) non-matching between areas; *  2.) actread vs. full-read (create indicator) *  3.) billing type (create indicator)
-	do "${subcode}billing.do"
+	do "${subcode}billing.do" //	* issues : 1.) non-matching between areas; *  2.) actread vs. full-read (create indicator) *  3.) billing type (create indicator)
 }
 
 if $ar_go == 1 {
@@ -59,10 +59,15 @@ if $ar_go == 1 {
 
 if $complaints_go == 1 {
 	** global: $complaintdata  ** input: DTA $complaintdata(all files)  ** output: TABLE cc
-	display "complaints"
-	do "${subcode}complaints.do"
-	* define disconnection using non-payment of bills after complaint!!
+	do "${subcode}complaints.do" // define disconnection using non-payment of bills after complaint!!
 }
+
+if $censusbarangaymerge_go == 1 {
+	** global: $temp, $censusgeodata ** input: $censusgeodata(psgc.dta, psgc_region_IV.dta), TABLE barangay ** TABLE censusbar * input : TABLE
+	do "${subcode}censusbarangaymerge.dta"
+}
+
+
 
 
 if "`run_here'"=="0" {

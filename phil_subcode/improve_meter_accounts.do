@@ -70,18 +70,24 @@ if "`run_meterseri_prep'" == "1" {
 odbc load, exec("SELECT OGC_FID, meter_seri, account_no AS conacctm FROM meter") clear  dsn("phil")
 destring conacctm, replace force
 
+
+** 1) some accounts have two meters
+** 2) sometimes the meter serial number is not unique to accounts 
+
 	replace meter_seri = subinstr(meter_seri,"-","",.)
 	replace meter_seri = strtrim(meter_seri)
 merge m:1 meter_seri using "${temp}meterseri.dta", keep(1 3) nogen
 
-g conacct_total = conacctm
+g long conacct_total = conacctm
 replace conacct_total = conacct if (conacctm==. | conacctm==0) & conacct!=.
-	duplicates tag conacct_total, g(D)
-	replace conacct_total = 0 if conacctm!=conacct & D>0
-	drop D
 
-** 1) some accounts have two meters
-** 2) sometimes the meter serial number is not unique to accounts (get rid of these)
+	bysort conacct_total: g cn = _n // keeps at least one of duplicates (same owner probs has nearby meters)
+	replace conacct_total = 0 if cn!=1
+	drop cn
+
+	*duplicates tag conacct_total, g(D) // gets rid of duplicates !
+	*replace conacct_total = 0 if conacctm!=conacct & D>0
+	*drop D
 
 sort OGC_FID
 keep OGC_FID conacct_total
