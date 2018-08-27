@@ -9,7 +9,9 @@ global phil_folder="/Users/williamviolette/Documents/Philippines/"
 global subcode="${phil_folder}phil_analysis/phil_code/phil_subcode/"
 
 	** data locations **
+global generated     = "${phil_folder}phil_analysis/phil_generated/"
 global temp          = "${phil_folder}phil_analysis/phil_temp/"
+global data 		 = "${phil_folder}data/"
 global database      = "${phil_folder}database/"
 global pawsdata      = "${phil_folder}data/paws/clean/"
 global cbmsdata      = "${phil_folder}data/backup_cbms/"

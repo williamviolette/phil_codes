@@ -1,16 +1,28 @@
 
 
+	** global : temp
+	** input  : TABLE billing_ALL, date_c, neighbor, cc
+	** temp   : TABLE leakneighbors, leakers, LN_total  DTA {temp} L_ALL.dta, LN_ALL.dta, leakers.dta, LN_total.dta
+
+
+
+** decision process : use = sqrt(A) / (sqrt(N) + 1)
+	* 1. only thing from leaks is distance to hassle mapping
+	* 2. only way to get distance for sharers is with stronggg assumptions
+	* 3. can vary the distribution and see if it matters tho
+	* assumption :: distance measures houses for estimation...
+	***           - not great but better than nothing... 
+
+	* could be errors in definition of pre and post periods!!
 
 ** control panel **
 
 global leak_data_prep_1_ = "yes" // get the initial leak sample to determine disconnection
 global leaker_define_2_  = "yes" // USES NEIGHBORS
-global leak_compile_3_   = "yes"
 
 
 * 1. check the distance matrix, did I do it right????
 * 2. different criteria for leaks (clean the exact same way?)
-*
 
 *** OLD CHECK *
 * leaks_clean_v1_add.do
@@ -18,8 +30,6 @@ global leak_compile_3_   = "yes"
 ** complaints included: 72,000           // checks out !
 ** key leakers identified: 3,959 (5.5%)  // get 
 ** able to merge with geo-data: 2,200 
-
-
 
 *** NEW CHECK ***
 ** complaints included: 25,253 
@@ -164,55 +174,9 @@ if "$leaker_define_2_"=="yes" {
 
 save "${temp}leakers.dta", replace
 
-* odbc load, exec("SELECT *  FROM leakers") clear
-* use "${phil_folder}savings/temp/key_leakers_2.dta", clear
-
-
-
- 
-*use "${phil_folder}sharing/temp/full_nearest_10_v2.dta", clear
-*	destring inputid targetid, replace force
-*	bys inputid: g n1=_n==1
-*	expand 2 if n1==1, gen(expand)
-*	replace targetid=inputid if expand==1
-*	replace distance=-1 if expand==1
-*	drop n1
-*	
-*		ren inputid conacct
-*			merge m:1 conacct using "${temp}leakers.dta"
-*			keep if _merge==3
-*			drop _merge
-*			ren date_leak date_c_treat
-*			keep conacct targetid distance date_c_treat
-*		ren conacct conacct_treat
-*		ren targetid conacct
-*	
-*	keep if distance<=5
-*	
-*	bys conacct distance: g c_n=_n
-*	sort  conacct_treat c_n distance
-*	by conacct_treat: g gn=_n
-*	g dist_rank=gn if c_n==1
-*	drop gn c_n
-*	keep if dist_rank<=5
-*	
-*		egen min_dist=min(distance), by(conacct) // closest distance
-*		keep if distance==min_dist
-*		drop min_dist
-*		
-*		duplicates drop conacct, force
-*		ren conacct conacctn
-*		ren conacct_treat conacct
-*		ren dist_rank rank
-*		replace rank=0 if distance==-1
-*		drop expand
-*
-*		*drop dist_rank
-*	gentable leakneighbors
-
 
 	**** DISTANCE AND RANK CUT IS HERE ! ****
-	odbc load, exec("SELECT C.*, A.date_l, A.b FROM neighbor AS C JOIN leakers AS A ON C.conacct = A.conacct WHERE C.rank<=6 AND C.distance<=5") clear
+	odbc load, dsn(phil) exec("SELECT C.*, A.date_l, A.b FROM neighbor AS C JOIN leakers AS A ON C.conacct = A.conacct WHERE C.rank<=6 AND C.distance<=5") clear
 
 		bys conacct: g n1=_n==1
 		expand 2 if n1==1, gen(expand)
@@ -225,16 +189,13 @@ save "${temp}leakers.dta", replace
 		keep if distance==min_dist
 		drop min_dist
 
-	*duplicates tag conacctn, g(D)
-	*browse if D>0
-		** there's an issue here with the matching of neighbors
-		** ... need to fix in neighbor's data data? So small, I'm gonna drop for now..
-	duplicates drop conacctn, force
+	*duplicates tag conacctn, g(D)   // 	** there's an issue here with the matching of neighbors
+	*browse if D>0   // 		** ... need to fix in neighbor's data data? So small, I'm gonna drop for now..
 
+		duplicates drop conacctn, force
 	gentable leakneighbors
 
-	*** get leak data for all the neighbors
-
+		*** get leak data for all the neighbors
 	forvalues r=1/12 {
 		leak_data_neighbors `r'
 	}
@@ -244,194 +205,7 @@ save "${temp}leakers.dta", replace
 	}
 	duplicates drop conacct date, force
 	save "${temp}LN_total.dta", replace
-
+	gentable LN_total
 }
-
-
-
-**** leak_compile_3_
-
-if "$leak_compile_3_"=="yes" {
-
-
-
-*odbc load, exec("SELECT A.*, B.barea, B.pop, B.density FROM pawsstats AS A  LEFT JOIN barea AS B ON A.conacct = B.conacct JOIN leakneighbors AS C ON A.conacct = C.conacctn") clear
-*	ren distance distancep
-
-
-* odbc load, exec("SELECT * FROM bstats") clear
-
-
-
-odbc load, exec("SELECT A.conacct, B.* FROM bmatch AS A  LEFT JOIN bstats AS B ON A.OGC_FID = B.OGC_FID JOIN leakneighbors AS C ON A.conacct = C.conacctn") clear
-
-	merge 1:m conacct using "${temp}LN_total.dta", keep(2 3) nogen
-
-*use "${temp}LN_total.dta", clear
-
-	keep if class==1 | class==2
-	drop if c>120 | c<0 // this is an important parameter right here...
-	drop if date<date_c
-	drop date_c
-
-	keep if distance<5
-	keep if rank<=5
-
-	g T = date - date_l
-	g c_nei = c if distance!=-1
-	egen C = sum(c_nei), by(conacct_leak date)
-
-
-	** smaller effect than in the paper .. is that an issue?!
-	*  1. don't worry about neighbors in the conacct near threshold... (close)
-
-
-*** g2 : heterogeneity by distance and rank 
-
-cap program drop est_total
-program define est_total
-	local cluster_var "conacct_leak"
-	local outcome "C"
-	local keep_low "-24"
-	local keep_high "12"
-	local treat_thresh "2"
-	*drop if T==0 | T==1
-	preserve
-		g treat = T>`treat_thresh' & T<.
-		g treat_T = treat*T
-		keep if T>=`keep_low' & T<=`keep_high'
-		duplicates drop `cluster_var' date, force
-		areg `outcome' treat treat_T T, absorb(`cluster_var') cluster(`cluster_var') r 		
-		areg `outcome' treat, absorb(`cluster_var') cluster(`cluster_var') r 		
-	
-	restore
-end
-
-est_total
-
-
-*** g1 : just total neighbor usage
-
-cap program drop graph_neighbor
-program define graph_neighbor
-	local cluster_var "conacct_leak"
-	local outcome "C"
-	local time "50"
-	duplicates drop `cluster_var' date, force
-	preserve
-		forvalues r = 1/`=`time'' {
-		g T_`r' = T==`=`r'-25'
-		}
-		qui areg `outcome' T_* date, absorb(`cluster_var') cluster(`cluster_var') r 
-	   	parmest, fast
-	   	g time = _n
-	   	keep if time<=`=`time''
-	   	replace time = time - `=`time'/2'
-    	tw (scatter estimate time) || (rcap max95 min95 time)
-   	restore
-end
-
-
-graph_neighbor
-
-
-
-
-
-
-cap program drop graph_ind
-program define graph_ind
-	local cluster_var "conacct"
-	local outcome "c"
-	local keep_low "-24"
-	local keep_high "12"
-	local treat_thresh "2"
-	preserve
-			*g d=distance if distance>0
-			*egen dc=cut(d), group(4)
-			*tab dc, g(DC_)
-			*local het "DC_1 DC_2 DC_3 DC_4"
-			*	g house_avg = (house_1_avg + house_2_avg) / 2
-			*	keep if pop>2000
-		local het "distance house_avg"
-		local int "no"
-
-			*egen max_distancep = max(distancep), by(conacct_leak)
-			*sum max_distancep, detail
-			*keep if max_distancep<`=r(p25)'
-		drop if distance==-1
-		g treat = T>`treat_thresh' & T<.
-		foreach v in `het' {
-		g treat_`v' = treat*`v'	
-			if "`int'"=="yes" {
-				g treat_`v'_T = T * `v'
-				g treat_`v'_T_post = T * treat_`v'
-			}
-		}
-		g T_treat = T*treat
-		keep if T>=`keep_low' & T<=`keep_high'
-			local int_controls ""
-			if "`int'"=="yes" {
-				local int_controls "T T_treat date"
-			}
-		duplicates drop `cluster_var' date, force
-			areg `outcome' treat $int_controls, absorb(`cluster_var') cluster(`cluster_var') r
-			areg `outcome' treat treat_* $int_controls, absorb(`cluster_var') cluster(`cluster_var') r	
-	restore
-end
-
-graph_ind
-
-
-
-}
-
-
-
-
-
-
-
-
-** 2 ** make graphs
-
-/*
-
-local time "50"
-forvalues r = 1/`=`time'' {
-	g T_`r' = T==`=`r'-25'
-}
-
-g cm = c==.
-
-qui areg read T_* i.date, absorb(conacct) cluster(conacct) r 
-
-   parmest, fast
-
-   g time = _n
-   keep if time<=`=`time''
-
-   tw (scatter estimate time) || (rcap max95 min95 time)
-
-
-
-
-/*		*** THIS IS JUST THE AR PART *** ;
-	if "${ar}"=="yes" {;
-	save "${temp}L_bill_`1'.dta", replace;
-	odbc load, exec( "SELECT A.*, B.date AS date_l 
-	FROM ar_`1' AS A JOIN cc AS B ON A.conacct = B.conacct;"
-	)  dsn("phil")	clear;
-	save "${temp}L_ar_`1'.dta", replace;
-
-	use "${temp}L_bill_`1'.dta", clear;
-	merge 1:1 conacct date using "${temp}L_ar_`1'.dta";
-	ren _merge M;
-	save "${temp}L_`1'.dta", replace;
-	erase "${temp}L_bill_`1'.dta";
-	erase "${temp}L_ar_`1'.dta";
-	};
-*/
-
 
 

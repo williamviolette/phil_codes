@@ -1,0 +1,26 @@
+notes
+
+8/23/18 :
+
+	- new sampling procedure : do random barangays, then random accounts within (to ensure enough neighbors !)  Issue: over-representation of small barangays (redo with 3?)
+
+
+	- complete alt_sub like we used to (maybe doublecheck later)
+
+
+8/24/18 :
+
+	- split leaks into three files, leaks.do (defines leaks), leaks_sample.do (outputs sample), leaks_graph.do (makes graphs)
+
+	- do robustness both WITH and WITHOUT Barangay oversampling..  * could make a table comparing means
+
+	- put all output into generated folder
+
+	- how do I handle estimating SHH? does it enter into controls? because that's a problem ... * no i think its ok in estimation (just divide by SHH..)
+
+
+8/27/18 :
+
+	- found proper code! make sure it all lines up!!
+
+
