@@ -4,35 +4,84 @@
 
     %{a
     
+
     
 clear;
 rng(1);
+
+% s sequence
+%%% tag_run         = ["v2", "v2", "upper_trim", "upper_trim", "upper_trim", "no_zero"] ; 
+%%% title_run       = ["s1", "s2", "s3",         "s4",         "s5",        "s6"];      
+%%% signu_run       = [ 3   5     2    3     5   5 ];
+%%% group_run       = [ 1 1 0    0    0   0 ];
+
+% sn sequence
+%%%tag_run         = ["upper_trim", "upper_trim", "upper_trim"] ; 
+%%%title_run       = [ "ut_sn6",         "ut_sn7",       "ut_sn8"     ];      
+%%%signu_run       = [   6    7    8    ];
+%%%group_run       = [   0    0    0   ];
+
+% sn v2
+%tag_run         = ["v2", "v2"] ; 
+%title_run       = [ "v2_sn6",         "v2_sn7"    ];  
+%signu_run       = [   6    7    ];
+%group_run       = [   1    1     ];
+
+% with and without groups %%
+tag_run         = [ "v1", "v1"  ] ;
+title_run       = [ "v1_nogroup",         "v1_withgroup"    ];  
+signu_run       = [   5    5    ];
+group_run       = [   0    1    ];
+
+% s sequence double
+%%%tag_run         = [ "upper_trim"] ; 
+%%%title_run       = [ "s5doublecheck"];      
+%%%signu_run       = [  5   ];
+%%%group_run       = [  0   ];
+
+
+for r=1:size(tag_run,2) 
+    
 print                   = 1;  %%% $$$ DEFAULT OPTIONS
-est_version             = 37;
-tag                     = 'v2';
+est_version             = 8;
+%tag                     = 'v2';
+       % \ % \ %  RUNRUNRUN % \ % \ % 
+tag                     = tag_run(r);
 only_alpha              = 0;
 mac                     = 1 ;
-moffitt                 = 1;    % 0: standard % 1: norm added
+moffitt                 = 1 ;    % 0: standard % 1: norm added
 control_max             = 10;
-est_title               = 'with smm1'; 
-cd_dir                  = '/Users/williamviolette/Documents/Philippines/phil_analysis/phil_generated/';
+%est_title               = ' try trimmed with small sample and 2 sig nu'; 
+       % \ % \ %  RUNRUNRUN % \ % \ % 
+est_title = title_run(r);
+
+cd '/Users/williamviolette/Documents/Philippines/phil_analysis/phil_code/phil_matlab/';
+cd_dir  = '/Users/williamviolette/Documents/Philippines/phil_analysis/phil_generated/';
 %%% $$$  PERFECT VARIATION OPTIONS
 perf_var                = 0;
-        Q_obs_range     = [10 50];
+        Q_obs_range     = [10 80];
         p_var           = 2;
         i               = 200;
         reps            = 100;
-        controls        = [3 5 9      9   2]; % [sig_ep sig_nu alpha other_controls(1 is hhsize, 2 is SHH)  SHH_control(0:off 2:on!)]
+        
+       % \ % \ %  RUNRUNRUN % \ % \ % 
+%       controls        = [3  2  9      9   2]; % [sig_ep sig_nu alpha other_controls(1 is hhsize, 2 is SHH)  SHH_control(0:off 2:on!)]
+       controls        = [3  signu_run(r)  9      9   2]; % [sig_ep sig_nu alpha other_controls(1 is hhsize, 2 is SHH)  SHH_control(0:off 2:on!)]
+
 
 %%% $$$  REAL DATA OPTIONS
 real_data               = 1; % first: controls data, second: controls random subsample
-        sample=    [   1    0    0   1 ]; % standard rts rtc  GROUP
-        size_smp = [   100    0   0   ];
+
+       % \ % \ %  RUNRUNRUN % \ % \ % 
+%        sample   = [   1    0    0   1  ]; % standard rts rtc  GROUP
+        sample   = [   1    0    0   group_run(r)  ]; % standard rts rtc  GROUP
+        size_smp = [   5000    0   0    ];
 %%% $$$ STARTING VALUES
         TUNE = 1; %% set linear tuning parameter
      sig_ep  = 5.*ones(1,controls(1));            
      sigma_1 = 12.*ones(1,controls(2) + (controls(5)>0).*2); % need to keep this small?? what if it gets too big??
      alpha_1 =  .5.*ones(1,controls(3)) ;
+%    alpha_1 = [.5 .1.*ones(1,controls(3)-1)];
 %%% $$$ PH ESTIMATION OPTIONS
      PH = 5;
      ph_controls = [ 1   1 ] ;
@@ -70,14 +119,14 @@ smm_est_option  = [ 4 ... % [0 (else): F,FA ;  1: F,FA,PA ;  2: F,PA (FA=0) ;  3
     appending = 0 ;    
     options=optimoptions('fminunc','Algorithm','trust-region','GradObj','on','Hessian','on','MaxIter',10000,'TolX',1e-10, 'TolFun', 1e-10 );
 if appending~=1
-    fileID=fopen(strcat('eNORM',num2str(est_version),' ',est_title,'.txt'),'w');
+    fileID=fopen(strcat(cd_dir,'results/','eNORM',num2str(est_version),' ',est_title,'.txt'),'w');
     fprintf(fileID,'%s\r\n',est_title);
     fprintf(fileID,'%s\r\n',' ');
 end
 
 
 
-for i = 4:30
+%for i = 4:30
 %   BOOT=[i];
                 %{a
   [~]=sim_build_normc_real_data_v8(print,tag,mac,sample,size_smp,...
@@ -107,7 +156,7 @@ for i = 4:30
  %                   1,TUNE,BOOT,boot_max,boot_estimates,alt_sample,ESTIMATION_OPTION,COST_INPUTS,C_FEE_DISCOUNT,income_percentile ); % set real data
                 %} 
     %{a
-end
+%end
     %}    
     %{a
     
@@ -142,4 +191,5 @@ if appending~=1
     fclose(fileID);
 end
 
+end
     %}

@@ -1,8 +1,18 @@
 
-
 	** global : generated, subcode
 	** input  : TABLE bmatch, bstats, LN_total, pawsstats, price, alt_sub
 	** output : CSV {generate} post.csv, post_t.csv, g.csv  TABLE leaks
+
+
+local version "v1"
+* local version "v2"
+
+global c_min_leak = "0"
+global c_max_leak = "100"
+
+if "`version'"=="v2" {
+	global c_max_leak = "120"
+}
 
 
 cap program drop gentable
@@ -32,7 +42,7 @@ P.barangay_id, P.SHH, P.SHO, P.house_1, P.house_2, P.age, P.hhemp, P.hhsize, P.l
 	drop if date<date_c
 	drop date_c
 
-	drop if c>120 | c<0 // this is an important parameter right here...
+	drop if c>${c_max_leak} | c<${c_min_leak} // this is an important parameter right here...
 	
 	keep if distance<5
 	keep if rank<=4
@@ -104,19 +114,22 @@ P.barangay_id, P.SHH, P.SHO, P.house_1, P.house_2, P.age, P.hhemp, P.hhsize, P.l
 
 	do "${subcode}generate_controls.do" 
 
+sort g_id conacct date
+
 *** PRE DATA ***
 preserve
 	** PRE : FULL DATA
 		keep if T<1
 		order c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS*	
-		export delimited "${generated}pre_v2.csv", delimiter(",") replace
+		export delimited "${generated}pre_`version'.csv", delimiter(",") replace
 	** PRE : TIME
 		keep conacct
-		bys conacct: g t=_N
+		g o = 1
+		egen t = sum(o), by(conacct)
 		duplicates drop conacct, force
 		keep t
 		*tab t
-		export delimited "${generated}pre_t_v2.csv", delimiter(",") replace	
+		export delimited "${generated}pre_t_`version'.csv", delimiter(",") replace	
 restore
 
 
@@ -125,14 +138,15 @@ preserve
 	** POST : FULL DATA
 		keep if T>=1
 		order c p_L p_H1 p_H2 p_H3 gamma alt_sub size SHH_G CONTROLS*
-		export delimited "${generated}post_v2.csv", delimiter(",") replace	
+		export delimited "${generated}post_`version'.csv", delimiter(",") replace	
 	** POST : TIME 
 		keep conacct
-		bys conacct: g t=_N
+		g o = 1
+		egen t = sum(o), by(conacct)
 		duplicates drop conacct, force
 		keep t
 		*tab t
-		export delimited "${generated}post_t_v2.csv", delimiter(",") replace			
+		export delimited "${generated}post_t_`version'.csv", delimiter(",") replace			
 restore
 
 *** G ***
@@ -140,7 +154,7 @@ preserve
 		duplicates drop g_id, force
 		keep g
 		tab g
-		export delimited "${generated}g_v2.csv", delimiter(",") replace
+		export delimited "${generated}g_`version'.csv", delimiter(",") replace
 restore
 
 *** export graph table ***

@@ -1,0 +1,3 @@
+with smm1
+ 
+   Data   Standard:1  R-to-S:0  R-to-C:0   Sizes:10000

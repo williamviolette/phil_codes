@@ -1,5 +1,4 @@
 
-
 ** pull full sample for billing
 
 	** global : generated, temp, subcode
@@ -7,6 +6,11 @@
 	** temp   : TABLE bill_sample_temp, pop_c, DTA {temp} price_avg.dta
 	** output : CSV {generated} standard.csv, standard_t.csv, alt.csv
 
+local version "v1"
+* local version "upper_trim"
+* local version "no_zero"
+* local version "big_t"
+* local version "limit_var"
 
 global bill_sample_upper = "6000"
 global bill_sample_total = "5000"
@@ -14,14 +18,35 @@ global b_mult = "5"
 global sample_per_upper = "`=$bill_sample_upper / $b_mult'"
 
 global c_low     = "0"
-global c_high    = "120"
+global c_high    = "100"
 global date_low  = "600"
 global date_high = "664"
 global t_min     = "10"
 
+
+** ** CUSTOM DATASET CRITERIA ** **
+if "`version'" == "v2" {
+	global c_high = "120"
+}
+if "`version'" == "no_zero" {
+	global c_low = "1"
+}
+if "`version'" == "upper_trim" {
+	global c_high = "100"
+}
+if "`version'" == "limit_var" {
+	global c_low = "5"
+	global c_high = "60"
+	global t_min = "60"
+}
+if "`version'" == "big_t" {
+	global t_min = "60"
+}
+
+
 global sample_by_barangay_1_ = "no"
 global compile_full_sample_2_ = "yes"
-global compile_alt_3_ = "yes"
+global compile_alt_3_ = "no"
 
 *********************************
 ****** PREPARING DATA HERE ******
@@ -103,14 +128,16 @@ forvalues r = 1/12 {;
 clear;
 #delimit cr;
 
-odbc load, exec("`bill_query'")  dsn("phil") clear
-	duplicates drop conacct date, force
+odbc load, exec("`bill_query'")  dsn("phil") clear  
+
+   	duplicates   drop   conacct   date,  force
 
 *** trim sample 
-	keep if c>=$c_low & c<=$c_high   
-	keep if date>=$date_low & date<=$date_high  
+	keep if c>=${c_low} & c<=${c_high}   
+	keep if date>=${date_low} & date<=${date_high}
 	bys conacct: g T=_N   	
-	drop if T<=${t_min}        
+		drop if T<=${t_min}  
+		drop T      
 
 *** minimum number of accounts per barangay ...  could be improved
 	set seed 10
@@ -147,18 +174,22 @@ odbc load, exec("`bill_query'")  dsn("phil") clear
 
 	do "${subcode}generate_controls.do" 
 
+sort conacct date
+
 ** FULL DATA EXPORT
 	preserve 
 		keep  c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* hhsize SHO 
 		order c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* hhsize SHO 
-		export delimited "${generated}standard_v2.csv", delimiter(",") replace 
+		export delimited "${generated}standard_`version'.csv", delimiter(",") replace 
 	restore 
 
 ** TIME EXPORT
 	preserve 
+		g o=1
+		egen T = sum(o), by(conacct)
 		duplicates drop conacct , force 
 		keep T 
-		export delimited "${generated}standard_t_v2.csv", delimiter(",") replace 
+		export delimited "${generated}standard_t_`version'.csv", delimiter(",") replace 
 	restore 
 
 ** EXPORT HHs PER BARANGAY  (to sample alt)
@@ -230,7 +261,7 @@ if "$compile_alt_3_" == "yes" {
 preserve
 	keep  c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* 
 	order c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS*
-	export delimited "${generated}alt_v2.csv", delimiter(",") replace
+	export delimited "${generated}alt_`version'.csv", delimiter(",") replace
 restore
 
 }

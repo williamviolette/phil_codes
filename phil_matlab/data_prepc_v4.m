@@ -8,7 +8,6 @@ function [t,Q_obs,k_1,k_2,k_3,p_1,p_2,p_3,p_4,CONTROL]=...
  mac=0
  tag='v1_test'
 %}
-cd(cd_dir)
 
 if isempty(BOOT)~=1
     rng(BOOT(1));
@@ -18,14 +17,14 @@ end
 
  
 if sample(1)==1
-    t          = csvread(strcat('standard_t_',tag,'.csv'),1,0)  ;
+    t          = csvread(strcat(cd_dir,'standard_t_',tag,'.csv'),1,0)  ;
     if size_smp(1)>0
         t=t(1:size_smp(1));
     end
-        X          = csvread(strcat('standard_',tag,'.csv'),1,0, [ 1 0 sum(t) (4+control_size) ]);
+        X          = csvread(strcat(cd_dir,'standard_',tag,'.csv'),1,0, [ 1 0 sum(t) (4+control_size) ]);
     if isempty(BOOT)~=1
         [i_B,t,~] = boot_testing(t);  
-        X          = csvread(strcat('standard_',tag,'.csv'),1,0, [ 1 0 max(i_B) (4+control_size) ]);
+        X          = csvread(strcat(cd_dir,'standard_',tag,'.csv'),1,0, [ 1 0 max(i_B) (4+control_size) ]);
         X = X(i_B,:);
         %{
                     if BOOT(1)>1
@@ -41,21 +40,21 @@ if sample(1)==1
                         csvwrite(strcat('tBOOT',num2str(est_version),'.csv'),t); 
                     end
                 %}
-                        dlmwrite(strcat('BOOT\iBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),i_B,'precision',20);    
-                        csvwrite(strcat('BOOT\tBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),t);       
+                        dlmwrite(strcat(cd_dir,'BOOT\iBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),i_B,'precision',20);    
+                        csvwrite(strcat(cd_dir,'BOOT\tBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),t);       
     end
 end
 
 
 if sample(2)==1
-    t2          = csvread(strcat('rts_t_',tag,'.csv'),1,0)  ;
+    t2          = csvread(strcat(cd_dir,'rts_t_',tag,'.csv'),1,0)  ;
     if size_smp(2)>0
         t2=t2(1:size_smp(2));
     end
-    X2          = csvread(strcat('rts_',tag,'.csv'),1,0, [ 1 0 sum(t2) (4+control_size) ]);
+    X2          = csvread(strcat(cd_dir,'rts_',tag,'.csv'),1,0, [ 1 0 sum(t2) (4+control_size) ]);
     if isempty(BOOT)~=1
         [i_B2,t2,~] = boot_testing(t2); 
-        X2          = csvread(strcat('rts_',tag,'.csv'),1,0, [ 1 0 max(i_B2) (4+control_size) ]);
+        X2          = csvread(strcat(cd_dir,'rts_',tag,'.csv'),1,0, [ 1 0 max(i_B2) (4+control_size) ]);
         X2 = X2(i_B2,:);
     end
     if sample(1)==1
@@ -68,14 +67,14 @@ if sample(2)==1
 end
 
 if sample(3)==1
-    t3          = csvread(strcat('rtc_t_',tag,'.csv'),1,0)  ;
+    t3          = csvread(strcat(cd_dir,'rtc_t_',tag,'.csv'),1,0)  ;
     if size_smp(3)>0
         t3=t3(1:size_smp(3));
     end
-    X3          = csvread(strcat('rtc_',tag,'.csv'),1,0, [ 1 0 sum(t3) (4+control_size) ]);
+    X3          = csvread(strcat(cd_dir,'rtc_',tag,'.csv'),1,0, [ 1 0 sum(t3) (4+control_size) ]);
     if isempty(BOOT)~=1
         [i_B3,t3,~] = boot_testing(t3);
-        X3          = csvread(strcat('rtc_',tag,'.csv'),1,0, [ 1 0 max(i_B3) (4+control_size) ]);
+        X3          = csvread(strcat(cd_dir,'rtc_',tag,'.csv'),1,0, [ 1 0 max(i_B3) (4+control_size) ]);
         X3 = X3(i_B3,:);
     end
     if sample(1)==1 || sample(2)==1
@@ -104,12 +103,12 @@ end
 
 if length(sample)>3
     if sample(4)==1
-        t4      = csvread(strcat('pre_t_',tag,'.csv'),1,0);
-        X4      = csvread(strcat('pre_',tag,'.csv'),1,0, [ 1 0 sum(t4) (4+control_size) ]);
+        t4      = csvread(strcat(cd_dir,'pre_t_',tag,'.csv'),1,0);
+        X4      = csvread(strcat(cd_dir,'pre_',tag,'.csv'),1,0, [ 1 0 sum(t4) (4+control_size) ]);
             if isempty(BOOT)~=1
-                g          = csvread(strcat('g_',tag,'.csv'),1,0)  ;   
+                g          = csvread(strcat(cd_dir,'g_',tag,'.csv'),1,0)  ;   
                 [~,~,gBindex,i_GB,t4] = boot_testing(g,t4);
-                X4      = csvread(strcat('pre_',tag,'.csv'),1,0, [ 1 0 max(i_GB) (4+control_size) ]);
+                X4      = csvread(strcat(cd_dir,'pre_',tag,'.csv'),1,0, [ 1 0 max(i_GB) (4+control_size) ]);
                 X4=X4(i_GB,:); %%
                 %{
                     if BOOT(1)>1
@@ -120,7 +119,7 @@ if length(sample)>3
                         csvwrite(strcat('gBOOT',num2str(est_version),'.csv'),gBindex);            
                     end
                %}
-                    csvwrite(strcat('BOOT\gBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),gBindex);
+                    csvwrite(strcat(cd_dir,'BOOT\gBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),gBindex);
             end
         if sample(1)==1 || sample(2)==1 || sample(3)==1
             X=[X;X4];

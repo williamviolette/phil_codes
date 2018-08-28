@@ -3,6 +3,14 @@ function [TRUTH,a,x1,se,TOC]=sim_build_normc_real_data_v8(print,tag,mac,sample,s
                     perf_var,Q_obs_range,p_var,i,reps,fileID,options,only_alpha,real_data,est_version,controls,BOOT,TUNE,cd_dir)
 
                 
+                
+if mac==1
+    slash = '/';
+else
+    slash = '\';
+end
+
+                
 if length(controls)>=4
     control_size=controls(4);
 else
@@ -53,13 +61,12 @@ real_data = real_data(1);
     gamma=repelem(gamma1',t,1);   
     
 
-if isempty(TUNE)~=1
-    if real_data~=1
-        Q_obs=moffitt_prep_norm_med_VAR_tune(t,k_1,k_2,k_3,p_1,p_2,p_3,p_4,...
+
+if real_data~=1
+    Q_obs=moffitt_prep_norm_med_VAR_tune(t,k_1,k_2,k_3,p_1,p_2,p_3,p_4,...
                 gamma,SIG_NU,SIG_EP,ALPHA_1,TUNE);
-    end
-    obj = @(a)est_nmid_general_tune(a,t,Q_obs,k_1,k_2,k_3,p_1,p_2,p_3,p_4,D,SE,CA,control_id,TUNE);
 end
+    obj = @(a)est_nmid_general_tune(a,t,Q_obs,k_1,k_2,k_3,p_1,p_2,p_3,p_4,D,SE,CA,control_id,TUNE);
 
 
     TRUTH = [ sig_ep sigma_1 alpha_1 gamma1 ];
@@ -85,9 +92,9 @@ end
             csvwrite(strcat('BOOT\xBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),x1');            
         end
         %}
-            dlmwrite(strcat('BOOT\xBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),x1','delimiter',',','precision',20);    
+            dlmwrite(strcat('BOOT',slash,'xBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),x1','delimiter',',','precision',20);    
     else
-        dlmwrite(strcat('x',num2str(est_version),'.csv'),x1','delimiter',',','precision',20);
+        dlmwrite(strcat(cd_dir,'results',slash,'x',num2str(est_version),'.csv'),x1','delimiter',',','precision',20);
     end
     
                             
@@ -112,16 +119,11 @@ fprintf(fileID,'%s\t %s\t %s\t %s\t \r\n','Truth','Est','SE','Dev');
 fprintf(fileID,'%1.2f\t %1.2f\t %1.2f\t %1.2f\t \r\n',[TRUTHp; x1p; sep; dev]);
 fprintf(fileID,'%s\r\n',' ');
 
-if mac==1
-    slash = '/';
-else
-    slash = '\';
-end
 
-dlmwrite(strcat('tables',slash,'TRUTH_step1_',num2str(est_version),'.csv'),TRUTH','delimiter',',','precision',20);
-dlmwrite(strcat('tables',slash,'TRUTHp_step1_',num2str(est_version),'.csv'),TRUTHp,'delimiter',',','precision',20);
-dlmwrite(strcat('tables',slash,'ESTp_step1_',num2str(est_version),'.csv'),x1p,'delimiter',',','precision',20);
-dlmwrite(strcat('tables',slash,'OBS_step1_',num2str(est_version),'.csv'),length(Q_obs),'delimiter',',','precision',20);
+dlmwrite(strcat(cd_dir,slash,'tables',slash,'TRUTH_step1_',num2str(est_version),'.csv'),TRUTH','delimiter',',','precision',20);
+dlmwrite(strcat(cd_dir,slash,'tables',slash,'TRUTHp_step1_',num2str(est_version),'.csv'),TRUTHp,'delimiter',',','precision',20);
+dlmwrite(strcat(cd_dir,slash,'tables',slash,'ESTp_step1_',num2str(est_version),'.csv'),x1p,'delimiter',',','precision',20);
+dlmwrite(strcat(cd_dir,slash,'tables',slash,'OBS_step1_',num2str(est_version),'.csv'),length(Q_obs),'delimiter',',','precision',20);
 
 
 end

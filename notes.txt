@@ -23,4 +23,10 @@ notes
 
 	- found proper code! make sure it all lines up!!
 
+	- do leaks graphs still !
+
+	- the cut for HH size is actually with percentiles in generate_controls.m (change in paper?)
+
+	- need to make more extensive descriptive tables for the appendix!!!
+
 
