@@ -13,7 +13,7 @@ cap program drop est_total
 program define est_total
 	local cluster_var "conacct_leak"
 	local outcome "C"
-	local keep_low "-24"
+	local keep_low "-12"
 	local keep_high "12"
 	local treat_thresh "2"
 	*drop if T==0 | T==1
@@ -28,10 +28,11 @@ program define est_total
 	restore
 end
 
-*est_total
+est_total
 
 
 *** g1 : just total neighbor usage
+
 
 cap program drop graph_neighbor
 program define graph_neighbor
@@ -40,20 +41,20 @@ program define graph_neighbor
 	local time "50"
 	duplicates drop `cluster_var' date, force
 	preserve
-		forvalues r = 1/`=`time'' {
-		g T_`r' = T==`=`r'-25'
-		}
-		qui areg `outcome' T_* date, absorb(`cluster_var') cluster(`cluster_var') r 
+		qui tab T, g(T_)
+		qui sum T, detail
+		local time_min `=r(min)'
+		local time `=r(max)-r(min)'
+		qui areg `outcome' T_* , absorb(`cluster_var') cluster(`cluster_var') r 
 	   	parmest, fast
 	   	g time = _n
 	   	keep if time<=`=`time''
-	   	replace time = time - `=`time'/2'
+	   	replace time = time + `=`time_min''
     	tw (scatter estimate time) || (rcap max95 min95 time)
    	restore
 end
 
-
-*graph_neighbor
+graph_neighbor
 
 
 
