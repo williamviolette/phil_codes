@@ -4,10 +4,10 @@
                 SIG_EP_INPUTS,reps,sto,alt_error,...
                 sort_condition,split_F_option,transfer_option,TUNE]=...
 sim_build_normc_real_data_smm_v5_more_moments_groupings(print,tag,mac,size_smp,...
-                    fileID,est_version,controls,control_max,ph_controls,given,...
+                    fileID,est_version,controls,control_size,ph_controls,given,...
                     a_start,sto,reps,...
                     sort_condition,split_F_option,transfer_option,smm_est_option,...
-                    real_data,TUNE,BOOT,boot_max,boot_estimates,alt_sample,ESTIMATION_OPTION)
+                    real_data,TUNE,BOOT,boot_max,boot_estimates,ESTIMATION_OPTION,cd_dir)
 
                 
                 
@@ -22,15 +22,15 @@ end
 %%%
 control_total=sum(controls(1:3))+SHH_control;
 
-    [Q_obs,k_1,k_2,k_3,p_1,p_2,p_3,p_4,x,ph,CONTROL,alt]=...
-    data_prep_smm_grouping_v2(size_smp(1),mac,tag,control_max,est_version,...
-    BOOT,ESTIMATION_OPTION,alt_sample,control_total,boot_max,boot_estimates);
+    [Q_obs,k_1,k_2,k_3,p_1,p_2,p_3,p_4,x,ph,CONTROL,alt,PH_CONTROL]=...
+    data_prep_smm_grouping_v2(size_smp(1),mac,tag,control_size,est_version,...
+    BOOT,ESTIMATION_OPTION,control_total,boot_max,boot_estimates,cd_dir);
 
     
 %%%%%%%% CALCULATE CONTROLS
 %%%
-
- [CA,SE,D,control_id]=generate_controls( controls , SHH_control, CONTROL , Q_obs, ones(length(p_2),1) ); 
+            
+ [CA,SE,D,control_id]=generate_controls( controls , SHH_control, CONTROL , Q_obs, ones(length(p_2),1) ); %% last input substitutes for t (since its only 1 in this case)
        
 sig_ep  = x(    1:control_id(1)  ); 
 sig_nu  = x(   (control_id(1)+1) : (control_id(1)+control_id(2))   );
@@ -72,10 +72,13 @@ if ph_controls(1)==1 %% now I plug in beta_temp !!!  %% generate predicted hassl
     for i = 1:ph_controls(2)
         PH = PH + ph(i).*PH_C(:,i);
     end
+    %%%%%%%%%%%%%% HUGE SIMPLIFICATION TO PH
+    PH = ph(end).*ones(length(alt),1);
 end  %% ok to use heterogeneity in the full hassle !!
 
-%%%%%%%%%%%%%% HUGE SIMPLIFICATION TO PH
-    PH = ph(end).*ones(length(alt),1);
+if ph_controls(1)==2
+    PH = ph(1) + ph(2).*PH_CONTROL(:,1) + ph(3).*PH_CONTROL(:,2);
+end
 
 
 %%%%%%%%% IMPUTE BETA FROM SPLITTING : DATA PREP

@@ -7,6 +7,9 @@
 local version "v1"
 * local version "v2"
 
+
+global min_dist = "yes"  // use min dist for all group members (instead of actual distance for main member)
+
 global c_min_leak = "0"
 global c_max_leak = "100"
 
@@ -105,24 +108,31 @@ P.barangay_id, P.SHH, P.SHO, P.house_1, P.house_2, P.age, P.hhemp, P.hhsize, P.l
 			drop TM
 
 *** GEN CONTROLS 
-	g size = (hhsize+SHO)/SHH 
-		
-	g SHH_G=1 if SHH<1.5 
-	replace SHH_G=2 if SHH>=1.5 & SHH<2.5 
-	replace SHH_G=3 if SHH>=2.5 & SHH<. 
-	g INC = 10000
-
+	
+	do "${subcode}size_SHH_INC_function.do"
 	do "${subcode}generate_controls.do" 
 
 sort g_id conacct date
+
+if "$min_dist" == "yes" {
+	g DIST = distance if distance>0 & distance<.
+	egen min_dist = min(DIST), by(g_id)   // use minimum distance instead
+	drop distance DIST
+	ren min_dist distance
+}
 
 *** PRE DATA ***
 preserve
 	** PRE : FULL DATA
 		keep if T<1
 		order c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS*	
+		keep  c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS*	
 		export delimited "${generated}pre_`version'.csv", delimiter(",") replace
+restore
+
+preserve
 	** PRE : TIME
+		keep if T<1
 		keep conacct
 		g o = 1
 		egen t = sum(o), by(conacct)
@@ -140,7 +150,11 @@ preserve
 		order c p_L p_H1 p_H2 p_H3 gamma alt_sub size SHH_G CONTROLS* house_census distance
 		keep  c p_L p_H1 p_H2 p_H3 gamma alt_sub size SHH_G CONTROLS* house_census distance
 		export delimited "${generated}post_`version'.csv", delimiter(",") replace	
+restore
+
+preserve
 	** POST : TIME 
+		keep if T>=1
 		keep conacct
 		g o = 1
 		egen t = sum(o), by(conacct)

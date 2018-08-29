@@ -2,15 +2,14 @@
 ** pull full sample for billing
 
 	** global : generated, temp, subcode
-	** input  : TABLE paws, conacctseri, price, leakneighbors, census billing_ALL, DO generate_controls.do
+	** input  : TABLE paws, conacctseri, price, leakneighbors, census, mean_dist, bstats, bmatch,
+				*  billing_ALL, DO generate_controls.do
 	** temp   : TABLE bill_sample_temp, pop_c, DTA {temp} price_avg.dta
 	** output : CSV {generated} standard.csv, standard_t.csv, alt.csv
 
 local version "v1"
-* local version "upper_trim"
-* local version "no_zero"
-* local version "big_t"
-* local version "limit_var"
+
+global shape = "mean" // also have "triangle", "square" : need to turn on ph_controls_function.do below
 
 global bill_sample_upper = "6000"
 global bill_sample_total = "5000"
@@ -23,30 +22,9 @@ global date_low  = "600"
 global date_high = "664"
 global t_min     = "10"
 
-
-** ** CUSTOM DATASET CRITERIA ** **
-if "`version'" == "v2" {
-	global c_high = "120"
-}
-if "`version'" == "no_zero" {
-	global c_low = "1"
-}
-if "`version'" == "upper_trim" {
-	global c_high = "100"
-}
-if "`version'" == "limit_var" {
-	global c_low = "5"
-	global c_high = "60"
-	global t_min = "60"
-}
-if "`version'" == "big_t" {
-	global t_min = "60"
-}
-
-
-global sample_by_barangay_1_ = "no"
-global compile_full_sample_2_ = "yes"
-global compile_alt_3_ = "no"
+global sample_by_barangay_1_ 	= "no"
+global compile_full_sample_2_ 	= "yes"
+global compile_alt_3_ 			= "no"
 
 *********************************
 ****** PREPARING DATA HERE ******
@@ -94,8 +72,9 @@ WHERE B.conacct>0 AND C.conacct IS NULL  ")  dsn("phil") 	clear;
 
 gentable bill_sample_temp
 
-
 }
+
+
 
 
 *****************************************
@@ -113,12 +92,20 @@ local bill_query "";
 forvalues r = 1/12 {;
 	local bill_query "`bill_query' 
 	SELECT A.date, A.c, A.class, A.read, B.*, 
-	C.p_L, C.p_H1, C.p_H2, C.p_H3
+	C.p_L, C.p_H1, C.p_H2, C.p_H3, 
+	H.area, 10*H.obs AS hhs, H.house_avg AS house_census,
+	M.mean_dist AS dist_mean
 	FROM billing_`r' AS A 
 	JOIN bill_sample_temp AS B 
 		ON A.conacct = B.conacct
 	JOIN price AS C
 		ON A.date = C.date AND A.class = C.class
+		LEFT JOIN bmatch AS J
+			ON J.conacct = A.conacct
+		LEFT JOIN bstats AS H
+			ON J.OGC_FID = H.OGC_FID
+		LEFT JOIN mean_dist AS M
+			ON H.barangay_id = M.barangay_id
 	WHERE A.class==1 OR A.class==2
 	";
 	if `r'!=12{;
@@ -166,20 +153,16 @@ odbc load, exec("`bill_query'")  dsn("phil") clear
 	drop G G_id R NN nn_id R_id Ri BN c1
 
 *** last fixing here 
-	g size = (hhsize+SHO)/SHH 
-	g SHH_G=1 if SHH<1.5 
-		replace SHH_G=2 if SHH>=1.5 & SHH<2.5 
-		replace SHH_G=3 if SHH>=2.5 & SHH<. 
-	g INC = 10000
-
+	do "${subcode}size_SHH_INC_function.do"
 	do "${subcode}generate_controls.do" 
+*	do "${subcode}ph_controls_function.do"
 
 sort conacct date
 
 ** FULL DATA EXPORT
 	preserve 
-		keep  c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* hhsize SHO 
-		order c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* hhsize SHO 
+		keep  c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* hhsize SHO house_census dist_${shape} 
+		order c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* hhsize SHO house_census dist_${shape}
 		export delimited "${generated}standard_`version'.csv", delimiter(",") replace 
 	restore 
 
@@ -218,7 +201,7 @@ if "$compile_alt_3_" == "yes" {
 	save "${temp}price_avg.dta", replace
 
 *** load data
-	odbc load, exec("SELECT A.*, B.pop_c FROM census AS A JOIN pop_c AS B ON A.barangay_id = B.barangay_id") dsn("phil") clear
+	odbc load, exec("SELECT A.*, B.pop_c, H.area, 10*H.obs AS hhs, H.house_avg AS house_census, M.mean_dist AS dist_mean FROM census AS A JOIN pop_c AS B ON A.barangay_id = B.barangay_id JOIN bstats AS H ON A.barangay_id = H.barangay_id JOIN mean_dist AS M ON A.barangay_id = M.barangay_id") dsn("phil") clear
 
 *** sampling procedure
 	egen alt_shr = mean(alt), by(barangay_id)
@@ -249,18 +232,13 @@ if "$compile_alt_3_" == "yes" {
  	g SHO = 0
  	g SHH = 1
 
-	g size = (hhsize+SHO)/SHH 
-		
-	g SHH_G=1 if SHH<1.5 
-	replace SHH_G=2 if SHH>=1.5 & SHH<2.5 
-	replace SHH_G=3 if SHH>=2.5 & SHH<. 
-	g INC = 10000
-
+ 	do "${subcode}size_SHH_INC_function.do"
 	do "${subcode}generate_controls.do"
+*	do "${subcode}ph_controls_function.do"
 
 preserve
-	keep  c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* 
-	order c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS*
+	keep  c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* hhsize SHO house_census dist_${shape} 
+	order c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* hhsize SHO house_census dist_${shape} 
 	export delimited "${generated}alt_`version'.csv", delimiter(",") replace
 restore
 

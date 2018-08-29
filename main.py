@@ -359,7 +359,8 @@ if _2_a_AREASTATS == 1:
 	   					AVG(house_1 + house_2) AS house_avg,
 	   					AVG(low_skill) AS low_skill,
 	   					AVG(hhsize) AS hhsize,
-	   					COUNT(*) AS obs
+	   					COUNT(*) AS obs,
+	   					MAX(G.barangay_id) AS barangay_id
 	            FROM barangay AS f 
 	            JOIN censusbar AS G 
 	            	ON f.OGC_FID = G.OGC_FID 

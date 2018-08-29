@@ -144,20 +144,9 @@ end
                             
     if isempty(BOOT)~=1
         csvwrite(strcat(cd_dir,'BOOT',slash,'phBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),x1)
-        %{
-        if BOOT(1)>1
-            x_pre=csvread(strcat('phBOOT',num2str(est_version),'.csv'));
-            x_post=[x_pre x1];
-            csvwrite(strcat('phBOOT',num2str(est_version),'.csv'),x_post);
-        else
-            csvwrite(strcat('phBOOT',num2str(est_version),'.csv'),x1);            
-        end
-        %}
     else
-        csvwrite(strcat(cd_dir,'ph',num2str(est_version),'.csv'),x1);
+        csvwrite(strcat(cd_dir,'results',slash,'ph',num2str(est_version),'.csv'),x1);
     end
-    
-    
                             
 if print==1                            
             vnum = length(x1);    %%% SET VNUM HERE !!!

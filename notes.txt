@@ -19,34 +19,43 @@ notes
 
 8/27/18 :
 
-	- found proper code! make sure it all lines up!!
+	- [nte] found proper code! make sure it all lines up!!
 
-	- do leaks graphs still !
+	- [chk] do leaks graphs still !
 
-	- the cut for HH size is actually with percentiles in generate_controls.m (change in paper?)
+	- [chk] the cut for HH size is actually with percentiles in generate_controls.m (change in paper?)
 
-	- need to make more extensive descriptive tables for the appendix!!!
+	- [arg] need to make more extensive descriptive tables for the appendix!!!
 
 8/28/18 :
 
-	- the key is cutting above 100 c  (then get the exact same elasticity)
+	- [arg] the key is cutting above 100 c  (then get the exact same elasticity)
 
-	- the leaks graph has a pre-trend (maybe worth addressing head-on but also could just discuss and show its not bias but might bias)
+	- [arg] the leaks graph has a pre-trend (maybe worth addressing head-on but also could just discuss and show its not bias but might bias)
 
-	- using square geography sounds good as a conservative approach (making sharing least likely!) and mention this; drive up the fixed cost estimate for sure
+	- [arg] using square geography sounds good as a conservative approach (making sharing least likely!) and mention this; drive up the fixed cost estimate for sure
 		- what is the alternative? mention these limitations! 
 			- no distances for sharers (could draw number between zero and nearest connection; make up distribution)
 			- sampling for neighbors (one neighbor's distance is different from another's if they are sampled together; hard to know)
 
-	- in discussion focus on the heterogeneity of the p_H effect!!! 
+	- [arg] in discussion focus on the heterogeneity of the p_H effect!!! 
 
 8/29/18 :
 	
-	- think about using similar prose from papers that use similar structural techniques
+	- [arg] think about using similar prose from papers that use similar structural techniques
+
+	- [arg] why don't I use own house type for PH heterogeneity? (because its imputed ; mention this clearly in the paper)
+
+	- [arg] ALSO DON'T KNOW WHERE THE ALTERNATIVE USERS ARE SO NEED LOCAL CHARACTERISTICS (can I randomly allocate them in space??)
+		- HUGE limitation to the spatial aspect that I have to mention!!
+
+	- [chk] data_prep_smm_grouping_v2.m : make sure that PH aggregates (NOW THAT IT HAS MULTIPLE ATTRIBUTES) 
+
+	- [rpt] the triangles produce crazy high hassle costs (unrealistic); instead lets just use avg closest distance (probably decent and smaller...)
+
+	- [chk] 1. Rename confusing file names?  2. have ph and standard tags differently?
 
 
 
-
-
-
+	
 

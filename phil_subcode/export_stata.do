@@ -24,6 +24,7 @@ global ar_go 			  	  = 0
 global complaints_go      	  = 0
 global censusbarangaymerge_go = 0
 global alt_sub_go 			  = 0
+global mean_dist_go 		  = 0
 
 *** TRUE EXPORT
 global bill_sample_go 		  = 0   // [check suboptions]
@@ -80,9 +81,15 @@ if $censusbarangaymerge_go == 1 {
 }
 
 if $alt_sub_go == 1 {
-	** input: TABLE census , paws   ** output: TABLE alt_sub
+	** input: TABLE census , paws    ** output: TABLE alt_sub
 	do "${subcode}alt_sub.do"
 }
+
+if $mean_dist_go == 1 {
+	** input: TABLE neighbor , bmatch , bstats    ** output: TABLE mean_dist
+	do "${subcode}mean_dist.do"
+}
+
 
 ***** EXPORT TRUE DATA *****
 

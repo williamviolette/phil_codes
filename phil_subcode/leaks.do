@@ -1,44 +1,12 @@
 
-
 	** global : temp
 	** input  : TABLE billing_ALL, date_c, neighbor, cc
 	** temp   : TABLE leakneighbors, leakers, LN_total  DTA {temp} L_ALL.dta, LN_ALL.dta, leakers.dta, LN_total.dta
-
-
-
-** decision process : use = sqrt(A) / (sqrt(N) + 1)
-	* 1. only thing from leaks is distance to hassle mapping
-	* 2. only way to get distance for sharers is with stronggg assumptions
-	* 3. can vary the distribution and see if it matters tho
-	* assumption :: distance measures houses for estimation...
-	***           - not great but better than nothing... 
-
-	* could be errors in definition of pre and post periods!!
 
 ** control panel **
 
 global leak_data_prep_1_ = "yes" // get the initial leak sample to determine disconnection
 global leaker_define_2_  = "yes" // USES NEIGHBORS
-
-
-* 1. check the distance matrix, did I do it right????
-* 2. different criteria for leaks (clean the exact same way?)
-
-*** OLD CHECK *
-* leaks_clean_v1_add.do
-
-** complaints included: 72,000           // checks out !
-** key leakers identified: 3,959 (5.5%)  // get 
-** able to merge with geo-data: 2,200 
-
-*** NEW CHECK ***
-** complaints included: 25,253 
-** key leakers identified: 1,154 (4.5%) (very similar...)
-** able to merge with geo-data: 496 ( which is about right now... )
-
-*** TESTING>>> use "${phil_folder}savings/temp/treat_sample_v2_2.dta", clear
-
-
 
 set more off
 
