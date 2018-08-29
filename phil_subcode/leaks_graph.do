@@ -13,8 +13,8 @@ cap program drop est_total
 program define est_total
 	local cluster_var "conacct_leak"
 	local outcome "C"
-	local keep_low "-12"
-	local keep_high "12"
+	local keep_low "-24"
+	local keep_high "16"
 	local treat_thresh "2"
 	*drop if T==0 | T==1
 	preserve
@@ -75,7 +75,7 @@ program define graph_ind
 			*local het "DC_1 DC_2 DC_3 DC_4"
 			*	g house_avg = (house_1_avg + house_2_avg) / 2
 			*	keep if pop>2000
-		local het "distance house_avg"
+		local het "distance house_census"
 		local int "no"
 
 			*egen max_distancep = max(distancep), by(conacct_leak)
@@ -102,7 +102,7 @@ program define graph_ind
 	restore
 end
 
-*graph_ind
+graph_ind
 
 
 

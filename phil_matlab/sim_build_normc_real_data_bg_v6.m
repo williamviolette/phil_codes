@@ -25,12 +25,14 @@ end
 real_data = real_data(1);
 
 
-[t,Q_obs,k_1,k_2,k_3,p_1,p_2,p_3,p_4,lambda,x,CONTROL,beta_O,beta_B]=...
+[t,Q_obs,k_1,k_2,k_3,p_1,p_2,p_3,p_4,lambda,x,CONTROL,CONTROL_PH,beta_O,beta_B]=...
     data_prep_bg_v1(mac,tag,control_size,est_version,pollfish,BOOT,RLENGTH,  1  , cd_dir); %%% THIS USES REAL DATA
     
  [CA,SE,D,control_id]=generate_controls( controls1 , SHH_control, CONTROL , Q_obs, t ); 
  [~,SE_SHR,~,~]=generate_controls( controls1 , SHH_control, [CONTROL(:,1) (CONTROL(:,2)+1) CONTROL(:,3:end)], Q_obs, t ); 
-        
+
+
+ 
 sig_ep  = x(    1:control_id(1)  ); %%% DETERMINE CONTROLS VALUES !
 sig_nu  = x(   (control_id(1)+1) : (control_id(1)+control_id(2))   );
 alpha_1 = x(   (control_id(1)+control_id(2)+1) : (control_id(1)+control_id(2)+control_id(3))   );
@@ -43,6 +45,7 @@ REG = [ SIG_EP     SIG_NU ALPHA  beta_O ];
 
 %%% HERE IS WHERE THE PH CONTROLS ARE DETERMINED!
 
+
 if ph_controls(1)==1 %% first option is for beta quantiles
     PC = zeros(sum(t),1);    
     for i = 1:ph_controls(2) %% second option sets the number of quintiles
@@ -51,6 +54,11 @@ if ph_controls(1)==1 %% first option is for beta quantiles
     end
     PH_C = dummyvar(PC);
 end
+if ph_controls(1)==2
+    PH_C = [ones(size(CONTROL_PH,1),1) CONTROL_PH];
+end
+
+
 
 if real_data~=1
             [~,~,~,~,~,~,~,~,~,~,x_sim,~,beta_O_sim,beta_B_sim]=...
@@ -76,8 +84,10 @@ end
 
        obj = @(a)est_nmid_bg_tune(a,Q_obs,k_1,k_2,k_3,p_1,p_2,p_3,p_4,SHR,REG,  lambda  ,PH_C,TUNE);
         
-        TRUTH = [ PH.*ones(1,ph_controls(2)) ];
-        
+
+TRUTH = [ PH.*ones(1,size(PH_C,2)) ];
+
+
     a = 1.05.*TRUTH;
  
          tic

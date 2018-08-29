@@ -4,9 +4,8 @@ notes
 
 	- new sampling procedure : do random barangays, then random accounts within (to ensure enough neighbors !)  Issue: over-representation of small barangays (redo with 3?)
 
-
 	- complete alt_sub like we used to (maybe doublecheck later)
-
+		- UPDATE (8/28/19): actually replaced by pollfish (but its ok to have anyways)
 
 8/24/18 :
 
@@ -18,7 +17,6 @@ notes
 
 	- how do I handle estimating SHH? does it enter into controls? because that's a problem ... * no i think its ok in estimation (just divide by SHH..)
 
-
 8/27/18 :
 
 	- found proper code! make sure it all lines up!!
@@ -28,5 +26,27 @@ notes
 	- the cut for HH size is actually with percentiles in generate_controls.m (change in paper?)
 
 	- need to make more extensive descriptive tables for the appendix!!!
+
+8/28/18 :
+
+	- the key is cutting above 100 c  (then get the exact same elasticity)
+
+	- the leaks graph has a pre-trend (maybe worth addressing head-on but also could just discuss and show its not bias but might bias)
+
+	- using square geography sounds good as a conservative approach (making sharing least likely!) and mention this; drive up the fixed cost estimate for sure
+		- what is the alternative? mention these limitations! 
+			- no distances for sharers (could draw number between zero and nearest connection; make up distribution)
+			- sampling for neighbors (one neighbor's distance is different from another's if they are sampled together; hard to know)
+
+	- in discussion focus on the heterogeneity of the p_H effect!!! 
+
+8/29/18 :
+	
+	- think about using similar prose from papers that use similar structural techniques
+
+
+
+
+
 
 

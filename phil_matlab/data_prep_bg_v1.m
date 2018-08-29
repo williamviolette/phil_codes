@@ -1,4 +1,4 @@
-function [t,Q_obs,k_1,k_2,k_3,p_1,p_2,p_3,p_4,gamma,x,CONTROL,beta_O,beta_B]=...
+function [t,Q_obs,k_1,k_2,k_3,p_1,p_2,p_3,p_4,gamma,x,CONTROL,CONTROL_PH,beta_O,beta_B]=...
     data_prep_bg_v1(mac,tag,control_size,est_version,pollfish,BOOT,RLENGTH,real_data,cd_dir)
 
 %%% test
@@ -16,7 +16,7 @@ function [t,Q_obs,k_1,k_2,k_3,p_1,p_2,p_3,p_4,gamma,x,CONTROL,beta_O,beta_B]=...
 
     g          = csvread(strcat(cd_dir,'g_'     ,tag,'.csv'),1,0)  ;
     t          = csvread(strcat(cd_dir,'post_t_',tag,'.csv'),1,0)  ;
-    X          = csvread(strcat(cd_dir,'post_'  ,tag,'.csv'),1,0, [ 1 0 sum(t) (6+control_size) ])  ;
+    X          = csvread(strcat(cd_dir,'post_'  ,tag,'.csv'),1,0, [ 1 0 sum(t) (6+control_size+4) ])  ;
     if RLENGTH>0
         R=[];
         for r=1:length(t)
@@ -87,6 +87,7 @@ function [t,Q_obs,k_1,k_2,k_3,p_1,p_2,p_3,p_4,gamma,x,CONTROL,beta_O,beta_B]=...
     
     CONTROL = X(:,8:7+control_size);
     
+    CONTROL_PH = [ X(:,end-1) X(:,end)];
     
   
 

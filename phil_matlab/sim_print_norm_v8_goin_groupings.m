@@ -41,7 +41,7 @@ real_data               = 1; % first: controls data, second: controls random sub
      
 %%% $$$ PH ESTIMATION OPTIONS
      PH = 5;
-     ph_controls = [ 1   1 ] ;
+     ph_controls = [ 2   1 ] ; %% 1st entry: 1 is normal , 2 is with distance house_avg
      pollfish    = [ 1 .297 ] ;
 %%% $$$ SMM ESTIMATION OPTIONS
   %  ESTIMATION_OPTION = 1;
@@ -93,13 +93,13 @@ end
                 %}
        
    
-                %{a
+                %{
   [~]=sim_build_normc_real_data_bg_v6(PH,print,tag,mac,...
                     fileID,est_version,controls,ph_controls,pollfish,real_data,BOOT,TUNE,cd_dir);
                 %}  
 
                 
-                %{
+                %{a
 [~]=sim_build_normc_real_data_smm_v5_more_moments_groupings(print,tag,mac,size_smp,...
                     fileID,est_version,controls,control_max,ph_controls,given,...
                     a_start,sto,reps,...

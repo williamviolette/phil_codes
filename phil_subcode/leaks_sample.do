@@ -137,7 +137,8 @@ restore
 preserve
 	** POST : FULL DATA
 		keep if T>=1
-		order c p_L p_H1 p_H2 p_H3 gamma alt_sub size SHH_G CONTROLS*
+		order c p_L p_H1 p_H2 p_H3 gamma alt_sub size SHH_G CONTROLS* house_census distance
+		keep  c p_L p_H1 p_H2 p_H3 gamma alt_sub size SHH_G CONTROLS* house_census distance
 		export delimited "${generated}post_`version'.csv", delimiter(",") replace	
 	** POST : TIME 
 		keep conacct
