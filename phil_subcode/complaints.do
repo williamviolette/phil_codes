@@ -97,8 +97,10 @@
 	***** HERE IS THE KEY KEEP CONDITION! *****
 	*** *** *** *** *** *** *** *** *** *** ***
 
-	keep if LEAK==1 
-	*keep if LEAK_OLD==1 | VERTICAL==1 | BILL==1
+	*keep if LEAK==1 
+
+	*** THIS DEALS WITH EXCESSIVE BILLING COMPLAINTS TOO
+	keep if LEAK_OLD==1 | VERTICAL==1 | BILL==1
 	
 	sort conacct date
 	by conacct: g id=_n

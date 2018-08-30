@@ -51,9 +51,15 @@ notes
 
 	- [chk] data_prep_smm_grouping_v2.m : make sure that PH aggregates (NOW THAT IT HAS MULTIPLE ATTRIBUTES) 
 
-	- [rpt] the triangles produce crazy high hassle costs (unrealistic); instead lets just use avg closest distance (probably decent and smaller...)
+	- [nte] the triangles produce crazy high hassle costs (unrealistic); instead lets just use avg closest distance (probably decent and smaller...)
 
-	- [chk] 1. Rename confusing file names?  2. have ph and standard tags differently?
+	- [chk] 1. Rename confusing file names? [some done]  2. have ph and standard tags differently? [done]
+
+8/30/18 :
+
+	- [nte] --> results folder
+		- correlationestimates_group.csv , smm_group_[est_version].csv , 
+
 
 
 

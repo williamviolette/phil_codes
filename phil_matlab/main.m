@@ -10,14 +10,14 @@ clear;
 rng(1);
     
 print                   = 1;  %%% $$$ DEFAULT OPTIONS
-est_version             = 9;
+est_version             = 10;
 tag                     = 'v1';
 tag_g                   = 'v1';
 only_alpha              = 0;
 mac                     = 1 ;
 moffitt                 = 1 ;    % 0: standard % 1: norm added
 control_size             = 10;
-est_title               = 'work'; 
+est_title               = ' try 2000 '; 
 
 cd '/Users/williamviolette/Documents/Philippines/phil_analysis/phil_code/phil_matlab/';
 cd_dir  = '/Users/williamviolette/Documents/Philippines/phil_analysis/phil_generated/';
@@ -42,7 +42,7 @@ real_data               = 1; % first: controls data, second: controls random sub
      
 %%% $$$ PH ESTIMATION OPTIONS
      PH = 5;
-     ph_controls = [ 2   1 ] ; %% 1st entry: 1 is normal , 2 is with distance house_avg
+     ph_controls = [ 2   1 ] ; %% 1st entry: 1 is normal , 2 is with distance house_avg, 3 adds a squared term
      pollfish    = [ 1 .297 ] ;
 %%% $$$ SMM ESTIMATION OPTIONS
   %  ESTIMATION_OPTION = 1;
@@ -86,7 +86,7 @@ end
 
 %for i = 4:30
 %   BOOT=[i];
-                %{a
+                %{
   [~]=est1(print,tag,tag_g,mac,sample,size_smp,...
                         sig_ep,sigma_1,alpha_1,...
                         perf_var,Q_obs_range,p_var,i,reps,fileID,options,...
@@ -94,7 +94,7 @@ end
                 %}
        
    
-                %{
+                %{a
   [~]=est2(PH,print,tag_g,mac,...
                     fileID,est_version,controls,ph_controls,pollfish,real_data,BOOT,TUNE,cd_dir);
                 %}  

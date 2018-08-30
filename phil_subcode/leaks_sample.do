@@ -5,18 +5,17 @@
 
 
 local version "v1"
-* local version "v2"
-
 
 global min_dist = "yes"  // use min dist for all group members (instead of actual distance for main member)
 
 global c_min_leak = "0"
 global c_max_leak = "100"
 
-if "`version'"=="v2" {
-	global c_max_leak = "120"
-}
+global T_post = "16"
+global T_pre  = "-24"
 
+global min_preperiod_per_group = "4"
+global min_preperiod_for_neighbors = "4"
 
 cap program drop gentable
 program define gentable
@@ -24,7 +23,6 @@ program define gentable
 	odbc insert, table("`1'") dsn("phil") create
 	odbc exec("CREATE INDEX `1'_conacct_ind ON `1' (conacct);"), dsn("phil")
 end
-
 
 #delimit;
 odbc load, dsn(phil) 
@@ -47,7 +45,7 @@ P.barangay_id, P.SHH, P.SHO, P.house_1, P.house_2, P.age, P.hhemp, P.hhsize, P.l
 
 	drop if c>${c_max_leak} | c<${c_min_leak} // this is an important parameter right here...
 	
-	keep if distance<5
+	* keep if distance<5
 	keep if rank<=4
 
 	g T = date - date_l
@@ -59,7 +57,8 @@ P.barangay_id, P.SHH, P.SHO, P.house_1, P.house_2, P.age, P.hhemp, P.hhsize, P.l
 
 			drop if T>0 & TREAT==1
 			
-			keep if ( T>=-24 & T<=16 & TREAT==0 ) | ( T>=-24 & T<0 & TREAT==1 )   // KEEP WIDER GROUP!
+			keep if ( T>= ${T_pre} & T<=${T_post} & TREAT==0 ) | ( T>=${T_pre} & T<0 & TREAT==1 )   
+			 ** KEEP WIDER GROUP!
 
 			drop if c==.
 			
@@ -67,8 +66,8 @@ P.barangay_id, P.SHH, P.SHO, P.house_1, P.house_2, P.age, P.hhemp, P.hhsize, P.l
 				egen mt=sum(TP), by(conacct) // total pre
 				g mt_g=mt if distance==-1 
 				egen mt_G=min(mt_g), by(g_id) // smallest preperiod by group
-				drop if mt_G<=1 // gets rid of groups without pre-periods 
-				drop if mt<2 // gets rid of neighbors with no pre-periods
+				drop if mt_G<= ${min_preperiod_per_group} // gets rid of groups without pre-periods 
+				drop if mt<${min_preperiod_for_neighbors} // gets rid of neighbors with no pre-periods
 				drop mt mt_G mt_g TP	
 
 			g TA=T>=1 & T<.   //   KEEP ONLY THOSE WITH POST PERIODS!
@@ -114,6 +113,16 @@ P.barangay_id, P.SHH, P.SHO, P.house_1, P.house_2, P.age, P.hhemp, P.hhsize, P.l
 
 sort g_id conacct date
 
+*** export graph table ***
+	preserve 
+		keep conacct date c class distance rank conacct_leak house_census T
+		gentable leaks
+	restore
+
+
+
+*** alter distance metric here ***
+
 if "$min_dist" == "yes" {
 	g DIST = distance if distance>0 & distance<.
 	egen min_dist = min(DIST), by(g_id)   // use minimum distance instead
@@ -122,8 +131,9 @@ if "$min_dist" == "yes" {
 }
 
 *** PRE DATA ***
-preserve
 	** PRE : FULL DATA
+
+preserve
 		keep if T<1
 		order c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS*	
 		keep  c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS*	
@@ -172,11 +182,6 @@ preserve
 		export delimited "${generated}g_`version'.csv", delimiter(",") replace
 restore
 
-*** export graph table ***
-preserve 
-	keep conacct date c class distance rank conacct_leak house_census T
-	gentable leaks
-restore
 
 
 

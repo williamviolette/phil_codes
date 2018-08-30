@@ -4,8 +4,6 @@ odbc load, dsn(phil) exec("SELECT A.* FROM leaks AS A") clear
 
 ** GRAPH OUTCOMES 
 
-	g c_nei = c if distance!=-1
-	egen C = sum(c_nei), by(conacct_leak date)
 
 *** g2 : heterogeneity by distance and rank 
 
@@ -13,16 +11,19 @@ cap program drop est_total
 program define est_total
 	local cluster_var "conacct_leak"
 	local outcome "C"
-	local keep_low "-24"
-	local keep_high "16"
+	local keep_low "-12"
+	local keep_high "10"
 	local treat_thresh "2"
 	*drop if T==0 | T==1
 	preserve
+		g c_nei = c if distance!=-1
+		egen C = sum(c_nei), by(conacct_leak date)
 		g treat = T>`treat_thresh' & T<.
 		g treat_T = treat*T
 		keep if T>=`keep_low' & T<=`keep_high'
 		duplicates drop `cluster_var' date, force
-		areg `outcome' treat treat_T T, absorb(`cluster_var') cluster(`cluster_var') r 		
+		areg `outcome' treat treat_T T date, absorb(`cluster_var') cluster(`cluster_var') r 		
+		*areg `outcome' treat i.date, absorb(`cluster_var') cluster(`cluster_var') r 		
 		areg `outcome' treat, absorb(`cluster_var') cluster(`cluster_var') r 		
 	
 	restore
@@ -38,9 +39,10 @@ cap program drop graph_neighbor
 program define graph_neighbor
 	local cluster_var "conacct_leak"
 	local outcome "C"
-	local time "50"
-	duplicates drop `cluster_var' date, force
 	preserve
+		g c_nei = c if distance!=-1
+		egen C = sum(c_nei), by(conacct_leak date)
+	duplicates drop `cluster_var' date, force
 		qui tab T, g(T_)
 		qui sum T, detail
 		local time_min `=r(min)'

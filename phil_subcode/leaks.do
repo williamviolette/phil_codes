@@ -3,12 +3,17 @@
 	** input  : TABLE billing_ALL, date_c, neighbor, cc
 	** temp   : TABLE leakneighbors, leakers, LN_total  DTA {temp} L_ALL.dta, LN_ALL.dta, leakers.dta, LN_total.dta
 
+
+** changed post cleaning to 10!
+
 ** control panel **
 
-global leak_data_prep_1_ = "yes" // get the initial leak sample to determine disconnection
+global leak_data_prep_1_ = "no" // get the initial leak sample to determine disconnection
 global leaker_define_2_  = "yes" // USES NEIGHBORS
 
+
 set more off
+
 
 cap program drop gentable
 program define gentable
@@ -126,8 +131,8 @@ if "$leaker_define_2_"=="yes" {
 			* previous .85
 
 		*** POST-CLEANING
-	g cmiss_post_id = 	cmiss==1 & T>=2 & T<=13
-	g c_post_id 	= 	T>=2 & T<=13
+	g cmiss_post_id = 	cmiss==1 & T>=2 & T<=10
+	g c_post_id 	= 	T>=2 & T<=10
 			
 	egen cmiss_post=sum(cmiss_post_id), by(conacct)
 	egen c_post=sum(c_post_id), by(conacct)

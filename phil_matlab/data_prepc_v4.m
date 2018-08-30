@@ -1,5 +1,5 @@
 function [t,Q_obs,k_1,k_2,k_3,p_1,p_2,p_3,p_4,CONTROL]=...
-    data_prep(est_version,sample,size_smp,tag,tag_g,control_size,RLENGTH,BOOT,cd_dir)
+    data_prepc_v4(est_version,sample,size_smp,tag,control_size,RLENGTH,BOOT,cd_dir)
 
 %%% test
 %{
@@ -39,7 +39,7 @@ if sample(1)==1
                         csvwrite(strcat('BOOT\iBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),i_B);    
                         csvwrite(strcat('tBOOT',num2str(est_version),'.csv'),t); 
                     end
-       %}
+                %}
                         dlmwrite(strcat(cd_dir,'BOOT\iBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),i_B,'precision',20);    
                         csvwrite(strcat(cd_dir,'BOOT\tBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),t);       
     end
@@ -103,12 +103,12 @@ end
 
 if length(sample)>3
     if sample(4)==1
-        t4      = csvread(strcat(cd_dir,'pre_t_',tag_g,'.csv'),1,0);
-        X4      = csvread(strcat(cd_dir,'pre_',tag_g,'.csv'),1,0, [ 1 0 sum(t4) (4+control_size) ]);
+        t4      = csvread(strcat(cd_dir,'pre_t_',tag,'.csv'),1,0);
+        X4      = csvread(strcat(cd_dir,'pre_',tag,'.csv'),1,0, [ 1 0 sum(t4) (4+control_size) ]);
             if isempty(BOOT)~=1
-                g          = csvread(strcat(cd_dir,'g_',tag_g,'.csv'),1,0)  ;   
+                g          = csvread(strcat(cd_dir,'g_',tag,'.csv'),1,0)  ;   
                 [~,~,gBindex,i_GB,t4] = boot_testing(g,t4);
-                X4      = csvread(strcat(cd_dir,'pre_',tag_g,'.csv'),1,0, [ 1 0 max(i_GB) (4+control_size) ]);
+                X4      = csvread(strcat(cd_dir,'pre_',tag,'.csv'),1,0, [ 1 0 max(i_GB) (4+control_size) ]);
                 X4=X4(i_GB,:); %%
                 %{
                     if BOOT(1)>1

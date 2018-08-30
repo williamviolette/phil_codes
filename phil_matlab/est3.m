@@ -18,6 +18,12 @@ else
     SHH_control=0;
 end
 
+if mac==1
+	slash='/';
+else
+	slash='\';
+end
+    
 %%%%%%%% BRING IN DATA
 %%%
 control_total=sum(controls(1:3))+SHH_control;
@@ -102,14 +108,6 @@ sho_C       = CONTROL(alt==0,size(CONTROL,2)  );
 beta_J_C = beta_temp_C + ...  %% impute beta with hassle cost
         (SHH_C==2).*   (ALPHA_C.*PH_C) + ...  
         (SHH_C==3).*2.*(ALPHA_C.*PH_C);
-
- %mean(beta_J_C(SHH_C==1))     %% key tests right here
- %mean(beta_J_C(SHH_C==2))./2
- %mean(beta_J_C(SHH_C==3))./3
-
- %mean(beta_temp_C(SHH_C==1))
- %mean(beta_temp_C(SHH_C==2))./2
- %mean(beta_temp_C(SHH_C==3))./3
 
 %%%%%%%%% IMPUTE BETA FROM SPLITTING : DIVIDE BETA : 2 HH
 %%%
@@ -231,16 +229,11 @@ end
 
     
     %%% EXPORT CORRELATION ESTIMATES!
-    if mac==1
-        slash='/';
-    else
-        slash='\';
-    end
     if isempty(BOOT)~=1
-            csvwrite(strcat('BOOT',slash,'correlation_estimatesgroup',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),...
+            csvwrite(strcat(cd_dir,'BOOT',slash,'correlation_estimatesgroup',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),...
                 [corr_ep_O_B corr_ep_B_B corr_nu_O_B corr_nu_B_B]);  
     else
-            csvwrite(strcat('correlation_estimatesgroup',num2str(est_version),'_.csv'),...
+            csvwrite(strcat(cd_dir,'results',slash,correlation_estimatesgroup',num2str(est_version),'_.csv'),...
           [corr_ep_O_B corr_ep_B_B corr_nu_O_B corr_nu_B_B]);  
     end
             
@@ -251,6 +244,12 @@ end
 
 
 J = [ GROUP CHOICE_FULL BETA_FULL ALPHA_FULL SIG_EP_FULL SIG_NU_FULL K_FULL P_FULL PH_FULL Y_FULL CONTROL_FULL ];
+
+
+%%% DROP IF BETA IS NEGATIVE!
+
+J = 
+
 
 
 BAR    = J(:,size(J,2)-2) ;
@@ -430,32 +429,15 @@ if ESTIMATION_OPTION==1
    moments_eqm
    %}
    %%%%%%%%%%%%%%%%%%%%%%%%%%
-                                            
-                                            
+    
     if isempty(BOOT)~=1
-        %{
-        if BOOT(1)>1
-            x_pre=csvread(strcat('smmBOOT_',num2str(est_version),'.csv'));
-            x_post=[x_pre x1];
-            csvwrite(strcat('smmBOOT_',num2str(est_version),'.csv'),x_post);
-        else
-            csvwrite(strcat('smmBOOT_',num2str(est_version),'.csv'),x1);            
-        end
-        %}
-        if mac==1
-            csvwrite(strcat('BOOT/xsmmBOOTgroup',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),x1');
-            csvwrite(strcat('BOOT/momentsBOOTgroup',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),moments);
-            csvwrite(strcat('BOOT/moments_eqmBOOTgroup',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),moments_eqm);
-        else
-            csvwrite(strcat('BOOT\xsmmBOOTgroup',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),x1');
-            csvwrite(strcat('BOOT\momentsBOOTgroup',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),moments);
-            csvwrite(strcat('BOOT\moments_eqmBOOTgroup',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),moments_eqm);            
-        end
+            csvwrite(strcat(cd_dir,'BOOT',slash,'xsmmBOOTgroup',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),x1');
+            csvwrite(strcat(cd_dir,'BOOT',slash,'momentsBOOTgroup',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),moments);
+            csvwrite(strcat(cd_dir,'BOOT',slash,'moments_eqmBOOTgroup',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),moments_eqm);
     else
-        csvwrite(strcat('smm_group_',num2str(est_version),'.csv'),x1');
+        csvwrite(strcat(cd_dir,'results',slash,'smm_group_',num2str(est_version),'.csv'),x1');
     end
                     
-
 
             if print==1                            
                         vnum = length(x1);    %%% SET VNUM HERE !!!
@@ -495,7 +477,6 @@ if ESTIMATION_OPTION==1
             end
 else
 
-    
 %%%%%%%%%%%%% !DOWN HERE WE GET DOWN TO COUNTERFACTUALS! %%%%%%%%%%%%% 
 %%%%%%%%%%%%% !DOWN HERE WE GET DOWN TO COUNTERFACTUALS! %%%%%%%%%%%%% 
 %%%%%%%%%%%%% !DOWN HERE WE GET DOWN TO COUNTERFACTUALS! %%%%%%%%%%%%% 
@@ -505,7 +486,7 @@ else
         rng(1)
        alt_error = normrnd(0,1,size(input1,1),3);
     end
-        x1 = csvread(strcat('smm_group_',num2str(est_version),'.csv'));
+        x1 = csvread(strcat(cd_dir,'results',slash,'smm_group_',num2str(est_version),'.csv'));
     
 end
    
