@@ -39,7 +39,10 @@ cap program drop graph_neighbor
 program define graph_neighbor
 	local cluster_var "conacct_leak"
 	local outcome "C"
+	local T_high "16"
+	local T_low "-16"
 	preserve
+		keep if T>=`=`T_low'' & T<=`=`T_high''
 		g c_nei = c if distance!=-1
 		egen C = sum(c_nei), by(conacct_leak date)
 	duplicates drop `cluster_var' date, force
@@ -52,7 +55,9 @@ program define graph_neighbor
 	   	g time = _n
 	   	keep if time<=`=`time''
 	   	replace time = time + `=`time_min''
-    	tw (scatter estimate time) || (rcap max95 min95 time)
+	   	lab var time "Time (Months to Leak)"
+    	*tw (scatter estimate time) || (rcap max95 min95 time)
+    	tw (line estimate time, lcolor(black) lwidth(medthick)) || (line max95 time, lcolor(blue) lpattern(dash) lwidth(med)) || (line min95 time, lcolor(blue) lpattern(dash) lwidth(med)), graphregion(color(gs16)) plotregion(color(gs16))
    	restore
 end
 

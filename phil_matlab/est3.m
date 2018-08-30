@@ -183,7 +183,7 @@ Y_FULL = CONTROL_FULL(:,10);
       
 if SHH_control>0 %%% DECOMPOSE CORRELATION IN VARIABLES !!!
     B_index1 = ones(length(BETA_FULL),1);
-    for i = 1:10
+    for i = 1:9 % changed from 10 to 9
        B_index1 = B_index1 + (BETA_FULL>B_prc(i)); 
     end
     B_index1 = dummyvar(B_index1);
@@ -233,7 +233,7 @@ end
             csvwrite(strcat(cd_dir,'BOOT',slash,'correlation_estimatesgroup',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),...
                 [corr_ep_O_B corr_ep_B_B corr_nu_O_B corr_nu_B_B]);  
     else
-            csvwrite(strcat(cd_dir,'results',slash,correlation_estimatesgroup',num2str(est_version),'_.csv'),...
+            csvwrite(strcat(cd_dir,'results',slash,'correlation_estimatesgroup',num2str(est_version),'_.csv'),...
           [corr_ep_O_B corr_ep_B_B corr_nu_O_B corr_nu_B_B]);  
     end
             
@@ -244,12 +244,6 @@ end
 
 
 J = [ GROUP CHOICE_FULL BETA_FULL ALPHA_FULL SIG_EP_FULL SIG_NU_FULL K_FULL P_FULL PH_FULL Y_FULL CONTROL_FULL ];
-
-
-%%% DROP IF BETA IS NEGATIVE!
-
-J = 
-
 
 
 BAR    = J(:,size(J,2)-2) ;
@@ -387,10 +381,30 @@ if ESTIMATION_OPTION==1
                                     SIG_EP_INPUTS,reps,sto,alt_error,...
                                     sort_condition,split_F_option,transfer_option,TUNE) ;
                    a = a_start ;
-                                        
+                              
+    %%% MAKE A GRAPH!
+    %{
+    K = 15;
+    R = zeros(K,1);
+    F = zeros(K,1);
+    for k=1:K 
+        f = 400*(k*2/K);
+        a = [ f 80 50 10];
+        r = obj(a);
+        R(k,1)=r;
+        F(k,1)=f;
+    end
+    plot(F,R)
+    %}
+    %%% DONE GRAPH!
+                   
+                   
                      tic
-                     %a     = [400 80 50 10];
+                    % a     = [300 80 50 10]; %% try new starting values
                      x1 = fminsearch(obj,a); 
+                    % TOC 
+                      %%% put a TOC here too1
+                     
         x_m = x1;
         [h_m,mm]=obj(x1);
         R = [.6 .7 1.3 1.5];

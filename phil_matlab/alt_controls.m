@@ -9,7 +9,8 @@ hhsize      = dummyvar(round(CONTROL(:,1)) ...
                     + round(mean(CONTROL(:,1)))...
                     .*(round(CONTROL(:,1))==0) ); %%% QUICK FIX FOR MISSING HHSIZE
 
-STANDARD = [CONTROL(:,3:2+standard_controls) hhsize(:,2:end) ];
+                
+STANDARD = [CONTROL(:,3:standard_controls) hhsize(:,2:end) ]; %% remove [+2] from [3:standard_controls+2]
 
 full_interaction=zeros(size(STANDARD,1),1);
 l=0;
@@ -24,7 +25,7 @@ end
 
 full_interaction = [STANDARD full_interaction] ;
 
-barangay_dummies = dummyvar(barangay_id);
+barangay_dummies = dummyvar(grp2idx(barangay_id));
 
 a = licols(  [full_interaction barangay_dummies(:,2:end)]  );
 

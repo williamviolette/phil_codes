@@ -93,37 +93,29 @@ end
                         only_alpha,real_data,est_version,controls,BOOT,TUNE,cd_dir);
                 %}
        
-   
-                %{a
+                %{
   [~]=est2(PH,print,tag_g,mac,...
                     fileID,est_version,controls,ph_controls,pollfish,real_data,BOOT,TUNE,cd_dir);
                 %}  
-
-
                 
                 %{
-                %%% NEED TO ADD PROPER TAGS!!
 [~]=est3(print,tag,mac,size_smp,...
                     fileID,est_version,controls,control_size,ph_controls,given,...
                     a_start,sto,reps,...
                     sort_condition,split_F_option,transfer_option,smm_est_option,...
-                    real_data,TUNE,BOOT,boot_max,boot_estimates,ESTIMATION_OPTION);
-                
+                    real_data,TUNE,BOOT,boot_max,boot_estimates,ESTIMATION_OPTION,cd_dir);
+                %} 
 %end
-    %}    
+
+
+%%%% DO THE COUNTERFACTUALS HERE PLEASE !
+
+
+
+
     %{a
     
-    
-    %{
-    %%% ESTIMATE FOR SET DATASET, SET BOOT EQUAL TO ZERO (first)
-     [~]=sim_build_normc_real_data_smm_v2(print,tag,mac,size_smp,...
-                    fileID,est_version,controls,control_size,ph_controls,given,...
-                    [ 200 200 40 10 ]  ,sto,reps,...
-                    sort_condition,split_F_option,1,censor_negative_option,[4 2 50],...
-                    1,TUNE,[],boot_max,boot_estimates,alt_sample,ESTIMATION_OPTION,COST_INPUTS,C_FEE_DISCOUNT,income_percentile ); % set real data
-                %} 
-    % NOW DO COUNTERFACTUALS SETTING ESTIMATION_OPTION EQUAL TO ZERO!
-
+   
 %{
         %%% TABLES! 
 
