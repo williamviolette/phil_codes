@@ -4,7 +4,7 @@ function h = graph_time_v4_group_comparison_graph(print,tag,mac,size_smp,...
                     a_start,sto,reps,...
                     sort_condition,split_F_option,transfer_option,smm_est_option,...
                     real_data,TUNE,boot_max,boot_estimates,alt_sample,...
-                    PH_COUNTER,group_percentile,COST_INPUTS,c_dir)
+                    PH_COUNTER,group_percentile,COST_INPUTS,cd_dir)
 %}
 
 
@@ -179,7 +179,7 @@ plot( PH_SET , PEQ./max(PEQ), ...
 
 
 
-%dlmwrite(strcat(cd_dir,table_pre,'tpt_graph_full.csv'),[PH_SET' PEQ FEQ CON SHR],'delimiter',',','precision',15);
+dlmwrite(strcat(cd_dir,table_pre,'tpt_graph_full.csv'),[PH_SET' PEQ FEQ CON SHR],'delimiter',',','precision',15);
 
 
 %plot(F_GRID(:,1),mean_utility1(:,2))

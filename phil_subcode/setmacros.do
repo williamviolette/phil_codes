@@ -20,6 +20,13 @@ global censusgeodata = "${phil_folder}census/input/"
 global billingdata   = "${phil_folder}descriptives/output/"
 global complaintdata = "${phil_folder}data/cc/"
 
+	** data version **
+global version = "v1"
+global version_leaks = "v1"
+
+	** output figures **
+global output 		 = "${phil_folder}phil_analysis/phil_code/phil_paper/tables/"
+
 	** variable macros **
 global paws_vars     	   = "SHH SHO house_1 house_2 age hhemp hhsize low_skill"
 

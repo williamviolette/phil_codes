@@ -28,20 +28,20 @@ if sample(1)==1
         X = X(i_B,:);
         %{
                     if BOOT(1)>1
-                        i_pre=csvread(strcat('BOOT\iBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'));
+                        i_pre=csvread(strcat('BOOT/iBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'));
                         i_post=[i_pre i_B];
-                        csvwrite(strcat('BOOT\iBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),i_post);
-                        t_pre=csvread(strcat('BOOT\tBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'));
+                        csvwrite(strcat('BOOT/iBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),i_post);
+                        t_pre=csvread(strcat('BOOT/tBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'));
                         t_post=[t_pre t];
-                        csvwrite(strcat('BOOT\tBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),t_post);
+                        csvwrite(strcat('BOOT/tBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),t_post);
                     else
 
-                        csvwrite(strcat('BOOT\iBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),i_B);    
+                        csvwrite(strcat('BOOT/iBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),i_B);    
                         csvwrite(strcat('tBOOT',num2str(est_version),'.csv'),t); 
                     end
        %}
-                        dlmwrite(strcat(cd_dir,'BOOT\iBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),i_B,'precision',20);    
-                        csvwrite(strcat(cd_dir,'BOOT\tBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),t);       
+                        dlmwrite(strcat(cd_dir,'BOOT/iBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),i_B,'precision',20);    
+                        csvwrite(strcat(cd_dir,'BOOT/tBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),t);       
     end
 end
 
@@ -119,7 +119,7 @@ if length(sample)>3
                         csvwrite(strcat('gBOOT',num2str(est_version),'.csv'),gBindex);            
                     end
                %}
-                    csvwrite(strcat(cd_dir,'BOOT\gBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),gBindex);
+                    csvwrite(strcat(cd_dir,'BOOT/gBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),gBindex);
             end
         if sample(1)==1 || sample(2)==1 || sample(3)==1
             X=[X;X4];

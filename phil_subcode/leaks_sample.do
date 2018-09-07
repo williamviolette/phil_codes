@@ -4,7 +4,6 @@
 	** output : CSV {generate} post.csv, post_t.csv, g.csv  TABLE leaks
 
 
-local version "v1"
 
 global min_dist = "yes"  // use min dist for all group members (instead of actual distance for main member)
 
@@ -137,7 +136,7 @@ preserve
 		keep if T<1
 		order c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS*	
 		keep  c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS*	
-		export delimited "${generated}pre_`version'.csv", delimiter(",") replace
+		export delimited "${generated}pre_${version_leaks}.csv", delimiter(",") replace
 restore
 
 preserve
@@ -149,7 +148,7 @@ preserve
 		duplicates drop conacct, force
 		keep t
 		*tab t
-		export delimited "${generated}pre_t_`version'.csv", delimiter(",") replace	
+		export delimited "${generated}pre_t_${version_leaks}.csv", delimiter(",") replace	
 restore
 
 
@@ -159,7 +158,7 @@ preserve
 		keep if T>=1
 		order c p_L p_H1 p_H2 p_H3 gamma alt_sub size SHH_G CONTROLS* house_census distance
 		keep  c p_L p_H1 p_H2 p_H3 gamma alt_sub size SHH_G CONTROLS* house_census distance
-		export delimited "${generated}post_`version'.csv", delimiter(",") replace	
+		export delimited "${generated}post_${version_leaks}.csv", delimiter(",") replace	
 restore
 
 preserve
@@ -171,7 +170,7 @@ preserve
 		duplicates drop conacct, force
 		keep t
 		*tab t
-		export delimited "${generated}post_t_`version'.csv", delimiter(",") replace			
+		export delimited "${generated}post_t_${version_leaks}.csv", delimiter(",") replace			
 restore
 
 *** G ***
@@ -179,7 +178,7 @@ preserve
 		duplicates drop g_id, force
 		keep g
 		tab g
-		export delimited "${generated}g_`version'.csv", delimiter(",") replace
+		export delimited "${generated}g_${version_leaks}.csv", delimiter(",") replace
 restore
 
 

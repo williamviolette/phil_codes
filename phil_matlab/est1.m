@@ -92,7 +92,7 @@ end
             csvwrite(strcat('BOOT\xBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),x1');            
         end
         %}
-            dlmwrite(strcat('BOOT',slash,'xBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),x1','delimiter',',','precision',20);    
+            dlmwrite(strcat(cd_dir,'BOOT',slash,'xBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),x1','delimiter',',','precision',20);    
     else
         dlmwrite(strcat(cd_dir,'results',slash,'x',num2str(est_version),'.csv'),x1','delimiter',',','precision',20);
     end

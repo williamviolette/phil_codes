@@ -57,7 +57,7 @@ program define graph_neighbor
 	   	replace time = time + `=`time_min''
 	   	lab var time "Time (Months to Leak)"
     	*tw (scatter estimate time) || (rcap max95 min95 time)
-    	tw (line estimate time, lcolor(black) lwidth(medthick)) || (line max95 time, lcolor(blue) lpattern(dash) lwidth(med)) || (line min95 time, lcolor(blue) lpattern(dash) lwidth(med)), graphregion(color(gs16)) plotregion(color(gs16))
+    	tw (line estimate time, lcolor(black) lwidth(medthick)) || (line max95 time, lcolor(blue) lpattern(dash) lwidth(med)) || (line min95 time, lcolor(blue) lpattern(dash) lwidth(med)), xlabel(`=`T) graphregion(color(gs16)) plotregion(color(gs16))
    	restore
 end
 

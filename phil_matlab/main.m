@@ -4,23 +4,24 @@
 
     %{a
     
-
+%%%% FOR ESTIMATION OPTION IS OFF !!!   [ just in case, to save time.. ]
     
 clear;
 rng(1);
     
 print                   = 1;  %%% $$$ DEFAULT OPTIONS
-est_version             = 10;
+est_version             = 11;
 tag                     = 'v1';
 tag_g                   = 'v1';
 only_alpha              = 0;
 mac                     = 1 ;
 moffitt                 = 1 ;    % 0: standard % 1: norm added
 control_size             = 10;
-est_title               = ' try 2000 '; 
+est_title               = ' now run it '; 
 
 cd '/Users/williamviolette/Documents/Philippines/phil_analysis/phil_code/phil_matlab/';
 cd_dir  = '/Users/williamviolette/Documents/Philippines/phil_analysis/phil_generated/';
+cd_out  = '/Users/williamviolette/Documents/Philippines/phil_analysis/phil_code/phil_paper/'; % most add tables anyways..
 %%% $$$  PERFECT VARIATION OPTIONS
 perf_var                = 0;
         Q_obs_range     = [10 80];
@@ -28,11 +29,14 @@ perf_var                = 0;
         i               = 200;
         reps            = 100;
 
-controls        = [3  5  9    9   2]; % [sig_ep sig_nu alpha other_controls(1 is hhsize, 2 is SHH)  SHH_control(0:off 2:on!)]
+%controls        = [3  5  9    9   2]; % [sig_ep sig_nu alpha other_controls(1 is hhsize, 2 is SHH)  SHH_control(0:off 2:on!)]
+
+controls        = [3  3  9    9   2  ]; % [sig_ep sig_nu alpha other_controls(1 is hhsize, 2 is SHH)  SHH_control(0:off 2:on!)]
+
 
 %%% $$$  REAL DATA OPTIONS
 real_data               = 1; % first: controls data, second: controls random subsample
-        sample   = [   1    0    0   1  ]; % standard rts rtc  GROUP
+        sample   = [   1    0    0   0  ]; % standard rts rtc  GROUP
         size_smp = [   5000    0   0    ];
 %%% $$$ STARTING VALUES
         TUNE = 1; %% set linear tuning parameter
@@ -59,7 +63,7 @@ smm_est_option  = [ 4 ... % [0 (else): F,FA ;  1: F,FA,PA ;  2: F,PA (FA=0) ;  3
          sto  = 5;
     a_start =  [ 400 80 50 10 ];
     %%% $$$ COUNTERFACTUAL TIME
-    ESTIMATION_OPTION = 1;
+    ESTIMATION_OPTION = 0;
     COST_INPUTS=[ 5 225 ]; % MARGINAL COST  , CONNECTION FEE (and fixed cost)
     
         alt_sample=.0601;
@@ -84,9 +88,10 @@ end
 
 
 
-%for i = 4:30
+%for i = 5:6
 %   BOOT=[i];
-                %{
+
+                %{a
   [~]=est1(print,tag,tag_g,mac,sample,size_smp,...
                         sig_ep,sigma_1,alpha_1,...
                         perf_var,Q_obs_range,p_var,i,reps,fileID,options,...
@@ -135,6 +140,18 @@ end
 if appending~=1
     fclose(fileID);
 end
+
+%%% GRAPHS 
+
+% fixed cost discount: fixed_cost_discount_groupings_v1.m  [added cd_out!]
+
+% regular tpt: graph_main.m  (run twice with different PHs!)
+
+% three part tariff: first_best_graph.m [add cd_out!] MEAN INC HARDCODED
+
+% full ph counterfactuals: graph_time_v4_group_comparison_graph.m
+
+%%% print welfare outputs: tables_print_welfare_facts_groupings.m
 
 
     %}

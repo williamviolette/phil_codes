@@ -19,10 +19,21 @@ controls_gen = controls(1:3);
     
     CC = zeros(size(CONTROL,1),1);    %%%%%%%%%%%%% SE %%%%%%%%%%%%%
     for i = 1:controls_gen(2)
-       pct = ( i./controls_gen(2) ).*100;
+       pct = ( i./controls_gen(2) ).*100 ; %%%%% KEY!!! 
        CC = CC +  ( PRC(pct,Q_obs,t)==1 ) ;
     end
     SE = dummyvar(CC);
+    
+    %SE = [ones(size(CONTROL,1),1) (ones(size(CONTROL,1),1) - PRC(60,Q_obs,t)==1 )];
+    
+    %UB = 10;
+    %SE = [ones(size(CONTROL,1),1)  (PRC(UB,Q_obs,t)==1)  (ones(size(CONTROL,1),1) - PRC(100-UB,Q_obs,t)==1 ) ];
+    %SE = ones(size(CONTROL,1),1);
+    %SE = [ones(size(CONTROL,1),1)  (PRC(10,Q_obs,t)==1)  (ones(size(CONTROL,1),1) - PRC(40,Q_obs,t)==1 ) ];
+    %SE = [ones(size(CONTROL,1),1)  (PRC(10,Q_obs,t)==1) ((PRC(20,Q_obs,t)==1) - (PRC(10,Q_obs,t)==1)) ((PRC(30,Q_obs,t)==1) - (PRC(20,Q_obs,t)==1))  (ones(size(CONTROL,1),1) - PRC(50,Q_obs,t)==1 ) ];
+    
+    SE = [ones(size(CONTROL,1),1)  (PRC(10,Q_obs,t)==1)  (ones(size(CONTROL,1),1) - PRC(60,Q_obs,t)==1 ) ];
+
     
     if SHH_control>0
        SE = [SE (round(CONTROL(:,2))==2) (round(CONTROL(:,2))==3)];
@@ -32,7 +43,7 @@ controls_gen = controls(1:3);
         D = ones(size(CONTROL,1),1); %%%%%%%%%%%%%%%%%%%%%% D %%%%%%%%%%%
     if controls_gen(3)>=3
         D =[ones(size(CONTROL,1),1) ...
-            (CONTROL(:,1)>prctile(CONTROL(:,1),33) & CONTROL(:,1)<prctile(CONTROL(:,1),67))...
+            (CONTROL(:,1)>=prctile(CONTROL(:,1),33) & CONTROL(:,1)<=prctile(CONTROL(:,1),67))...
             (CONTROL(:,1)>prctile(CONTROL(:,1),67)) ...
             ];
     end

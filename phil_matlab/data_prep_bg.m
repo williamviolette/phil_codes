@@ -31,7 +31,7 @@ function [t,Q_obs,k_1,k_2,k_3,p_1,p_2,p_3,p_4,gamma,x,CONTROL,CONTROL_PH,beta_O,
             gindex=csvread(strcat(cd_dir,'BOOT',slash,'gBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'));
             %gindex=gindex(:,BOOT(1));
             [~,~,iB,t] = boot_testing_2(g-1,t,gindex);
-            X          = csvread(strcat(cd_dir,'post_',tag_v1,'.csv'),1,0, [ 1 0 max(iB) (6+control_size) ]);
+            X          = csvread(strcat(cd_dir,'post_',tag_g,'.csv'),1,0, [ 1 0 max(iB) (6+control_size) ]);
             X = X(iB,:);
             %x_pre=csvread(strcat('xBOOT',num2str(est_version),'.csv'));
             x=csvread(strcat(cd_dir,'BOOT',slash,'xBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'));

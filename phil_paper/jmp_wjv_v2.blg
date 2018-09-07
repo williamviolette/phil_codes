@@ -1,0 +1,85 @@
+This is BibTeX, Version 0.99d (TeX Live 2015)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: jmp_wjv_v2.aux
+The style file: abbrvnat.bst
+Database file #1: library.bib
+You're missing a field name---line 166 of file library.bib
+ :   
+ :   %month  = "",
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+Repeated entry---line 499 of file library.bib
+ : @book{mcintosh2003asian
+ :                        ,
+I'm skipping whatever remains of this entry
+Too many commas in name 1 of "Ying, Yvonne Skilling, Heather Banerjee, Sudeshna Wodon, Quentin Foster, Vivien" for entry doi:10.1596/1813-9450-5384
+while executing---line 1347 of file abbrvnat.bst
+Too many commas in name 1 of "Ying, Yvonne Skilling, Heather Banerjee, Sudeshna Wodon, Quentin Foster, Vivien" for entry doi:10.1596/1813-9450-5384
+while executing---line 1347 of file abbrvnat.bst
+Too many commas in name 1 of "Ying, Yvonne Skilling, Heather Banerjee, Sudeshna Wodon, Quentin Foster, Vivien" for entry doi:10.1596/1813-9450-5384
+while executing---line 1347 of file abbrvnat.bst
+Too many commas in name 1 of "Ying, Yvonne Skilling, Heather Banerjee, Sudeshna Wodon, Quentin Foster, Vivien" for entry doi:10.1596/1813-9450-5384
+while executing---line 1347 of file abbrvnat.bst
+Too many commas in name 1 of "Ying, Yvonne Skilling, Heather Banerjee, Sudeshna Wodon, Quentin Foster, Vivien" for entry doi:10.1596/1813-9450-5384
+while executing---line 1347 of file abbrvnat.bst
+Too many commas in name 1 of "Ying, Yvonne Skilling, Heather Banerjee, Sudeshna Wodon, Quentin Foster, Vivien" for entry doi:10.1596/1813-9450-5384
+while executing---line 1347 of file abbrvnat.bst
+Warning--empty journal in keener2010provision
+Warning--empty journal in komives2006distributional
+Warning--empty journal in nauges2006water
+Warning--empty journal in tarozzi2013impact
+Warning--empty note in wsup
+Too many commas in name 1 of "Ying, Yvonne Skilling, Heather Banerjee, Sudeshna Wodon, Quentin Foster, Vivien" for entry doi:10.1596/1813-9450-5384
+while executing---line 1429 of file abbrvnat.bst
+Too many commas in name 1 of "Ying, Yvonne Skilling, Heather Banerjee, Sudeshna Wodon, Quentin Foster, Vivien" for entry doi:10.1596/1813-9450-5384
+while executing---line 1429 of file abbrvnat.bst
+Too many commas in name 1 of "Ying, Yvonne Skilling, Heather Banerjee, Sudeshna Wodon, Quentin Foster, Vivien" for entry doi:10.1596/1813-9450-5384
+while executing---line 1429 of file abbrvnat.bst
+Too many commas in name 1 of "Ying, Yvonne Skilling, Heather Banerjee, Sudeshna Wodon, Quentin Foster, Vivien" for entry doi:10.1596/1813-9450-5384
+while executing---line 1429 of file abbrvnat.bst
+Too many commas in name 1 of "Ying, Yvonne Skilling, Heather Banerjee, Sudeshna Wodon, Quentin Foster, Vivien" for entry doi:10.1596/1813-9450-5384
+while executing---line 1429 of file abbrvnat.bst
+Too many commas in name 1 of "Ying, Yvonne Skilling, Heather Banerjee, Sudeshna Wodon, Quentin Foster, Vivien" for entry doi:10.1596/1813-9450-5384
+while executing---line 1429 of file abbrvnat.bst
+You've used 50 entries,
+            2773 wiz_defined-function locations,
+            883 strings with 13182 characters,
+and the built_in function-call counts, 21293 in all, are:
+= -- 1930
+> -- 1053
+< -- 37
++ -- 365
+- -- 315
+* -- 1678
+:= -- 3289
+add.period$ -- 155
+call.type$ -- 50
+change.case$ -- 248
+chr.to.int$ -- 50
+cite$ -- 105
+duplicate$ -- 1014
+empty$ -- 1855
+format.name$ -- 391
+if$ -- 4425
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 55
+newline$ -- 263
+num.names$ -- 200
+pop$ -- 488
+preamble$ -- 1
+purify$ -- 205
+quote$ -- 0
+skip$ -- 750
+stack$ -- 0
+substring$ -- 917
+swap$ -- 64
+text.length$ -- 3
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 515
+warning$ -- 5
+while$ -- 217
+width$ -- 0
+write$ -- 648
+(There were 14 error messages)

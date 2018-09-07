@@ -7,9 +7,6 @@
 	** temp   : TABLE bill_sample_temp, pop_c, DTA {temp} price_avg.dta
 	** output : CSV {generated} standard.csv, standard_t.csv, alt.csv
 
-local version "v1"
-
-global shape = "mean" // also have "triangle", "square" : need to turn on ph_controls_function.do below
 
 global bill_sample_upper = "6000"
 global bill_sample_total = "5000"
@@ -20,11 +17,11 @@ global c_low     = "0"
 global c_high    = "100"
 global date_low  = "600"
 global date_high = "664"
-global t_min     = "10"
+global t_min     = "30"
 
-global sample_by_barangay_1_ 	= "no"
+global sample_by_barangay_1_ 	= "yes"
 global compile_full_sample_2_ 	= "yes"
-global compile_alt_3_ 			= "no"
+global compile_alt_3_ 			= "yes"
 
 *********************************
 ****** PREPARING DATA HERE ******
@@ -155,15 +152,14 @@ odbc load, exec("`bill_query'")  dsn("phil") clear
 *** last fixing here 
 	do "${subcode}size_SHH_INC_function.do"
 	do "${subcode}generate_controls.do" 
-*	do "${subcode}ph_controls_function.do"
 
 sort conacct date
 
 ** FULL DATA EXPORT
 	preserve 
-		keep  c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* hhsize SHO house_census dist_${shape} 
-		order c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* hhsize SHO house_census dist_${shape}
-		export delimited "${generated}standard_`version'.csv", delimiter(",") replace 
+		keep  c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* hhsize SHO house_census dist_mean 
+		order c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* hhsize SHO house_census dist_mean
+		export delimited "${generated}standard_${version}.csv", delimiter(",") replace 
 	restore 
 
 ** TIME EXPORT
@@ -172,7 +168,7 @@ sort conacct date
 		egen T = sum(o), by(conacct)
 		duplicates drop conacct , force 
 		keep T 
-		export delimited "${generated}standard_t_`version'.csv", delimiter(",") replace 
+		export delimited "${generated}standard_t_${version}.csv", delimiter(",") replace 
 	restore 
 
 ** EXPORT HHs PER BARANGAY  (to sample alt)
@@ -234,12 +230,11 @@ if "$compile_alt_3_" == "yes" {
 
  	do "${subcode}size_SHH_INC_function.do"
 	do "${subcode}generate_controls.do"
-*	do "${subcode}ph_controls_function.do"
 
 preserve
-	keep  c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* hhsize SHO house_census dist_${shape} 
-	order c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* hhsize SHO house_census dist_${shape} 
-	export delimited "${generated}alt_`version'.csv", delimiter(",") replace
+	keep  c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* hhsize SHO house_census dist_mean
+	order c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* hhsize SHO house_census dist_mean 
+	export delimited "${generated}alt_${version}.csv", delimiter(",") replace
 restore
 
 }

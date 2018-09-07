@@ -51,8 +51,9 @@ append using "${temp}RT02_`r'_prep.dta"
 		g low_skill     = (occupation>=6 & occupation<=8)
 		replace age = 100 if age>100
 		g conacct=_n
-		keep barangay_id alt house_1 house_2 age hhemp hhsize conacct low_skill move
+		keep barangay_id alt house_1 house_2 age hhemp hhsize conacct low_skill move sh3c_laundry
 		
+
 odbc exec("DROP TABLE IF EXISTS census;"), dsn("phil")
 odbc insert, table("census") dsn("phil") create
 odbc exec("CREATE INDEX census_conacct_ind ON census (conacct);"), dsn("phil")

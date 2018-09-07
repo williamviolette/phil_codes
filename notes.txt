@@ -60,6 +60,19 @@ notes
 	- [nte] --> results folder
 		- correlationestimates_group.csv , smm_group_[est_version].csv , 
 
+	- [arg] why don't I include consumption values in counterfactuals ?? easy to re-run? do I get weird stuff for alt users? mean consumption would probably be fine...
+
+9/5/18 :
+	
+	- [nte] mention that the lines are jagged in the new counterfactual graph because of the grid size... or fix! ...
+		- or just run a smoother over it...
+
+	- [chk] go back and fix directories so that .tex files export to the right place from Matlab!
+
+9/6/18 :
+
+	- [nte] MEAN_INC.csv HARD CODED IN first best graph
+
 
 
 
