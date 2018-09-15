@@ -1,6 +1,8 @@
 
 
 
+
+
 use "${billingdata}pasay_mcf_2009_2015.dta", clear
 keep conacct month year BLK_UTIL
 *keep if BLK_UTIL== "TCD" | BLK_UTIL=="6" | BLK_UTIL=="06" | BLK_UTIL== "PCD"| BLK_UTIL=="7" | BLK_UTIL=="07"
