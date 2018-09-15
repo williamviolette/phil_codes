@@ -6,7 +6,7 @@
 ******************
 
 global phil_folder="/Users/williamviolette/Documents/Philippines/"
-global subcode="${phil_folder}phil_analysis/phil_code/phil_subcode/"
+global subcode="${phil_folder}phil_analysis/phil_codes/phil_subcode/"
 
 	** data locations **
 global generated     = "${phil_folder}phil_analysis/phil_generated/"
@@ -25,7 +25,7 @@ global version = "v1"
 global version_leaks = "v1"
 
 	** output figures **
-global output 		 = "${phil_folder}phil_analysis/phil_code/phil_paper/tables/"
+global output 		 = "${phil_folder}phil_analysis/phil_codes/phil_paper/tables/"
 
 	** variable macros **
 global paws_vars     	   = "SHH SHO house_1 house_2 age hhemp hhsize low_skill"
