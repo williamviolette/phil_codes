@@ -19,9 +19,9 @@ moffitt                 = 1 ;    % 0: standard % 1: norm added
 control_size            = 10;
 est_title               = ' now run it '; 
 
-cd        '/Users/williamviolette/Documents/Philippines/phil_analysis/phil_code/phil_matlab/';
+cd        '/Users/williamviolette/Documents/Philippines/phil_analysis/phil_codes/phil_matlab/';
 cd_dir  = '/Users/williamviolette/Documents/Philippines/phil_analysis/phil_generated/';
-cd_out  = '/Users/williamviolette/Documents/Philippines/phil_analysis/phil_code/phil_paper/'; % most add tables anyways..
+cd_out  = '/Users/williamviolette/Documents/Philippines/phil_analysis/phil_codes/phil_paper/'; % most add tables anyways..
 %%% $$$  PERFECT VARIATION OPTIONS
 perf_var                = 0;
         Q_obs_range     = [10 80];
@@ -107,7 +107,7 @@ end
 
 
 
-for i = 4:25
+for i = 26:60
 
    BOOT = [i]
 
