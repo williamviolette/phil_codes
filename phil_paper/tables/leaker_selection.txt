@@ -1,0 +1,21 @@
+		(1)	(2)	(3)
+VARIABLES	LABELS	Q (m3)	Avg. Q (m3)	Share Offset
+				
+TR1	Quintile 1	-0.397	9.704	-0.0409
+		(1.612)		
+TR2	Quintile 2	5.290***	16.69	0.317
+		(1.587)		
+TR3	Quintile 3	4.311**	22.66	0.190
+		(1.818)		
+TR4	Quintile 4	4.560**	29.96	0.152
+		(1.927)		
+TR5	Quintile 5	3.838**	47.79	0.0803
+		(1.918)		
+Constant	Constant	65.40***		
+		(0.331)		
+				
+Observations		18,763		
+R-squared		0.788		
+Neighborhood FE		Yes		
+Robust standard errors in parentheses				
+*** p<0.01, ** p<0.05, * p<0.1				

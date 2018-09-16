@@ -10,18 +10,18 @@ clear;
 rng(1);
     
 print                   = 1;  %%% $$$ DEFAULT OPTIONS
-est_version             = 11;
+est_version             = 11; % 11 is standard, 12 is with low sig guess, 13 is with high sig guess
 tag                     = 'v1';
 tag_g                   = 'v1';
 only_alpha              = 0;
 mac                     = 1 ;
 moffitt                 = 1 ;    % 0: standard % 1: norm added
-control_size             = 10;
+control_size            = 10;
 est_title               = ' now run it '; 
 
-cd '/Users/williamviolette/Documents/Philippines/phil_analysis/phil_codes/phil_matlab/';
+cd        '/Users/williamviolette/Documents/Philippines/phil_analysis/phil_code/phil_matlab/';
 cd_dir  = '/Users/williamviolette/Documents/Philippines/phil_analysis/phil_generated/';
-cd_out  = '/Users/williamviolette/Documents/Philippines/phil_analysis/phil_codes/phil_paper/'; % most add tables anyways..
+cd_out  = '/Users/williamviolette/Documents/Philippines/phil_analysis/phil_code/phil_paper/'; % most add tables anyways..
 %%% $$$  PERFECT VARIATION OPTIONS
 perf_var                = 0;
         Q_obs_range     = [10 80];
@@ -29,17 +29,24 @@ perf_var                = 0;
         i               = 200;
         reps            = 100;
 
-%controls        = [3  5  9    9   2]; % [sig_ep sig_nu alpha other_controls(1 is hhsize, 2 is SHH)  SHH_control(0:off 2:on!)]
 
-controls        = [3  3  9    9   2  ]; % [sig_ep sig_nu alpha other_controls(1 is hhsize, 2 is SHH)  SHH_control(0:off 2:on!)]
+%controls        = [3  5  9  9  2]; % [sig_ep sig_nu alpha other_controls(1 is hhsize, 2 is SHH)  SHH_control(0:off 2:on!)]
+
+
+controls        = [3  3  9  9  2]; % [sig_ep sig_nu alpha other_controls(1 is hhsize, 2 is SHH)  SHH_control(0:off 2:on!)]
 
 
 %%% $$$  REAL DATA OPTIONS
 real_data               = 1; % first: controls data, second: controls random subsample
-        sample   = [   1    0    0   0  ]; % standard rts rtc  GROUP
+        sample   = [   1    0    0   1  ]; % standard rts rtc  GROUP
         size_smp = [   5000    0   0    ];
 %%% $$$ STARTING VALUES
-        TUNE = 1; %% set linear tuning parameter
+        TUNE = 1; %% set linear tuning parameter; SECOND ENTRY SIG GUESS (1 : low, 2 : high)
+        if est_version==12
+            TUNE = [1 1];
+        elseif est_version==13
+            TUNE = [1 2];
+        end
      sig_ep  = 5.*ones(1,controls(1));            
      sigma_1 = 12.*ones(1,controls(2) + (controls(5)>0).*2); % need to keep this small?? what if it gets too big??
      alpha_1 =  .5.*ones(1,controls(3)) ;
@@ -50,20 +57,32 @@ real_data               = 1; % first: controls data, second: controls random sub
      pollfish    = [ 1 .297 ] ;
 %%% $$$ SMM ESTIMATION OPTIONS
   %  ESTIMATION_OPTION = 1;
-smm_est_option  = [ 4 ... % [0 (else): F,FA ;  1: F,FA,PA ;  2: F,PA (FA=0) ;  3: F,PA,a_sigma (FA=0) ;  4: F,FA,PA,a_sigma ] ]
-                    1 ... % [0 (else): simple moments; 1 : covariance moments; 2 : first covariance moments (not alterantive, can't fit, come back..) ]
-                    200 ]; % (else empty) weights share moments (relative to covariance moments) high weights ensure shares are hit
+%smm_est_option  = [ 4 ... % [0 (else): F,FA ;  1: F,FA,PA ;  2: F,PA (FA=0) ;  3: F,PA,a_sigma (FA=0) ;  4: F,FA,PA,a_sigma ] ]
+%                    1 ... % [0 (else): simple moments; 1 : covariance moments; 2 : first covariance moments (not alterantive, can't fit, come back..) ]
+%                    200 ]; % (else empty) weights share moments (relative to covariance moments) high weights ensure shares are hit
                     
+smm_est_option  = [ 4 ... % [0 (else): F,FA ;  1: F,FA,PA ;  2: F,PA (FA=0) ;  3: F,PA,a_sigma (FA=0) ;  4: F,FA,PA,a_sigma  5: F only ] ]
+                    1 ... % [0 (else): simple moments; 1 : covariance moments; 2 : first covariance moments (not alterantive, can't fit, come back..) ]
+                    200 ];                
+                
     sort_condition  = 0; % 0 (else): by beta;  1: by net utility (with alternative);  2: by consumption
     split_F_option  = 0; % 0 (else): no split;  1: split evenly
     transfer_option = 1; % 0 (else): no transfer;  1: transfers ; 2: only positive transfers
     censor_negative_option = 0; % 0 (else): no censoring;  1: with censoring  (prevent zero consumption with negative utility)
-    given = 50; % pa mean at this point 
+%    given = 40; % pa mean at this point 
+if smm_est_option(1)==5
+    given = [40 50]; % pa mean, FA
+else
+    given = 40; % pa mean at this point 
+end
          reps = 10;
          sto  = 5;
-    a_start =  [ 400 80 50 10 ];
+    %a_start =  [ 400  80 50 10 ]; % previous start values
+     a_start =  .6.*[ 350 140 40  8 ];
+      
     %%% $$$ COUNTERFACTUAL TIME
-    ESTIMATION_OPTION = 0;
+    ESTIMATION_OPTION = 1;
+    many_sv_smm       = 1; % 1: many starting values (0: single)
     COST_INPUTS=[ 5 225 ]; % MARGINAL COST  , CONNECTION FEE (and fixed cost)
     
         alt_sample=.0601;
@@ -73,8 +92,8 @@ smm_est_option  = [ 4 ... % [0 (else): F,FA ;  1: F,FA,PA ;  2: F,PA (FA=0) ;  3
      %   income_percentile=10;  % sets the percentile for looking at distributional effects
      group_percentile=50; % sets general percentile for looking at distributional effects
      
-    boot_max = 30;
-
+    boot_max = 60;
+    
     C_FEE_DISCOUNT = 45; % used to be .05
     BOOT=[];
 
@@ -88,29 +107,30 @@ end
 
 
 
-%for i = 5:6
-%   BOOT=[i];
+for i = 4:25
 
-                %{a
-  [~]=est1(print,tag,tag_g,mac,sample,size_smp,...
+   BOOT = [i]
+
+                %{
+[~]=est1(print,tag,tag_g,mac,sample,size_smp,...
                         sig_ep,sigma_1,alpha_1,...
                         perf_var,Q_obs_range,p_var,i,reps,fileID,options,...
                         only_alpha,real_data,est_version,controls,BOOT,TUNE,cd_dir);
                 %}
        
                 %{
-  [~]=est2(PH,print,tag_g,mac,...
+[~]=est2(PH,print,tag_g,mac,...
                     fileID,est_version,controls,ph_controls,pollfish,real_data,BOOT,TUNE,cd_dir);
                 %}  
                 
-                %{
+                %{a
 [~]=est3(print,tag,mac,size_smp,...
                     fileID,est_version,controls,control_size,ph_controls,given,...
                     a_start,sto,reps,...
                     sort_condition,split_F_option,transfer_option,smm_est_option,...
-                    real_data,TUNE,BOOT,boot_max,boot_estimates,ESTIMATION_OPTION,cd_dir);
+                    real_data,TUNE,BOOT,boot_max,boot_estimates,ESTIMATION_OPTION,many_sv_smm,cd_dir);
                 %} 
-%end
+end
 
 
 %%%% DO THE COUNTERFACTUALS HERE PLEASE !
@@ -125,10 +145,10 @@ end
         %%% TABLES! 
 
         [~]=table_step_1_estimates...
-            (est_version,tag,controls,sample,size_smp,boot_max,mac);
+            (est_version,tag,controls,sample,size_smp,boot_max,mac,cd_out,cd_dir);
 
         [~]=table_step_1_elasticities...
-            (est_version,tag,controls,sample,size_smp,boot_max,mac,TUNE);
+            (est_version,tag,controls,sample,size_smp,boot_max,mac,TUNE,cd_out,cd_dir);
 
         [~]=table_step_2_estimates...
             (est_version,tag,boot_max,mac);
@@ -143,15 +163,28 @@ end
 
 %%% GRAPHS 
 
-% fixed cost discount: fixed_cost_discount_groupings_v1.m  [added cd_out!]
+%%% print general paraemters: print_general_parameters.m
 
-% regular tpt: graph_main.m  (run twice with different PHs!)
 
-% three part tariff: first_best_graph.m [add cd_out!] MEAN INC HARDCODED
+% 1. fixed cost discount: fixed_cost_discount_groupings_v1.m  [added cd_out!]
 
-% full ph counterfactuals: graph_time_v4_group_comparison_graph.m
+% 2. regular tpt: graph_main.m  (run twice with different PHs!)
+
+% 3. three part tariff: first_best_graph.m [add cd_out!] MEAN INC HARDCODED
+
+% 4. full ph counterfactuals: graph_time_v4_group_comparison_graph.m
 
 %%% print welfare outputs: tables_print_welfare_facts_groupings.m
 
+
+%%% print counterfactual parameters: sim_build_counterfactual_out_of_sample_groupings_v1.m
+
+%%% ROBUSTNESS
+
+% 1. alternative demand specification estimates
+    % 
+
+% 2. incidental parameter test : table_appendix_incidental_parameters.m
+    % not going to re-run, its fine for now..
 
     %}

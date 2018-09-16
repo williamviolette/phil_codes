@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  6 SEP 2018 11:02
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  14 SEP 2018 16:36
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1099,29 +1099,348 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <7> not available
 (./tables/tpt_improvement_percent_sharing_group.tex)
 (./tables/tpt_improvement_income_sharing_group.tex) [1
 
-{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./jmp_
-wjv_v2.bbl [2] [3]
-[4]) [5]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1438.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1438.
+{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] (./tabl
+es/access_pipes.tex)
+(./tables/access_single_tap.tex) (./tables/access_fetch.tex) [2]
+(./tables/hassle_percentage.tex) [3]
+(./tables/tpt_improvement_percent_sharing_group.tex)
+(./tables/tpt_improvement_income_sharing_group.tex) [4] [5]
+<tables/tariff_structure.pdf, id=339, 397.485pt x 289.08pt>
+File: tables/tariff_structure.pdf Graphic file (type pdf)
+
+<use tables/tariff_structure.pdf>
+Package pdftex.def Info: tables/tariff_structure.pdf used on input line 141.
+(pdftex.def)             Requested size: 278.2376pt x 202.35461pt.
+ (./tables/vendor_total.tex) [6 <./tables/tariff_structure.pdf>] [7] [8] (./tab
+les/new_descriptives.tex) (./tables/incshr.tex) (./tables/shr_individual.tex) (
+./tables/shr_1hh.tex) (./tables/shr_2hh.tex)
+[9] [10] (./tables/vendor_total.tex) (./tables/vendor_well.tex)
+(./tables/vendor_peddler.tex) [11] [12] (./tables/no_info.tex)
+(./tables/no_use.tex) [13] (./tables/bill_split.tex) (./tables/bill_fixed.tex)
+(./tables/bill_usage.tex) [14] (./tables/access_fetch.tex)
+(./tables/access_single_tap.tex) (./tables/access_pipes.tex) [15]
+Overfull \hbox (57.15686pt too wide) in paragraph at lines 281--281
+[] 
+ []
+
+[16] [17] [18]
+<tables/tariff_structure_1_no_label.pdf, id=477, 397.485pt x 289.08pt>
+File: tables/tariff_structure_1_no_label.pdf Graphic file (type pdf)
+
+<use tables/tariff_structure_1_no_label.pdf>
+Package pdftex.def Info: tables/tariff_structure_1_no_label.pdf used on input l
+ine 357.
+(pdftex.def)             Requested size: 310.04918pt x 225.49031pt.
+ [19] [20 <./tables/tariff_structure_1_no_label.pdf>] [21] [22] [23]
+Overfull \hbox (3.373pt too wide) in paragraph at lines 462--464
+\OT1/cmr/m/n/12 Given this func-tion, the choice sets for house-holds $\OML/cmm
+/m/it/12 i > \OT1/cmr/m/n/12 1$ con-sist of $\OML/cmm/m/it/12 A[] \OT1/cmr/m/n/
+12 = \OMS/cmsy/m/n/12 f\OML/cmm/m/it/12 v; c; g\OT1/cmr/m/n/12 (\OML/cmm/m/it/1
+2 a[]\OT1/cmr/m/n/12 )\OML/cmm/m/it/12 ; :::; g\OT1/cmr/m/n/12 (\OML/cmm/m/it/1
+2 a[]\OT1/cmr/m/n/12 )\OMS/cmsy/m/n/12 g$
+ []
+
+[24] (./tables/fee_even_some.tex) [25] [26] (./tables/neighbor.tex) [27]
+LaTeX Font Info:    Try loading font information for U+bbm on input line 505.
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/bbm-macros/ubbm.fd
+File: ubbm.fd 1999/03/15 V 1.2 Font definition for bbm font - TH
+) [28] [29]
+[30] [31] (./tables/boot_max.tex) [32] (./tables/step_1_estimates_group.tex)
+[33] [34] (./tables/elasticity_estimates.tex) (./tables/mean_elasticity.tex)
+<tables/hist_both.pdf, id=640, 397.485pt x 289.08pt>
+File: tables/hist_both.pdf Graphic file (type pdf)
+
+<use tables/hist_both.pdf>
+Package pdftex.def Info: tables/hist_both.pdf used on input line 618.
+(pdftex.def)             Requested size: 306.06439pt x 222.59227pt.
+ [35] [36 <./tables/hist_both.pdf>]
+(./tables/corr_table_group.tex) [37] [38] (./tables/mean_hassle.tex)
+(./tables/hassle_percentage.tex) (./tables/step_2_estimates.tex)
+<tables/hassle_cost_distribution.pdf, id=700, 397.485pt x 289.08pt>
+File: tables/hassle_cost_distribution.pdf Graphic file (type pdf)
+
+<use tables/hassle_cost_distribution.pdf>
+Package pdftex.def Info: tables/hassle_cost_distribution.pdf used on input line
+ 681.
+(pdftex.def)             Requested size: 278.2376pt x 202.35461pt.
+ [39 <./tables/hassle_cost_distribution.pdf>] [40] [41] (./tables/totalhhsmm_gr
+oup.tex)
+(./tables/sim_time_periods.tex) (./tables/sim_repetitions.tex)
+(./tables/step_3_estimates_group.tex) (./tables/totalhhsmm_group.tex)
+(./tables/fixedfee_group.tex) (./tables/cfee_group.tex) [42]
+(./tables/vendorfixedfee_group.tex) (./tables/vendorprice_group.tex) [43]
+(./tables/first_stage.tex)
+<tables/diff_595_first_stage.pdf, id=758, 397.485pt x 289.08pt>
+File: tables/diff_595_first_stage.pdf Graphic file (type pdf)
+
+<use tables/diff_595_first_stage.pdf>
+Package pdftex.def Info: tables/diff_595_first_stage.pdf used on input line 745
+.
+(pdftex.def)             Requested size: 278.2376pt x 202.35461pt.
+ [44 <./tables/diff_595_first_stage.pdf>]
+(./tables/would_have_added.tex) (./tables/actually_added.tex)
+(./tables/substitution.tex) [45] (./tables/diff_595_reg_secondary.tex)
+<tables/diff_595.pdf, id=794, 397.485pt x 289.08pt>
+File: tables/diff_595.pdf Graphic file (type pdf)
+ <use tables/diff_595.pdf>
+Package pdftex.def Info: tables/diff_595.pdf used on input line 781.
+(pdftex.def)             Requested size: 317.98842pt x 231.2643pt.
+
+[46] (./tables/diff_595_reg_primary.tex) (./tables/red_form_est.tex)
+(./tables/red_form_base.tex) (./tables/treated_months.tex)
+(./tables/total_effect.tex) (./tables/mru_size.tex)
+(./tables/percent_increase_discount.tex) (./tables/share_2_hhs.tex)
+(./tables/share_3_hhs.tex) (./tables/mru_size.tex)
+(./tables/population_served.tex)
+(./tables/increase_in_individual_connections.tex) (./tables/substitution.tex)
+(./tables/out_of_sample_inc_ind_conn_group.tex)
+(./tables/increase_in_individual_connections.tex) [47 <./tables/diff_595.pdf>]
+(./tables/group_percentile_group.tex)
+(./tables/oos_discount_estimates_group.tex) [48] [49]
+(./tables/c_fee_discount_group.tex) (./tables/discount_tariff_rise_group.tex)
+[50] <tables/discount_tariff_groups.pdf, id=855, 397.485pt x 289.08pt>
+File: tables/discount_tariff_groups.pdf Graphic file (type pdf)
+
+<use tables/discount_tariff_groups.pdf>
+Package pdftex.def Info: tables/discount_tariff_groups.pdf used on input line 8
+29.
+(pdftex.def)             Requested size: 278.2376pt x 202.35461pt.
+
+(./tables/discount_sharing_change_group.tex)
+(./tables/discount_vendor_change_group.tex)
+(./tables/discount_avg_surplus_change_group.tex)
+(./tables/c_fee_discount_group.tex)
+(./tables/discount_avg_welfare_change_group.tex)
+(./tables/group_percentile_group.tex)
+(./tables/discount_low_welfare_change_group.tex)
+(./tables/discount_estimates_group.tex) [51 <./tables/discount_tariff_groups.pd
+f>] [52] <tables/no_shr_tariff_groups.pdf, id=896, 397.485pt x 289.08pt>
+File: tables/no_shr_tariff_groups.pdf Graphic file (type pdf)
+
+<use tables/no_shr_tariff_groups.pdf>
+Package pdftex.def Info: tables/no_shr_tariff_groups.pdf used on input line 863
+.
+(pdftex.def)             Requested size: 397.48402pt x 289.07928pt.
+ (./tables/first_best_surplus_group.tex)
+(./tables/first_best_surplus_percent_income_group.tex)
+(./tables/first_best_percent_vendor_group.tex)
+(./tables/tpt_surplus_improvement_group.tex)
+(./tables/welfare_no_sharing_groups.tex) [53] [54 <./tables/no_shr_tariff_group
+s.pdf>] (./tables/tpt_improvement_percent_sharing_group.tex)
+(./tables/tpt_improvement_income_sharing_group.tex)
+<tables/shr_tariff_groups.pdf, id=923, 397.485pt x 289.08pt>
+File: tables/shr_tariff_groups.pdf Graphic file (type pdf)
+
+<use tables/shr_tariff_groups.pdf>
+Package pdftex.def Info: tables/shr_tariff_groups.pdf used on input line 894.
+(pdftex.def)             Requested size: 397.48402pt x 289.07928pt.
+ [55] (./tables/welfare_sharing_groups.tex)
+(./tables/tpt_social_surplus_change_low_sharing_group.tex)
+(./tables/tpt_social_surplus_change_avg_sharing_group.tex) [56 <./tables/shr_ta
+riff_groups.pdf>] [57]
+<tables/tpt_full_graph_prices.pdf, id=967, 397.485pt x 289.08pt>
+File: tables/tpt_full_graph_prices.pdf Graphic file (type pdf)
+
+<use tables/tpt_full_graph_prices.pdf>
+Package pdftex.def Info: tables/tpt_full_graph_prices.pdf used on input line 92
+9.
+(pdftex.def)             Requested size: 218.61742pt x 158.99448pt.
+
+<tables/tpt_full_graph_shares.pdf, id=968, 397.485pt x 289.08pt>
+File: tables/tpt_full_graph_shares.pdf Graphic file (type pdf)
+
+<use tables/tpt_full_graph_shares.pdf>
+Package pdftex.def Info: tables/tpt_full_graph_shares.pdf used on input line 93
+0.
+(pdftex.def)             Requested size: 230.54146pt x 167.6665pt.
+ [58] [59 <./tables/tpt_full_graph_prices.pdf> <./tables/tpt_full_graph_shares.
+pdf>] [60]
+Overfull \hbox (2.99678pt too wide) in paragraph at lines 983--983
+[]\OT1/cmr/bx/n/17.28 Assessing the Sam-pling of the Con-nec-tion Sur-vey 
+ []
+
+[61] (./tables/paws_sampling.tex) (./tables/descriptives_census_to_paws.tex)
+[62] [63] (./tables/pollfish_paws_means.tex) [64]
+(./tables/pollfish_paws_diff.tex)
+<tables/cdf_approx.png, id=1037, 401.5pt x 401.5pt>
+File: tables/cdf_approx.png Graphic file (type png)
+
+<use tables/cdf_approx.png>
+Package pdftex.def Info: tables/cdf_approx.png used on input line 1044.
+(pdftex.def)             Requested size: 200.7495pt x 200.7495pt.
+ [65] (./tables/approx_welfare.tex)
+(./tables/approx_simulation.tex) [66 <./tables/cdf_approx.png (PNG copy)>]
+[67] (./tables/new_descriptives_est_sample.tex) [68]
+<tables/consumption_histogram.pdf, id=1064, 397.485pt x 289.08pt>
+File: tables/consumption_histogram.pdf Graphic file (type pdf)
+
+<use tables/consumption_histogram.pdf>
+Package pdftex.def Info: tables/consumption_histogram.pdf used on input line 11
+03.
+(pdftex.def)             Requested size: 278.2376pt x 202.35461pt.
+
+<tables/tariff_time_series.pdf, id=1065, 397.485pt x 289.08pt>
+File: tables/tariff_time_series.pdf Graphic file (type pdf)
+
+<use tables/tariff_time_series.pdf>
+Package pdftex.def Info: tables/tariff_time_series.pdf used on input line 1113.
+
+(pdftex.def)             Requested size: 278.2376pt x 202.35461pt.
+ (./tables/semi_sample_size.tex)
+Overfull \hbox (6.7678pt too wide) in paragraph at lines 1119--1120
+\OT1/cmr/m/n/12 This set-ting also pro-vides quasi-experimental vari-a-tion in 
+the tar-iff over time at the connection-
+ []
+
+[69 <./tables/consumption_histogram.pdf>]
+<tables/res_semi_tariff.pdf, id=1088, 397.485pt x 289.08pt>
+File: tables/res_semi_tariff.pdf Graphic file (type pdf)
+
+<use tables/res_semi_tariff.pdf>
+Package pdftex.def Info: tables/res_semi_tariff.pdf used on input line 1127.
+(pdftex.def)             Requested size: 258.36218pt x 187.89977pt.
+ (./tables/sem_compare_means.tex) [70 <./tables/tariff_time_series.pdf>] [71 <.
+/tables/res_semi_tariff.pdf>]
+<tables/sem_event.pdf, id=1127, 397.485pt x 289.08pt>
+File: tables/sem_event.pdf Graphic file (type pdf)
+
+<use tables/sem_event.pdf>
+Package pdftex.def Info: tables/sem_event.pdf used on input line 1155.
+(pdftex.def)             Requested size: 278.2376pt x 202.35461pt.
+ [72 <./tables/sem_event.pdf>]
+(./tables/sig_guess_estimates.tex) [73] [74] (./tables/neighbor_distance.tex)
+[75] (./tables/mean_diff_leak.tex) (./tables/mean_diff_DC.tex) [76] [77]
+<tables/leakers_pre_2.pdf, id=1185, 397.485pt x 289.08pt>
+File: tables/leakers_pre_2.pdf Graphic file (type pdf)
+
+<use tables/leakers_pre_2.pdf>
+Package pdftex.def Info: tables/leakers_pre_2.pdf used on input line 1264.
+(pdftex.def)             Requested size: 278.2376pt x 202.35461pt.
+
+<tables/leakers_full_2.pdf, id=1187, 397.485pt x 289.08pt>
+File: tables/leakers_full_2.pdf Graphic file (type pdf)
+
+<use tables/leakers_full_2.pdf>
+Package pdftex.def Info: tables/leakers_full_2.pdf used on input line 1279.
+(pdftex.def)             Requested size: 278.2376pt x 202.35461pt.
+ [78 <./tables/leakers_pre_2.pdf>]
+(./tables/neighbor_selection.tex) [79 <./tables/leakers_full_2.pdf>] [80]
+(./tables/leaker_selection.tex) [81] [82] (./tables/incidental_parameters.tex)
+(./jmp_wjv_v2.bbl [83] [84] [85] [86] [87]) [88]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1460.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1460.
  (./jmp_wjv_v2.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1438.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1438.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1460.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1460.
 
 Package rerunfilecheck Info: File `jmp_wjv_v2.out' has not changed.
-(rerunfilecheck)             Checksum: A02D95553E30B97FF125B1AA17CF9044;47.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1438.
+(rerunfilecheck)             Checksum: 7F90AE75615B438957009BCB459DD52A;3516.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1460.
  ) 
 Here is how much of TeX's memory you used:
- 24488 strings out of 493089
- 470668 string characters out of 6134842
- 582410 words of memory out of 5000000
- 27357 multiletter control sequences out of 15000+600000
- 15111 words of font info for 59 fonts, out of 8000000 for 9000
+ 25593 strings out of 493089
+ 494428 string characters out of 6134842
+ 609410 words of memory out of 5000000
+ 27916 multiletter control sequences out of 15000+600000
+ 17914 words of font info for 72 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,11n,67p,1903b,561s stack positions out of 5000i,500n,10000p,200000b,80000s
-pdfTeX warning (dest): name{Hfootnote.4} has been referenced but does not exi
-st, replaced by a fixed one
+ 55i,22n,75p,1903b,1531s stack positions out of 5000i,500n,10000p,200000b,80000s
+pdfTeX warning (dest): name{Hfootnote.35} has been referenced but does not ex
+ist, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.34} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.33} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.32} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.31} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.30} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.29} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.28} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.27} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.26} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.25} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.24} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.23} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.22} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.21} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.20} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.19} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.18} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.17} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.16} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.15} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.14} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.13} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.12} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.11} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.10} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.9} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.8} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.7} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.6} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.5} has been referenced but does not exist
+, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.4} has been referenced but does not exist
+, replaced by a fixed one
 
 pdfTeX warning (dest): name{Hfootnote.3} has been referenced but does not exist
 , replaced by a fixed one
@@ -1132,21 +1451,32 @@ pdfTeX warning (dest): name{Hfootnote.2} has been referenced but does not exist
 pdfTeX warning (dest): name{Hfootnote.1} has been referenced but does not exist
 , replaced by a fixed one
 
-</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><
-/usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></
-usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></us
-r/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/
-local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/lo
-cal/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local
-/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/te
-xlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/tex
-live/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texli
+ </Users/williamviolette/Library/texlive/2015/texmf-var/fonts/pk/ljfour/public/
+bbm/bbm12.600pk></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmbx10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/
+cm/cmbx12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmex10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmmi10.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/
+cmmi12.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mmi6.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmm
+i7.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8
+.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.p
+fb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb
+></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><
+/usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></us
+r/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/l
+ocal/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/loca
+l/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local
+/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/local/t
+exlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/tex
+live/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texli
 ve/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texliv
-e/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on jmp_wjv_v2.pdf (5 pages, 160384 bytes).
+e/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive
+/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on jmp_wjv_v2.pdf (88 pages, 1417985 bytes).
 PDF statistics:
- 183 PDF objects out of 1000 (max. 8388607)
- 163 compressed objects within 2 object streams
- 62 named destinations out of 1000 (max. 500000)
- 21 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1442 PDF objects out of 1728 (max. 8388607)
+ 1265 compressed objects within 13 object streams
+ 292 named destinations out of 1000 (max. 500000)
+ 463 words of extra memory for PDF output out of 10000 (max. 10000000)
 

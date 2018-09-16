@@ -19,9 +19,11 @@ global date_low  = "600"
 global date_high = "664"
 global t_min     = "30"
 
-global sample_by_barangay_1_ 	= "yes"
+global sample_by_barangay_1_ 	= "no"   // EXPORTS ARE SWITCHED OFF NOW
 global compile_full_sample_2_ 	= "yes"
-global compile_alt_3_ 			= "yes"
+global compile_alt_3_ 			= "no"
+
+
 
 *********************************
 ****** PREPARING DATA HERE ******
@@ -40,17 +42,7 @@ end
 
 local paws_data_selection "(SELECT * FROM paws GROUP BY conacct HAVING MIN(ROWID) ORDER BY ROWID)"
 
-#delimit;
-odbc load, exec("
-SELECT A.* 
-	FROM `paws_data_selection' AS A
-	JOIN conacctseri AS B 
-		 ON A.conacct = B.conacct
-	LEFT JOIN leakneighbors AS C 
-		ON A.conacct = C.conacct 
-WHERE B.conacct>0 AND C.conacct IS NULL  ")  dsn("phil") 	clear;
-#delimit cr;
-
+odbc load, exec("SELECT A.* FROM `paws_data_selection' AS A JOIN conacctseri AS B  ON A.conacct = B.conacct LEFT JOIN leakneighbors AS C  ON A.conacct = C.conacct  WHERE B.conacct>0 AND C.conacct IS NULL  ")  dsn("phil") 	clear
 
 	set seed 10
 	g B = runiform()
@@ -156,10 +148,18 @@ odbc load, exec("`bill_query'")  dsn("phil") clear
 sort conacct date
 
 ** FULL DATA EXPORT
+
+
+	preserve 
+		keep conacct c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* hhsize SHO house_census dist_mean 
+		order conacct c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* hhsize SHO house_census dist_mean
+		save "${temp}standard_${version}_temp.dta", replace
+	restore 
+
 	preserve 
 		keep  c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* hhsize SHO house_census dist_mean 
 		order c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* hhsize SHO house_census dist_mean
-		export delimited "${generated}standard_${version}.csv", delimiter(",") replace 
+	*	export delimited "${generated}standard_${version}.csv", delimiter(",") replace 
 	restore 
 
 ** TIME EXPORT
@@ -168,7 +168,7 @@ sort conacct date
 		egen T = sum(o), by(conacct)
 		duplicates drop conacct , force 
 		keep T 
-		export delimited "${generated}standard_t_${version}.csv", delimiter(",") replace 
+	*	export delimited "${generated}standard_t_${version}.csv", delimiter(",") replace 
 	restore 
 
 ** EXPORT HHs PER BARANGAY  (to sample alt)
@@ -180,9 +180,23 @@ sort conacct date
 		keep pop_c barangay_id 
 		odbc exec("DROP TABLE IF EXISTS pop_c;"), dsn("phil") 
 		odbc insert, table("pop_c") dsn("phil") create 
-		odbc exec("CREATE INDEX pop_c_barangay ON pop_c (barangay_id);"), dsn("phil") 
+	*	odbc exec("CREATE INDEX pop_c_barangay ON pop_c (barangay_id);"), dsn("phil") 
 	restore 
 
+
+merge m:1 conacct using "${temp}paws_inc.dta"
+drop if _merge==2
+drop _merge
+sort conacct date
+
+egen m_inc=mean(INC)
+replace INC=m_inc if INC==.
+drop m_inc
+
+	preserve
+		keep  INC
+		*export delimited "${generated}standard_inc_${version}.csv", delimiter(",") replace 	
+	restore
 }
 
 
@@ -234,7 +248,7 @@ if "$compile_alt_3_" == "yes" {
 preserve
 	keep  c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* hhsize SHO house_census dist_mean
 	order c p_L p_H1 p_H2 p_H3 size SHH_G CONTROLS* hhsize SHO house_census dist_mean 
-	export delimited "${generated}alt_${version}.csv", delimiter(",") replace
+	*export delimited "${generated}alt_${version}.csv", delimiter(",") replace
 restore
 
 }

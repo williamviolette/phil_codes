@@ -27,7 +27,7 @@ est3(print,tag,mac,size_smp,...
                     fileID,est_version,controls,control_size,ph_controls,given,...
                     a_start,sto,reps,...
                     sort_condition,split_F_option,transfer_option,smm_est_option,...
-                    real_data,TUNE,BOOT,boot_max,boot_estimates,est_opt,cd_dir);
+                    real_data,TUNE,BOOT,boot_max,boot_estimates,est_opt,many_sv_smm,cd_dir);
 
 if mac==1
     table_pre= 'tables/';
@@ -50,14 +50,14 @@ group_percentile = 50;
                 transfer_option=1;
             
     capital_real = 0;
-    PH_COUNTER   = []  ;   
+    PH_COUNTER   = [12000]  ;   
     income_opt   = 0   ;
 
     
         TRIALS = 50  + 1;            
 if isempty(PH_COUNTER)~=1
     if income_opt==0
-        F_MIN = -50;
+        F_MIN = 0;
         F_MAX = 400;
         start_value = [  5 15  ] ;
     else

@@ -1,0 +1,21 @@
+		(1)
+VARIABLES	LABELS	Q (m3)
+		
+TR1	Distance Rank 1	0.972*
+		(0.504)
+TR2	Distance Rank 2	0.981**
+		(0.444)
+TR3	Distance Rank 3	-0.760
+		(0.479)
+TR4	Distance Rank 4	0.253
+		(0.512)
+TR5	Distance Rank 5-5	0.216
+		(0.517)
+Constant	Constant	22.68***
+		(0.124)
+		
+Observations		59,225
+R-squared		0.678
+Pre Post Trends by Rank		Yes
+Robust standard errors in parentheses		
+*** p<0.01, ** p<0.05, * p<0.1		

@@ -1,0 +1,17 @@
+		(1)
+VARIABLES	LABELS	Diff-in-Diff Estimate
+		
+POST_BANK	Post X Treated	0.127***
+		(0.0215)
+POST	Post	0.0163
+		(0.0122)
+Constant	Constant	0.794***
+		(0.00855)
+		
+Observations		382,462
+R-squared		0.062
+Avg. New Conn.		.86
+Area FE		Yes
+Robust standard errors in parentheses		
+*** p<0.01, ** p<0.05, * p<0.1		
+Clustered at the MRU Level: 3,757 MRUs		

@@ -61,6 +61,8 @@ P.barangay_id, P.SHH, P.SHO, P.house_1, P.house_2, P.age, P.hhemp, P.hhsize, P.l
 
 			drop if c==.
 			
+
+			
 			g TP=T<0          //   KEEP ONLY TREATED WITH PREPERIODS
 				egen mt=sum(TP), by(conacct) // total pre
 				g mt_g=mt if distance==-1 

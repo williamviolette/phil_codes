@@ -30,9 +30,14 @@ controls_gen = controls(1:3);
     %SE = [ones(size(CONTROL,1),1)  (PRC(UB,Q_obs,t)==1)  (ones(size(CONTROL,1),1) - PRC(100-UB,Q_obs,t)==1 ) ];
     %SE = ones(size(CONTROL,1),1);
     %SE = [ones(size(CONTROL,1),1)  (PRC(10,Q_obs,t)==1)  (ones(size(CONTROL,1),1) - PRC(40,Q_obs,t)==1 ) ];
+    %SE = [ones(size(CONTROL,1),1)  (PRC(10,Q_obs,t)==1)  (ones(size(CONTROL,1),1) - PRC(,Q_obs,t)==1 ) ];
     %SE = [ones(size(CONTROL,1),1)  (PRC(10,Q_obs,t)==1) ((PRC(20,Q_obs,t)==1) - (PRC(10,Q_obs,t)==1)) ((PRC(30,Q_obs,t)==1) - (PRC(20,Q_obs,t)==1))  (ones(size(CONTROL,1),1) - PRC(50,Q_obs,t)==1 ) ];
     
-    SE = [ones(size(CONTROL,1),1)  (PRC(10,Q_obs,t)==1)  (ones(size(CONTROL,1),1) - PRC(60,Q_obs,t)==1 ) ];
+    
+
+%    SE = [ones(size(CONTROL,1),1)  (PRC(30,Q_obs,t)==1)  (ones(size(CONTROL,1),1) - PRC(60,Q_obs,t)==1 ) ];
+
+    SE = [ones(size(CONTROL,1),1)  (PRC(20,Q_obs,t)==1)  (ones(size(CONTROL,1),1) - PRC(60,Q_obs,t)==1 ) ];
 
     
     if SHH_control>0

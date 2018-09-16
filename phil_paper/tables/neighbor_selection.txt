@@ -1,0 +1,22 @@
+		(1)	(2)	(3)
+VARIABLES	LABELS	Q (m3)	Q (m3)	Difference
+				
+TR1	Demand Rank 1	1.480***	1.334***	0.145
+		(0.247)	(0.292)	
+TR2	Demand Rank 2	0.918**	-0.0839	1.002
+		(0.361)	(0.398)	
+TR3	Demand Rank 3	0.157	1.275*	-1.117
+		(0.541)	(0.663)	
+TR4	Demand Rank 4	-0.122	-0.813	0.691
+		(1.013)	(0.929)	
+TR5	Demand Rank 5	1.769	4.117	-2.348
+		(1.915)	(3.283)	
+Constant	Constant	22.06***	21.99***	
+		(0.0799)	(0.0409)	
+				
+Observations		59,225	42,108	
+R-squared		0.678	0.710	
+Connection FE		Yes	Yes	
+Simulated Leak		No	Yes	
+Robust standard errors in parentheses				
+*** p<0.01, ** p<0.05, * p<0.1				

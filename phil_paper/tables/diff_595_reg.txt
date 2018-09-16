@@ -1,0 +1,14 @@
+		(1)
+VARIABLES	LABELS	Diff-in-Diff Estimate
+		
+POST_BANK	Post X Treated	0.351***
+		(0.0311)
+POST	Post	-0.0260**
+		(0.0129)
+		
+Observations		382,462
+R-squared		0.062
+Area FE		Yes
+Robust standard errors in parentheses		
+*** p<0.01, ** p<0.05, * p<0.1		
+Clustered at the Area Level: 3,757 Areas		

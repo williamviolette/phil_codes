@@ -38,9 +38,7 @@ end
     end
     
     
-    %X          = csvread(strcat(cd_dir,'standard_',tag,'.csv'),1,0, [ 1 0 sum(t) (4+control_size+3) ]);
-    %%% ADD PH CONTROLS
-    X          = csvread(strcat(cd_dir,'standard_',tag,'.csv'),1,0, [ 1 0 sum(t) (4+control_size+3+2) ]);
+    %X          = csvread(strcat(cd_dir,'standard_',tag,'.csv'),1,0, [ 1 0 sum(t) (4+control_size+3+2) ]);
     
     
     if isempty(BOOT)~=1
@@ -54,6 +52,8 @@ end
         %t=csvread(strcat('tBOOT',num2str(est_version),'.csv'));        
         %t=csvread(strcat('BOOT\tBOOT',num2str(est_version),'_',num2str(BOOT(1)),'.csv'));
         %t=t(:,BOOT(1));
+    else
+        X          = csvread(strcat(cd_dir,'standard_',tag,'.csv'),1,0, [ 1 0 sum(t) (4+control_size+3+2) ]);
     end
     
  %   xa =grpstats(X,repelem((1:length(t))',t,1));

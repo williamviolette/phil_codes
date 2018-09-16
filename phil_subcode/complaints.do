@@ -99,8 +99,31 @@
 
 	*keep if LEAK==1 
 
+	
+
+
 	*** THIS DEALS WITH EXCESSIVE BILLING COMPLAINTS TOO
 	keep if LEAK_OLD==1 | VERTICAL==1 | BILL==1
+	
+
+	g o=1
+	egen os=sum(o)
+	sum os, detail
+	file open myfile using "${output}total_bill_compalints.tex", write replace
+			file write myfile %20.0fc "`=round(r(mean),1)'"
+			file close myfile
+	drop os o
+
+	preserve
+		keep if LEAK_OLD==1 | VERTICAL==1
+		g o=1
+		egen os=sum(o)
+		sum os, detail
+		file open myfile using "${output}total_leaks.tex", write replace
+				file write myfile %20.0fc "`=round(r(mean),1)'"
+				file close myfile
+		drop os o
+	restore 
 	
 	sort conacct date
 	by conacct: g id=_n
@@ -116,7 +139,7 @@
 	odbc exec("CREATE INDEX cc_conacct_ind ON cc (conacct);"), dsn("phil")
 
 
-odbc load, exec("SELECT * FROM cc") clear
+*odbc load, exec("SELECT * FROM cc") clear
 
 
 ***  checks out, exactly the same sample  ***

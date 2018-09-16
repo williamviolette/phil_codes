@@ -22,6 +22,12 @@ else
     SHH_control=0;
 end
 
+SIG_GUESS = 0;
+if length(TUNE)>1
+   SIG_GUESS = TUNE(2);
+   TUNE = TUNE(1);
+end
+
 %%% REAL DATA OPTION
 if length(real_data)>1
     RLENGTH=real_data(2);
@@ -66,7 +72,14 @@ if real_data~=1
     Q_obs=moffitt_prep_norm_med_VAR_tune(t,k_1,k_2,k_3,p_1,p_2,p_3,p_4,...
                 gamma,SIG_NU,SIG_EP,ALPHA_1,TUNE);
 end
-    obj = @(a)est_nmid_general_tune(a,t,Q_obs,k_1,k_2,k_3,p_1,p_2,p_3,p_4,D,SE,CA,control_id,TUNE);
+	if SIG_GUESS==1
+                obj = @(a)est_no_mid_general_tune(a,t,Q_obs,k_1,k_2,k_3,p_1,p_2,p_3,p_4,D,SE,CA,control_id,TUNE);    
+	elseif SIG_GUESS==2
+                obj = @(a)est_full_mid_general_tune(a,t,Q_obs,k_1,k_2,k_3,p_1,p_2,p_3,p_4,D,SE,CA,control_id,TUNE);   
+	else
+                obj = @(a)est_nmid_general_tune(a,t,Q_obs,k_1,k_2,k_3,p_1,p_2,p_3,p_4,D,SE,CA,control_id,TUNE);                
+	end
+    %obj = @(a)est_nmid_general_tune(a,t,Q_obs,k_1,k_2,k_3,p_1,p_2,p_3,p_4,D,SE,CA,control_id,TUNE);
 
 
     TRUTH = [ sig_ep sigma_1 alpha_1 gamma1 ];

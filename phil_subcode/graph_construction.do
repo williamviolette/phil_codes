@@ -1,16 +1,102 @@
+		
+		
 
+
+***** HISTOGRAM OF OBSERVED AND PREDICTED CONSUMPTION ******
+
+		import delimited using "${generated}results/q_obs_pred.csv", delimiter(",") clear
+		g id=_n
+		save "${temp}q_obs_pred.dta", replace
+
+		import delimited using "${generated}results/q_obs_true.csv", delimiter(",") clear
+		ren v1 v2
+		g id=_n
+		merge 1:1 id using "${temp}q_obs_pred.dta"
+		drop _merge
+
+		ren v1 Q_obs_pred
+		ren v2 Q_obs
+		
+		replace Q_obs_pred=round(Q_obs_pred)
+		
+		
+		label var Q_obs "Observed Water Use"
+		label var Q_obs_pred "Prediced Water Use"
+		
+			hist Q_obs_pred if Q_obs_pred<=120  ,  discrete xline(11) xline(21) xline(40) title("Histogram of Prediced Water Use") graphregion(style(none) color(gs16))   plotregion(style(none) color(gs16))
+				graph export "${output}hist_pred.pdf", as(pdf) replace		
+						
+			
+			hist Q_obs if Q_obs<=120         ,  discrete xlabel(0(50)120)  xline(11) xline(21) xline(40) title("Histogram of Observed Water Use") graphregion(style(none) color(gs16))   plotregion(style(none) color(gs16))
+				graph export "${output}hist_true.pdf", as(pdf) replace		
+
+				
+
+			twoway (hist Q_obs_pred if Q_obs_pred<=100 & Q_obs_pred>-15 , ///
+			discrete fcolor(gs10) ///
+			) || ///
+			(hist Q_obs if Q_obs<=100  & Q_obs>-15       , fcolor(none) lcolor(black)  discrete xlabel(0(50)120) ///
+			xline(11) xline(21) xline(40)), title("Histogram of Consumption") ///
+			graphregion(style(none) color(gs16))   plotregion(style(none) color(gs16)) ///
+			legend(order(1 "Predicted" 2 "Observed" ))
+				graph export "${output}hist_both.pdf", as(pdf) replace		
+				
+
+****** HISTOGRAM OF PREDICTED HASSLE COSTS *****
+
+	import delimited using "${generated}results/ph_distribution.csv", delimiter(",") clear
+	lab var v1 "Predicted Hassle Cost (PhP/m3)"
+	
+	sum v1, detail
+
+	hist v1 if v1>`=r(p1)' & v1<`=r(p99)', ///
+			discrete width(1) fcolor(gs14)
+
+	graph export "${output}hassle_cost_distribution.pdf", as(pdf) replace		
+				
+
+	
+
+
+
+
+
+
+		use "${data}prices_5B_no_inflation.dta", clear
+			keep if date==620
+			expand 5000
+			g c=_n/100
+			g P=0 if c<=10
+			replace P=p_H1 if c>10 & c<=20
+			replace P=p_H2 if c>20 & c<=40
+			replace P=p_H3 if c>40
+		*scatter P c
+		keep P c
+	
+		save "${temp}price_graph2.dta", replace
+		
+		
 
 		
 		
 		import delimited using "${generated}tables/tariff_graph/tpt_graph_full.csv", ///
 		delimiter(",") clear
 		
-		g p_lead=v2[_n+1]
-		g p_lead2=v2[_n+2]
-		g p_lag = v2[_n-1]
-		g p_avg= ( v2+p_lag+p_lead+p_lead2 ) / 4
+		egen pm = ma()
+
+		g p_lead =	v2[_n+1]
+		g p_lead2=	v2[_n+2]
+		g p_lead3=  v2[_n+3]
+		g p_lead4=  v2[_n+4]
+		g p_lag  = 	v2[_n-1]
+		g p_lag2 = 	v2[_n-2]
+		g p_lag3 =  v2[_n-3]
+		g p_avg= ( 	v2+p_lag  + p_lag2+p_lead+p_lead2 + p_lead3 + p_lead4 ) / 7
 		replace p_avg=v2 if p_avg==.
 		
+		*g p_avg1 = ( 	v2+p_lag  + p_lag2 +p_lead+p_lead2 ) / 5
+		*replace p_avg = p_avg1 if v1<3
+
 		g f_lead= v3[_n+1]
 		g f_lead2= v3[_n+2]
 		g f_lag = v3[_n-1]
@@ -51,22 +137,7 @@
 		
 		
 		
-		
-		
-		use "${data}prices_5B_no_inflation.dta", clear
-			keep if date==620
-			expand 5000
-			g c=_n/100
-			g P=0 if c<=10
-			replace P=p_H1 if c>10 & c<=20
-			replace P=p_H2 if c>20 & c<=40
-			replace P=p_H3 if c>40
-		*scatter P c
-		keep P c
-	
-		save "${temp}price_graph2.dta", replace
-		
-		
+
 		
 		
 		
@@ -75,7 +146,7 @@
 		******** FULL TARIFF STRUCTURE GRAPHS **********
 		
 		
-		use "{temp}price_graph2.dta", clear
+		use "${temp}price_graph2.dta", clear
 		
 		*replace P=P/50
 		
@@ -265,7 +336,7 @@ odbc load, exec("SELECT A.date, A.c FROM billing_7 AS A WHERE (A.class==1 OR A.c
 
 		lab var c_N "Frequency"
 		
-			scatter c_N c if c<=60 & c_n==1, title("Histogram of Monthly Consumption") ///
+			scatter c_N c if c<=60 & c_n==1,  ///
 			ylabel(0(.01).035) xlabel(0(10)60) ///
 			xline(11,lstyle(refline) lpattern(dash)) ///
 			xline(21,lstyle(refline) lpattern(dash)) ///
@@ -297,7 +368,7 @@ odbc load, exec("SELECT A.date, A.c FROM billing_7 AS A WHERE (A.class==1 OR A.c
 			lab var date "Date"
 			
 			line p_L date if date>600, lwidth("thick") || line p_H1 date if date>600, lwidth("thick") ///
-			|| line p_H2 date if date>600, lwidth("thick") || line p_H3 date if date>600, lwidth("thick") title("Regulated Tariff Changes") ytitle("Tariff (PhP/m3)") 
+			|| line p_H2 date if date>600, lwidth("thick") || line p_H3 date if date>600, lwidth("thick") ytitle("Tariff (PhP/m3)") 
 			graph export "${output}tariff_time_series.pdf", as(pdf) replace		
 		
 
@@ -338,7 +409,7 @@ odbc load, exec("SELECT A.date, A.c FROM billing_7 AS A WHERE (A.class==1 OR A.c
 
 		replace c = c+1		
 			
-		line P c, lwidth("thick") || line P_semi c, lpattern("dash") title("Residential and Semi-Business Tariffs") lwidth("thick")
+		line P c, lwidth("thick") || line P_semi c, lpattern("dash") lwidth("thick")
 	
 			graph export "${output}res_semi_tariff.pdf", as(pdf) replace
 		

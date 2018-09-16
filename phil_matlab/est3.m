@@ -7,7 +7,8 @@ est3(print,tag,mac,size_smp,...
                     fileID,est_version,controls,control_size,ph_controls,given,...
                     a_start,sto,reps,...
                     sort_condition,split_F_option,transfer_option,smm_est_option,...
-                    real_data,TUNE,BOOT,boot_max,boot_estimates,ESTIMATION_OPTION,cd_dir)
+                    real_data,TUNE,BOOT,boot_max,boot_estimates,ESTIMATION_OPTION,...
+                    many_sv_smm,cd_dir)
 
                 
                 
@@ -237,13 +238,26 @@ end
           [corr_ep_O_B corr_ep_B_B corr_nu_O_B corr_nu_B_B]);  
     end
             
+
+
+if isempty(BOOT)==1
+            csvwrite(strcat(cd_dir,'results',slash,'correlation_ph_beta_.csv'),...
+                corr(PH_FULL,BETA_FULL));    
+end
             
             
 %%%%%%%%% DETERMINE LITTLE NEIGHBORHOODS
 %%%       So far NOT grouping by BARANGAY! do that next..
 
 
+
+            
 J = [ GROUP CHOICE_FULL BETA_FULL ALPHA_FULL SIG_EP_FULL SIG_NU_FULL K_FULL P_FULL PH_FULL Y_FULL CONTROL_FULL ];
+
+    
+%%% PRINT SAMPLE SIZE
+
+csvwrite(strcat(cd_dir,'results',slash,'pre_sample_hhs.csv'),length(J(:,1))); 
 
 
 BAR    = J(:,size(J,2)-2) ;
@@ -273,6 +287,9 @@ end
 input1 = j1(:,3:2+13); %% ADD K and Y
 input2 = j2(:,3:2+13);
 input3 = j3(:,3:2+13);
+
+csvwrite(strcat(cd_dir,'results',slash,'post_sample_hhs.csv'),3*length(input1(:,1))); 
+
 
 CHOICE_TRUE = [j1(:,2) j2(:,2) j3(:,2)];
 
@@ -374,14 +391,37 @@ if ESTIMATION_OPTION==1
     end
                                                    
   % given = 30;
-  % given = 35
+  % given = 35;
                     obj = @(a1) smm_shell_v3_more_moments(a1,given,moments,smm_est_option,...
                                     input1s,input2s,input3s,...
                                     errors1s,errors2s,errors3s,...
                                     SIG_EP_INPUTS,reps,sto,alt_error,...
                                     sort_condition,split_F_option,transfer_option,TUNE) ;
                    a = a_start ;
-                              
+                
+    
+    %%% MAKE A GRAPH! (( NEW GRAPH ))
+    %{
+    K = 15;
+    R = zeros(K,1);
+    F = zeros(K,1);
+    for k=1:K 
+        f = 100*(k*2/K);
+        %f = 300*(k*2/K);
+        as = [ 275 f ];
+        r = obj(as);
+        R(k,1)=r;
+        F(k,1)=f;
+    end
+    plot(F,R)
+    %}
+    %%% DONE GRAPH!                   
+                  
+ % [h,moments_output,Choices]=obj([275 100]);
+  
+ % moments
+ % moments_output
+                   
     %%% MAKE A GRAPH!
     %{
     K = 15;
@@ -389,41 +429,45 @@ if ESTIMATION_OPTION==1
     F = zeros(K,1);
     for k=1:K 
         f = 400*(k*2/K);
-        a = [ f 80 50 10];
-        r = obj(a);
+        as = [ f 130 50 10];
+        r = obj(as);
         R(k,1)=r;
         F(k,1)=f;
     end
     plot(F,R)
     %}
     %%% DONE GRAPH!
-                   
-                   
+                                    
                      tic
-                    % a     = [300 80 50 10]; %% try new starting values
                      x1 = fminsearch(obj,a); 
+                    % toc
                     % TOC 
                       %%% put a TOC here too1
-                     
-        x_m = x1;
-        [h_m,mm]=obj(x1);
-        R = [.6 .7 1.3 1.5];
-        for r = 1:size(R,2)
-           a1=a.*R(r);
-           x1a = fminsearch(obj,a1);
-           [h,moments_eqm]=obj(x1a);
-           x_m(1+r,:)=x1a;
-           h_m(1+r,:)=h;
-           mm(1+r,:)=moments_eqm;
+                    
+        if many_sv_smm==1  %%% only run multiple start values if option is equal to one
+            x_m = x1;
+            [h_m,mm]=obj(x1);
+            %R = [.6 .7 1.3 1.5];
+           %R = [.3 .5 .6 1.1 1.2];
+            R = [.8 1.2];
+            for r = 1:size(R,2)
+               a1=a.*R(r);
+               x1a = fminsearch(obj,a1);
+               [h,moments_eqm]=obj(x1a);
+               x_m(1+r,:)=x1a;
+               h_m(1+r,:)=h;
+               mm(1+r,:)=moments_eqm;
+            end
+
+            h_m
+            x_m
+            mm
+            moments
+
+            x1 = x_m(repelem(min(h_m),size(h_m,1),1)==h_m,:);
+            x1 = x1(1,:);
         end
-    
-        h_m
-        x_m
-        mm
-        moments
-        
-        x1 = x_m(repelem(min(h_m),size(h_m,1),1)==h_m,:);
-        x1 = x1(1,:);
+            
         TOC=toc;
                      
 [~,moments_eqm] ...

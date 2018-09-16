@@ -112,7 +112,9 @@ US          = zeros(length(start_value),1);
 end
 
 
+
 %{
+
                 subplot(1,2,1)
           hold on 
      plot(F_GRID,  (mean_utility1(:,2)-mean_utility1(1,2)),'LineWidth',2,'Color','red','DisplayName','Low');

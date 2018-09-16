@@ -105,7 +105,7 @@
 	
 
 ** IMPUTATE INCOME
-odbc load, table("paws") clear
+odbc load, table("paws") clear dsn("phil")
 		g paws = 1
 		append using "${temp}cbms_inc.dta"	
 			replace age=100 if age>100
@@ -113,6 +113,10 @@ odbc load, table("paws") clear
 		predict INC, xb
 		keep if paws==1
 		keep conacct INC
+		duplicates drop conacct, force
+		drop if conacct==.
+save "${temp}paws_inc.dta", replace
+
 odbc exec("DROP TABLE IF EXISTS paws_inc;"), dsn("phil")
 odbc insert, table("paws_inc") dsn("phil") create
 odbc exec("CREATE INDEX paws_inc_conacct_ind ON paws_inc (conacct);"), dsn("phil")

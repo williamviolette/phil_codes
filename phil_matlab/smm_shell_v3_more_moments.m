@@ -26,6 +26,10 @@ elseif smm_est_option(1)==4
     FA_mean     = a(1,2);
     PA_mean     = a(1,3);  
     a_sigma     = a(1,4);
+elseif smm_est_option(1)==5
+    F_mean      = a(1,1);
+    PA_mean     = given(1);
+    FA_mean     = given(2);
 else
     F_mean      = a(1,1);
     FA_mean     = a(1,2);
@@ -110,7 +114,10 @@ h = ( moments(1) - EM_individual  ).^2 + ...
          cc1 = corrcoef([Choices(:,1)==3;Choices(:,2)==3;Choices(:,3)==3],[input1a(:,1);input2a(:,1);input3a(:,1)]);
          cc2 = corrcoef([Choices(:,1)==2;Choices(:,2)==2;Choices(:,3)==2],[input1a(:,1);input2a(:,1);input3a(:,1)]);
          cc3 = corrcoef([Choices(:,1)==1;Choices(:,2)==1;Choices(:,3)==1],[input1a(:,1);input2a(:,1);input3a(:,1)]);
-           cov_moments = [ cc1(1,2) cc2(1,2) cc3(1,2) ];
+         cc1(isnan(cc1)==1) = 2; %%% Plug in 2 for cov moments! %%%
+         cc2(isnan(cc2)==1) = 2;
+         cc3(isnan(cc3)==1) = 2;
+         cov_moments = [ cc1(1,2) cc2(1,2) cc3(1,2) ];
     end
 
 

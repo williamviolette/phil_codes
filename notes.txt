@@ -65,16 +65,41 @@ notes
 9/5/18 :
 	
 	- [nte] mention that the lines are jagged in the new counterfactual graph because of the grid size... or fix! ...
-		- or just run a smoother over it...
+		- or just run a smoother over it... [done]
 
-	- [chk] go back and fix directories so that .tex files export to the right place from Matlab!
+	- [chk] go back and fix directories so that .tex files export to the right place from Matlab! [done]
 
 9/6/18 :
 
 	- [nte] MEAN_INC.csv HARD CODED IN first best graph
 
-
-
-
+9/10/18 :
 	
+	- [chk] get rid of bootstrapping procedure for hassle cost section [done]
+
+	- [chk] rewrite the disconnection policy section with new figures : DOuble-check back of the envelope calculations!!
+
+	- [chk] need to relabel the controls!  (now I'm using different ones) [done]
+
+	- [chk] need to include descriptives for the control variables too! (at least percentages in the main estimation sample...; just be super transparent about it)
+
+	- [nte] think about how to explain results now in terms of correlation of ph with different subgroups? like poorer areas? is this heterogeneity important? (do counterfactual where everyone gets the same 15 ph)  ;  ph might be sort of an implicit price discrimination
+
+	- [chk] get the right number of households for table 3 (discuss how some HHs are dropped, how we create these little neighborhoods)
+
+	- [chk] make separate descriptive tables for step 1 and step 3 [maybe not...]
+
+	- [chk] look at presentations for extra tables! (like the one testing the representativeness of different samples!)
+
+	- [chk] put volumes in counterfactuals!
+
+9/14/18 :
+
+	- [chk] make undersampling table [maybe not...]
+	
+	- [chk] refer to pres (add other shared goods in motivation)
+
+	- [chk] need to put in model fit!! for SMM and explain moments more clearly!
+
+	- [chk] what are some tests I can do on the distance metric, for it to make sense?
 

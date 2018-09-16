@@ -12,12 +12,16 @@
 * ${output}access_pipes.tex , ${output}access_fetch.tex , ${output}access_single_tap.tex
 
 
-"${subcode}descriptives_prep.do"
+"${subcode}descriptives_prep.do" // primary descriptive table in the beginning
 
 ** OUTPUT :
 * ${output}shr_use_from_neighbor.tex , ${output}shr_1or2hh.tex , 
 * ${output}shr_individual.tex , ${output}shr_1hh.tex , ${output}shr_2hh.tex
 * 
+
+
+"${subcode}descriptives_prep_estimation_sample.do" // descriptive sample for the actual estimation sample
+
 
 "${subcode}descriptives_paws_census.do"
 
@@ -28,3 +32,4 @@
 
 
 "${subcode}graph_construction_rate_change.do"
+

@@ -87,6 +87,8 @@ use "${temp}paws_temp_stats.dta", clear
 
 	** STAT 3: shr_individual.tex (share of connected that are individual)
 
+	egen CHH = sum(SHH), by(SHH)
+
 	egen THH_c = sum(SHH)
 
 	egen shh_c = sum(SHH), by(SHH)
@@ -194,7 +196,7 @@ replace `var'=`var'*100
 
 *global varlist "hhtot mc vol_per hhsize house_1 house_2 duplex low_skill INC THH HH"
 
-global varlist "age hhsize hhemp low_skill INC house_1 house_2 duplex   mc mb hhtot  vol_per   THH HH T"
+global varlist "age hhsize hhemp low_skill INC house_1 house_2 duplex   mc mb hhtot  vol_per   CHH HH T"
 
 
 order $varlist
@@ -237,7 +239,7 @@ estpost sum $varlist if SHH==3
 	lab var T "Months per Connection"
 	lab var N "Total Accounts"
 	lab var HH "Share of Total HHs"
-		lab var THH "Total HHs"
+		lab var CHH "Total HHs"
 		
 		lab var mb "Water Bill (USD/Mo)"
 		
@@ -280,8 +282,8 @@ replace temp = "Water Bill (USD/Mo)" in 10
 replace temp = "Total People Served" in 11
 replace temp = "Water per Person" in 12
 
-replace temp = "Total HHs" in 13
-replace temp = "Share of Total HHs" in 14
+replace temp = "Connected HHs" in 13
+replace temp = "Share of Connected HHs" in 14
 replace temp = "Months per Connection" in 15
 
 
