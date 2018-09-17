@@ -30,7 +30,7 @@ est3(print,tag,mac,size_smp,...
                     sort_condition,split_F_option,transfer_option,smm_est_option,...
                     real_data,TUNE,BOOT,boot_max,boot_estimates,est_opt,many_sv_smm,cd_dir);
 
- PH_COUNTER = [1200];
+ PH_COUNTER = [];
     MARGINAL_COST   = COST_INPUTS(1);
     CONNECTION_COST = COST_INPUTS(2);
     

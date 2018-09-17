@@ -487,7 +487,11 @@ if ESTIMATION_OPTION==1
    moments_eqm
    %}
    %%%%%%%%%%%%%%%%%%%%%%%%%%
-    
+   if isempty(BOOT)==1
+        csvwrite(strcat(cd_dir,'results',slash,'moments_',num2str(est_version),'.csv'),moments);
+        csvwrite(strcat(cd_dir,'results',slash,'moments_eqm',num2str(est_version),'.csv'),moments_eqm);
+   end
+  
     if isempty(BOOT)~=1
             csvwrite(strcat(cd_dir,'BOOT',slash,'xsmmBOOTgroup',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),x1');
             csvwrite(strcat(cd_dir,'BOOT',slash,'momentsBOOTgroup',num2str(est_version),'_',num2str(BOOT(1)),'.csv'),moments);

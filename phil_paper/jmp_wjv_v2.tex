@@ -158,7 +158,7 @@ Since the object of interest for welfare is household-level demand, I merge the 
 %consumption and water source choices at the household-level.  
 %To examine both consumption decisions and water source choices at the household-level, I construct a dataset that merges (1) monthly water usage for around 50,000 connections, (2) demographics and water sharing measures for households using these connections, and (3) a cross-section of all households and their water source choices.  Put together, these data form a representative sample of households in half of Metro Manila.
 
-A full analysis of water usage in Manila also requires describing households that choose to use water from local vendors.  For information on households that are using water from alternative sources, I turn to the 2010 Census of Population and Housing.  Households are defined as connected to the piped network if they report using a ``faucet community water system'' for their cooking, laundry, or bathing needs.\footnote{The census was designed largely for rural populations so it does not directly ask whether households are connected to a piped water network.}  Alternatively, I define households as using from a water vendor if they report any other category, which includes deep wells, peddlers, or other sources.  I then construct similar demographic measures to the connection survey using questions in the census and compare these measures across these data sources in Table~\ref{table:pawstocensus} of Appendix~\ref{appendix:pawstocensus}.  Households that own a connection in the connection survey are similar to households connected to the piped water network in the Census data.  To construct a profile of water source choices for the full population, I randomly sample from the pool of households using from vendors in 8 regions of the city so that the data form a representative sample when combined with households covered by the connection survey in each small area.\footnote{Regions are chosen to overlap with village administrative/political boundaries while ensuring that I am able to obtain a large enough sample of vendor households for each area to perform the counterfactual analysis in Section~\ref{section:fixedcostestimation}.}
+A full analysis of water usage in Manila also requires describing households that choose to use water from local vendors.  For information on households that are using water from alternative sources, I turn to the 2010 Census of Population and Housing.  Households are defined as connected to the piped network if they report using a ``faucet community water system'' for their cooking, laundry, or bathing needs.\footnote{The census was designed largely for rural populations so it does not directly ask whether households are connected to a piped water network.}  Alternatively, I define households as using from a water vendor if they report any other category, which includes deep wells, peddlers, or other sources.  I then construct similar demographic measures to the connection survey using questions in the census and compare these measures across these data sources in Table~\ref{table:pawstocensus} of Appendix~\ref{appendix:pawstocensus}.  Households that own a connection in the connection survey are similar to households connected to the piped water network in the Census data.  To construct a profile of water source choices for the full population, I randomly sample from the pool of households using from vendors in 8 regions of the city so that the data form a representative sample when combined with households covered by the connection survey in each small area.\footnote{Regions are chosen to overlap with ward administrative/political boundaries while ensuring that I am able to obtain a large enough sample of vendor households for each area to perform the counterfactual analysis in Section~\ref{section:fixedcostestimation}.}
 
 For additional information on water sharing relationships between households, I fielded a small, non-representative survey of 600 households via mobile phone app.  This survey asks about issues associated with using different water sources, basic demographics, as well as how the bill and connection fee are paid for sharing households.  Appendix~\ref{appendix:pollfish} includes additional details on this survey and finds roughly similar measures between the connection survey and the mobile survey, suggesting that the mobile survey may provide a reasonable descriptive picture of sharing in Manila.
 
@@ -713,7 +713,7 @@ Disaggregating connection-level preferences as well as including households usin
 
 \subsubsection{Simulation and Estimation}
 
-With the full set of household preferences, the simulation routine first groups households into random sets of three neighbors with each of the 8 geographic regions.  The routine then orders households in the sequential game according to their utilities from using an individual connection.  This assumption captures the intuition that households who would have connected in the absence of any sharing are likely to be the first to take-up a new connection.  Random draws of the preference shocks, $\eta$ and $\epsilon$, are assigned to each household so that households can compute expected utilities over \input{tables/sim_time_periods}months for all possible water source choices.  These shocks are sampled from a multivariate normal distribution taking into account the estimated correlation between sharing partners from Table~\ref{table:correstimates}.  
+With the full set of household preferences, the simulation routine first groups households into random sets of three neighbors with each of the 599 geographic regions.  The routine then orders households in the sequential game according to their utilities from using an individual connection.  This assumption captures the intuition that households who would have connected in the absence of any sharing are likely to be the first to take-up a new connection.  Random draws of the preference shocks, $\eta$ and $\epsilon$, are assigned to each household so that households can compute expected utilities over \input{tables/sim_time_periods}months for all possible water source choices.  These shocks are sampled from a multivariate normal distribution taking into account the estimated correlation between sharing partners from Table~\ref{table:correstimates}.  
 %\footnote{ Future versions will not condition on observed choices in this way, and instead sample households across sharing relationships. }
 
 Households calculate payoffs following Section~\ref{section:watersourcechoice} given all potential choice sets.  Appendix~\ref{appendix:gametreefull} maps the full game tree with three players that is simulated in the estimation.  This sequential game is repeated \input{tables/sim_repetitions}times to construct a set of draws to compute simulated moments.  The moments used in the estimation include the shares of households choosing different sources --- using an individual connection, using water from a neighbor, and using from a vendor --- as well as the covariance between each of these source choices and the fixed preference parameters for each household, $\gamma_i$.\footnote{I ensure that the estimation places heavier weight on matching the source-choice moments over the correlation moments because these correlations rely on possibly noisy measures of the preference parameters both due to incidental parameter issues in estimation as well as imputation for households using vended water. }  % Future versions will re-weight these moments given the boot-strapped variance-covariance matrix.
@@ -800,7 +800,7 @@ Despite these caveats, the fact that the reduced-form and model-based estimates 
 \centering
 \caption{Connection Fee Discount: Out-of-Sample Test Results}\label{table:oosestimates}
 \input{tables/oos_discount_estimates_group} \\ 
-Consumer surplus is measured in PhP/month.
+\footnotesize{Consumer surplus is measured in PhP/month.}
 \end{table}
 
 
@@ -836,7 +836,7 @@ Table~\ref{table:fixedfeediscount} summarizes the impacts of this change on sour
 	\caption{Fixed Fee Discount Counterfactual}\label{table:fixedfeediscount}
 	\input{tables/discount_estimates_group} \\
 	\footnotesize{Low Users include the bottom 50\% of water users. \\
-	Surplus is measured in terms of PhPd/month.}
+	Surplus is measured in terms of PhP/month.}
 \end{table}
 
 \subsection{Characterizing Optimal Tariff Schedules}
@@ -1007,7 +1007,7 @@ Comparing columns two and three, I find that shared-use households have lower im
 \centering
 \caption{Household Demographics across \\ Survey and Census Data by Water Source}\label{table:pawstocensus}
 \input{tables/descriptives_census_to_paws} \\
-\footnotesize{The data include connection survey data on households owning water connections \\ as well as 2010 Census data on households.  This sample includes overlapping villages between surveys (67\%)}
+\footnotesize{The data include connection survey data on households owning water connections \\ as well as 2010 Census data on households. This sample includes \\ overlapping wards between  surveys (67\%)}
 \end{table}
 
 
@@ -1018,7 +1018,7 @@ The mobile survey was conducted using Pollfish--- an organization that advertise
 \begin{table}
 \centering
 \caption{Mobile and PAWS Water Source Choices}\label{table:pollfishpawsmeans}
-\input{tables/pollfish_paws_means} 
+\input{tables/pollfish_paws_means} \\
 \vspace{.3cm}
 \footnotesize{The PAWS data have been adjusted to reflect that \\ shared connections serve multiple households.}
 \end{table}
@@ -1082,8 +1082,10 @@ In the case where price sensitivities are equal between households, $\alpha_1=\a
 
 \section{Descriptive for Estimation Sample}\label{appendix:descriptivesest}
 
+Table~\ref{table:descriptivesestsample} provides descriptive statistics for the connection-level sample used in the simulated method of moments estimation.  Demographic variables are expressed in terms of dummy variables capturing various features that might drive demand for water.  Ward-level attributes include features that determine hassle-costs of sharing with a neighbor.  The sample includes a random sample of 5,000 connections combined with a sample of unconnected households in order to ensure a representative sample of the population of households.
+
 \begin{table}
-\caption{Descriptives for Estimation Sample}
+\caption{Descriptives for Estimation Sample}\label{table:descriptivesestsample}
 \begin{center}
 \input{tables/new_descriptives_est_sample}
 \end{center}
@@ -1417,6 +1419,18 @@ The first column presents the true assumed parameter values, the second column p
 \caption{Simulation Test for Incidental Parameter Bias}\label{table:incidentalparameters}
 \input{tables/incidental_parameters}\\
 \footnotesize{T refers to months observed for each connections.  The first sample includes half of the time periods per connection (around 35 months), while the second sample includes all months.  Both samples include 5,000 accounts.}
+\end{table}
+
+
+\section{Simulated Method of Moments Model Fit}\label{appendix:modelfit}
+
+
+By weighting the first three moments highly, the model almost exactly matches moments shown in Table~\ref{table:modelfit}.  The model is also able to match the direction but predicts stronger correlations with fixed preferences for water $\beta_i$ and percent owning connections and percent using from a neighbor.  One interpretation is that there may be other factors besides simply water preferences and heterogeneity in hassle costs that are driving source decisions.  The model has difficulty matching correlation between fixed preferences and share using from vendors, which may be partially due to noise generated in the process of projecting fixed preferences.
+
+\begin{table}
+\centering
+\caption{Simulated Method of Moments Model Fit}\label{table:modelfit}
+\input{tables/smm_moments}
 \end{table}
 
 

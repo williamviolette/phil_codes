@@ -82,7 +82,6 @@
 		import delimited using "${generated}tables/tariff_graph/tpt_graph_full.csv", ///
 		delimiter(",") clear
 		
-		egen pm = ma()
 
 		g p_lead =	v2[_n+1]
 		g p_lead2=	v2[_n+2]

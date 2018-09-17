@@ -3,6 +3,42 @@ function h=table_step_3_estimates...
 
 
 
+%%% MOMENTS TABLE %%%
+
+moments=csvread(strcat(cd_dir,'results/moments_',num2str(est_version),'.csv'));
+moments_eqm=csvread(strcat(cd_dir,'results/moments_eqm',num2str(est_version),'.csv'));
+ 
+
+fileID = fopen(strcat(cd_out,'tables/smm_moments.tex'),'w');
+
+fprintf(fileID,'%s\n','\begin{tabular}{lcccccc}');
+fprintf(fileID,'%s\n','      &            & \%Use   &            &       Correlation   &       Correlation   &       Correlation    \\');
+fprintf(fileID,'%s\n','   Moments      &   \%Owning  &  Neighbor  &  \%Vendor &   ($\beta_i$, \%Own.) &   ($\beta_i$, \% Neigh.) &   ($\beta_i$, \%Vendor)    \\');
+
+fprintf(fileID,'%s\n','\hline');
+
+fprintf(fileID,'%s\n',strcat(' True  & ',num2str(moments(1) ,'%5.3f'),' & ',...
+ num2str(moments(2) ,'%5.3f'),' & ', ...
+ num2str(moments(3) ,'%5.3f'),' & ', ...
+ num2str(moments(4) ,'%5.3f'),' & ', ...
+ num2str(moments(5) ,'%5.3f'),' & ', ...
+ num2str(moments(6) ,'%5.3f'),' \\ '  ) );
+
+fprintf(fileID,'%s\n',strcat(' Estimated  & ',num2str(moments_eqm(1) ,'%5.3f'),' & ',...
+ num2str(moments_eqm(2) ,'%5.3f'),' & ', ...
+ num2str(moments_eqm(3) ,'%5.3f'),' & ', ...
+ num2str(moments_eqm(4) ,'%5.3f'),' & ', ...
+ num2str(moments_eqm(5) ,'%5.3f'),' & ', ...
+ num2str(moments_eqm(6) ,'%5.3f'),' \\ '  ) );
+
+
+fprintf(fileID,'%s\n','\hline');
+fprintf(fileID,'%s\n','\end{tabular}');
+fclose(fileID);
+
+
+
+
 TOTAL_HH_POST = csvread(strcat(cd_dir,'results/post_sample_hhs.csv'));
 TOTAL_HH_PRE  = csvread(strcat(cd_dir,'results/pre_sample_hhs.csv'));
 
@@ -62,7 +98,7 @@ for i = 2:boot_max
 end
 
 Xmean=mean(smm_TRUE,2);
-Xstd=std(smm,0,2);
+Xstd=std(abs(smm),0,2);
 
 
 

@@ -107,9 +107,9 @@ end
 
 
 
-for i = 26:60
+%for i = 51:60
 
-   BOOT = [i]
+%   BOOT = [i]
 
                 %{
 [~]=est1(print,tag,tag_g,mac,sample,size_smp,...
@@ -130,7 +130,7 @@ for i = 26:60
                     sort_condition,split_F_option,transfer_option,smm_est_option,...
                     real_data,TUNE,BOOT,boot_max,boot_estimates,ESTIMATION_OPTION,many_sv_smm,cd_dir);
                 %} 
-end
+%end
 
 
 %%%% DO THE COUNTERFACTUALS HERE PLEASE !
@@ -174,10 +174,12 @@ end
 
 % 4. full ph counterfactuals: graph_time_v4_group_comparison_graph.m
 
+
 %%% print welfare outputs: tables_print_welfare_facts_groupings.m
 
-
 %%% print counterfactual parameters: sim_build_counterfactual_out_of_sample_groupings_v1.m
+
+
 
 %%% ROBUSTNESS
 

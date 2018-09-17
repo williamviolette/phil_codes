@@ -1,4 +1,4 @@
-PWD /Users/williamviolette/Documents/Philippines/phil_analysis/phil_code/phil_paper
+PWD /Users/williamviolette/Documents/Philippines/phil_analysis/phil_codes/phil_paper
 INPUT /usr/local/texlive/2015/texmf.cnf
 INPUT /usr/local/texlive/2015/texmf-dist/web2c/texmf.cnf
 INPUT /usr/local/texlive/2015/texmf-var/web2c/pdftex/pdflatex.fmt
@@ -668,6 +668,8 @@ INPUT tables/leaker_selection.tex
 INPUT tables/leaker_selection.tex
 INPUT tables/incidental_parameters.tex
 INPUT tables/incidental_parameters.tex
+INPUT tables/smm_moments.tex
+INPUT tables/smm_moments.tex
 INPUT jmp_wjv_v2.bbl
 INPUT jmp_wjv_v2.bbl
 INPUT /usr/local/texlive/2015/texmf-dist/fonts/tfm/public/cm/cmti10.tfm

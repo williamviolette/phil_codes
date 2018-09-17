@@ -9,7 +9,7 @@ import delimited using "${generated}alt_${version}.csv", delimiter(",") clear
 use "${temp}standard_${version}_temp.dta", clear
 	ren * , lower
 	g alt=0
-	g TOTAL_C = _N
+
 	append using "${temp}alt_${version}_temp.dta"
 	egen A = sum(alt)
 
@@ -17,6 +17,9 @@ use "${temp}standard_${version}_temp.dta", clear
 
 	duplicates drop conacct, force
 
+	g TOTAL_C = _N
+	replace TOTAL_C = TOTAL_C-A
+	
 		g hh2 = shh == 2 
 		egen hh2s = sum(hh2)
 		g hh3 = shh == 3
@@ -96,8 +99,8 @@ replace temp = "Two or more Empl. HH members"  	in 9
 replace temp = "HoH Age Between 36 and 52 Yrs"  	in 10
 replace temp = "HoH Age above 52 Yrs"  	in 11
 
-replace temp = "Apt. or Single House" in 12
-replace temp = "Distance Between Neighbors" 	in 13
+replace temp = "Apartment or Single House" in 12
+replace temp = "Dist. Between Neighbors (meters)" 	in 13
 
 
 
@@ -162,7 +165,7 @@ program define tables `1' `2' `3' `4' `5' `6' `7' `8'
 		}
 	}	
 	*file write fi "\hline" _n  *** FIRST SECTION HERE 
-	file write fi "\hline \\" _n	
+*	file write fi "\hline \\" _n	
 	file write fi "\textbf{Owner Demographics} &\multicolumn{`=`COLS''}{c}{ }\\" _n	
 	file write fi "\hline" _n	
 	forvalues r=1/`=`7'[1,1]' {
@@ -183,7 +186,7 @@ program define tables `1' `2' `3' `4' `5' `6' `7' `8'
 	}
 			***  SECOND  SECTION HERE 
 	file write fi "\hline \\" _n	
-	file write fi "\textbf{Village-Level Attributes} &\multicolumn{`=`COLS''}{c}{ }\\" _n	
+	file write fi "\textbf{Ward-Level Characteristics} &\multicolumn{`=`COLS''}{c}{ }\\" _n	
 	file write fi "\hline" _n	
 	forvalues r=`=`7'[1,1]+1'/`=`7'[1,1]+`7'[2,1]' {
 	file write fi  "`=`4'[`r']' & "
