@@ -89,7 +89,7 @@ notes
 
 	- [chk] make separate descriptive tables for step 1 and step 3 [maybe not...]
 
-	- [chk] look at presentations for extra tables! (like the one testing the representativeness of different samples!)
+	- [chk] look at presentations for extra tables! (like the one testing the representativeness of different samples!) 
 
 	- [chk] put volumes in counterfactuals!
 
@@ -102,4 +102,19 @@ notes
 	- [chk] need to put in model fit!! for SMM and explain moments more clearly!
 
 	- [chk] what are some tests I can do on the distance metric, for it to make sense?
+
+9/17/18 :
+
+	- [chk] write in where consumption goes!!
+
+9/18/18 :
+
+	- [chk] use [chk] notation for things to fix in the paper
+
+	- [chk] write about consumption findings in the beginning!! (export the findings???)
+ 
+ 	- [chk] in model motivation, refer to more prior literature!
+
+
+ 	
 

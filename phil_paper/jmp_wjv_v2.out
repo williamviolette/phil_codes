@@ -18,7 +18,7 @@
 \BOOKMARK [3][-]{subsubsection.6.3.1}{Disaggregating Connection-Level Preferences to Household-Level Preferences}{subsection.6.3}% 18
 \BOOKMARK [3][-]{subsubsection.6.3.2}{Imputing Preferences for Households using from Water Vendors}{subsection.6.3}% 19
 \BOOKMARK [3][-]{subsubsection.6.3.3}{Simulation and Estimation}{subsection.6.3}% 20
-\BOOKMARK [2][-]{subsection.6.4}{Out-of-Sample Test}{section.6}% 21
+\BOOKMARK [2][-]{subsection.6.4}{Out-of-Sample Test: A Connection Fee Discount Program}{section.6}% 21
 \BOOKMARK [1][-]{section.7}{Counterfactual Exercises}{}% 22
 \BOOKMARK [2][-]{subsection.7.1}{Compensated Fixed Fee Discount}{section.7}% 23
 \BOOKMARK [2][-]{subsection.7.2}{Characterizing Optimal Tariff Schedules}{section.7}% 24
@@ -43,4 +43,5 @@
 \BOOKMARK [1][-]{Appendix.a.K}{Hassle Cost Assumptions}{}% 43
 \BOOKMARK [1][-]{Appendix.a.L}{Game Tree with Three Players}{}% 44
 \BOOKMARK [1][-]{Appendix.a.M}{Test for Incidental Parameter Bias}{}% 45
-\BOOKMARK [1][-]{Appendix.a.N}{Simulated Method of Moments Model Fit}{}% 46
+\BOOKMARK [1][-]{Appendix.a.N}{Out of Sample Test for Vendor Price Estimates}{}% 46
+\BOOKMARK [1][-]{Appendix.a.O}{Simulated Method of Moments Model Fit}{}% 47

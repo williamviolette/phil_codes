@@ -113,7 +113,7 @@ COST_PARAMETERS
 
 
 %%% FIRST BEST:
-    [HA,TU,TOTAL_CONNECTED,NET_REV,CAPITAL,Total_Share,gamma,incomes,Choices,Total_Utility_Alt] ...
+    [HA,TU,TOTAL_CONNECTED,NET_REV,CAPITAL,Total_Share,gamma,incomes,Choices,Total_Utility_Alt,Total_Consumption] ...
                     =  smm_shell_counterfactual_v3(  MARGINAL_COST, CONNECTION_COST, alternative_parameters,...
                                     input1sub,input2sub,input3sub,...
                                     errors1sub,errors2sub,errors3sub,...
@@ -150,7 +150,8 @@ RES_first_best = [ CONNECTION_COST ; ...
         mean(mean(Choices==1)) ; ...
         mean(mean(Choices==2)) ; ...
         mean(  AVG_SURPLUS + NET_REV  ) ; ...
-        POOR_SURPLUS ...
+        POOR_SURPLUS ; ...
+        mean(mean(Total_Consumption))
         ]    
     
 
@@ -196,7 +197,7 @@ tpt1 = [tpt(2) tpt(5)];
                                 
                                 
                                
- %{        a 
+ %{        
                  %%%   THIS IS FOR THE ESTIMATION OF THE TPT3  !!!
 iterations   =  40;                                
 stepsize = [60 4];
@@ -341,6 +342,10 @@ fprintf(fileID,'%s\n','\hline');
 [~] = table_print_welfare('Source Neighbor &',3, '%5.0f',1,fileID ,RES_first_best, RES_current, RES_tpt0, RES_tpt1, RES_tpt3_0, RES_tpt3_1);
 [~] = table_print_welfare('Surplus &',4, '%5.1f',0,fileID ,RES_first_best, RES_current, RES_tpt0, RES_tpt1, RES_tpt3_0, RES_tpt3_1);
 [~] = table_print_welfare('Surplus: Low Users &',5, '%5.1f',0,fileID ,RES_first_best, RES_current, RES_tpt0, RES_tpt1, RES_tpt3_0, RES_tpt3_1);
+
+[~] = table_print_welfare('Consumption (m3/month) &',6, '%5.1f',0,fileID ,RES_first_best, RES_current, RES_tpt0, RES_tpt1, RES_tpt3_0, RES_tpt3_1);
+%%%[~] = table_print_welfare('Cons.: Low Users (m3/month) &',7, '%5.1f',0,fileID ,RES_first_best, RES_current, RES_tpt0, RES_tpt1, RES_tpt3_0, RES_tpt3_1);
+
 
 fprintf(fileID,'%s\n','\hline');
 fprintf(fileID,'%s\n','\end{tabular}'); 

@@ -203,10 +203,10 @@ fileID = fopen(strcat(cd_out,table_pre,'discount_estimates_group.tex'),'w');
 
 %fprintf(fileID,'%s\n','\caption{Welfare Impacts of a Fixed Fee Discount Policy}'); 
 fprintf(fileID,'%s\n','\begin{tabular}{lcc}');
-fprintf(fileID,'%s\n','\hline');
+%fprintf(fileID,'%s\n','\hline');
 fprintf(fileID,'%s\n','& Current & Discount \\');
-fprintf(fileID,'%s\n','\hline');
-fprintf(fileID,'%s\n','\hline');
+%fprintf(fileID,'%s\n','\hline');
+%fprintf(fileID,'%s\n','\hline');
 
 
     
@@ -248,11 +248,11 @@ end
 if income_opt==0
 fprintf(fileID,'%s\n',strcat(' Surplus: Low Users  &',num2str(surplus_current_low,'%5.1f') ,'&', ...
                     num2str(surplus_discount_low,'%5.1f'),' \\'));
-    fprintf(fileID,'%s\n','\hline');    
+%    fprintf(fileID,'%s\n','\hline');    
 else
     fprintf(fileID,'%s\n',strcat('Gain HH Inc: Low Inc & &', ...
                         num2str(TU_change_low_income,'%5.1f'),' \\'));
-    fprintf(fileID,'%s\n','\hline');
+%    fprintf(fileID,'%s\n','\hline');
 end
 
 fprintf(fileID,'%s\n','\end{tabular}'); 
