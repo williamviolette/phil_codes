@@ -1,14 +1,14 @@
 # Fdb version 3
-["bibtex jmp_wjv_v2"] 1537372833 "jmp_wjv_v2.aux" "jmp_wjv_v2.bbl" "jmp_wjv_v2" 1537372835
+["bibtex jmp_wjv_v2"] 1537477388 "jmp_wjv_v2.aux" "jmp_wjv_v2.bbl" "jmp_wjv_v2" 1537480971
   "/usr/local/texlive/2015/texmf-dist/bibtex/bst/natbib/abbrvnat.bst" 1233624470 26532 66bed5cc59495faaa3f9ae9af9fa5e42 ""
-  "jmp_wjv_v2.aux" 1537372835 33232 fcfe9f498b29d7eb455e1199722c40a7 ""
+  "jmp_wjv_v2.aux" 1537480971 33399 302197608d88c8a2180cf3d8deee9edb ""
   "jmp_wjv_v2.bcf" 0 -1 0 ""
   "library.bib" 1511734121 14894 219b6c2f9806c093067c4f9c96dfb5dc ""
   (generated)
   "jmp_wjv_v2.bbl"
   "jmp_wjv_v2.blg"
-["pdflatex"] 1537372833 "jmp_wjv_v2.tex" "jmp_wjv_v2.pdf" "jmp_wjv_v2" 1537372835
-  "./jmp_wjv_v2.out" 1537372835 3711 886f7a17de75bf3c9d93754c2cbca51c ""
+["pdflatex"] 1537480970 "jmp_wjv_v2.tex" "jmp_wjv_v2.pdf" "jmp_wjv_v2" 1537480971
+  "./jmp_wjv_v2.out" 1537480971 3711 886f7a17de75bf3c9d93754c2cbca51c ""
   "./tables/cdf_approx.png" 1506356933 10984 8bc923350f732701acb7fd20f93a3a97 ""
   "./tables/consumption_histogram.pdf" 1537212769 24883 56afae5b5c61f1340397c40bd05db9e0 ""
   "./tables/diff_595.pdf" 1536872144 23509 4270edc64e0986c7390ce87dfd8fe60f ""
@@ -276,10 +276,10 @@
   "/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1432479641 1764542 91654ba72bdb667e84ea24f076ae16d8 ""
   "/usr/local/texlive/2015/texmf-var/web2c/pdftex/pdflatex.fmt" 1432479681 3849859 39a7d258195bde2394e244961601fbc5 ""
   "/usr/local/texlive/2015/texmf.cnf" 1432479636 577 0d611272082f3cdb8e80e09a3c69cf07 ""
-  "jmp_wjv_v2.aux" 1537372835 33232 fcfe9f498b29d7eb455e1199722c40a7 ""
-  "jmp_wjv_v2.bbl" 1537372833 13435 fc19e555a55db4a4d320b0ef6aa8bd9e "bibtex jmp_wjv_v2"
-  "jmp_wjv_v2.out" 1537372835 3711 886f7a17de75bf3c9d93754c2cbca51c ""
-  "jmp_wjv_v2.tex" 1537372831 223277 dc94df2cfa136f581729d1473c525cf0 ""
+  "jmp_wjv_v2.aux" 1537480971 33399 302197608d88c8a2180cf3d8deee9edb ""
+  "jmp_wjv_v2.bbl" 1537477388 13435 fc19e555a55db4a4d320b0ef6aa8bd9e "bibtex jmp_wjv_v2"
+  "jmp_wjv_v2.out" 1537480971 3711 886f7a17de75bf3c9d93754c2cbca51c ""
+  "jmp_wjv_v2.tex" 1537480971 226111 629c822f75b30b3c0e07d3a09490cd79 ""
   "tables/access_fetch.tex" 1536157422 2 aab3238922bcc25a6f606eb525ffdc56 ""
   "tables/access_pipes.tex" 1536157422 2 7f39f8317fbdb1988ef4c628eba02591 ""
   "tables/access_single_tap.tex" 1536157422 2 8e296a067a37563370ded05f5a3bf3ec ""
@@ -388,7 +388,7 @@
   "tables/welfare_sharing_groups.tex" 1537216176 501 fd714244f0c74ef6ea4c2adfa0848174 ""
   "tables/would_have_added.tex" 1536872150 3 2058eb305f47c3a279a0bf56de7b626c ""
   (generated)
-  "jmp_wjv_v2.out"
   "jmp_wjv_v2.aux"
   "jmp_wjv_v2.pdf"
+  "jmp_wjv_v2.out"
   "jmp_wjv_v2.log"

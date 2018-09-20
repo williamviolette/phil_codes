@@ -215,20 +215,30 @@ Conditional on their water source choice, households then choose how much water 
 % Modeling this behavior is not only useful for accurately characterizing demand, but may also play an important role in measuring the potential welfare losses from these non-linear pricing schedules.  
 %(CITE JAYACHANDRAN AND JACK)
 
-This section details how households choose their monthly quantities of consumption holding their water source fixed.  For households using piped water, this consumption choice is complicated by four features:  (1) households may have difficulty targeting their exact monthly consumption levels; (2) increasing marginal prices in the water tariff result in non-linear budget constraints; (3) households that share a connection need to determine how to divide the monthly water bill; and (4) households fetching from a neighbor may face additional hassle costs in transporting water.  Since the data record monthly consumption for each connection, this model first introduces individual household demand before aggregating household demand at the connection-level for estimation.
+%This section details how households choose their monthly quantities of consumption holding their water source fixed.  
 
-Households that use piped water face the difficult task of coordinating water consumption among all household members.  For example, consider a household head trying to manage water consumption across all of their household members each month.  This task would involve monitoring the meter located outside of their dwelling and observing water use among all members.\footnote{Given that many developing countries feature steeply increasing prices with monthly usage, these coordination challenges may magnify any distortions caused by non-linear pricing.}  Mobile survey data indicate that \input{tables/no_info}\unskip\% of surveyed household members do not recall how much they paid for water in the last month while \input{tables/no_use}\unskip\% do not recall the amount that their household consumed in the previous month.  
+%For households using piped water, they have to consider four aspects when choosing how much to use each month:  (1) households may have difficulty targeting their exact monthly consumption levels since meters can be hard to observe and many family members use the same tap; (2) increasing marginal prices in the water tariff mean that households face non-linear budget constraints; (3) households that share a connection need to determine how to divide the monthly water bill; and (4) households fetching from a neighbor may face additional hassle costs in transporting water.
 
-As a simple way to capture this coordination task, the model assumes that each household $i$ sets a goal for water use each month, $w_i$, knowing that idiosyncratic factors, $\epsilon_i$, may increase or decrease the realized amount of usage.  Consumption shocks, $\epsilon_i$, are assumed to be unobserved to the household and independent across time, bringing the total realized water consumption each month to, $W_i=w_i+\epsilon_i$.  Household utility over water, $W_i$ and a numeraire good, $x_i$ is assumed to take the following shape:
+%Since the data record monthly consumption for each connection, this model first introduces individual household demand before aggregating household demand at the connection-level for estimation.
+
+In choosing how much water to use each month, households using piped water face the difficult task of coordinating water consumption among all household members.  For example, consider a household head trying to manage water consumption across all of their household members each month.  This task would involve monitoring the meter located outside of their dwelling and observing water use among all members.\footnote{Given that many developing countries feature steeply increasing prices with monthly usage, these coordination challenges may magnify any distortions caused by non-linear pricing.}  Mobile survey data indicate that \input{tables/no_info}\unskip\% of surveyed household members do not recall how much they paid for water in the last month while \input{tables/no_use}\unskip\% do not recall the amount that their household consumed in the previous month.  
+
+As a simple way to capture this coordination task, let each household $i$ set a goal for water use each month, $w_i$, knowing that consumption shocks, $\epsilon_i$, may increase or decrease the realized amount of usage.  Consumption shocks, $\epsilon_i$, are assumed to be unobserved to the household and independent across time, bringing the total realized water consumption each month to, $W_i=w_i+\epsilon_i$.  Household utility over water, $W_i$ and a numeraire good, $x_i$ is assumed to take the following shape:
 \begin{align}\label{equation:umaxfirst}
 \begin{split}
-U(x_i,W_i) &=  x_i + W_i - \frac{1}{2\alpha_i } ( W_i - \Gamma_i + \alpha_i )^2  \\
+U(x_i,W_i) &=  x_i + (1-H_i) W_i - \frac{1}{2\alpha_i } ( W_i - \Gamma_i + \alpha_i )^2  \\
 W_i &= w_i + \epsilon_i \\
 \epsilon_i &\sim \mathcal{N}(0,\Sigma_{\epsilon})
 \end{split}
 \end{align}
 Following from quasi-linear preferences, this quadratic form for utility eliminates income effects and includes a natural satiation point for water consumption, capturing the tendency of households to target specific consumption levels despite low or zero marginal prices as in Figure~\ref{figure:consumptionhistogram}.  Household preferences for water are characterized by $\Gamma_i$, which can be interpreted as a fixed preference for water each month and $\alpha_i$, which captures the extent to which households are price sensitive.  These terms have clearer interpretations in the demand function below.  The exogenous shock to consumption, $\epsilon_i$, is assumed to be drawn from a multivariate normal distribution, $\Sigma_{\epsilon}$ with zero mean, variance terms, $\sigma_{\epsilon}^2$, and allowing for correlation with neighboring households, ${\rho}^{\epsilon}_{i,j}$.  Although households cannot anticipate the exact realization of $\epsilon_i$, they are assumed to understand the distribution of possible shocks, allowing them to maximize expected utility.
+
+Households that are using water from a neighbor's tap may face an additional utility cost per gallon of water $H_i$.  This hassle cost captures any inconvenience associated with using water from a neighbor's tap.  The mobile survey reveals that among households accessing water from a neighbor's connection, \input{tables/access_fetch}\unskip\% fetch water with containers, \input{tables/access_single_tap}\unskip\% access water from a single hose/pipe provided by the connection owner, and \input{tables/access_pipes}\unskip\% are able to fully connect their household plumbing near the water meter.  These different modes of access suggest that sharing households may face higher time costs fetching water or lower water pressure from piping water additional distances.  Without data on the sharing mode and distance between households for each connection, the model assumes all sharing households face a homogeneous hassle cost, $H_i$, from using a neighbor's connection.\footnote{Section~\ref{section:hasslecostestimation} discusses the extent to which this assumption may bias estimates.  The partitioning of the city into sharing neighborhoods also imposes the implicit assumption that hassle costs rise substantially between neighborhoods so that no household has an incentive to share with households in another neighborhood.}  
+
+% , normalized as $i>1$,
+
 \subsubsection{Determining the Budget Constraint}
+
 The household problem is additionally complicated by the presence of non-linear price schedules for water.  Figure~\ref{figure:tariff} provides the increasing tariff in Manila.  The non-linear price schedule produces kinks in household budget constraints leading to non-linear demand functions.  Let $P(W_C) = \{ p^{1},...,p^{K},\overline{W}^{0},...,\overline{W}^{K}\}$ describe tariff schedule as a function of total consumption for the water connection, $W_C = \sum_{i=1}^{S} W_i$.  The tariff includes $K$ segments where segment $k$ corresponds to price $p^{k}$ for water consumption between the consumption thresholds (or kink points), $\overline{W}^{k-1}$ and $\overline{W}^{k}$:
 \begin{align*}
 P(W_C)=&  
@@ -241,44 +251,51 @@ P(W_C)=&
 \end{align*}
 Given prices and household utility, the final ingredient for characterizing consumption choices is the budget constraint.  The budget constraint includes monthly household income, $Y_i$, and monthly fixed costs of using the water connection, $F_i$, which are assumed to capture three components: (1) monthly service fees, (2) initial connection fees amortized in monthly terms for the duration of the connection, and (3) unobserved, fixed hassle costs associated with setting up a connection, which are also amortized into monthly terms.  Data does not track household water source choices over time in a comprehensive way, which limits the extent to which the model can distinguish between one-time connection costs and monthly service/maintenance costs.  This limitation means that the model cannot address the optimal timing of fixed payments or capture any potential heterogeneity in monthly fixed costs.
 
-Water sharing relationships impact monthly consumption choices through the budget constraint in three ways.\footnote{While the formation of these relationships is discussed in more detail in Section~\ref{section:watersourcechoice}, this section takes these sharing relationships as exogenously given.}  To develop notation for sharing, normalize $i=1$ to be the owner of the connection and define the total number of sharing households for a particular connection as $S$.
+Water sharing relationships impact monthly consumption choices through the budget constraint.\footnote{While the formation of these relationships is discussed in more detail in Section~\ref{section:watersourcechoice}, this section takes these sharing relationships as exogenously given.}  To develop notation for sharing, normalize $i=1$ to be the owner of the connection and define the total number of sharing households for a particular connection as $S$.  Therefore, all households, $i\neq1$, using from a neighbor's tap have a positive hassle cost, $H$, while the connection owner, $i=1$, has zero hassle cost.
 
-First, this model assumes that the monthly water bill is split evenly between all sharing households.  Descriptive evidence suggests that challenges observing and coordinating usage within members of a household also extend across households.  Among owners of the water connection responding to the mobile survey, \input{tables/bill_split}\unskip\% report splitting the water bill evenly or alternating payment each month, \input{tables/bill_fixed}\unskip\% charge sharing households a fixed amount each month regardless of their consumption, and \input{tables/bill_usage}\unskip\% charge other users a price according to their usage.\footnote{The remaining households report ``I don't know'' or ``other.''}  Evenly splitting the bill, alternating payment, or charging a fixed amount provide easy ways to extract compensation without requiring specific information on the monthly consumption of each sharing household.  Yet, these methods also introduce free-rider incentives since households do not have to fully pay for their contributions to the total water bill.  Since data limitations prevent identifying the specific type of contract associated with each shared connection, the model assumes that all households evenly split the bill and explores the theoretical and empirical implications of alternate models in Appendix~\ref{appendix:fixedprice}.  The model captures bill splitting by dividing the total monthly payment for a water connection across the $S$ sharing households.  
+This model assumes that the monthly water bill is split evenly between all sharing households.  Descriptive evidence suggests that challenges observing and coordinating usage within members of a household also extend across households.  Among owners of the water connection responding to the mobile survey, \input{tables/bill_split}\unskip\% report splitting the water bill evenly or alternating payment each month, \input{tables/bill_fixed}\unskip\% charge sharing households a fixed amount each month regardless of their consumption, and \input{tables/bill_usage}\unskip\% charge other users a price according to their usage.\footnote{The remaining households report ``I don't know'' or ``other.''}  Evenly splitting the bill, alternating payment, or charging a fixed amount provide easy ways to extract compensation without requiring specific information on the monthly consumption of each sharing household.  Yet, these methods also introduce free-rider incentives since households do not have to fully pay for their contributions to the total water bill.  Since data limitations prevent identifying the specific type of contract associated with each shared connection, the model assumes that all households evenly split the bill and explores the theoretical and empirical implications of alternate models in Appendix~\ref{appendix:fixedprice}.  The model captures bill splitting by dividing the total monthly payment for a water connection across the $S$ sharing households.  
 
 %\footnote{Under the additional assumption that households never directly observe the $\epsilon$ shocks, splitting the bill provides an intuitive way to ensure all households account for at least some of their usage.  }
-Second, sharing households may face a hassle cost, $p_h$, per unit of water, which captures any inconvenience associated with using water from a neighbor's tap.  The mobile survey reveals that among households accessing water from a neighbor's connection, \input{tables/access_fetch}\unskip\% fetch water with containers, \input{tables/access_single_tap}\unskip\% access water from a single hose/pipe provided by the connection owner, and \input{tables/access_pipes}\unskip\% are able to fully connect their household plumbing near the water meter.  These different modes of access suggest that sharing households may face higher time costs fetching water or lower water pressure from piping water additional distances.  Without data on the sharing mode and distance between households for each connection, the model assumes all sharing households, normalized as $i>1$, face a homogeneous hassle cost, $p_h$, from using a neighbor's connection.\footnote{Section~\ref{section:hasslecostestimation} discusses the extent to which this assumption may bias estimates.}  The partitioning of the city into sharing neighborhoods also imposes the implicit assumption that hassle costs rise substantially between neighborhoods so that no household has an incentive to share with households in another neighborhood.  Hassle costs for household $i$ are given by the following function:
-\begin{align*}
-H_{i} =& 
-\begin{cases}
-0     &  \text{ if } i=1 \text{ (connection owner) }\\
-p_h   &  \text{ if } i \neq 1
-\end{cases}
-\end{align*}
-Third, sharing households must negotiate over how to pay the monthly fixed fees.  The model assumes that households commit to dividing any fixed fees at the start of the sharing arrangement.  Under quasi-linear utility, any fixed transfers are exogenous to monthly consumption decisions.  For ease of exposition, this section assigns a fixed fee, $F_i$ to each household and postpones discussion of how the total fixed fee may be divided between households to Section~\ref{section:watersourcechoice}.  
 
-Normalizing the price of the numeraire good, $x$, to one, the budget constraint for household, $i$, using a connection with households, $S$, takes the following form:
-\begin{align*}
-Y_i - F_i &=  
-\begin{cases}
-      x_i + H_{i} W_i + \frac{1}{S} p^{1} W_C   &\text{ if }   W_C \in [0,\overline{W}^{1}], \\
-      x_i +  H_{i} W_i +  \frac{1}{S} \big [p^{k} W_C -  E_{k} \big]     &\text{ if } W_C \in [\overline{W}^{k-1},\overline{W}^{k}], \\
-      ...   &\text{ ... }      
-\end{cases} \\
-E_{k} &= \big  [\sum_{j=1}^{k-1}  (p^{k} - p^{j})(\overline{W}^{j}-\overline{W}^{j-1})  \big ]
-\end{align*}
+Sharing households must negotiate over how to pay the monthly fixed fees.  The model assumes that households commit to dividing any fixed fees at the start of the sharing arrangement.  Under quasi-linear utility, any fixed transfers are exogenous to monthly consumption decisions.  For ease of exposition, this section assigns a fixed fee, $F_i$ to each household and postpones discussion of how the total fixed fee may be divided between households to Section~\ref{section:watersourcechoice}.  
 
-$E_{k}$ represents the discount that the household earns on all previous price thresholds below the current level of consumption.  This term is calculated by subtracting the current price that the household faces, $p^{k}$, from the previous prices and multiplying by their exposure given by, $(\overline{W}^{j}-\overline{W}^{j-1})$.  In the case where a household uses a connection individually, this expression simplifies by setting the index, $i$, and the total using households, $S$, both equal to one.  In this scenario, the household does not face any hassle costs, $p_h$, and pays the total bill from its corresponding consumption.  
+Normalizing the price of the numeraire good, $x$, to one, the budget constraint for household, $i$, using a connection with households, $S$, takes the following form given that total consumption for their connection, $W_C$, falls between thresholds, $\overline{W}^{k-1}$ and $\overline{W}^{k}$:
+%\begin{align*}
+%Y_i - F_i &=  
+%\begin{cases}
+%      x_i + H_{i} W_i + \frac{1}{S} p^{1} W_C   &\text{ if }   W_C \in [0,\overline{W}^{1}], \\
+%      x_i +  H_{i} W_i +  \frac{1}{S} \big [p^{k} W_C -  E_{k} \big]     &\text{ if } W_C \in [\overline{W}^{k-1},\overline{W}^{k}], \\
+%      ...   &\text{ ... }      
+%\end{cases} \\
+%E_{k} &= \big  [\sum_{j=1}^{k-1}  (p^{k} - p^{j})(\overline{W}^{j}-\overline{W}^{j-1})  \big ]
+%\end{align*}
+\begin{align}
+\label{equation:budgetconstraint}
+\begin{split}
+(Y_i - F_i) &= x_i +   \dfrac{  B_{C,k}  }{S_C}    \hspace{.3cm} \text{ if } \hspace{.1cm} W_C \in [\overline{W}^{k-1},\overline{W}^{k}] \\
+\text{Where: }& \\
+B_{C,k}  &= p^{k} (W_{C}^{*} - \overline{W}^{k-1}) +\sum_{j=1}^{k-1}  p^{j}(\overline{W}^{j}-\overline{W}^{j-1}) 
+\end{split}
+\end{align}
+
+The full budget constraint is a piece-wise expression of equation (\ref{equation:budgetconstraint}) over all $K$ price thresholds.  $B_{C,k}$represents the total water bill for connection $C$ given the tariff schedule.  This term is calculated by subtracting the current price that the household faces, $p^{k}$, from the previous prices and multiplying by their exposure given by, $(\overline{W}^{j}-\overline{W}^{j-1})$.\footnote{In the case where a household uses a connection individually, this expression simplifies by setting the index, $i$, and the total using households, $S$, both equal to one.  In this scenario, the household does not face any hassle costs, $H_i$, and pays the total bill from its corresponding consumption.}
 
 \subsubsection{Maximizing Expected Utility}
 
 When households share a water connection, the consumption choice for each household becomes a strategic decision.  Since prices are non-linear, the total consumption level for each connection, $W_C$, determines the marginal price faced by all households.  For example, with an increasing block tariff like Figure~\ref{figure:tariff}, one household's choice to increase consumption may produce a higher marginal price for other sharing households.   Rewriting the utility function in equation (\ref{equation:umaxfirst}) by substituting the numeraire good, $x$, with the budget constraint, expected utility for household $i$ over the consumption shocks takes the following form:
-%\begin{comment}
-\scalebox{.88}{\parbox{1\linewidth}{
+
+%\scalebox{.88}{\parbox{1\linewidth}{
+%\begin{align*}
+%E[U(x_i,w_i)] = &  (Y_i - F_i)  - \frac{1}{S} \sum_{k=1}^{K} \int_{\overline{W}^{k-1}-W_C}^{\overline{W}^{k}-W_C}\big [p^{k} W_C -  E_{k} \big] d \epsilon_C + \int_{-\infty}^{\infty} W_i - H_{i} W_i - \frac{1}{2\alpha_i} ( W_i - \Gamma_i + \alpha_i )^2 d \epsilon_i  \\  
+ %         = &  (Y_i - F_i)  - \frac{1}{S} \sum_{k=1}^{K} \int_{\overline{W}^{k-1}-W_C}^{\overline{W}^{k}-W_C}\big [p^{k} W_C d -  E_{k} \big] d \epsilon_C+ w_i - H_{i} w_i - \frac{1}{2\alpha_i} ( w_i - \Gamma_i + \alpha_i )^2 + \sigma_{\epsilon}^{2}  
+%\end{align*}
+%}} \\
+
+% E[U(w_i)] = 
 \begin{align*}
-E[U(x_i,w_i)] = &  (Y_i - F_i)  - \frac{1}{S} \sum_{k=1}^{K} \int_{\overline{W}^{k-1}-W_C}^{\overline{W}^{k}-W_C}\big [p^{k} W_C -  E_{k} \big] d \epsilon_C + \int_{-\infty}^{\infty} W_i - H_{i} W_i - \frac{1}{2\alpha_i} ( W_i - \Gamma_i + \alpha_i )^2 d \epsilon_i  \\  
-          = &  (Y_i - F_i)  - \frac{1}{S} \sum_{k=1}^{K} \int_{\overline{W}^{k-1}-W_C}^{\overline{W}^{k}-W_C}\big [p^{k} W_C d -  E_{k} \big] d \epsilon_C+ w_i - H_{i} w_i - \frac{1}{2\alpha_i} ( w_i - \Gamma_i + \alpha_i )^2 + \sigma_{\epsilon}^{2}  
+max_{w_i} \sum_{k=1}^{K} \int_{\overline{W}^{k-1}-{w_C}}^{\overline{W}^{k}-{w_C}} (Y_i - F_i) -  \dfrac{ B_{C,k} }{S_C}     + (1-p_s) W_i   - \frac{1}{2\alpha } ( W_i - \Gamma_i + \alpha_i )^2  d \epsilon_C 
 \end{align*}
-}} \\
+
 Where $\epsilon_C$ is the convolution of consumption shocks across sharing households distributed as follows:
 \begin{align*}
           \epsilon_C &\sim \mathcal{N}(0,\sigma_{\epsilon_C}^2 = \sum_{i=1}^{S} \sigma_{\epsilon}^2 + \sum_{i=1}^{S} \sum_{j>i}^{S} \sigma_{\epsilon}^2 \rho^{\epsilon}_{i,j} )
@@ -320,7 +337,7 @@ This component helps to capture unexplained fluctuations in consumption for hous
 
 \subsubsection{Characterizing the Optimal Demand Function}
 
-The best-response functions for each household can be solved and summed across all sharing households $S$ to form demand at the level of each connection, $C$.  The optimal demand function takes a piecewise form depending on the proximity of different price segments.\footnote{This approach is only relevant for strictly increasing block tariffs since in this case, the budget constraint is convex.  Tariffs that include both increasing and decreasing block tariffs require comparing indirect utilities across all segments.  I take this calculation into account when allowing for decreasing marginal prices in the counterfactual exercises.}  The aggregate demand function is as follows (where $L,M,H$ index low, medium, and high prices relative to each segment):\footnote{For ease of exposition, I use notation where $D^{l}_C=D^{l,l,l}_C$ and $D^{l,j}_C=D^{l,j,j}_C$.}
+The best-response functions for each household can be solved and summed across all sharing households $S$ to form demand at the level of each connection, $C$.  The optimal demand function takes a piecewise form depending on the proximity of different price segments.\footnote{This approach is only relevant for strictly increasing block tariffs since in this case, the budget constraint is convex.  Tariffs that include both increasing and decreasing block tariffs require comparing indirect utilities across all segments.  I take this calculation into account when allowing for decreasing marginal prices in the counterfactual exercises.}  The aggregate demand function is as follows (where $L,M,H$ index low, medium, and high prices relative to each segment):
 \begin{align}\label{equation:generaldemand}
 \begin{split}
 w^{*}_C &=
@@ -334,13 +351,37 @@ D^{3,4}_C   & \text{ if } \hspace{.5cm} \overline{\eta}^{3}_{3,L} <    \frac{ \e
 D^{4}_C   & \text{ if } \hspace{.5cm} \overline{\eta}^{4}_{3,U} <    \frac{ \eta_C }{ V^{4,4} }  
 \end{cases}\\
 \text{Where: } & \\
-D^{L,M,H}_C        		&=  d^{L,M,H}_C + \frac{ \eta_C }{ V_{H,L} }   \\
+D^{L,M,H}_C        		&=  d^{L,M,H}_C + \frac{ \eta_C }{ V_{L,H} }   \\
 d^{L,M,H}_C       		&= \frac{ 1}{ V^{L,H} } \Big ( \gamma_C - \alpha_C H_{C} - \frac{\alpha_C}{2 S}  [ p^{H} + p^{L} - \overline{W}^{H} (\frac{p^{H} - p^{M}}{\sqrt{2}{\sigma_{\epsilon_C}}})  - \overline{W}^{M} (\frac{p^{M} - p^{L}}{\sqrt{2}{\sigma_{\epsilon_C}}})  ]  \Big )    \\
 V^{L,H} 	     	    &=   1 + \frac{\alpha_C}{2 S} ( \frac{p^{H} - p^{L}}{\sqrt{2}\sigma_{\epsilon_C}})   \\
 \overline{\eta}^{j}_{l,L}   &= \overline{W}_l - ( \gamma_C - \alpha_C H_{C} -   \frac{\alpha_C}{S} p^j ) - \sqrt{2} \sigma_{\epsilon_C} \\
 \overline{\eta}^{j}_{l,U}   &= \overline{W}_l - ( \gamma_C - \alpha_C H_{C} -   \frac{\alpha_C}{S} p^j ) + \sqrt{2} \sigma_{\epsilon_C} \\
 \end{split}
 \end{align}
+
+
+%\begin{align}\label{equation:generaldemand}
+%\begin{split}
+%w^{*}_C &=
+%\begin{cases}
+%D^{1}_C   & \text{ if } \hspace{1.7cm}                                               \frac{ \eta_C }{ V_{1,1} }  \leq \overline{\eta}^{1}_{1,L}  \\
+%D^{1,2}_C   & \text{ if } \hspace{.5cm} \overline{\eta}^{1}_{1,L} <    \frac{ \eta_C }{ V^{1,2} }    \leq \overline{\eta}^{2}_{2,L}  \\
+%D^{1,2,3}_C   & \text{ if } \hspace{.5cm} \overline{\eta}^{2}_{2,L} <    \frac{ \eta_C }{ V^{1,3} }    \leq \overline{\eta}^{2}_{1,U}  \\
+%D^{2,3}_C   & \text{ if } \hspace{.5cm} \overline{\eta}^{2}_{1,U} <    \frac{ \eta_C }{ V^{2,3} }    \leq \overline{\eta}^{3}_{2,U}  \\ 
+%D^{3}_C   & \text{ if } \hspace{.5cm} \overline{\eta}^{3}_{2,U} <    \frac{ \eta_C }{ V^{3,3} }    \leq \overline{\eta}^{3}_{3,L}  \\ 
+%D^{3,4}_C   & \text{ if } \hspace{.5cm} \overline{\eta}^{3}_{3,L} <    \frac{ \eta_C }{ V^{3,4} }    \leq \overline{\eta}^{4}_{3,U}  \\ 
+%D^{4}_C   & \text{ if } \hspace{.5cm} \overline{\eta}^{4}_{3,U} <    \frac{ \eta_C }{ V^{4,4} }  
+%\end{cases}\\
+%\text{Where: } & \\
+%D^{L,M,H}_C        		&=  d^{L,M,H}_C + \frac{ \eta_C }{ V_{H,L} }   \\
+%d^{L,M,H}_C       		&= \frac{ 1}{ V^{L,H} } \Big ( \gamma_C - \alpha_C H_{C} - \frac{\alpha_C}{2 S}  [ p^{H} (\tfrac{\lambda_C - \overline{W}^{H}}{\lambda_C}) + p^{M} (\tfrac{\overline{W}^{H} - \overline{W}^{H}}{\lambda_C} ) -    p^{L} - \overline{W}^{H} (\frac{p^{H} - p^{M}}{\lambda_C})  - \overline{W}^{M} (\frac{p^{M} - p^{L}}{\lambda_C})  ]  \Big )    \\
+%V^{L,H} 	     	    &=   1 + \frac{\alpha_C}{2 S} ( \frac{p^{H} - p^{L}}{\lambda_C})  ,  \lambda_C = \sqrt{2}{\sigma_{\epsilon_C}} \\
+%\overline{\eta}^{j}_{l,L}   &= \overline{W}_l - ( \gamma_C - \alpha_C H_{C} -   \frac{\alpha_C}{S} p^j ) - \lambda_C \\
+%\overline{\eta}^{j}_{l,U}   &= \overline{W}_l - ( \gamma_C - \alpha_C H_{C} -   \frac{\alpha_C}{S} p^j ) + \lambda_C \\
+%\end{split}
+%\end{align}
+
+For ease of exposition, I use notation where $D^{l}_C=D^{l,l,l}_C$ and $D^{l,j}_C=D^{l,j,j}_C$.
 
 In this expression, $d^{L,M,H}_C$ captures the deterministic component of demand while $D^{L,M,H}_C$ adds the stochastic component of fixed preferences.  Connection-level fixed preferences $\gamma_C$, price sensitivities $\alpha_C$, and  hassle costs $H_C$ sum across their respective values for all households using a connection.  A series of thresholds in the level of unobserved fixed preference, $\eta_C$, given by $\overline{\eta}^{j}_{l,L}$ and $\overline{\eta}^{j}_{l,U}$ work to determine which prices influence demand at each point in the schedule.  Crossing a threshold means that the consumption shock now exposes the connection to a different set of prices.  Figure~\ref{figure:intuitivedemand} graphs an example demand curve where the slope is determined by the functions $D^{L,M,H}_C$ and the changes in slope are given by the preference thresholds.
 
@@ -514,20 +555,20 @@ Let $L$ represent the total households affected by a leak.  $L$ is greater than 
 These assumptions allow for the specification of a likelihood function that expresses neighbor's consumption following a leak as a function of household preferences and the hassle cost, $p_h$.  Define $LL(\gamma,\alpha,S)$ as the likelihood function in equation (\ref{equation:LLikelihood}) in terms of the preference parameters--- $\gamma$ and $\alpha$ --- as well as the number of households using the connection, $S$.  Given the probabilities above, the likelihood for consumption from connection $j$ after a nearby leak can be expressed as follows:
 \begin{align}\label{equation:hasslelikelihood}
 \begin{split}
-LL_{j,Post l} = & \frac{J-(1-G)}{J} \overbrace{LL(\gamma_j,\alpha_j,S_j)}^{\text{$L$ do not share with $j$}} + \\
+LL_{j,PostLeak} = & \frac{J-(1-G)}{J} \overbrace{LL(\gamma_j,\alpha_j,S_j)}^{\text{$L$ do not share with $j$}} + \\
 	    & \frac{(1-G)}{J}  \underbrace{LL(\gamma_j + \gamma_{L},\alpha_j+\alpha_{L},S_j+S_L)}_{\text{$L$ share with $j$}}
 \end{split}
 \end{align}
 The first term multiplies the standard likelihood for this connection by the probability that households $L$ do not share with connection $j$.  The second term adds the probability that $L$ households choose to share with connection $j$ following the leak.  This probability is multiplied by the likelihood corresponding to joint consumption, which includes both preference terms from connection $j$ as well from $L$ households.  This approach recovers the hassle cost, $p_h$, by comparing the fixed preferences for households experiencing the leak before and after they start using from a neighbor.  Let $pre$ take a value of one for months before a leak.  Fixed preferences for $L$ households take the following form:
 \begin{align*}
-\gamma_{L} = &  \sum_{l=1}^{\overline{L}} ( \gamma_{l} - \alpha_{l} P_{h,l} ) \\
-P_{h,l} = & 
+\gamma_{L} = &  \sum_{l=1}^{\overline{L}} ( \gamma_{l} - \alpha_{l} H_l ) \\
+H_{l} = & 
 	\begin{cases}
 	0     &  \text{ if } l=1 \text{ and } pre=1 \\
-	p_h   &  \text{ else }
+	H   &  \text{ else }
 	\end{cases}
 \end{align*}
-Substituting to a neighbor's connection newly exposes the owner, $l=1$, to the hassle cost $p_h$ while other households $s \neq 1$ are assumed to be exposed to the hassle cost both before and after the leak.  Therefore, this method identifies hassle costs from variation in exposure for owners of the connection.  Section~\ref{section:hasslecostestimation} details potential limitations of this assumption.
+Substituting to a neighbor's connection newly exposes the owner, $l=1$, to the hassle cost $H_i$ while other households $s \neq 1$ are assumed to be exposed to the hassle cost both before and after the leak.  Therefore, this method identifies hassle costs from variation in exposure for owners of the connection.  Section~\ref{section:hasslecostestimation} details potential limitations of this assumption.
 
 
 
@@ -579,7 +620,7 @@ The next expression extends this framework to identify the correlation between t
 \end{align*}
 Although sharing relationships and neighborhoods are limited to a maximum of three households in this paper, this approach can be used to identify correlations between an arbitrary number of sharing partners.
 
-\textbf{Sample} : The estimation uses a 10\% sample of connections from the connection survey (5,000 connections), which serves as the primary sample for the counterfactual exercises.  This sample is combined with 5,239 connections from the leak quasi-experiment used in Section~\ref{section:hasslecostestimation}, which takes preference estimates from this step as an input.  Together these connections produce 473,114 months of consumption observations used in the preference estimation.  All standard errors throughout this paper are bootstrapped using \input{tables/boot_max}repetitions.  This sample does not include households using water from vendors since the data do not include information on consumption for these households.  Section~\ref{section:fixedcostestimation} details the imputation procedure used to infer preferences for these households.  Appendix~\ref{appendix:sigmanuassumptions} determines the ex-ante assumptions on $\sigma_{\epsilon}$ needed to identify the particular demand function.
+\textbf{Sample} : The estimation uses a 10\% sample of connections from the connection survey (5,000 connections), which serves as the primary sample for the counterfactual exercises.  This sample is combined with 2,151 connections from the leak quasi-experiment used in Section~\ref{section:hasslecostestimation}, which takes preference estimates from this step as an input.  Together these connections produce 349,265 months of consumption observations used in the preference estimation.  All standard errors throughout this paper are bootstrapped using \input{tables/boot_max}repetitions.  This sample does not include households using water from vendors since the data do not include information on consumption for these households.  Section~\ref{section:fixedcostestimation} details the imputation procedure used to infer preferences for these households.  Appendix~\ref{appendix:sigmanuassumptions} determines the ex-ante assumptions on $\sigma_{\epsilon}$ needed to identify the particular demand function.
 %The estimates are robust to varying the total and relative sample sizes of these groups.
 
 \textbf{Estimates} : Table~\ref{table:demandestimates} provides estimates for the different parameters as well as bootstrapped standard errors.  The price sensitivity parameter, $\alpha$, exhibits some statistically significant heterogeneity across demographic measures although the magnitudes of these estimates are relatively small compared to the intercept.  Moderately sized households have larger price sensitivities while employment among household members tends to lower price sensitivity estimates.  Relative to living in a duplex, households in apartments and single houses exhibit greater price sensitivities with large standard errors.  These estimates can be difficult to interpret economically since the elasticity of demand depends not only on these $\alpha$ terms, but also on variation in the fixed preferences for water across households.
@@ -923,7 +964,7 @@ This section calculates the optimal tariff structure in the current environment 
 The optimal fixed fee lies below the current fixed fee, which is priced at the cost of installing and maintaining a connection.  Since households incur hassle costs and free-rider distortions from splitting the bill in sharing connections, pricing below cost allows the regulator to encourage households to substitute away from shared connections toward individual connections and avoid these hassle costs at the margin.  By subsidizing individual connections, the two-part tariff in column three performs very close to the First-Best tariff in terms of average consumer surplus.  
 
  Moving to a social two-part tariff in column four, I find that maximizing welfare for low users counterintuitively involves increasing the fixed fee in order to subsidize a very low marginal price.  This tariff maximizes the share of households using from neighbors while also driving a significant share of households toward water vendors.  Since low-users are able to split the fixed fee with their sharing partner, they can enjoy greater consumption at the low marginal price.  Despite this relatively extreme pricing schedule, surplus for low users only increases by \input{tables/tpt_social_surplus_change_low_sharing_group}PhP/month while average surplus declines by \input{tables/tpt_social_surplus_change_avg_sharing_group}PhP/month.  While manipulating the two-part tariff proved to be an effective redistributive strategy without sharing in Section~\ref{section:optimaltariffswithoutsharing}, this finding suggests that informal sharing networks act to constrain the effectiveness of non-linear pricing in redistributing surplus.  
- 
+
 \begin{figure}[!htp]
 \centering
 \caption{Optimal Tariffs With Sharing}\label{figure:optimaltariffsharing}
