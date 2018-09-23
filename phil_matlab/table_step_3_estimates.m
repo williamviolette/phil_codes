@@ -15,7 +15,7 @@ fprintf(fileID,'%s\n','\begin{tabular}{lcccccc}');
 fprintf(fileID,'%s\n','      &            & \%Use   &            &       Correlation   &       Correlation   &       Correlation    \\');
 fprintf(fileID,'%s\n','   Moments      &   \%Owning  &  Neighbor  &  \%Vendor &   ($\beta_i$, \%Own.) &   ($\beta_i$, \% Neigh.) &   ($\beta_i$, \%Vendor)    \\');
 
-fprintf(fileID,'%s\n','\hline');
+%fprintf(fileID,'%s\n','\hline');
 
 fprintf(fileID,'%s\n',strcat(' True  & ',num2str(moments(1) ,'%5.3f'),' & ',...
  num2str(moments(2) ,'%5.3f'),' & ', ...
@@ -32,7 +32,7 @@ fprintf(fileID,'%s\n',strcat(' Estimated  & ',num2str(moments_eqm(1) ,'%5.3f'),'
  num2str(moments_eqm(6) ,'%5.3f'),' \\ '  ) );
 
 
-fprintf(fileID,'%s\n','\hline');
+%fprintf(fileID,'%s\n','\hline');
 fprintf(fileID,'%s\n','\end{tabular}');
 fclose(fileID);
 
@@ -66,14 +66,19 @@ fileID = fopen(strcat(cd_out,'tables',slash,'corr_table_group.tex'),'w');
     
 fprintf(fileID,'%s\n','\begin{tabular}{lcc}'); 
 %fprintf(fileID,'%s\n','\hline');
-fprintf(fileID,'%s\n','& $\epsilon$ & $\eta$ \\');
+%fprintf(fileID,'%s\n','& $\epsilon$ & $\eta$ \\');
+fprintf(fileID,'%s\n','& Consumption & Preference \\');
+fprintf(fileID,'%s\n','& Shock & Shock \\');
+
 %fprintf(fileID,'%s\n','\hline');
-fprintf(fileID,'%s\n','\hline');
-fprintf(fileID,'%s\n',strcat('Corr. Owner-Buyer: $\rho_{O,B}$ &', ...
+%fprintf(fileID,'%s\n','\hline');
+%fprintf(fileID,'%s\n',strcat('Corr. Owner-Buyer: $\rho_{O,B}$ &', ...
+fprintf(fileID,'%s\n',strcat('Owner-Buyer &', ...
                     num2str(CORR(1),'%5.2f'),'&', num2str(CORR(3),'%5.2f'),'\\'));
 fprintf(fileID,'%s\n',strcat('  & (', ...
                     num2str(corr_sd(1),'%5.2f'),') & (', num2str(corr_sd(3),'%5.2f'),') \\'));
-fprintf(fileID,'%s\n',strcat('Corr. Buyer-Buyer: $\rho_{B_1,B_2}$ &', ...
+%fprintf(fileID,'%s\n',strcat('Corr. Buyer-Buyer: $\rho_{B_1,B_2}$ &', ...
+fprintf(fileID,'%s\n',strcat('Buyer-Buyer &', ...
                     num2str(CORR(2),'%5.2f'),'&', num2str(CORR(4),'%5.2f'),'\\')); 
 fprintf(fileID,'%s\n',strcat(' & (', ...
                     num2str(corr_sd(2),'%5.2f'),') & (', num2str(corr_sd(4),'%5.2f'),') \\')); 
@@ -166,39 +171,39 @@ fileID = fopen(strcat(cd_out,'tables/step_3_estimates_group.tex'),'w');
 fprintf(fileID,'%s\n','\begin{tabular}{lcc}');
 %fprintf(fileID,'%s\n','\hline');
 fprintf(fileID,'%s\n','& Estimate & Standard Error \\');
-fprintf(fileID,'%s\n','\hline');
+%fprintf(fileID,'%s\n','\hline');
 %fprintf(fileID,'%s\n','\hline');
 
 
 
 %%%%%%% PRINT THE ESTIMATE TABLE
 
-fprintf(fileID,'%s\n',strcat('Fixed Cost per Connection (PhP/Month): $F$ &', ...
+fprintf(fileID,'%s\n',strcat('Connection Fixed Cost &', ...
                     num2str(Xmean(1),'%5.2f'),'&', num2str(Xstd(1),'%5.2f'),'\\'));
 
 if size(smm,1)==3
-    fprintf(fileID,'%s\n',strcat('Fixed Cost for Vended Water (PhP/Month): $F_{V}$ &', ...
+    fprintf(fileID,'%s\n',strcat('Vendor Fixed Cost &', ...
                         num2str(Xmean(2),'%5.2f'),'&', num2str(Xstd(2),'%5.2f'),'\\'));
 
-    fprintf(fileID,'%s\n',strcat('Price for Vended Water (PhP/m3): $P_{V}$ &', ...
+    fprintf(fileID,'%s\n',strcat('Vendor Price &', ...
                         num2str(Xmean(3),'%5.2f'),'&', num2str(Xstd(3),'%5.2f'),'\\'));
 
 elseif size(smm,1)==4
-    fprintf(fileID,'%s\n',strcat('Fixed Cost for Vended Water (PhP/Month): $F_{V}$ &', ...
+    fprintf(fileID,'%s\n',strcat('Vendor Fixed Cost &', ...
                         num2str(Xmean(2),'%5.2f'),'&', num2str(Xstd(2),'%5.2f'),'\\'));
 
-    fprintf(fileID,'%s\n',strcat('Price for Vended Water (PhP/m3): $P_{V}$ &', ...
+    fprintf(fileID,'%s\n',strcat('Vendor Price &', ...
                         num2str(Xmean(3),'%5.2f'),'&', num2str(Xstd(3),'%5.2f'),'\\'));
 
-    fprintf(fileID,'%s\n',strcat('Vendor Price Variance: $\sigma_{V}^2$  &', ...
+    fprintf(fileID,'%s\n',strcat('Vendor Price Variance &', ...
                         num2str(Xmean(4),'%5.2f'),'&', num2str(Xstd(4),'%5.2f'),'\\'));
 else
-    fprintf(fileID,'%s\n',strcat('Price for Vended Water (PhP/m3): $P_{V}$ &', ...
+    fprintf(fileID,'%s\n',strcat('Vendor Price &', ...
                         num2str(Xmean(2),'%5.2f'),'&', num2str(Xstd(2),'%5.2f'),'\\'));
 
 end
 
-    fprintf(fileID,'%s\n','\hline'); 
+  %  fprintf(fileID,'%s\n','\hline'); 
     
 fprintf(fileID,'%s\n','\end{tabular}'); 
 

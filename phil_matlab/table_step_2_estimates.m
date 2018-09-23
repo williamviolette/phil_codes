@@ -93,7 +93,7 @@ ph_corr = csvread(strcat(cd_dir,'results',slash,'correlation_ph_beta_.csv'));
 fprintf(fileID,'%s\n','\begin{tabular}{lccc}');
 %fprintf(fileID,'%s\n','\hline');
 fprintf(fileID,'%s\n','Hassle Cost (PhP/m3) & Sample Mean & Estimate & Standard Error \\');
-fprintf(fileID,'%s\n','\hline');
+%fprintf(fileID,'%s\n','\hline');
 %fprintf(fileID,'%s\n','\hline');
 
 
@@ -102,15 +102,15 @@ fprintf(fileID,'%s\n','\hline');
 
 fprintf(fileID,'%s\n',strcat('Intercept & 1 &', ...
                     num2str(Xmean(1),'%5.2f'),' & ', num2str(Xstd(1),'%5.2f'),'\\'));
-fprintf(fileID,'%s\n',strcat('\% HHs in Single Home/Apt.  &', ...
+fprintf(fileID,'%s\n',strcat('\% Single Home/Apartment  &', ...
                     num2str(mean(PH_CONTROL(:,1)),'%5.2f'),'&',num2str(Xmean(2),'%5.2f'),'&', ...
                     num2str(Xstd(2),'%5.2f'),'\\'));
-fprintf(fileID,'%s\n',strcat('Avg. Dist. Between HHs (meters) &', ...
+fprintf(fileID,'%s\n',strcat('Neighbor Distance &', ...
                     num2str(mean(PH_CONTROL(:,2)),'%5.2f'), '&', num2str(Xmean(3),'%5.2f'),'&', ...
                     num2str(Xstd(3),'%5.2f'),'\\'));
                 
                 
-fprintf(fileID,'%s\n','\hline');
+%fprintf(fileID,'%s\n','\hline');
 
 fprintf(fileID,'%s\n','\end{tabular} '); 
 

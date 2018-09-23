@@ -333,21 +333,21 @@ end
 fprintf(fileID,'%s\n','\begin{tabular}{lcccccc}');
 %fprintf(fileID,'%s\n','\hline');
 fprintf(fileID,'%s\n','  & First-Best & Current & 2-Part  & 2-Part Social  & 3-Part & 3-Part Social \\');
-fprintf(fileID,'%s\n','\hline');
-fprintf(fileID,'%s\n','\hline');
+%fprintf(fileID,'%s\n','\hline');
+%fprintf(fileID,'%s\n','\hline');
 
-[~] = table_print_welfare('Fixed Fee (PhP/month) &',1, '%5.0f',0,fileID ,RES_first_best, RES_current, RES_tpt0, RES_tpt1, RES_tpt3_0, RES_tpt3_1);
-[~] = table_print_welfare('Avg. Tariff (PhP/m3) &',1, '%5.1f',0,fileID ,mc, avg_tariff, tpt0_p1 , tpt1_p1, tpt3_0_p1, tpt3_1_p1);
-[~] = table_print_welfare('Source Vendor &',2, '%5.0f',1,fileID ,RES_first_best, RES_current, RES_tpt0, RES_tpt1, RES_tpt3_0, RES_tpt3_1);
-[~] = table_print_welfare('Source Neighbor &',3, '%5.0f',1,fileID ,RES_first_best, RES_current, RES_tpt0, RES_tpt1, RES_tpt3_0, RES_tpt3_1);
+[~] = table_print_welfare('Fixed Fee  &',1, '%5.0f',0,fileID ,RES_first_best, RES_current, RES_tpt0, RES_tpt1, RES_tpt3_0, RES_tpt3_1);
+[~] = table_print_welfare('Avg. Tariff  &',1, '%5.1f',0,fileID ,mc, avg_tariff, tpt0_p1 , tpt1_p1, tpt3_0_p1, tpt3_1_p1);
+[~] = table_print_welfare('Source Vendor &',2, '%5.0f',0,fileID ,RES_first_best, RES_current, RES_tpt0, RES_tpt1, RES_tpt3_0, RES_tpt3_1);
+[~] = table_print_welfare('Source Neighbor &',3, '%5.0f',0,fileID ,RES_first_best, RES_current, RES_tpt0, RES_tpt1, RES_tpt3_0, RES_tpt3_1);
 [~] = table_print_welfare('Surplus &',4, '%5.1f',0,fileID ,RES_first_best, RES_current, RES_tpt0, RES_tpt1, RES_tpt3_0, RES_tpt3_1);
 [~] = table_print_welfare('Surplus: Low Users &',5, '%5.1f',0,fileID ,RES_first_best, RES_current, RES_tpt0, RES_tpt1, RES_tpt3_0, RES_tpt3_1);
 
-[~] = table_print_welfare('Consumption (m3/month) &',6, '%5.1f',0,fileID ,RES_first_best, RES_current, RES_tpt0, RES_tpt1, RES_tpt3_0, RES_tpt3_1);
+[~] = table_print_welfare('Consumption &',6, '%5.1f',0,fileID ,RES_first_best, RES_current, RES_tpt0, RES_tpt1, RES_tpt3_0, RES_tpt3_1);
 %%%[~] = table_print_welfare('Cons.: Low Users (m3/month) &',7, '%5.1f',0,fileID ,RES_first_best, RES_current, RES_tpt0, RES_tpt1, RES_tpt3_0, RES_tpt3_1);
 
 
-fprintf(fileID,'%s\n','\hline');
+%fprintf(fileID,'%s\n','\hline');
 fprintf(fileID,'%s\n','\end{tabular}'); 
 fclose(fileID);
 %}

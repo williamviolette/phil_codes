@@ -212,13 +212,15 @@ fprintf(fileID,'%s\n','& Current & Discount \\');
     
 
 if C_FEE_DISCOUNT>1
-    fprintf(fileID,'%s\n',strcat('Fixed Fee (PhP/month) &', ...
-                        num2str(x1(1),'%5.0f'),'&', num2str(x1(1)-C_FEE_DISCOUNT,'%5.0f'),'\\'));
+    fprintf(fileID,'%s\n',strcat('Fixed Fee &', ...
+                        num2str(225,'%5.0f'),'&', num2str(225-C_FEE_DISCOUNT,'%5.0f'),'\\'));
+                        %num2str(x1(1),'%5.0f'),'&', num2str(x1(1)-C_FEE_DISCOUNT,'%5.0f'),'\\'));
+
 if HLINE==1                    
     fprintf(fileID,'%s\n','\hline');  
 end
 else
-    fprintf(fileID,'%s\n',strcat('Fixed Fee (PhP/month) &', ...
+    fprintf(fileID,'%s\n',strcat('Fixed Fee  &', ...
                         num2str(x1(1),'%5.0f'),'&', num2str(x1(1)+GIVEN_P1-GIVEN_P,'%5.0f'),'\\'));
 if HLINE==1                    
     fprintf(fileID,'%s\n','\hline');  

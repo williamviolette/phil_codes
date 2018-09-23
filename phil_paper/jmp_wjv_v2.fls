@@ -74,6 +74,8 @@ INPUT /usr/local/texlive/2015/texmf-dist/tex/latex/amscls/amsthm.sty
 INPUT /usr/local/texlive/2015/texmf-dist/tex/latex/amscls/amsthm.sty
 INPUT /usr/local/texlive/2015/texmf-dist/tex/latex/tools/array.sty
 INPUT /usr/local/texlive/2015/texmf-dist/tex/latex/tools/array.sty
+INPUT /usr/local/texlive/2015/texmf-dist/tex/latex/threeparttable/threeparttable.sty
+INPUT /usr/local/texlive/2015/texmf-dist/tex/latex/threeparttable/threeparttable.sty
 INPUT /usr/local/texlive/2015/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty
 INPUT /usr/local/texlive/2015/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty
 INPUT /usr/local/texlive/2015/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty

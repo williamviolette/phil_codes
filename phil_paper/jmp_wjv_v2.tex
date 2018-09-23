@@ -9,6 +9,7 @@
 \DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
 \usepackage{amsmath, amsthm, amssymb}
 \usepackage{array}
+\usepackage{threeparttable}
 %\usepackage{pgfplots}
 \usepackage{tikz}
 \usepackage{tkz-euclide}
@@ -70,7 +71,7 @@
 %this strategy may have the opposite effect when connections are frequently shared between households.  
 %	I analyze the welfare impacts of pricing for piped water in a context where households may choose to share their water connections with their neighbors.  
 %	based on first-world experience
-
+	
 
 	%This policy improves welfare by up to \input{tables/tpt_improvement_percent_sharing_group}\unskip\% of consumer surplus or \input{tables/tpt_improvement_income_sharing_group}\unskip\% of household income.
 
@@ -86,9 +87,7 @@ Despite large investments in piped water throughout the developing world, the sh
 
 
 
-
-
-Conventional pricing policies often rely on the assumption that each water connection serves a single household; however, many households in developing cities share with neighbors instead of purchasing their own connections.  For example, 70\% of African cities report frequent water sharing (\cite{keener2010provision}) ranging from fetching from neighbors with hoses and buckets in Tangiers, Morocco (\cite{devoto2012happiness}) to drawing from single taps that each serve compounds in Kumasi, Ghana (\cite{whittington1992possible}).\footnote{\cite{nauges2006water} finds further evidence of widespread water sharing in Sri Lanka.}  In Manila, I establish that 23\% of households access water through a neighbor's connection by connecting plumbing directly to the meter (\input{tables/access_pipes}\unskip\%), extending plastic pipes (\input{tables/access_single_tap}\unskip\%), or fetching water with containers (\input{tables/access_fetch}\unskip\%).  While previous studies have focused on particular suburbs, this paper is the first to my knowledge to measure the role of water sharing in extending access across an urban population.
+Conventional pricing policies often rely on the assumption that each water connection serves a single household; however, many households in developing cities share with neighbors instead of purchasing their own connections.  For example, 70\% of African cities report frequent water sharing (\cite{keener2010provision}) ranging from fetching from neighbors with hoses and buckets in Tangiers, Morocco (\cite{devoto2012happiness}) to drawing from single taps that each serve compounds in Kumasi, Ghana (\cite{whittington1992possible}).\footnote{\cite{nauges2006water} finds further evidence of widespread water sharing in Sri Lanka.}  In Manila, I establish that 23\% of households access water through a neighbor's connection by connecting plumbing directly to the meter (\input{tables/access_pipes}\unskip\%), extending plastic pipes (\input{tables/access_single_tap}\unskip\%), or fetching water with containers (\input{tables/access_fetch}\unskip\%).  While previous studies have focused on specific suburbs, this paper is the first to my knowledge to measure the role of water sharing in extending access across an urban population.
 
 Water sharing has important implications for the welfare impacts of common pricing policies.  Increasing marginal prices weaken incentives for households to extend water access to their neighbors through sharing (\cite{whittington1992possible}).  Fixed fee subsidies may have limited impacts on water access when sharing households split connection fees with their neighbors.  Since low-income households are more likely to use water from their neighbors, increasing marginal prices and low fixed fees may combine to act as regressive taxes in the presence of sharing.  
 
@@ -99,11 +98,22 @@ To evaluate the impacts of different pricing policies, I build a model of househ
 
 The estimation combines water source and consumption decisions to structurally recover preferences and unobserved costs of water sharing.  To include reduced-form approaches to identification within the context of a structural model, I divide the estimation into three steps.  The first step uses variation in the non-linear price schedule (both across and within households) to identify water demand for each household using monthly consumption data.  To measure the shadow costs of fetching water from a shared connection, the second step analyzes a quasi-experiment where households face leaks in their service pipes, forcing them to substitute to a neighbor's connection.  The model maps the extent to which these households are able to offset their consumption to a neighbor's connection into an estimate of the marginal costs of fetching water.  This exercise recovers sizable sharing costs on the order of \input{tables/hassle_percentage}\unskip\% of the average marginal water price.  This quasi-experimental approach builds on a descriptive literature pointing to potential costs of sharing water (\cite{whittington1992possible,nauges2006water}).  On top of an initial connection fee and monthly service fee, households may face unobserved fixed costs in owning a connection, which may include application costs, plumbing maintenance, as well as land-tenure issues in qualifying for a water connection.  The third step estimates these fixed costs by simulating the sequential game to match cross-sectional variation in water source choices.  This strategy provides a structural, revealed-preference approach to recovering unobserved fixed costs, complementing previous reduced-form evidence in \cite{devoto2012happiness}.
 
-Combining the model and estimates, I simulate a series of counterfactual policies.  First, I consider a connection fee subsidy policy consistent with recommendations from the World Bank, NGOs, and other researchers to improve water access for the poor (\cite{komives2005water,wsup,jimenez2014factors,mcintosh2003asian}).  I discount the fixed fee by 12\% while increasing the tariff schedule proportionally to ensuring that the water provider exactly covers costs.  This policy reduces access by incentivizing households to substitute away from sharing arrangements toward both individual connections and water vendors (which mainly include deepwells and water refilling stations).  
+Combining the model and estimates, I simulate a series of counterfactual policies.  First, I consider a connection fee subsidy policy consistent with recommendations from the World Bank, NGOs, and other researchers to improve water access for the poor (\cite{komives2005water,wsup,jimenez2014factors,mcintosh2003asian}).  I discount the fixed fee by 12\% while increasing the tariff schedule proportionally to ensuring that the water provider exactly covers costs.  This policy reduces access by incentivizing households to substitute toward water vendors (which mainly include deepwells and water refilling stations).  
+
+%substitute away from sharing arrangements toward both individual connections and
+%This policy reduces access by incentivizing households to substitute away from sharing arrangements toward both individual connections and water vendors (which mainly include deepwells and water refilling stations).  
 
 Next, I compute an optimal tariff schedule to maximize consumer surplus while exactly covering production costs.  Compared to the current tariff, I find that a simple, two-part tariff characterized by a fixed fee and low, flat marginal price can produce gains on the order of \input{tables/tpt_improvement_percent_sharing_group}\unskip\% of consumer surplus or \input{tables/tpt_improvement_income_sharing_group}\unskip\% of household income.  These gains are driven both by pricing closer to marginal cost as well as by increasing sharing, which reduces the number of connections to install and maintain.  Yet, since sharing involves costly redistribution of water, the optimal tariff subsidizes individual connections on the margin by pricing above marginal cost and setting the fixed fee below the cost of installing and maintaining each connection.
 
-Finally, I compare the optimal tariff with a social tariff that maximizes consumer surplus only for the bottom 50\% of users and is intended to capture goals of ensuring minimum usage and access as well as income redistribution.  The social tariff features a much higher fixed fee and lower marginal price, does not improve access to piped water, and reallocates little consumer surplus to low-demand households at a large cost to average welfare.  By contrast, in a counterfactual world without sharing, the social tariff features a fixed fee subsidy and increasing marginal prices; it also increases access and efficiently redistributes consumer surplus to low users as compared the optimal tariff.  These results provide evidence that the presence of informal sharing networks constrains pricing policy as an effective tool for redistribution.
+Finally, I compare the optimal tariff with a social tariff that maximizes consumer surplus only for the bottom 50\% of users and is intended to capture goals of ensuring minimum usage and access as well as income redistribution.  With sharing, social tariffs are ineffective at reallocating surplus from large to small users; however in a counterfactual without sharing, social tariffs achieve substantial redistribution, over doubling consumer surplus for small users.  This evidence suggests that the presence of informal sharing networks constrains non-linear pricing as an effective tool for redistribution.
+
+%features a much lower fixed fee and higher marginal price and redistributes substantial surplus to low users as compared to the optimal tariff.  
+
+%features a slightly lower fixed fee and higher marginal price, produces universal access to piped water and reduces sharing, but reallocates little consumer surplus to low-demand households. 
+
+%and increasing marginal prices; it also increases access and efficiently redistributes consumer surplus to low users as compared the optimal tariff.  These results provide evidence that the presence of informal sharing networks constrains pricing policy as an effective tool for redistribution.
+
+%The social tariff features a much higher fixed fee and lower marginal price, does not improve access to piped water, and reallocates little consumer surplus to low-demand households at a large cost to average welfare.  By contrast, in a counterfactual world without sharing, the social tariff features a fixed fee subsidy and increasing marginal prices; it also increases access and efficiently redistributes consumer surplus to low users as compared the optimal tariff.  These results provide evidence that the presence of informal sharing networks constrains pricing policy as an effective tool for redistribution.
 
 In focusing on water sharing behavior, this approach abstracts away from several features that may also affect optimal pricing policy.  First, I do not directly model environmental, health, or other externalities associated with piped water use.  From a policy perspective, water shortages may lead policymakers to promote conservation through higher marginal prices while positive health externalities may motivate further subsidizing piped water (\cite{timmins2002measuring}, \cite{galiani2005water}).\footnote{\cite{bennett2012does} shows that piped water can also lead to negative externalities through worse sanitation, possibly motivating higher prices for piped water.}  Second, I assume that government regulator is able to fully observe production costs for the water provider, eliminating scope for prices to correct for possible principal-agent frictions as characterized by \cite{laffont1993theory}.  Finally, the counterfactual exercises borrow the public-private partnership regulatory framework in Manila by assuming that revenue must fully cover production costs.  Additional data on the costs of raising public funds and risks of regulatory capture would allow for a more flexible analysis taking into account the possibility of public funding for water (\cite{laffont2005regulation}).  
 
@@ -152,17 +162,18 @@ Faced with this fixed fee as well as other costs associated with getting and mai
 \section{Data}\label{section:data}
 
 %Monthly quantity choices across different households and at different prices reveal information about household demand.  Observing multiple quantities choices for the same household allows for a rich characterization of demand heterogeneity at the household-level.  
-Evaluating different pricing policies requires measuring demand at the household level as well as costs associated with providing piped water.  For information about these attributes, I developed a partnership with one of the regulated, private providers in Manila who provided both billing records as well as information about the regulatory structure, pricing, and production costs.  Complete billing records for each water connection including the monthly meter reading, the total bill charged, and the precise location for each meter serve as the primary measure of quantity choices.  These data span 2010 to 2015, during which connections grew from 800,000 to 1.5 million water connections, generating nearly 100 million transaction records.  Connections are divided into residential (90\%), semi-business (4\%), commercial (5\%), and industrial (1\%).  This paper focuses on residential and semi-business connections.\footnote{Semi-business connections are largely composed of households that own small roadside stands.  These connections provide a useful source of price variation which is described in Appendix~\ref{appendix:ratechangeelasticity}.}  The monthly meter reading is used as the measure of consumption for each connection.  Meter readings are rounded to the nearest cubic meter, and I limit consideration to meter readings below 120 $\text{m}^{3}$ in order to exclude pipe leaks as well as meter reading errors (readings above 120 $\text{m}^{3}$ compose less than 0.5\% of the sample).
+Evaluating different pricing policies requires measuring demand at the household level as well as costs associated with providing piped water.  For information about these attributes, I developed a partnership with one of the regulated, private providers in Manila who provided both billing records as well as information about the regulatory structure, pricing, and production costs.  Complete billing records for each water connection including the monthly meter reading, the total bill charged, and the precise location for each meter serve as the primary measure of quantity choices.  These data span 2010 to 2015, during which connections grew from 900,000 to 1.5 million water connections, generating nearly 100 million transaction records.  Connections are divided into residential (90\%), semi-business (4\%), commercial (5\%), and industrial (1\%).  This paper focuses on residential and semi-business connections.\footnote{Semi-business connections are largely composed of households that own small roadside stands.  These connections provide a useful source of price variation which is described in Appendix~\ref{appendix:ratechangeelasticity}.}  The monthly meter reading is used as the measure of consumption for each connection.  Meter readings are rounded to the nearest cubic meter, and I limit consideration to meter readings below 100 $\text{m}^{3}$ in order to exclude pipe leaks as well as meter reading errors (readings above 100 $\text{m}^{3}$ compose less than 0.7\% of the sample).
 
 Since the object of interest for welfare is household-level demand, I merge the billing records to unique survey data recording information on households using each connection.  To evaluate the performance of the water provider, the regulator contracted with a local university to conduct the Public Assessment of Water Services (PAWS) in three waves from 2008 to 2012, surveying around 50,000 water connections.\footnote{Appendix~\ref{appendix:pawssampling} describes the sampling design and tests the extent to which it may be correlated with demographic characteristics.  This exercise finds relatively weak correlations in economic terms with key characteristics.}  I have collected unique identifiers for this survey, which allows responses to be linked to water connections.  The connection survey records the total number of households and people using each connection, providing the primary measure of sharing behavior.  The connection survey also includes basic demographics for the owner of the connection.  The demographics used in this paper are household size, dwelling type (whether apartment, duplex, or single house), number of employed household members, and whether the head of household is employed in a low-skill profession.
 %consumption and water source choices at the household-level.  
 %To examine both consumption decisions and water source choices at the household-level, I construct a dataset that merges (1) monthly water usage for around 50,000 connections, (2) demographics and water sharing measures for households using these connections, and (3) a cross-section of all households and their water source choices.  Put together, these data form a representative sample of households in half of Metro Manila.
 
-A full analysis of water usage in Manila also requires describing households that choose to use water from local vendors.  For information on households that are using water from alternative sources, I turn to the 2010 Census of Population and Housing.  Households are defined as connected to the piped network if they report using a ``faucet community water system'' for their cooking, laundry, or bathing needs.\footnote{The census was designed largely for rural populations so it does not directly ask whether households are connected to a piped water network.}  Alternatively, I define households as using from a water vendor if they report any other category, which includes deep wells, peddlers, or other sources.  I then construct similar demographic measures to the connection survey using questions in the census and compare these measures across these data sources in Table~\ref{table:pawstocensus} of Appendix~\ref{appendix:pawstocensus}.  Households that own a connection in the connection survey are similar to households connected to the piped water network in the Census data.  To construct a profile of water source choices for the full population, I randomly sample from the pool of households using from vendors in 8 regions of the city so that the data form a representative sample when combined with households covered by the connection survey in each small area.\footnote{Regions are chosen to overlap with ward administrative/political boundaries while ensuring that I am able to obtain a large enough sample of vendor households for each area to perform the counterfactual analysis in Section~\ref{section:fixedcostestimation}.}
+A full analysis of water usage in Manila also requires describing households that choose to use water from local vendors.  For information on households that are using water from alternative sources, I turn to the 2010 Census of Population and Housing.  Households are defined as connected to the piped network if they report using a ``faucet community water system'' for their cooking, laundry, or bathing needs.\footnote{The census was designed largely for rural populations so it does not directly ask whether households are connected to a piped water network.}  Alternatively, I define households as using from a water vendor if they report any other category, which includes deep wells, peddlers, or other sources.  I then construct similar demographic measures to the connection survey using questions in the census and compare these measures across these data sources in Table~\ref{table:pawstocensus} of Appendix~\ref{appendix:pawstocensus}.  Households that own a connection in the connection survey are similar to households connected to the piped water network in the Census data.  To construct a profile of water source choices for the full population, I randomly sample from the pool of households using from vendors in 599 wards of the city so that the data form a representative sample when combined with households covered by the connection survey in each small area.
+%\footnote{Regions are chosen to overlap with ward administrative/political boundaries while ensuring that I am able to obtain a large enough sample of vendor households for each area to perform the counterfactual analysis in Section~\ref{section:fixedcostestimation}.}
 
 For additional information on water sharing relationships between households, I fielded a small, non-representative survey of 600 households via mobile phone app.  This survey asks about issues associated with using different water sources, basic demographics, as well as how the bill and connection fee are paid for sharing households.  Appendix~\ref{appendix:pollfish} includes additional details on this survey and finds roughly similar measures between the connection survey and the mobile survey, suggesting that the mobile survey may provide a reasonable descriptive picture of sharing in Manila.
 
-The water provider also maintains call records of all service complaints, which can be linked to individual connections.  This data is used to measure instances where households face unanticipated shocks to their water source as part of the identification strategy to estimate the hassle costs of sharing water.  Finally, the water provider tracks data on the marginal cost of pumping an additional cubic meter of water as well as the costs associated with installing new connections.  These data provide inputs into the provider's budget constraint, which are necessary for computing counterfactual pricing regimes.  Supplemental survey data from a subset of Manila include income measures that are used to impute income for the remainder of the sample across a variety of demographic variables and their interactions.
+The water provider also maintains call records of all service complaints, which can be linked to individual connections.  This data is used to measure instances where households face unanticipated shocks to their water source as part of the identification strategy to estimate the marginal costs of sharing water.  Finally, the water provider tracks data on the marginal cost of pumping an additional cubic meter of water as well as the costs associated with installing new connections.  These data provide inputs into the provider's budget constraint, which are necessary for computing counterfactual pricing regimes.  Supplemental survey data from a subset of Manila include income measures that are used to impute income for the remainder of the sample across a variety of demographic variables and their interactions.
 
 
 \section{Patterns of Water Use}\label{section:patternsofwateruse}
@@ -173,13 +184,17 @@ The first rows provide demographic information from the connection survey for ho
 
 \begin{table}
 \centering
-\captionsetup{justification=centering}
+%\captionsetup{justification=centering}
+\begin{threeparttable}
 \caption{ Water Connections  by Number of Households Served}\label{descriptives}
-\input{tables/new_descriptives} \\
-\footnotesize{The data include billing records merged with the connection survey. \\ Income is imputed using location, demographic variables, and their interactions.}
+\input{tables/new_descriptives}
+\begin{tablenotes}
+\item \footnotesize{The data include billing records merged with the connection survey.  Income is imputed using location, demographic variables, and their interactions.}
+\end{tablenotes}
+\end{threeparttable}
 \end{table} 
 
-Table~\ref{descriptives} also summarizes water use and sharing behavior for these connections, merging information from the connection survey with the billing records.  Larger numbers of households sharing a water connection are correlated with higher total water usage, but less water per person.\footnote{Total People Served by a connection includes both the owning household and any other households using a connection.}  This decline in usage per person may have many possible drivers: (1) sharing households face higher prices by locating at a higher point on the tariff schedule (Figure~\ref{figure:tariff}), (2) sharing households may face hassle costs in fetching water from neighboring taps, (3) these price effects may incentivize low-demand households to select into sharing relationships, consistent with the demographic patterns, and (4) low-demand households may have idiosyncratic preferences for sharing relationships.  On average, monthly water bills (inclusive of service fees) take up around \input{tables/incshr}\unskip\% of household income, which does not include other unobserved costs in accessing water.  These findings suggest that policies which affect sharing choices can have significant welfare consequences.  
+Table~\ref{descriptives} summarizes water use and sharing behavior for these connections, merging information from the connection survey with the billing records.  Larger numbers of households sharing a water connection are correlated with higher total water usage, but less water per person.\footnote{Total People Served by a connection includes both the owning household and any other households using a connection.}  This decline in usage per person may have many possible drivers: (1) sharing households face higher prices by locating at a higher point on the tariff schedule (Figure~\ref{figure:tariff}), (2) sharing households may face hassle costs in fetching water from neighboring taps, (3) these price effects may incentivize low-demand households to select into sharing relationships, consistent with the demographic patterns, and (4) low-demand households may have idiosyncratic preferences for sharing relationships.  On average, monthly water bills (inclusive of service fees) take up around \input{tables/incshr}\unskip\% of household income, which does not include other unobserved costs in accessing water.  These findings suggest that policies which affect sharing choices can have significant welfare consequences.  
 
 %Also, the mobile survey indicates that only around 30\% of sharing households would substitute to toward a neighbor's connection if they no longer had access to their primary water source.  For this reason, I treat connections reported to serve more than three households as only serving three households.  
 Table~\ref{descriptives} also computes the total number of households using from each source.  I assume that households sharing with one or two other households are uniquely linked to one connection so that the population of households connected to the network can be computed by summing the number of households served by each connection.  This assumption is consistent with the presence of fixed costs in setting up a connection or a sharing relationship.  To the extent that households are drawing water from multiple connections, this assumption may lead to an overestimation of the population engaged in sharing relationships.  Under this assumption, I find that \input{tables/shr_individual}\unskip\% of connected households receive their water from an individual connection, \input{tables/shr_1hh}\unskip\% are involved in a sharing relationship with a single neighbor, and \input{tables/shr_2hh}\unskip\% are in a sharing relationship with 2 or more other households.  These proportions do not take into consideration households that are using from water vendors, which are discussed in more detail below.  Each water connection contributes over six years of billing records on average.
@@ -257,7 +272,7 @@ This model assumes that the monthly water bill is split evenly between all shari
 
 %\footnote{Under the additional assumption that households never directly observe the $\epsilon$ shocks, splitting the bill provides an intuitive way to ensure all households account for at least some of their usage.  }
 
-Sharing households must negotiate over how to pay the monthly fixed fees.  The model assumes that households commit to dividing any fixed fees at the start of the sharing arrangement.  Under quasi-linear utility, any fixed transfers are exogenous to monthly consumption decisions.  For ease of exposition, this section assigns a fixed fee, $F_i$ to each household and postpones discussion of how the total fixed fee may be divided between households to Section~\ref{section:watersourcechoice}.  
+Sharing households must negotiate over how to pay the monthly fixed costs (including the fixed fee paid to the firm and any unobserved costs of using a connection).  The model assumes that households commit to dividing any fixed costs at the start of the sharing arrangement.  Under quasi-linear utility, any fixed transfers are exogenous to monthly consumption decisions.  For ease of exposition, this section assigns a fixed cost, $F_i$ to each household and postpones discussion of how the total fixed cost may be divided between households to Section~\ref{section:watersourcechoice}.  
 
 Normalizing the price of the numeraire good, $x$, to one, the budget constraint for household, $i$, using a connection with households, $S$, takes the following form given that total consumption for their connection, $W_C$, falls between thresholds, $\overline{W}^{k-1}$ and $\overline{W}^{k}$:
 %\begin{align*}
@@ -477,7 +492,7 @@ Summing each part of the demand function in equation (\ref{equation:generaldeman
 
 \subsubsection{Households using from Water Small-Scale Providers}
 
-6\unskip\% of households source their water from small-scale water vendors.  These sources are collapsed into a single vendor category, which is modeled as a perfect substitute to piped water and is characterized by a monthly fixed fee, $F_v$, and a marginal price, $p_v$.  The monthly fixed fee, $F_v$, is assumed to capture primarily fixed differences in quality of service between vended water and other sources.  Similarly, the marginal price, $p_v$, includes both the price per unit as well as any differences in water quality or ease of use relative to piped water.  Demand for this source becomes a simple linear function of prices given by equation (\ref{equation:vendordemand}).
+6\unskip\% of households source their water from small-scale water vendors.  These sources are collapsed into a single vendor category, which is modeled as a perfect substitute to piped water and is characterized by a monthly fixed cost, $F_v$, and a marginal price, $p_v$.  The monthly fixed cost, $F_v$, is assumed to capture primarily fixed differences in quality of service between vended water and other sources.  Similarly, the marginal price, $p_v$, includes both the price per unit as well as any differences in water quality or ease of use relative to piped water.  Demand for this source becomes a simple linear function of prices given by equation (\ref{equation:vendordemand}).
 \begin{align}\label{equation:vendordemand}
 w^{*} = \Gamma_i - \alpha_i p_v
 \end{align}
@@ -631,8 +646,8 @@ Estimates of the variance of consumption shocks, $\sigma_{\epsilon}$ increase sl
 \centering
 \caption{Demand Estimates}\label{table:demandestimates}
 \input{tables/step_1_estimates_group} \\
-\vspace{.1cm}
-{\footnotesize{Total Observations:  349,265   Total Connections:  7,151} }
+\vspace{.2cm}
+{\footnotesize{Sample includes 349,265 billing months for 7,151 connections. } }
 \end{table}
 To interpret these estimates in economic terms, I compute the elasticity of demand with respect to price at the connection-level.  Given a linear demand structure, the elasticity of demand depends on both the price sensitivity and fixed preferences for water.  As a simplified example, consider the calculation for elasticity under a single marginal price and linear demand specification:
 \begin{align*}
@@ -644,14 +659,16 @@ Table~\ref{table:elasticity} presents demand elasticity estimates across tercile
 
 \begin{table}
 \centering
+\begin{threeparttable}
 \caption{Elasticity Estimates}\label{table:elasticity}
-\input{tables/elasticity_estimates} \\
-\vspace{.5cm}
-{\footnotesize Total Observations:  349,265   Total Connections:  7,151 \\
-Standard errors are bootstrapped at the connection level.}
+\input{tables/elasticity_estimates} 
+\begin{tablenotes}
+\item {\footnotesize Elasticities are calculated from 7,151 connections making 349,265 connection-months.  Income is imputed based on demographics, locations, and their interactions.  Standard errors are bootstrapped at the connection level.}
+\end{tablenotes}
+\end{threeparttable}
 \end{table}
 
-The demand estimation yields an average elasticity of -\input{tables/mean_elasticity}\unskip, which can be interpreted as the percentage change in quantity due to a one percentage change in price.  This estimate also closely matches reduced-form elasticity estimates from price-change quasi-experiment detailed in Appendix~\ref{appendix:ratechangeelasticity}.  This estimate is well below the -0.98 estimate of \cite{szabo2015value} but in the range of other similar studies in developing world that find elasticities between -0.01 and -0.81 (\cite{diakite2009proposal}, \cite{strand2005water}).  
+The demand estimation yields an average elasticity of \input{tables/mean_elasticity}\unskip, which can be interpreted as the percentage decrease in quantity due to a one percentage increase in price.  This estimate also closely matches reduced-form elasticity estimates from price-change quasi-experiment detailed in Appendix~\ref{appendix:ratechangeelasticity}.  This estimate is in range of the 0.98 estimate from \cite{szabo2015value} as well as similar studies in the developing world that find elasticities between 0.01 and 0.81 (\cite{diakite2009proposal}, \cite{strand2005water}).  
 
 \begin{figure}
 \caption{Comparing Predicted and Observed Water Use}\label{figure:predictedwateruse}
@@ -660,15 +677,20 @@ The demand estimation yields an average elasticity of -\input{tables/mean_elasti
 \end{center}
 \end{figure}
 
-Figure~\ref{figure:predictedwateruse} compares the predicted histogram of consumption with observed values.  Vertical red lines indicate the price thresholds in the tariff schedule.  By roughly matching the smoothness of the distributions especially across price thresholds, this model improves on standard models in the literature, which often predict excessive bunching at thresholds (\cite{mcrae2014infrastructure}, \cite{olmstead2009reduced}, \cite{szabo2015value}).  The model has difficultly rationalizing low levels of consumption likely because households face zero prices below this threshold.  Since preference and consumption shocks are assumed to be normally distributed, the model predicts some negative consumption values.  In the counterfactual exercises, I round these negative realizations to zero consumption.  Likewise, the model also cannot account for bunching at zero (likely capturing households that go on vacation).  The model also predicts greater bunching around the upper price threshold despite little observed bunching in the data as large users tend to ignore this smaller jump in price.
+Figure~\ref{figure:predictedwateruse} compares the predicted histogram of consumption with observed values.  Vertical red lines indicate the price thresholds in the tariff schedule.  By roughly matching the smoothness of the distributions especially across price thresholds, this model improves on standard models in the literature, which often predict excessive bunching at thresholds (\cite{mcrae2014infrastructure}, \cite{olmstead2009reduced}, \cite{szabo2015value}).  The model has difficultly rationalizing low levels of consumption likely because households face zero prices below this threshold.  Since preference and consumption shocks are assumed to be normally distributed, the model predicts some negative consumption values.  In the counterfactual exercises, I treat these negative realizations as zero consumption choices.  Likewise, the model also cannot account for bunching at zero (likely capturing households that go on vacation).  The model also predicts greater bunching around the upper price threshold despite little observed bunching in the data as large users tend to ignore this smaller jump in price.
 
 Table~\ref{table:correstimates} presents correlation estimates decomposed from the consumption and preference shocks.  Both the consumptions shocks, $\epsilon$ and preference shocks, $\eta$ demonstrate negative correlations between neighbors for owners and buyers.  This finding suggests that neighboring households may intentionally form sharing relationships with whom their shocks are negatively correlated.  This behavior may provide an insurance benefit in the presence of non-linear prices, reducing the risk that joint consumption exceeds price thresholds each month.  Alternatively, these negative consumption findings may stem from households that frequently travel ensuring that at least one user is home to take care of the connection.  For example, given the high rate of overseas workers from the Philippines, it may be common for households to match with other households with different work schedules.  
 %Since I have no information on the overseas work status of individuals, I am not able to test this hypothesis empirically.
 
 \begin{table}
 \centering
+\begin{threeparttable}
 \caption{Correlation Estimates}\label{table:correstimates}
 \input{tables/corr_table_group}
+\begin{tablenotes}
+\item { \footnotesize Errors are bootstrapped at the connection level. }
+\end{tablenotes}
+\end{threeparttable}
 %\vspace{.3cm}
 %\footnotesize{1 indexes correlations with first movers \\ while 2 indexes correlations with second movers}
 \end{table}
@@ -711,10 +733,13 @@ The following additional assumptions are required to ensure that this empirical 
 
 \begin{table}
 \centering
+\begin{threeparttable}
 \caption{Hassle Cost Estimates}\label{table:step2estimates}
-\input{tables/step_2_estimates} \\
-\vspace{.2cm} 
-\footnotesize{Leaking Connections:  548,   Neighboring Connections:  2,151,   Total Obs:  20,299  \\ Standard errors are bootstrapped at the leaking connection-neighborhood level. }
+\input{tables/step_2_estimates}
+\begin{tablenotes}
+\item \footnotesize{Estimates include 548 leaking connections and 2,151 neighboring connections, making 20,299 connection-months.  \% single/home and neighbor distance are averages within wards.  Neighbor distance is in meters.   Standard errors are bootstrapped at the level of the leaking connection (and neighbors). }
+\end{tablenotes}
+\end{threeparttable}
 \end{table}
 
 
@@ -775,10 +800,13 @@ Households calculate payoffs following Section~\ref{section:watersourcechoice} g
 
 \begin{table}
 \centering
-\caption{Simulated Method of Moments Estimates}\label{table:smmestimates}
-\input{tables/step_3_estimates_group}\\
-\vspace{.05cm}
-\footnotesize{ Total Households:  \input{tables/totalhhsmm_group}   Total Wards:  599 \\ Standard errors are bootstrapped at the connection level.   }
+\begin{threeparttable}
+\caption{Fixed Cost Estimates}\label{table:smmestimates}
+\input{tables/step_3_estimates_group}
+\begin{tablenotes}
+\item \footnotesize{  Fixed costs are in PhP/month and prices are in PhP/m3.   \input{tables/totalhhsmm_group} households across 599 wards are included in simulated method of moment estimation using source choices.  Standard errors are bootstrapped at the connection level }
+\end{tablenotes}
+\end{threeparttable}
 \end{table}
 
 Table~\ref{table:smmestimates} presents the estimation results, finding a total estimated monthly fixed cost of \input{tables/fixedfee_group}PhP, which is around 50\% higher than the \input{tables/cfee_group}PhP monthly fixed fee paid to the provider.  This finding suggests that households face sizable barriers to connecting to the water network such as maintenance land tenure insecurity, or administrative costs.  This total fixed fee is also comparable to the total variable price (tariff $\times$ volume) paid to the provider each month in Table~\ref{descriptives}, suggesting that fixed costs compose almost half of the total costs of using piped water.  
@@ -864,7 +892,8 @@ Despite these caveats, the fact that the reduced-form and model-based estimates 
 \centering
 \caption{Connection Fee Discount: Out-of-Sample Test Results}\label{table:oosestimates}
 \input{tables/oos_discount_estimates_group} \\ 
-\footnotesize{Consumer surplus is measured in PhP/month.}
+\vspace{.2cm}
+\footnotesize{Fixed fee and consumer surplus are in PhP/month.}
 \end{table}
 
 
@@ -900,8 +929,9 @@ Table~\ref{table:fixedfeediscount} summarizes the impacts of this change on sour
 	\centering
 	\caption{Fixed Fee Discount Counterfactual}\label{table:fixedfeediscount}
 	\input{tables/discount_estimates_group} \\
+	\vspace{.2cm}
 	\footnotesize{Low Users include the bottom 50\% of water users. \\
-	Surplus is measured in terms of PhP/month.}
+	Surplus and fixed fee are in PhP/month.}
 \end{table}
 
 \subsection{Characterizing Optimal Tariff Schedules}
@@ -938,7 +968,7 @@ The First-Best tariff schedule produces the highest level of consumer surplus re
 \resizebox{\textwidth}{!}{%
 \input{tables/welfare_no_sharing_groups}
 }	\\
-\footnotesize{$\text{ }^{*}$ The First-Best fee does not include individual transfers imposed by the regulator. \\  Social tariffs place all welfare weight on the bottom 50\% of water users. \\ Surplus is measured in terms of PhP/month.}
+\footnotesize{$\text{ }^{*}$ The First-Best fee does not include individual transfers imposed by the regulator. \\  Social tariffs place all welfare weight on the bottom 50\% of water users. All terms are monthly.}
 \end{table}
 
 

@@ -50,7 +50,7 @@ group_percentile = 50;
                 transfer_option=1;
             
     capital_real = 0;
-    PH_COUNTER   = [12000]  ;   
+    PH_COUNTER   = []  ;   
     income_opt   = 0   ;
 
     
@@ -58,11 +58,11 @@ group_percentile = 50;
 if isempty(PH_COUNTER)~=1
     if income_opt==0
         F_MIN = 0;
-        F_MAX = 400;
+        F_MAX = 1200;
         start_value = [  5 15  ] ;
     else
         F_MIN=0;
-        F_MAX=500; 
+        F_MAX=1200; 
         start_value = [  5 15  ] ;        
     end
 else
@@ -167,5 +167,7 @@ mean_utility1(solutions1==SOL_MAX1(2),:)-mean_utility1(solutions1==SOL_MAX1(3),:
 mean_utility1(solutions1==SOL_MAX1(1),:)-mean_utility1(solutions1==SOL_MAX1(3),:)
 mean_utility1(solutions1==SOL_MAX1(1),:)-mean_utility1(solutions1==SOL_MAX1(2),:)
 %}
+
+
 
 

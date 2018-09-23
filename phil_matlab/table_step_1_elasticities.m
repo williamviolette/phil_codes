@@ -212,7 +212,7 @@ HLINE=0;
 fprintf(fileID,'%s\n',strcat('Mean Elasticity &', ...
                     num2str(Xmean(1),'%5.3f'),'&', num2str(Xstd(1),'%5.3f'),'\\'));
 
-fprintf(fileID,'%s\n','\hline');
+%fprintf(fileID,'%s\n','\hline');
 
 fprintf(fileID,'%s\n',strcat(' & &  \\'));
 
@@ -243,7 +243,7 @@ fprintf(fileID,'%s\n',strcat('Medium Usage &', ...
 
 fprintf(fileID,'%s\n',strcat('High Usage &', ...
                     num2str(Xmean(7),'%5.3f'),'&', num2str(Xstd(7),'%5.3f'),'\\'));
-fprintf(fileID,'%s\n','\hline');
+%fprintf(fileID,'%s\n','\hline');
 
 
 fprintf(fileID,'%s\n','\end{tabular} '); 

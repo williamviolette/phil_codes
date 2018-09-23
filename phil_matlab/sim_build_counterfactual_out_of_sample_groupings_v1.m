@@ -143,8 +143,11 @@ fprintf(fileID,'%s\n','& Current &  Discount \\');
 %fprintf(fileID,'%s\n','\hline');
 
 
-fprintf(fileID,'%s\n',strcat('Fixed Fee (PhP/month) &', ...
-                    num2str(x1(1),'%5.0f'),'&', num2str(x1(1) - DISCOUNT ,'%5.0f'),'\\'));
+
+fprintf(fileID,'%s\n',strcat('Fixed Fee &', ...
+                    num2str(225,'%5.0f'),'&', num2str(225 - DISCOUNT ,'%5.0f'),'\\'));
+                %    num2str(x1(1),'%5.0f'),'&', num2str(x1(1) - DISCOUNT ,'%5.0f'),'\\'));
+
 if HLINE==1
     fprintf(fileID,'%s\n','\hline');
 end

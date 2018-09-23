@@ -48,8 +48,8 @@ fileID = fopen(strcat(cd_out,'tables/step_1_estimates_group.tex'),'w');
 
 fprintf(fileID,'%s\n','\begin{tabular}{lcc}');
 fprintf(fileID,'%s\n','& Estimate & Standard Error \\');
-fprintf(fileID,'%s\n','Price Sensitivity : $\alpha$ & \multicolumn{2}{c}{}\\');
-fprintf(fileID,'%s\n','\hline');
+fprintf(fileID,'%s\n','\textbf{Price Sensitivity} : $\alpha$ & \multicolumn{2}{c}{}\\');
+%fprintf(fileID,'%s\n','\hline');
 %fprintf(fileID,'%s\n','\hline');
 
 
@@ -86,8 +86,8 @@ fprintf(fileID,'%s\n',strcat('Over 2 Empl. Members &', ...
 
 fprintf(fileID,'%s\n','\multicolumn{3}{c}{} \\');
 
-fprintf(fileID,'%s\n','Consumption Shock : $\sigma_{\epsilon}$ & \multicolumn{2}{c}{}\\');
-fprintf(fileID,'%s\n','\hline');
+fprintf(fileID,'%s\n','\textbf{Consumption Shocks} : $\sigma_{\epsilon}$ & \multicolumn{2}{c}{}\\');
+%fprintf(fileID,'%s\n','\hline');
 %fprintf(fileID,'%s\n','\hline');
 
 %%%%% SIG EP
@@ -102,7 +102,7 @@ fprintf(fileID,'%s\n',strcat('Three HHs &', ...
 
 fprintf(fileID,'%s\n','\multicolumn{3}{c}{} \\');
 
-fprintf(fileID,'%s\n','Preference Shock : $\sigma_{\psi}$ & \multicolumn{2}{c}{}\\');
+fprintf(fileID,'%s\n','\textbf{Preference Shocks} : $\sigma_{\psi}$ & \multicolumn{2}{c}{}\\');
 fprintf(fileID,'%s\n','\hline');
 
 %%%%%%% QUINTILE OF CONSUMPTION %%%%%%%%
@@ -128,7 +128,7 @@ fprintf(fileID,'%s\n',strcat('Two HHs &', ...
 
 fprintf(fileID,'%s\n',strcat('Three HHs &', ...
                     num2str(Xmean(10-as),'%5.2f'),'&', num2str(Xstd(10-as),'%5.2f'),'\\'));
-fprintf(fileID,'%s\n','\hline');
+%fprintf(fileID,'%s\n','\hline');
 
 fprintf(fileID,'%s\n','\end{tabular} '); 
 
