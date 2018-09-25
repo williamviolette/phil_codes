@@ -123,7 +123,10 @@ notes
 
 	- [chk] water shock, preference shock
 
+
+9/23/18 :
 	
+	- [chk] negative consumption values!
 
 
 

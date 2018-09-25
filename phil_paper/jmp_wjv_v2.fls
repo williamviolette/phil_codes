@@ -477,9 +477,8 @@ INPUT tables/elasticity_estimates.tex
 INPUT tables/elasticity_estimates.tex
 INPUT tables/mean_elasticity.tex
 INPUT tables/mean_elasticity.tex
-INPUT tables/hist_both.pdf
-INPUT ./tables/hist_both.pdf
-INPUT ./tables/hist_both.pdf
+INPUT tables/sample_prediction.tex
+INPUT tables/sample_prediction.tex
 INPUT tables/corr_table_group.tex
 INPUT tables/corr_table_group.tex
 INPUT /usr/local/texlive/2015/texmf-dist/fonts/tfm/public/cm/cmti12.tfm

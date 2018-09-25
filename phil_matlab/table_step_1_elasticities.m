@@ -33,11 +33,8 @@ end
 
         [CA,SE,D,~]=...
                    generate_controls( controls , SHH_control, CONTROL ,Q_obs,t );
-        if mac==1
-           x_r = csvread(strcat(cd_dir,'BOOT/xBOOT',num2str(est_version),'_',num2str(i),'.csv'))  ;
-        else
-           x_r = csvread(strcat(cd_dir,'BOOT\xBOOT',num2str(est_version),'_',num2str(i),'.csv'))  ;
-        end
+
+       x_r = csvread(strcat(cd_dir,'results/x',num2str(est_version),'.csv'))  ;
         
        sig_ep = x_r(1:controls(1));
        sigma_1 = x_r(controls(1)+1:controls(1)+controls(2)+SHH_control);
@@ -65,11 +62,17 @@ HH=length(t);
 
 %R_to_S=size_smp(2);
 
-
+shr = CONTROL(:,2);
+true = [mean(Q_obs) mean(Q_obs(shr==1)) mean(Q_obs(shr==2)) mean(Q_obs(shr==3))];
+tstd = [std(Q_obs) std(Q_obs(shr==1)) std(Q_obs(shr==2)) std(Q_obs(shr==3))];
 
 %%%% ELASTICITY!!! %%%%%%
 elasticity = zeros(boot_max,7);
-    
+   
+pred = zeros(boot_max,4);
+pstd = zeros(boot_max,4);
+
+
     for i = 1:boot_max
 
         t=csvread(strcat(cd_dir,'BOOT/tBOOT',num2str(est_version),'_',num2str(i),'.csv'));
@@ -94,7 +97,8 @@ elasticity = zeros(boot_max,7);
             Q_obs  = X(:,1) ; 
 
             CONTROL = X(:,6:5+control_size);
-
+    
+        shr = CONTROL(:,2);
 
         [CA,SE,D,~]=...
                    generate_controls( controls , SHH_control, CONTROL ,Q_obs,t );
@@ -125,6 +129,10 @@ elasticity = zeros(boot_max,7);
         elasticity(i,1) = 100.*(mean(Q_obs_pred)-mean(Q_obs_pred1))./mean(Q_obs_pred);
         
         
+        Q_obsp = Q_obs_pred.*(Q_obs_pred>0);
+        
+        pred(i,:)=[mean(Q_obsp) mean(Q_obsp(shr==1)) mean(Q_obsp(shr==2)) mean(Q_obsp(shr==3))];
+        pstd(i,:)=[std(Q_obsp) std(Q_obsp(shr==1)) std(Q_obsp(shr==2)) std(Q_obsp(shr==3))];
         
         %%% BY TERCILE OF INCOME
         inc_low = (INC<prctile(INC,33));
@@ -153,10 +161,71 @@ elasticity = zeros(boot_max,7);
             elasticity(i,7) = 100.*(mean(Q_obs_pred(use_high==1))-...
                                                 mean(Q_obs_pred1(use_high==1)))./...
                                                 mean(Q_obs_pred(use_high==1));                             
+    
     end
     
    
+ diff = true - pred; 
+ dstd = tstd - pstd;
+ pred_mean = mean(pred);
+ diff_mean = mean(diff);
+ pred_std  = std(pred);
+ 
+ pstd_mean = mean(pstd);
+ dstd_mean = mean(dstd);
+ pstd_std  = std(pstd);
+ 
+ % true
+ % pred
+
+ 
+
+fileID = fopen(strcat(cd_out,'tables/sample_prediction.tex'),'w');
+
+fprintf(fileID,'%s\n','\begin{tabular}{lcccccc}');
+fprintf(fileID,'%s\n','  & \multicolumn{3}{c}{Mean Usage (m3/month)} & \multicolumn{3}{c}{Standard Deviation}  \\');
+fprintf(fileID,'%s\n','  & Observed & Predicted  & Difference &  Observed & Predicted  & Difference \\');
+fprintf(fileID,'%s\n','\hline');
+
+fprintf(fileID,'%s\n',strcat('All &', ...
+              num2str(true(1),'%5.2f'),'&', num2str(pred_mean(1),'%5.2f'), ...
+              '&', num2str(diff_mean(1),'%5.2f'),'&',...
+              num2str(tstd(1),'%5.2f'),'&', num2str(pstd_mean(1),'%5.2f'), ...
+              '&', num2str(dstd_mean(1),'%5.2f'),'\\'));
+fprintf(fileID,'%s\n',strcat(' & & (', ...
+              num2str(pred_std(1),'%5.2f'),') & & & (',...
+              num2str(pstd_std(1),'%5.2f') , ') & \\'));    
+
+fprintf(fileID,'%s\n',strcat('Single HH &', ...
+              num2str(true(2),'%5.2f'),'&', num2str(pred_mean(2),'%5.2f'), ...
+              '&', num2str(diff_mean(2),'%5.2f'),'&',...
+              num2str(tstd(2),'%5.2f'),'&', num2str(pstd_mean(2),'%5.2f'), ...
+              '&', num2str(dstd_mean(2),'%5.2f'),'\\'));
+fprintf(fileID,'%s\n',strcat(' & & (', ...
+              num2str(pred_std(2),'%5.2f'),') & & & (',...
+              num2str(pstd_std(2),'%5.2f') , ') & \\'));    
+
+fprintf(fileID,'%s\n',strcat('Two HHs &', ...
+              num2str(true(3),'%5.2f'),'&', num2str(pred_mean(3),'%5.2f'), ...
+              '&', num2str(diff_mean(3),'%5.2f'),'&',...
+              num2str(tstd(3),'%5.2f'),'&', num2str(pstd_mean(3),'%5.2f'), ...
+              '&', num2str(dstd_mean(3),'%5.2f'),'\\'));
+fprintf(fileID,'%s\n',strcat(' & & (', ...
+              num2str(pred_std(3),'%5.2f'),') & & & (',...
+              num2str(pstd_std(3),'%5.2f') , ') & \\'));    
     
+fprintf(fileID,'%s\n',strcat('Three HHs &', ...
+              num2str(true(4),'%5.2f'),'&', num2str(pred_mean(4),'%5.2f'), ...
+              '&', num2str(diff_mean(4),'%5.2f'),'&',...
+              num2str(tstd(4),'%5.2f'),'&', num2str(pstd_mean(4),'%5.2f'), ...
+              '&', num2str(dstd_mean(4),'%5.2f'),'\\'));
+fprintf(fileID,'%s\n',strcat(' & & (', ...
+              num2str(pred_std(4),'%5.2f'),') & & & (',...
+              num2str(pstd_std(4),'%5.2f') , ') & \\'));    
+          
+fprintf(fileID,'%s\n','\hline');
+fprintf(fileID,'%s\n','\end{tabular} '); 
+fclose(fileID);
     
     
     
@@ -204,7 +273,7 @@ fileID = fopen(strcat(cd_out,'tables/elasticity_estimates.tex'),'w');
 fprintf(fileID,'%s\n','\begin{tabular}{lcc}');
 fprintf(fileID,'%s\n','& Estimate & Standard Error \\');
 %fprintf(fileID,'%s\n','\hline');
-%fprintf(fileID,'%s\n','\hline');
+fprintf(fileID,'%s\n','\hline');
 
 HLINE=0;
 
@@ -243,7 +312,8 @@ fprintf(fileID,'%s\n',strcat('Medium Usage &', ...
 
 fprintf(fileID,'%s\n',strcat('High Usage &', ...
                     num2str(Xmean(7),'%5.3f'),'&', num2str(Xstd(7),'%5.3f'),'\\'));
-%fprintf(fileID,'%s\n','\hline');
+
+fprintf(fileID,'%s\n','\hline');
 
 
 fprintf(fileID,'%s\n','\end{tabular} '); 
