@@ -3,12 +3,12 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: jmp_wjv_v2.aux
 The style file: abbrvnat.bst
 Database file #1: library.bib
-You're missing a field name---line 166 of file library.bib
+You're missing a field name---line 176 of file library.bib
  :   
  :   %month  = "",
 (Error may have been on previous line)
 I'm skipping whatever remains of this entry
-Repeated entry---line 499 of file library.bib
+Repeated entry---line 509 of file library.bib
  : @book{mcintosh2003asian
  :                        ,
 I'm skipping whatever remains of this entry
@@ -41,45 +41,45 @@ Too many commas in name 1 of "Ying, Yvonne Skilling, Heather Banerjee, Sudeshna 
 while executing---line 1429 of file abbrvnat.bst
 Too many commas in name 1 of "Ying, Yvonne Skilling, Heather Banerjee, Sudeshna Wodon, Quentin Foster, Vivien" for entry doi:10.1596/1813-9450-5384
 while executing---line 1429 of file abbrvnat.bst
-You've used 50 entries,
+You've used 51 entries,
             2773 wiz_defined-function locations,
-            883 strings with 13182 characters,
-and the built_in function-call counts, 21293 in all, are:
-= -- 1930
-> -- 1053
+            888 strings with 13368 characters,
+and the built_in function-call counts, 21899 in all, are:
+= -- 1982
+> -- 1101
 < -- 37
-+ -- 365
-- -- 315
-* -- 1678
-:= -- 3289
-add.period$ -- 155
-call.type$ -- 50
-change.case$ -- 248
-chr.to.int$ -- 50
-cite$ -- 105
-duplicate$ -- 1014
-empty$ -- 1855
-format.name$ -- 391
-if$ -- 4425
++ -- 381
+- -- 330
+* -- 1738
+:= -- 3384
+add.period$ -- 158
+call.type$ -- 51
+change.case$ -- 256
+chr.to.int$ -- 51
+cite$ -- 107
+duplicate$ -- 1035
+empty$ -- 1896
+format.name$ -- 407
+if$ -- 4547
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 55
-newline$ -- 263
-num.names$ -- 200
-pop$ -- 488
+missing$ -- 56
+newline$ -- 268
+num.names$ -- 204
+pop$ -- 502
 preamble$ -- 1
-purify$ -- 205
+purify$ -- 212
 quote$ -- 0
-skip$ -- 750
+skip$ -- 767
 stack$ -- 0
-substring$ -- 917
-swap$ -- 64
+substring$ -- 944
+swap$ -- 65
 text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 515
+type$ -- 526
 warning$ -- 5
-while$ -- 217
+while$ -- 222
 width$ -- 0
-write$ -- 648
+write$ -- 661
 (There were 14 error messages)

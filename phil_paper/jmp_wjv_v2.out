@@ -18,30 +18,30 @@
 \BOOKMARK [3][-]{subsubsection.6.3.1}{Disaggregating Connection-Level Preferences to Household-Level Preferences}{subsection.6.3}% 18
 \BOOKMARK [3][-]{subsubsection.6.3.2}{Imputing Preferences for Households using from Water Vendors}{subsection.6.3}% 19
 \BOOKMARK [3][-]{subsubsection.6.3.3}{Simulation and Estimation}{subsection.6.3}% 20
-\BOOKMARK [2][-]{subsection.6.4}{Out-of-Sample Test: A Connection Fee Discount Program}{section.6}% 21
-\BOOKMARK [1][-]{section.7}{Counterfactual Exercises}{}% 22
-\BOOKMARK [2][-]{subsection.7.1}{Compensated Fixed Fee Discount}{section.7}% 23
-\BOOKMARK [2][-]{subsection.7.2}{Characterizing Optimal Tariff Schedules}{section.7}% 24
-\BOOKMARK [3][-]{subsubsection.7.2.1}{Optimal Tariffs Without Sharing}{subsection.7.2}% 25
-\BOOKMARK [3][-]{subsubsection.7.2.2}{Optimal Tariffs With Sharing}{subsection.7.2}% 26
-\BOOKMARK [3][-]{subsubsection.7.2.3}{Optimal Two-Part Tariffs and Sharing Hassle Costs}{subsection.7.2}% 27
-\BOOKMARK [1][-]{section.8}{Conclusion}{}% 28
-\BOOKMARK [1][-]{section*.28}{Appendices}{}% 29
-\BOOKMARK [1][-]{Appendix.a.A}{Connection Fee}{}% 30
-\BOOKMARK [1][-]{Appendix.a.B}{Assessing the Sampling of the Connection Survey}{}% 31
-\BOOKMARK [1][-]{Appendix.a.C}{Comparing Demographics in the Census to the Connection Survey}{}% 32
-\BOOKMARK [1][-]{Appendix.a.D}{Details on Mobile Survey}{}% 33
-\BOOKMARK [1][-]{Appendix.a.E}{Linear Approximation}{}% 34
-\BOOKMARK [1][-]{Appendix.a.F}{Alternative Sharing Contracts}{}% 35
-\BOOKMARK [1][-]{Appendix.a.G}{Descriptive for Estimation Sample}{}% 36
-\BOOKMARK [1][-]{Appendix.a.H}{Price Variation}{}% 37
-\BOOKMARK [2][-]{subsection.a.H.1}{Targeting the Non-linear Tariff}{Appendix.a.H}% 38
-\BOOKMARK [2][-]{subsection.a.H.2}{Time Series Variation in Tariffs}{Appendix.a.H}% 39
-\BOOKMARK [2][-]{subsection.a.H.3}{Within Connection Price Variation}{Appendix.a.H}% 40
-\BOOKMARK [1][-]{Appendix.a.I}{Determining the Demand Function with Respect to Variance of Consumption Shocks}{}% 41
-\BOOKMARK [1][-]{Appendix.a.J}{Hassle Cost: Neighbor Radius}{}% 42
-\BOOKMARK [1][-]{Appendix.a.K}{Hassle Cost Assumptions}{}% 43
-\BOOKMARK [1][-]{Appendix.a.L}{Game Tree with Three Players}{}% 44
+\BOOKMARK [1][-]{section.7}{Counterfactual Exercises}{}% 21
+\BOOKMARK [2][-]{subsection.7.1}{Compensated Fixed Fee Discount}{section.7}% 22
+\BOOKMARK [2][-]{subsection.7.2}{Characterizing Optimal Tariff Schedules}{section.7}% 23
+\BOOKMARK [3][-]{subsubsection.7.2.1}{Optimal Tariffs Without Sharing}{subsection.7.2}% 24
+\BOOKMARK [3][-]{subsubsection.7.2.2}{Optimal Tariffs With Sharing}{subsection.7.2}% 25
+\BOOKMARK [3][-]{subsubsection.7.2.3}{Optimal Two-Part Tariffs and Sharing Hassle Costs}{subsection.7.2}% 26
+\BOOKMARK [1][-]{section.8}{Conclusion}{}% 27
+\BOOKMARK [1][-]{section*.23}{Appendices}{}% 28
+\BOOKMARK [1][-]{Appendix.a.A}{Connection Fee}{}% 29
+\BOOKMARK [1][-]{Appendix.a.B}{Assessing the Sampling of the Connection Survey}{}% 30
+\BOOKMARK [1][-]{Appendix.a.C}{Comparing Demographics in the Census to the Connection Survey}{}% 31
+\BOOKMARK [1][-]{Appendix.a.D}{Details on Mobile Survey}{}% 32
+\BOOKMARK [1][-]{Appendix.a.E}{Linear Approximation}{}% 33
+\BOOKMARK [1][-]{Appendix.a.F}{Alternative Sharing Contracts}{}% 34
+\BOOKMARK [1][-]{Appendix.a.G}{Descriptive for Estimation Sample}{}% 35
+\BOOKMARK [1][-]{Appendix.a.H}{Price Variation}{}% 36
+\BOOKMARK [2][-]{subsection.a.H.1}{Targeting the Non-linear Tariff}{Appendix.a.H}% 37
+\BOOKMARK [2][-]{subsection.a.H.2}{Time Series Variation in Tariffs}{Appendix.a.H}% 38
+\BOOKMARK [2][-]{subsection.a.H.3}{Within Connection Price Variation}{Appendix.a.H}% 39
+\BOOKMARK [1][-]{Appendix.a.I}{Determining the Demand Function with Respect to Variance of Consumption Shocks}{}% 40
+\BOOKMARK [1][-]{Appendix.a.J}{Hassle Cost: Neighbor Radius}{}% 41
+\BOOKMARK [1][-]{Appendix.a.K}{Hassle Cost Assumptions}{}% 42
+\BOOKMARK [1][-]{Appendix.a.L}{Game Tree with Three Players}{}% 43
+\BOOKMARK [2][-]{subsection.a.L.1}{Out-of-Sample Test: A Connection Fee Discount Program}{Appendix.a.L}% 44
 \BOOKMARK [1][-]{Appendix.a.M}{Test for Incidental Parameter Bias}{}% 45
 \BOOKMARK [1][-]{Appendix.a.N}{Out of Sample Test for Vendor Price Estimates}{}% 46
 \BOOKMARK [1][-]{Appendix.a.O}{Simulated Method of Moments Model Fit}{}% 47
