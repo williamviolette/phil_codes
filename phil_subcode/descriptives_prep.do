@@ -258,7 +258,6 @@ matrix FOR[7,1]=0
 matrix FOR[8,1]=0
 matrix FOR[14,1]=0
 
-
 matrix define PER=J(15,1,0)
 matrix PER[4,1]=1
 matrix PER[6,1]=1

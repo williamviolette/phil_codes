@@ -6,37 +6,37 @@
 \BOOKMARK [2][-]{subsection.5.1}{Consumption Choices for Households Using Piped Water}{section.5}% 6
 \BOOKMARK [3][-]{subsubsection.5.1.1}{Determining the Budget Constraint}{subsection.5.1}% 7
 \BOOKMARK [3][-]{subsubsection.5.1.2}{Maximizing Expected Utility}{subsection.5.1}% 8
-\BOOKMARK [3][-]{subsubsection.5.1.3}{Characterizing the Optimal Demand Function}{subsection.5.1}% 9
-\BOOKMARK [3][-]{subsubsection.5.1.4}{Deriving the Likelihood Function}{subsection.5.1}% 10
-\BOOKMARK [3][-]{subsubsection.5.1.5}{Households using from Water Small-Scale Providers}{subsection.5.1}% 11
-\BOOKMARK [2][-]{subsection.5.2}{Water Source Choice}{section.5}% 12
-\BOOKMARK [3][-]{subsubsection.5.2.1}{Exogenous Interruptions to a Water Source}{subsection.5.2}% 13
-\BOOKMARK [1][-]{section.6}{Specification and Estimation}{}% 14
-\BOOKMARK [2][-]{subsection.6.1}{Preference Estimation}{section.6}% 15
-\BOOKMARK [2][-]{subsection.6.2}{Hassle Cost Estimation}{section.6}% 16
-\BOOKMARK [2][-]{subsection.6.3}{Fixed Cost Estimation}{section.6}% 17
-\BOOKMARK [3][-]{subsubsection.6.3.1}{Disaggregating Connection-Level Preferences to Household-Level Preferences}{subsection.6.3}% 18
-\BOOKMARK [3][-]{subsubsection.6.3.2}{Imputing Preferences for Households using from Water Vendors}{subsection.6.3}% 19
-\BOOKMARK [3][-]{subsubsection.6.3.3}{Simulation and Estimation}{subsection.6.3}% 20
-\BOOKMARK [1][-]{section.7}{Counterfactual Exercises}{}% 21
-\BOOKMARK [2][-]{subsection.7.1}{Compensated Fixed Fee Discount}{section.7}% 22
-\BOOKMARK [2][-]{subsection.7.2}{Characterizing Optimal Tariff Schedules}{section.7}% 23
-\BOOKMARK [3][-]{subsubsection.7.2.1}{Optimal Tariffs Without Sharing}{subsection.7.2}% 24
-\BOOKMARK [3][-]{subsubsection.7.2.2}{Optimal Tariffs With Sharing}{subsection.7.2}% 25
-\BOOKMARK [3][-]{subsubsection.7.2.3}{Optimal Two-Part Tariffs and Sharing Hassle Costs}{subsection.7.2}% 26
-\BOOKMARK [1][-]{section.8}{Conclusion}{}% 27
-\BOOKMARK [1][-]{section*.23}{Appendices}{}% 28
-\BOOKMARK [1][-]{Appendix.a.A}{Connection Fee}{}% 29
-\BOOKMARK [1][-]{Appendix.a.B}{Assessing the Sampling of the Connection Survey}{}% 30
-\BOOKMARK [1][-]{Appendix.a.C}{Comparing Demographics in the Census to the Connection Survey}{}% 31
-\BOOKMARK [1][-]{Appendix.a.D}{Details on Mobile Survey}{}% 32
-\BOOKMARK [1][-]{Appendix.a.E}{Linear Approximation}{}% 33
-\BOOKMARK [1][-]{Appendix.a.F}{Alternative Sharing Contracts}{}% 34
-\BOOKMARK [1][-]{Appendix.a.G}{Descriptive for Estimation Sample}{}% 35
-\BOOKMARK [1][-]{Appendix.a.H}{Price Variation}{}% 36
-\BOOKMARK [2][-]{subsection.a.H.1}{Targeting the Non-linear Tariff}{Appendix.a.H}% 37
-\BOOKMARK [2][-]{subsection.a.H.2}{Time Series Variation in Tariffs}{Appendix.a.H}% 38
-\BOOKMARK [2][-]{subsection.a.H.3}{Within Connection Price Variation}{Appendix.a.H}% 39
+\BOOKMARK [3][-]{subsubsection.5.1.3}{Deriving the Likelihood Function}{subsection.5.1}% 9
+\BOOKMARK [3][-]{subsubsection.5.1.4}{Households using from Water Small-Scale Providers}{subsection.5.1}% 10
+\BOOKMARK [2][-]{subsection.5.2}{Choosing a Water Source}{section.5}% 11
+\BOOKMARK [3][-]{subsubsection.5.2.1}{Exogenous Interruptions to a Water Source}{subsection.5.2}% 12
+\BOOKMARK [1][-]{section.6}{Specification and Estimation}{}% 13
+\BOOKMARK [2][-]{subsection.6.1}{Preference Estimation}{section.6}% 14
+\BOOKMARK [2][-]{subsection.6.2}{Hassle Cost Estimation}{section.6}% 15
+\BOOKMARK [2][-]{subsection.6.3}{Fixed Cost Estimation}{section.6}% 16
+\BOOKMARK [3][-]{subsubsection.6.3.1}{Disaggregating Connection-Level Preferences to Household-Level Preferences}{subsection.6.3}% 17
+\BOOKMARK [3][-]{subsubsection.6.3.2}{Imputing Preferences for Households using from Water Vendors}{subsection.6.3}% 18
+\BOOKMARK [3][-]{subsubsection.6.3.3}{Simulation and Estimation}{subsection.6.3}% 19
+\BOOKMARK [1][-]{section.7}{Counterfactual Exercises}{}% 20
+\BOOKMARK [2][-]{subsection.7.1}{Compensated Fixed Fee Discount}{section.7}% 21
+\BOOKMARK [2][-]{subsection.7.2}{Characterizing Optimal Tariff Schedules}{section.7}% 22
+\BOOKMARK [3][-]{subsubsection.7.2.1}{Optimal Tariffs Without Sharing}{subsection.7.2}% 23
+\BOOKMARK [3][-]{subsubsection.7.2.2}{Optimal Tariffs With Sharing}{subsection.7.2}% 24
+\BOOKMARK [3][-]{subsubsection.7.2.3}{Optimal Two-Part Tariffs and Sharing Hassle Costs}{subsection.7.2}% 25
+\BOOKMARK [1][-]{section.8}{Conclusion}{}% 26
+\BOOKMARK [1][-]{section*.22}{Appendices}{}% 27
+\BOOKMARK [1][-]{Appendix.a.A}{Connection Fee}{}% 28
+\BOOKMARK [1][-]{Appendix.a.B}{Assessing the Sampling of the Connection Survey}{}% 29
+\BOOKMARK [1][-]{Appendix.a.C}{Comparing Demographics in the Census to the Connection Survey}{}% 30
+\BOOKMARK [1][-]{Appendix.a.D}{Details on Mobile Survey}{}% 31
+\BOOKMARK [1][-]{Appendix.a.E}{Linear Approximation}{}% 32
+\BOOKMARK [1][-]{Appendix.a.F}{Alternative Sharing Contracts}{}% 33
+\BOOKMARK [1][-]{Appendix.a.G}{Descriptive for Estimation Sample}{}% 34
+\BOOKMARK [1][-]{Appendix.a.H}{Price Variation}{}% 35
+\BOOKMARK [2][-]{subsection.a.H.1}{Targeting the Non-linear Tariff}{Appendix.a.H}% 36
+\BOOKMARK [2][-]{subsection.a.H.2}{Time Series Variation in Tariffs}{Appendix.a.H}% 37
+\BOOKMARK [2][-]{subsection.a.H.3}{Within Connection Price Variation}{Appendix.a.H}% 38
+\BOOKMARK [2][-]{subsection.a.H.4}{Characterizing the Optimal Demand Function}{Appendix.a.H}% 39
 \BOOKMARK [1][-]{Appendix.a.I}{Determining the Demand Function with Respect to Variance of Consumption Shocks}{}% 40
 \BOOKMARK [1][-]{Appendix.a.J}{Hassle Cost: Neighbor Radius}{}% 41
 \BOOKMARK [1][-]{Appendix.a.K}{Hassle Cost Assumptions}{}% 42

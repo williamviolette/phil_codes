@@ -67,7 +67,6 @@ restore
 
 
 
-
 preserve
 	keep if class=="BILL"
 	drop if aging>10 | aging<0
