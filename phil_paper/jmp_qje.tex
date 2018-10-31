@@ -43,11 +43,24 @@
 %\newdateformat{monthyeardate}{\monthname[\THEMONTH]}
 
 
+\usepackage[notablist,nofiglist]{endfloat}
+%\renewcommand{\efloatseparator}{\mbox{}}
+
+\renewcommand{\thetable}{\Roman{table}}
+\renewcommand{\thefigure}{\Roman{figure}}
+
+\renewcommand{\thesection}{\Roman{section}} 
+\renewcommand{\thesubsection}{\thesection.\Alph{subsection}}
+\renewcommand{\thesubsubsection}{\thesubsection.\roman{subsubsection}}
+
+
 %\usepackage[dvipsnames]{xcolor}
 %\usepackage{cite}
 \onehalfspacing
 \usepackage{natbib}  
-\title{ Optimal Pricing and Informal Sharing: \\ Evidence from Piped Water in Manila }
+%\title{ Optimal Pricing and Informal Sharing: \\ Evidence from Piped Water in Manila }
+\title{ OPTIMAL PRICING AND INFORMAL SHARING: \\ EVIDENCE FROM PIPED WATER IN MANILA}
+
 \author{William Violette\thanks{Contact: Federal Trade Commission, Washington, DC: william.j.violette@gmail.com \\ I am grateful to Andrew Foster, Matthew Turner, Jesse Shapiro, Daniel Bj\"{o}rkegren, and Bryce Steinberg for guidance and encouragement.  For helpful conversations, I am also grateful to John Friedman, Edward Glaeser, Emily Oster, Brian Knight, and Lint Barrage.  In Manila, thank you to the staff of my water company partner, government regulators at MWSS, as well as the USAID Be-Secure project for access to data and excellent conversations.  This work was supported through the Watson Institute for International and Public Affairs.  Any opinions and conclusions expressed herein are those of the author and do not necessarily represent the views of the the Federal Trade Commission or its Commissioners.}
  }
 %\\ 
@@ -181,7 +194,9 @@ For additional information on water sharing relationships between households, I 
 
 The water provider also maintains call records of all service complaints, which can be linked to individual connections.  This data is used to measure instances where households face unanticipated shocks to their water source, which are used to identify the marginal costs of using water from a neighbor.  Finally, the water provider tracks data on the marginal cost of pumping an additional cubic meter of water as well as the costs associated with installing new connections.  These data provide inputs into the provider's budget constraint, which are necessary for computing counterfactual pricing regimes.  
 
-Supplemental survey data from a subset of Manila include income measures that are used to approximate household income using the full set of demographic measures and their interactions.
+With information on water source and monthly expenditures as well as household income, the 2011 Community Based Monitoring System data cover over 70\% of households in Pasay City --- a large area with a population of 500,000 in downtown metro Manila.  These data are used to impute income for households outside of the sample according to the following demographic measures: age of household head and indicators for low-skilled employment of household head, residing in a duplex, residing in a house, as well as all possible household sizes and number of employed household members.  The imputation also includes all possible interactions between these measures.
+
+%Supplemental survey data from the Community Based Monitoring Survey in Pasay City --- a large city in the center of Metro Manila --- include household income measures for  that are used to approximate household income using the full set of demographic measures and their interactions.
 
 
 \section{Patterns of Water Use}\label{section:patternsofwateruse}
@@ -949,6 +964,15 @@ Since sharing networks constrain the menu of pricing policies available to polic
 
 
 \begin{appendices}
+%\appendix
+
+%\renewcommand\thefigure{\thesection.\arabic{figure}}
+%\renewcommand\thetable{\thesection.\arabic{table}}
+
+
+\renewcommand{\thesection}{A.\Roman{section}} 
+\renewcommand{\thesubsection}{\thesection.\roman{subsection}}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1078,7 +1102,7 @@ In the case where price sensitivities are equal between households, $\alpha_1=\a
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\section{Descriptive for Estimation Sample}\label{appendix:descriptivesest}
+\section{Descriptive Statistics for Estimation Sample}\label{appendix:descriptivesest}
 
 Table~\ref{table:descriptivesestsample} provides descriptive statistics for the connection-level sample used in the demand estimation (Section~\ref{section:preferenceestimation}) and simulated method of moments estimation (Section~\ref{section:fixedcostestimation}).  Demographic variables are expressed in terms of dummy variables capturing various features that might drive demand for water.  Ward-level attributes include features that determine hassle-costs of sharing with a neighbor.  The sample includes a random sample of 5,000 connections combined with a sample of unconnected households in order to ensure a representative sample of the population of households.
 

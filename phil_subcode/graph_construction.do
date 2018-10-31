@@ -204,18 +204,18 @@
 			
 			
 			g P_tpt_avg = `=tpt_p_noshr_avg'
-			lab var P_tpt_avg "Opt. 2-Part"			
+			lab var P_tpt_avg "2-Part"			
 			
 			g P_tpt_poor =  `=tpt_p_noshr_poor'
-			lab var P_tpt_poor "Social 2-Part"	
+			lab var P_tpt_poor "2-Part Social"	
 			
 			g P_tp3_avg = `=tp3_p1_noshr_avg'
 			replace P_tp3_avg = `=tp3_p2_noshr_avg' if c>20
-			lab var P_tp3_avg "Opt. 3-Part"
+			lab var P_tp3_avg "3-Part"
 			
 			g P_tp3_poor = `=tp3_p1_noshr_poor'
 			replace P_tp3_poor = `=tp3_p2_noshr_poor' if c>20
-			lab var P_tp3_poor "Social 3-Part"
+			lab var P_tp3_poor "3-Part Social"
 			
 		replace c = c+1
 		
@@ -228,15 +228,26 @@
 		line P c, lwidth(medthick)  ///
 			|| line MC c, lwidth(medthick) ///
 			|| line P_tpt_avg c, lpattern("dash") lcolor("green") lwidth(medthick) ///
-			|| line P_tpt_poor c, lpattern("dash") lcolor("orange") lwidth(medthick) ///
-			|| line P_tp3_avg c, lpattern("longdash_dot") lcolor("forest_green") lwidth(medthick) ///
+			|| line P_tpt_poor c, lpattern("dash_dot") lcolor("orange") lwidth(medthick) ///
+			|| line P_tp3_avg c, lpattern("longdash") lcolor("forest_green") lwidth(medthick) ///
 			|| line P_tp3_poor c, lpattern("longdash_dot") lcolor("sienna")  lwidth(medthick) ytitle("Tariff (PhP/m3)") ///
 			 graphregion(style(none) color(gs16))
 		*title("Optimal Tariffs Without Sharing")
 		
 			graph export "${output}no_shr_tariff_groups.pdf", as(pdf) replace		
 						
+		line P c, lwidth(medthick)  ///
+			|| line MC c, lwidth(medthick) ///
+			|| line P_tpt_avg c, lpattern("dash") lcolor("green") lwidth(medthick) ///
+			|| line P_tpt_poor c, lpattern("dash") lcolor("orange") lwidth(medthick) ///
+			|| line P_tp3_avg c, lpattern("longdash_dot") lcolor("forest_green") lwidth(medthick) ///
+			|| line P_tp3_poor c, lpattern("longdash_dot") lcolor("sienna")  lwidth(medthick) ytitle("Tariff (PhP/m3)") ///
+			 graphregion(style(none) color(gs16)) legend(off)
+		*title("Optimal Tariffs Without Sharing")
+		
+			graph export "${output}no_shr_tariff_groups_no_legend.pdf", as(pdf) replace		
 						
+									
 			
 			
 			
@@ -255,18 +266,18 @@
 			
 			
 			g P_tpt_avg = `=tpt_p_normal_avg'
-			lab var P_tpt_avg "Opt. 2-Part"			
+			lab var P_tpt_avg "2-Part"			
 			
 			g P_tpt_poor =  `=tpt_p_normal_poor'
-			lab var P_tpt_poor "Social 2-Part"	
+			lab var P_tpt_poor "2-Part Social"	
 			
 			g P_tp3_avg = `=tp3_p1_normal_avg'
 			replace P_tp3_avg = `=tp3_p2_normal_avg' if c>20
-			lab var P_tp3_avg "Opt. 3-Part"
+			lab var P_tp3_avg "3-Part"
 			
 			g P_tp3_poor = `=tp3_p1_normal_poor'
 			replace P_tp3_poor = `=tp3_p2_normal_poor' if c>20
-			lab var P_tp3_poor "Social 3-Part"
+			lab var P_tp3_poor "3-Part Social"
 			
 			
 			
@@ -281,14 +292,26 @@
 		line P c, lwidth(medthick)   ///
 		|| line MC c, lwidth(medthick) ///
 		|| line P_tpt_avg c, lpattern("dash") lcolor("green") lwidth(medthick) ///
-		|| line P_tpt_poor c, lpattern("dash") lcolor("orange") lwidth(medthick) ///
-		|| line P_tp3_avg c, lpattern("longdash_dot") lcolor("forest_green") lwidth(medthick) ///
+		|| line P_tpt_poor c, lpattern("dash_dot") lcolor("orange") lwidth(medthick) ///
+		|| line P_tp3_avg c, lpattern("longdash") lcolor("forest_green") lwidth(medthick) ///
 		|| line P_tp3_poor c, lpattern("longdash_dot") lcolor("sienna")  lwidth(medthick) ytitle("Tariff (PhP/m3)") ///
 		 graphregion(style(none) color(gs16))
 		
 		*title("Optimal Tariffs With Sharing")
 		
 			graph export "${output}shr_tariff_groups.pdf", as(pdf) replace		
+						
+				line P c, lwidth(medthick)   ///
+		|| line MC c, lwidth(medthick) ///
+		|| line P_tpt_avg c, lpattern("dash") lcolor("green") lwidth(medthick) ///
+		|| line P_tpt_poor c, lpattern("longdash") lcolor("orange") lwidth(medthick) ///
+		|| line P_tp3_avg c, lpattern("dash_dot") lcolor("forest_green") lwidth(medthick) ///
+		|| line P_tp3_poor c, lpattern("longdash_dot") lcolor("sienna")  lwidth(medthick) ytitle("Tariff (PhP/m3)") ///
+		 graphregion(style(none) color(gs16)) legend(off)
+		
+		*title("Optimal Tariffs With Sharing")
+		
+			graph export "${output}shr_tariff_groups_no_legend.pdf", as(pdf) replace		
 						
 		
 			

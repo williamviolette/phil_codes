@@ -1,6 +1,6 @@
 This is BibTeX, Version 0.99d (TeX Live 2015)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
-The top-level auxiliary file: jmp_wjv_v2.aux
+The top-level auxiliary file: jmp_qje.aux
 The style file: abbrvnat.bst
 Database file #1: library.bib
 You're missing a field name---line 176 of file library.bib
@@ -18,7 +18,7 @@ Warning--empty journal in nauges2006water
 Warning--empty note in wsup
 You've used 32 entries,
             2773 wiz_defined-function locations,
-            784 strings with 9882 characters,
+            784 strings with 9876 characters,
 and the built_in function-call counts, 13399 in all, are:
 = -- 1221
 > -- 633
