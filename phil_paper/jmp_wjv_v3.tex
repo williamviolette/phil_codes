@@ -43,15 +43,15 @@
 %\newdateformat{monthyeardate}{\monthname[\THEMONTH]}
 
 
-\usepackage[notablist,nofiglist]{endfloat}
+%\usepackage[notablist,nofiglist]{endfloat}
 %\renewcommand{\efloatseparator}{\mbox{}}
 
-\renewcommand{\thetable}{\Roman{table}}
-\renewcommand{\thefigure}{\Roman{figure}}
+%\renewcommand{\thetable}{\Roman{table}}
+%\renewcommand{\thefigure}{\Roman{figure}}
 
-\renewcommand{\thesection}{\Roman{section}} 
-\renewcommand{\thesubsection}{\thesection.\Alph{subsection}}
-\renewcommand{\thesubsubsection}{\thesubsection.\roman{subsubsection}}
+%\renewcommand{\thesection}{\Roman{section}} 
+%\renewcommand{\thesubsection}{\thesection.\Alph{subsection}}
+%\renewcommand{\thesubsubsection}{\thesubsection.\roman{subsubsection}}
 
 
 %\usepackage[dvipsnames]{xcolor}
@@ -59,7 +59,7 @@
 \onehalfspacing
 \usepackage{natbib}  
 %\title{ Optimal Pricing and Informal Sharing: \\ Evidence from Piped Water in Manila }
-\title{ OPTIMAL PRICING AND INFORMAL SHARING: \\ EVIDENCE FROM PIPED WATER IN MANILA}
+\title{ Optimal Pricing and Informal Sharing: \\ Evidence from Piped Water in Manila }
 
 \author{William Violette\thanks{Contact: Federal Trade Commission, Washington, DC: william.j.violette@gmail.com \\ I am grateful to Andrew Foster, Matthew Turner, Jesse Shapiro, Daniel Bj\"{o}rkegren, and Bryce Steinberg for guidance and encouragement.  For helpful conversations, I am also grateful to John Friedman, Edward Glaeser, Emily Oster, Brian Knight, and Lint Barrage.  In Manila, thank you to the staff of my water company partner, government regulators at MWSS, as well as the USAID Be-Secure project for access to data and excellent conversations.  This work was supported through the Watson Institute for International and Public Affairs.  Any opinions and conclusions expressed herein are those of the author and do not necessarily represent the views of the the Federal Trade Commission or its Commissioners.}
  }
@@ -656,8 +656,8 @@ Table~\ref{table:elasticity} presents connection-level demand elasticity estimat
 The demand estimation yields an average elasticity of \input{tables/mean_elasticity}\unskip, which can be interpreted as the percentage decrease in quantity due to a one percentage increase in price.  This estimate also closely matches reduced-form elasticity estimates from price-change quasi-experiment detailed in Appendix~\ref{appendix:ratechangeelasticity}.  This estimate is in range of the 0.98 estimate from \cite{szabo2015value} as well as similar studies in the developing world that find elasticities between 0.01 and 0.81 (\cite{diakite2009proposal}, \cite{strand2005water}). 
 %is its inability to match zero consumption values observed in the data
 \begin{table}
-\caption{Model Performance}\label{table:modelperformance}
 \centering
+\caption{Model Performance}\label{table:modelperformance}
 \input{tables/sample_prediction}
 \end{table}
 Table~\ref{table:modelperformance} compares predicted consumption from the model to observed consumption in the data.  This exercise finds negligible differences across average consumption and the variance of consumption for connections according to sharing status.  Closely matching observed patterns, this model improves on previous approaches to demand estimation likely by recovering a separate fixed preference term for each connection as well as rich heterogeneity in the variance terms (\cite{szabo2015value}). 

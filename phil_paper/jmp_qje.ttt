@@ -34,6 +34,7 @@
  
 \begin{table}
 \caption{Model Performance}\label{table:modelperformance}
+\centering
 \input{tables/sample_prediction}
 \end{table}
 \efloatseparator

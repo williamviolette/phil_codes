@@ -1,0 +1,60 @@
+This is BibTeX, Version 0.99d (TeX Live 2015)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: jmp_wjv_v3.aux
+The style file: abbrvnat.bst
+Database file #1: library.bib
+You're missing a field name---line 176 of file library.bib
+ :   
+ :   %month  = "",
+(Error may have been on previous line)
+I'm skipping whatever remains of this entry
+Repeated entry---line 509 of file library.bib
+ : @book{mcintosh2003asian
+ :                        ,
+I'm skipping whatever remains of this entry
+Warning--empty journal in keener2010provision
+Warning--empty journal in komives2006distributional
+Warning--empty journal in nauges2006water
+Warning--empty note in wsup
+You've used 32 entries,
+            2773 wiz_defined-function locations,
+            784 strings with 9882 characters,
+and the built_in function-call counts, 13399 in all, are:
+= -- 1221
+> -- 633
+< -- 26
++ -- 221
+- -- 189
+* -- 1026
+:= -- 2061
+add.period$ -- 96
+call.type$ -- 32
+change.case$ -- 155
+chr.to.int$ -- 32
+cite$ -- 68
+duplicate$ -- 650
+empty$ -- 1183
+format.name$ -- 239
+if$ -- 2791
+int.to.chr$ -- 1
+int.to.str$ -- 1
+missing$ -- 34
+newline$ -- 168
+num.names$ -- 128
+pop$ -- 309
+preamble$ -- 1
+purify$ -- 127
+quote$ -- 0
+skip$ -- 485
+stack$ -- 0
+substring$ -- 586
+swap$ -- 46
+text.length$ -- 2
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 332
+warning$ -- 4
+while$ -- 142
+width$ -- 0
+write$ -- 410
+(There were 2 error messages)

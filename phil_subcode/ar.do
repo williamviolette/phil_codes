@@ -15,6 +15,7 @@ prog define load_data_ar
 		g ar =regexs(1) if regexm(bucket,"(^[0-9]+)")
 			drop bucket
 			drop if ar==""
+		destring ar, replace force
 		sort conacct year month ar
 			by conacct year month: g id1=_n
 			by conacct year month: g id2=_N
