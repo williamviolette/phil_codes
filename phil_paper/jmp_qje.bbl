@@ -1,4 +1,4 @@
-\begin{thebibliography}{32}
+\begin{thebibliography}{34}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -124,6 +124,12 @@ K.~Komives, J.~Halpern, V.~Foster, Q.~T. Wodon, and R.~Abdullah.
   subsidies.
 \newblock 2006.
 
+\bibitem[Kosec(2014)]{kosec2014child}
+K.~Kosec.
+\newblock The child health implications of privatizing africa's urban water
+  supply.
+\newblock \emph{Journal of health economics}, 35:\penalty0 1--19, 2014.
+
 \bibitem[Laffont(2005)]{laffont2005regulation}
 J.-J. Laffont.
 \newblock \emph{Regulation and development}.
@@ -206,5 +212,11 @@ WHO/UNICEF.
 \newblock Piped water coverage, 2015.
 \newblock data retrieved from World Development Indicators,
   \url{https://data.worldbank.org/indicator/SH.H2O.BASW.UR.ZS}.
+
+\bibitem[Zhang and Xu(2016)]{zhang2016long}
+J.~Zhang and L.~C. Xu.
+\newblock The long-run effects of treated water on education: The rural
+  drinking water program in china.
+\newblock \emph{Journal of Development Economics}, 122:\penalty0 1--15, 2016.
 
 \end{thebibliography}

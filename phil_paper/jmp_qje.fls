@@ -379,10 +379,6 @@ INPUT /usr/local/texlive/2015/texmf-dist/fonts/tfm/public/cm/cmr10.tfm
 INPUT /usr/local/texlive/2015/texmf-dist/fonts/tfm/public/cm/cmbx10.tfm
 INPUT tables/shr_use_from_neighbor.tex
 INPUT tables/shr_use_from_neighbor.tex
-INPUT tables/tpt_improvement_percent_sharing_group.tex
-INPUT tables/tpt_improvement_percent_sharing_group.tex
-INPUT tables/tpt_improvement_income_sharing_group.tex
-INPUT tables/tpt_improvement_income_sharing_group.tex
 INPUT /usr/local/texlive/2015/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT /usr/local/texlive/2015/texmf-dist/fonts/tfm/public/cm/cmr17.tfm
 INPUT /usr/local/texlive/2015/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
@@ -404,12 +400,6 @@ INPUT /usr/local/texlive/2015/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm1
 INPUT /usr/local/texlive/2015/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
 INPUT /usr/local/texlive/2015/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm7.tfm
 INPUT /usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map
-INPUT tables/access_pipes.tex
-INPUT tables/access_pipes.tex
-INPUT tables/access_single_tap.tex
-INPUT tables/access_single_tap.tex
-INPUT tables/access_fetch.tex
-INPUT tables/access_fetch.tex
 INPUT tables/hassle_percentage.tex
 INPUT tables/hassle_percentage.tex
 INPUT tables/tpt_improvement_percent_sharing_group.tex
