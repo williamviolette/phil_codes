@@ -404,8 +404,6 @@ INPUT tables/hassle_percentage.tex
 INPUT tables/hassle_percentage.tex
 INPUT tables/tpt_improvement_percent_sharing_group.tex
 INPUT tables/tpt_improvement_percent_sharing_group.tex
-INPUT tables/tpt_improvement_income_sharing_group.tex
-INPUT tables/tpt_improvement_income_sharing_group.tex
 OUTPUT jmp_qje.fff
 INPUT tables/vendor_total.tex
 INPUT tables/vendor_total.tex

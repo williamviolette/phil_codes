@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  9 NOV 2018 15:51
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  13 NOV 2018 16:37
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1114,27 +1114,26 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <7> not available
 
 {/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2] [3]
  (./tables/hassle_percentage.tex)
-[4] (./tables/tpt_improvement_percent_sharing_group.tex)
-(./tables/tpt_improvement_income_sharing_group.tex) [5]
+(./tables/tpt_improvement_percent_sharing_group.tex) [4] [5]
 \openout4 = `jmp_qje.fff'.
 
  (jmp_qje.fff)
-(./tables/vendor_total.tex) [6] [7] [8] (./tables/incshr.tex)
+(./tables/vendor_total.tex) [6] [7] (./tables/incshr.tex) [8]
 \openout5 = `jmp_qje.ttt'.
 
  (jmp_qje.ttt)
 (./tables/shr_individual.tex) (./tables/shr_1hh.tex) (./tables/shr_2hh.tex)
-[9] (./tables/vendor_total.tex) (./tables/vendor_well.tex)
-(./tables/vendor_peddler.tex) [10]
-Overfull \hbox (1.50299pt too wide) in paragraph at lines 293--293
+(./tables/vendor_total.tex) (./tables/vendor_well.tex)
+(./tables/vendor_peddler.tex) [9] [10]
+Overfull \hbox (1.50299pt too wide) in paragraph at lines 325--325
 []\OT1/cmr/bx/n/14.4 Consumption Choices for House-holds Us-ing Piped Wa-ter 
  []
 
 (./tables/no_info.tex) (./tables/no_use.tex) [11] (./tables/access_fetch.tex)
-(./tables/access_single_tap.tex) (./tables/access_pipes.tex) [12] [13]
+(./tables/access_single_tap.tex) (./tables/access_pipes.tex) [12]
 (./tables/bill_split.tex) (./tables/bill_fixed.tex) (./tables/bill_usage.tex)
-[14] [15] [16] [17] [18] [19] [20]
-Overfull \hbox (3.373pt too wide) in paragraph at lines 549--551
+[13] [14] [15] [16] [17] [18] [19] [20]
+Overfull \hbox (3.373pt too wide) in paragraph at lines 581--583
 \OT1/cmr/m/n/12 Given this func-tion, the choice sets for house-holds $\OML/cmm
 /m/it/12 i > \OT1/cmr/m/n/12 1$ con-sist of $\OML/cmm/m/it/12 A[] \OT1/cmr/m/n/
 12 = \OMS/cmsy/m/n/12 f\OML/cmm/m/it/12 v; c; g\OT1/cmr/m/n/12 (\OML/cmm/m/it/1
@@ -1142,42 +1141,42 @@ Overfull \hbox (3.373pt too wide) in paragraph at lines 549--551
 2 a[]\OT1/cmr/m/n/12 )\OMS/cmsy/m/n/12 g$
  []
 
-[21] (./tables/fee_even_some.tex) [22] [23] [24] (./tables/neighbor.tex)
-LaTeX Font Info:    Try loading font information for U+bbm on input line 590.
+(./tables/fee_even_some.tex) [21] [22] [23] (./tables/neighbor.tex) [24]
+LaTeX Font Info:    Try loading font information for U+bbm on input line 622.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/bbm-macros/ubbm.fd
 File: ubbm.fd 1999/03/15 V 1.2 Font definition for bbm font - TH
 ) [25] [26]
-[27] [28] [29] (./tables/boot_max.tex) [30] [31] (./tables/mean_elasticity.tex)
-[32] [33] [34] (./tables/mean_hassle.tex) (./tables/hassle_percentage.tex)
-(./tables/correlation_hassle.tex) [35] [36] (./tables/totalhhsmm_group.tex)
-(./tables/sim_time_periods.tex) [37] (./tables/sim_repetitions.tex)
+[27] [28] (./tables/boot_max.tex) [29] [30] (./tables/mean_elasticity.tex)
+[31] [32] [33] (./tables/mean_hassle.tex) (./tables/hassle_percentage.tex)
+(./tables/correlation_hassle.tex) [34] [35] (./tables/totalhhsmm_group.tex)
+(./tables/sim_time_periods.tex) [36] (./tables/sim_repetitions.tex)
 (./tables/fixedfee_group.tex) (./tables/cfee_group.tex)
-(./tables/vendorfixedfee_group.tex) (./tables/vendorprice_group.tex) [38]
-[39] (./tables/c_fee_discount_group.tex)
-(./tables/discount_tariff_rise_group.tex) [40]
+(./tables/vendorfixedfee_group.tex) (./tables/vendorprice_group.tex) [37]
+[38] (./tables/c_fee_discount_group.tex)
+(./tables/discount_tariff_rise_group.tex) [39]
 (./tables/discount_vendor_change_group.tex)
 (./tables/discount_avg_surplus_change_group.tex)
 (./tables/c_fee_discount_group.tex)
 (./tables/discount_avg_welfare_change_group.tex)
 (./tables/group_percentile_group.tex)
-(./tables/discount_low_welfare_change_group.tex) [41] [42]
+(./tables/discount_low_welfare_change_group.tex) [40] [41]
 (./tables/first_best_surplus_group.tex)
 (./tables/first_best_surplus_percent_income_group.tex)
 (./tables/first_best_percent_vendor_group.tex)
-(./tables/tpt_surplus_improvement_group.tex) [43]
+(./tables/tpt_surplus_improvement_group.tex) [42]
 (./tables/tpt_improvement_percent_sharing_group.tex)
-(./tables/tpt_improvement_income_sharing_group.tex) [44]
-(./tables/tpt_social_surplus_change_low_sharing_group.tex) [45] [46] [47]
-[48] [49] [50] <tables/cdf_approx.png, id=866, 401.5pt x 401.5pt>
+(./tables/tpt_improvement_income_sharing_group.tex) [43]
+(./tables/tpt_social_surplus_change_low_sharing_group.tex) [44] [45] [46]
+[47] [48] [49] [50] <tables/cdf_approx.png, id=871, 401.5pt x 401.5pt>
 File: tables/cdf_approx.png Graphic file (type png)
 
 <use tables/cdf_approx.png>
-Package pdftex.def Info: tables/cdf_approx.png used on input line 1106.
+Package pdftex.def Info: tables/cdf_approx.png used on input line 1148.
 (pdftex.def)             Requested size: 200.7495pt x 200.7495pt.
  (./tables/approx_welfare.tex) [51 <./tables/cdf_approx.png (PNG copy)>] [52] (
 ./tables/semi_sample_size.tex)
-Overfull \hbox (6.7678pt too wide) in paragraph at lines 1184--1185
+Overfull \hbox (6.7678pt too wide) in paragraph at lines 1226--1227
 \OT1/cmr/m/n/12 This set-ting also pro-vides quasi-experimental vari-a-tion in 
 the tar-iff over time at the connection-
  []
@@ -1185,7 +1184,7 @@ the tar-iff over time at the connection-
 [53] [54] [55] [56] [57] [58] [59] [60] [61] [62] [63]
 (./tables/first_stage.tex) [64] (./tables/would_have_added.tex)
 (./tables/actually_added.tex) (./tables/substitution.tex) [65]
-Overfull \hbox (1.64944pt too wide) in paragraph at lines 1623--1625
+Overfull \hbox (1.64944pt too wide) in paragraph at lines 1665--1667
 \OT1/cmr/m/n/12 Figure []XVI[] pro-vides the graph-i-cal es-ti-mates from this 
 equa-tion. The differences-in-differences
  []
@@ -1199,20 +1198,20 @@ equa-tion. The differences-in-differences
 (./tables/out_of_sample_inc_ind_conn_group.tex)
 (./tables/increase_in_individual_connections.tex) [66]
 (./tables/group_percentile_group.tex) [67]
-Overfull \hbox (17.55884pt too wide) in paragraph at lines 1672--1672
+Overfull \hbox (17.55884pt too wide) in paragraph at lines 1714--1714
 []\OT1/cmr/bx/n/17.28 Out of Sam-ple Test for Ven-dor Price Es-ti-mates 
  []
 
 [68] (./jmp_qje.bbl [69] [70]) AED endfloat: Processing end Figures and Tables
 [71] (./jmp_qje.fff
-<tables/tariff_structure.pdf, id=1057, 397.485pt x 289.08pt>
+<tables/tariff_structure.pdf, id=1063, 397.485pt x 289.08pt>
 File: tables/tariff_structure.pdf Graphic file (type pdf)
 
 <use tables/tariff_structure.pdf>
 Package pdftex.def Info: tables/tariff_structure.pdf used on input line 5.
 (pdftex.def)             Requested size: 278.2376pt x 202.35461pt.
  [72 <./tables/tariff_structure.pdf>]
-<tables/hassle_cost_distribution.pdf, id=1074, 397.485pt x 289.08pt>
+<tables/hassle_cost_distribution.pdf, id=1080, 397.485pt x 289.08pt>
 File: tables/hassle_cost_distribution.pdf Graphic file (type pdf)
 
 <use tables/hassle_cost_distribution.pdf>
@@ -1220,7 +1219,7 @@ Package pdftex.def Info: tables/hassle_cost_distribution.pdf used on input line
  14.
 (pdftex.def)             Requested size: 278.2376pt x 202.35461pt.
  [73 <./tables/hassle_cost_distribution.pdf>] <tables/discount_tariff_groups.pd
-f, id=1092, 397.485pt x 289.08pt>
+f, id=1098, 397.485pt x 289.08pt>
 File: tables/discount_tariff_groups.pdf Graphic file (type pdf)
 
 <use tables/discount_tariff_groups.pdf>
@@ -1228,7 +1227,7 @@ Package pdftex.def Info: tables/discount_tariff_groups.pdf used on input line 2
 3.
 (pdftex.def)             Requested size: 278.2376pt x 202.35461pt.
  [74 <./tables/discount_tariff_groups.pdf>] <tables/no_shr_tariff_groups.pdf, i
-d=1109, 397.485pt x 289.08pt>
+d=1115, 397.485pt x 289.08pt>
 File: tables/no_shr_tariff_groups.pdf Graphic file (type pdf)
 
 <use tables/no_shr_tariff_groups.pdf>
@@ -1242,7 +1241,7 @@ Package pdftex.def Info: tables/no_shr_tariff_groups.pdf used on input line 30.
 
 
  <./tables/no_shr_tariff_groups.pdf>]
-<tables/shr_tariff_groups.pdf, id=1126, 397.485pt x 289.08pt>
+<tables/shr_tariff_groups.pdf, id=1132, 397.485pt x 289.08pt>
 File: tables/shr_tariff_groups.pdf Graphic file (type pdf)
 
 <use tables/shr_tariff_groups.pdf>
@@ -1251,7 +1250,7 @@ Package pdftex.def Info: tables/shr_tariff_groups.pdf used on input line 37.
  [76
 
  <./tables/shr_tariff_groups.pdf>]
-<tables/tpt_full_graph_prices.pdf, id=1143, 397.485pt x 289.08pt>
+<tables/tpt_full_graph_prices.pdf, id=1149, 397.485pt x 289.08pt>
 File: tables/tpt_full_graph_prices.pdf Graphic file (type pdf)
 
 <use tables/tpt_full_graph_prices.pdf>
@@ -1259,7 +1258,7 @@ Package pdftex.def Info: tables/tpt_full_graph_prices.pdf used on input line 44
 .
 (pdftex.def)             Requested size: 218.61742pt x 158.99448pt.
 
-<tables/tpt_full_graph_shares.pdf, id=1144, 397.485pt x 289.08pt>
+<tables/tpt_full_graph_shares.pdf, id=1150, 397.485pt x 289.08pt>
 File: tables/tpt_full_graph_shares.pdf Graphic file (type pdf)
 
 <use tables/tpt_full_graph_shares.pdf>
@@ -1268,7 +1267,7 @@ Package pdftex.def Info: tables/tpt_full_graph_shares.pdf used on input line 45
 (pdftex.def)             Requested size: 230.54146pt x 167.6665pt.
  [77 <./tables/tpt_full_graph_prices.pdf> <./tables/tpt_full_graph_shares.pdf>]
 
-<tables/consumption_histogram.pdf, id=1175, 397.485pt x 289.08pt>
+<tables/consumption_histogram.pdf, id=1181, 397.485pt x 289.08pt>
 File: tables/consumption_histogram.pdf Graphic file (type pdf)
 
 <use tables/consumption_histogram.pdf>
@@ -1276,28 +1275,28 @@ Package pdftex.def Info: tables/consumption_histogram.pdf used on input line 55
 .
 (pdftex.def)             Requested size: 278.2376pt x 202.35461pt.
  [78 <./tables/consumption_histogram.pdf>] <tables/tariff_time_series.pdf, id=1
-192, 397.485pt x 289.08pt>
+198, 397.485pt x 289.08pt>
 File: tables/tariff_time_series.pdf Graphic file (type pdf)
 
 <use tables/tariff_time_series.pdf>
 Package pdftex.def Info: tables/tariff_time_series.pdf used on input line 64.
 (pdftex.def)             Requested size: 278.2376pt x 202.35461pt.
  [79 <./tables/tariff_time_series.pdf>]
-<tables/res_semi_tariff.pdf, id=1211, 397.485pt x 289.08pt>
+<tables/res_semi_tariff.pdf, id=1217, 397.485pt x 289.08pt>
 File: tables/res_semi_tariff.pdf Graphic file (type pdf)
 
 <use tables/res_semi_tariff.pdf>
 Package pdftex.def Info: tables/res_semi_tariff.pdf used on input line 72.
 (pdftex.def)             Requested size: 258.36218pt x 187.89977pt.
  [80 <./tables/res_semi_tariff.pdf>]
-<tables/sem_event.pdf, id=1228, 397.485pt x 289.08pt>
+<tables/sem_event.pdf, id=1234, 397.485pt x 289.08pt>
 File: tables/sem_event.pdf Graphic file (type pdf)
 
 <use tables/sem_event.pdf>
 Package pdftex.def Info: tables/sem_event.pdf used on input line 80.
 (pdftex.def)             Requested size: 278.2376pt x 202.35461pt.
  [81 <./tables/sem_event.pdf>]
-<tables/tariff_structure_1_no_label.pdf, id=1243, 397.485pt x 289.08pt>
+<tables/tariff_structure_1_no_label.pdf, id=1249, 397.485pt x 289.08pt>
 File: tables/tariff_structure_1_no_label.pdf Graphic file (type pdf)
 
 <use tables/tariff_structure_1_no_label.pdf>
@@ -1305,21 +1304,21 @@ Package pdftex.def Info: tables/tariff_structure_1_no_label.pdf used on input l
 ine 93.
 (pdftex.def)             Requested size: 310.04918pt x 225.49031pt.
  [82 <./tables/tariff_structure_1_no_label.pdf>] <tables/leakers_pre_2.pdf, id=
-1258, 397.485pt x 289.08pt>
+1264, 397.485pt x 289.08pt>
 File: tables/leakers_pre_2.pdf Graphic file (type pdf)
 
 <use tables/leakers_pre_2.pdf>
 Package pdftex.def Info: tables/leakers_pre_2.pdf used on input line 132.
 (pdftex.def)             Requested size: 278.2376pt x 202.35461pt.
  [83 <./tables/leakers_pre_2.pdf>]
-<tables/leakers_full_2.pdf, id=1273, 397.485pt x 289.08pt>
+<tables/leakers_full_2.pdf, id=1279, 397.485pt x 289.08pt>
 File: tables/leakers_full_2.pdf Graphic file (type pdf)
 
 <use tables/leakers_full_2.pdf>
 Package pdftex.def Info: tables/leakers_full_2.pdf used on input line 141.
 (pdftex.def)             Requested size: 278.2376pt x 202.35461pt.
  [84 <./tables/leakers_full_2.pdf>] [85]
-<tables/diff_595_first_stage.pdf, id=1293, 397.485pt x 289.08pt>
+<tables/diff_595_first_stage.pdf, id=1299, 397.485pt x 289.08pt>
 File: tables/diff_595_first_stage.pdf Graphic file (type pdf)
 
 <use tables/diff_595_first_stage.pdf>
@@ -1327,7 +1326,7 @@ Package pdftex.def Info: tables/diff_595_first_stage.pdf used on input line 223
 .
 (pdftex.def)             Requested size: 278.2376pt x 202.35461pt.
  [86 <./tables/diff_595_first_stage.pdf>]
-<tables/diff_595.pdf, id=1311, 397.485pt x 289.08pt>
+<tables/diff_595.pdf, id=1317, 397.485pt x 289.08pt>
 File: tables/diff_595.pdf Graphic file (type pdf)
  <use tables/diff_595.pdf>
 Package pdftex.def Info: tables/diff_595.pdf used on input line 230.
@@ -1381,26 +1380,35 @@ Overfull \hbox (18.57417pt too wide) in paragraph at lines 1--246
  []
 
 [115])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1732.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1732.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1774.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1774.
  (./jmp_qje.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1732.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1732.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1774.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1774.
 
 Package rerunfilecheck Info: File `jmp_qje.out' has not changed.
 (rerunfilecheck)             Checksum: 0CD94A1E1BF41439325787F5AA40768A;3715.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1732.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1774.
  ) 
 Here is how much of TeX's memory you used:
- 25810 strings out of 493089
- 496674 string characters out of 6134842
+ 25811 strings out of 493089
+ 496614 string characters out of 6134842
  613497 words of memory out of 5000000
  28099 multiletter control sequences out of 15000+600000
  17914 words of font info for 72 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 59i,22n,77p,2347b,1499s stack positions out of 5000i,500n,10000p,200000b,80000s
-pdfTeX warning (dest): name{Hfootnote.41} has been referenced but does not ex
+ 59i,22n,77p,2490b,1499s stack positions out of 5000i,500n,10000p,200000b,80000s
+pdfTeX warning (dest): name{Hfootnote.44} has been referenced but does not ex
 ist, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.43} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.42} has been referenced but does not exis
+t, replaced by a fixed one
+
+pdfTeX warning (dest): name{Hfootnote.41} has been referenced but does not exis
+t, replaced by a fixed one
 
 pdfTeX warning (dest): name{Hfootnote.40} has been referenced but does not exis
 t, replaced by a fixed one
@@ -1544,10 +1552,10 @@ live/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texli
 ve/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texliv
 e/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive
 /2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on jmp_qje.pdf (115 pages, 1397612 bytes).
+Output written on jmp_qje.pdf (115 pages, 1397795 bytes).
 PDF statistics:
- 1593 PDF objects out of 1728 (max. 8388607)
- 1391 compressed objects within 14 object streams
- 320 named destinations out of 1000 (max. 500000)
+ 1599 PDF objects out of 1728 (max. 8388607)
+ 1397 compressed objects within 14 object streams
+ 323 named destinations out of 1000 (max. 500000)
  474 words of extra memory for PDF output out of 10000 (max. 10000000)
 
