@@ -1,0 +1,234 @@
+\begin{figure}
+\centering
+\caption{Water Tariff in Manila}\label{figure:tariff}
+\begin{center}
+\includegraphics[scale=.7]{tables/tariff_structure.pdf}\\
+\footnotesize{1 USD = 50 PhP}
+\end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+\centering
+\caption{Predicted Hassle Cost Distribution}\label{figure:step2histogram}
+\includegraphics[scale=.7]{tables/hassle_cost_distribution.pdf} \\
+%\vspace{cm}
+\footnotesize{Excludes top and bottom 1\% outliers}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+\centering
+\caption{Revenue-Neutral Tariffs \\ Pre/Post Connection Fee Discount}\label{figure:discounttariff}
+\includegraphics[scale=.7]{tables/discount_tariff_groups.pdf}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[!htp]
+\centering
+\caption{Optimal Tariffs Without Sharing}\label{figure:optimaltariffnosharing}
+\includegraphics{tables/no_shr_tariff_groups.pdf}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[!htp]
+\centering
+\caption{Optimal Tariffs With Sharing}\label{figure:optimaltariffsharing}
+\includegraphics{tables/shr_tariff_groups.pdf}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+\caption{Two-Part Tariffs and Sharing Hassle Costs}\label{figure:tptshrcosts}
+\begin{center}
+\includegraphics[scale=.55,valign=t]{tables/tpt_full_graph_prices.pdf}
+\includegraphics[scale=.58,valign=t]{tables/tpt_full_graph_shares.pdf}\\
+{\footnotesize The vertical gray lines show the estimated hassle cost of 15.14 PhP/$\text{m}^3$ from Section~\ref{section:hasslecostestimation}.}
+% \\ Marginal prices and fixed fees are smoothed with a moving average.}
+\end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+\caption{Consumption Histogram}\label{figure:consumptionhistogram}
+\begin{center}
+\includegraphics[scale=.7]{tables/consumption_histogram.pdf}\\
+\footnotesize{Consumption values are truncated at 60 to highlight bunching at kink points.}
+\end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+\caption{Regulated Tariff Changes}\label{figure:regulatedtariffchanges}
+\begin{center}
+\includegraphics[scale=.7]{tables/tariff_time_series.pdf}
+\end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+\caption{Residential and Semi-Business Tariffs}\label{figure:ressemi}
+\begin{center}
+\includegraphics[scale=.65]{tables/res_semi_tariff.pdf}
+\end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+\caption{Demand Response to Time Series Price Variation}\label{figure:semieventstudy}
+\begin{center}
+\includegraphics[scale=.7]{tables/sem_event.pdf}
+\end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+\caption{Example Demand Curve}\label{figure:intuitivedemand}
+\centering
+\begin{tikzpicture}[
+        every node/.style={anchor=south west,inner sep=0pt},
+        x=1cm, y=1cm,
+      ]
+     \node (fig1) at (0,0)
+       {\includegraphics[width=.66\textwidth,height=1\textheight,keepaspectratio]{tables/tariff_structure_1_no_label.pdf}};
+
+\draw [line width=0.2mm,color=red,dashed] (2.8,1.8) -- (2.8,7.6);
+\draw [line width=0.2mm,color=red,dashed] (3.8,1.8) -- (3.8,7.6);
+\draw [line width=0.2mm,color=red,dashed] (4.6,1.8) -- (4.6,7.6);
+\draw [line width=0.2mm,color=red,dashed] (5.5,1.8) -- (5.5,7.6);
+\draw [line width=0.2mm,color=red,dashed] (8.2,1.8) -- (8.2,7.6);
+\draw [line width=0.2mm,color=red,dashed] (9.1,1.8) -- (9.1,7.6);
+
+\node[align=center] at (2.7,7.6)  { \text{\footnotesize  $\overline{\eta}^{1}_{1,L} $}};
+\node[align=center] at (3.7,7.6)  { \text{\footnotesize  $\overline{\eta}^{2}_{2,L} $}};
+\node[align=center] at (4.5,7.6)  { \text{\footnotesize  $\overline{\eta}^{2}_{1,U} $}};
+\node[align=center] at (5.4,7.6)  { \text{\footnotesize  $\overline{\eta}^{3}_{2,U} $}};
+\node[align=center] at (8.1,7.6)  { \text{\footnotesize  $\overline{\eta}^{3}_{3,L}  $}};
+\node[align=center] at (9,7.6)  { \text{\footnotesize  $\overline{\eta}^{4}_{3,U}  $}};
+
+\draw [line width=0.5mm] (1.2,7.6) -- (2.8,7) -- (3.8,6) -- (4.6,4.5) -- (5.2,2); %% curve
+
+\node[align=center] at (1.8,1)  { \text{\footnotesize  $W^{1,1,1}_C$}};
+\node[align=center] at (2.8,1) { \text{\footnotesize  $W^{1,2,2}_C$}};
+\node[align=center] at (3.8,1)  { \text{\footnotesize  $W^{1,2,3}_C $}};
+\node[align=center] at (4.8,1) { \text{\footnotesize  $W^{2,3,3}_C $}};
+\node[align=center] at (6.6,1)  { \text{\footnotesize  $W^{3,3,3}_C $}};
+\node[align=center] at (8.3,1)    { \text{\footnotesize  $W^{3,4,4}_C $}};
+\node[align=center] at (9.6,1)  { \text{\footnotesize  $W^{4,4,4}_C $}};
+
+\node[align=center] at (2.3,2.3) { \text{$p^1$} };
+\node[align=center] at (4,4.5)   { \text{$p^2$} };
+\node[align=center] at (6.6,6.4) { \text{$p^3$} };
+\node[align=center] at (10,7.6) { \text{$p^4$} };
+
+\end{tikzpicture}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+\centering
+\caption{Pre-Trend in Leaker's Consumption}\label{figure:leakpretrend}
+\begin{center}
+\includegraphics[scale=.7]{tables/leakers_pre_2.pdf}
+\end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+\centering
+\caption{Neighbors' Water Usage following a Leak Disconnection}\label{figure:leakeventstudy}
+\begin{center}
+\includegraphics[scale=.7]{tables/leakers_full_2.pdf}
+\end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+\caption{Sequential Game Choosing Water Sources}\label{figure:fullgametree}
+\centering
+\begin{turn}{90}
+\resizebox{1.1\textwidth}{!}{%
+\begin{tikzpicture}
+\node(0){ \textbf{HH  1}}
+child[level distance=8mm,sibling distance=150mm]{node{\textbf{HH2}} %%% HERE IS NODE 1 %%%
+child[level distance=20mm,sibling distance=25mm]{node{\textbf{HH3}}
+child[level distance=15mm,sibling distance=15mm]{node[label={[align=left,label distance=.01cm]240: \scriptsize{$u^{1}(v)$} \\ \scriptsize{$u^{2}(v)$} \\ \scriptsize{$u^{3}(v)$}  }]{} edge from parent node[left]{\scriptsize{Vendor}}
+}
+child[level distance=15mm,sibling distance=15mm]{node[label={[align=left,label distance=.01cm]270: \scriptsize{$u^{1}(v)$} \\ \scriptsize{$u^{2}(c|1)$} \\ \scriptsize{$u^{3}(c|1)$}  }]{} edge from parent node[right]{\scriptsize{Connect}}
+}
+edge from parent node[left]{ \scriptsize{Vendor}}
+}
+child[level distance=50mm,sibling distance=25mm]{node{\textbf{HH3}}
+child[level distance=15mm,sibling distance=25mm]{node[label={[align=left,label distance=.01cm]240: \scriptsize{$u^{1}(v)$} \\ \scriptsize{$u^{2}(c|1)$} \\ \scriptsize{$u^{3}(v)$}  }]{} edge from parent node[left]{\scriptsize{Vendor}}
+}
+child[level distance=15mm,sibling distance=25mm]{node[label={[align=left,label distance=.01cm]270: \scriptsize{$u^{1}(v)$} \\ \scriptsize{$U_{2}(P_S,F-T_{3,2})$} \\ \scriptsize{$u^{3}(s^{2}|\{ 1,2 \}) + T(\{ 1,2 \})$}  }]{} edge from parent node[left]{\scriptsize{Shr HH2}}
+}
+child[level distance=15mm,sibling distance=15mm]{node[label={[align=left,label distance=.01cm]280: \scriptsize{$u^{1}(v)$} \\ \scriptsize{$u^{2}(c|1)$} \\ \scriptsize{$u^{3}(c|1)$}  }]{} edge from parent node[right]{\scriptsize{Connect}}
+}
+edge from parent node[right]{ \scriptsize{Connect}}
+}
+edge from parent node[below]{ \footnotesize{Vendor} }
+}
+child[level distance=8mm,sibling distance=80mm]{node{\textbf{HH2}} %%% HERE IS NODE 2 %%%
+child[level distance=10mm,sibling distance=50mm]{node{\textbf{HH3}}
+child[level distance=15mm,sibling distance=25mm]{node[label={[align=left,label distance=.01cm]240: \scriptsize{$u^{1}(c|1)$} \\ \scriptsize{$u^{2}(v)$} \\ \scriptsize{$u^{3}(v)$}  }]{} edge from parent node[left]{\scriptsize{Vendor}}
+}
+child[level distance=15mm,sibling distance=25mm]{node[label={[align=left,label distance=.01cm]270: \scriptsize{$U_{1}(P_S,F-T_{3,1})$} \\ \scriptsize{$u^{2}(v)$} \\ \scriptsize{$u^{3}(s^{1}|\{ 1,3 \}) + T(\{ 1,3 \})$}  }]{} edge from parent node[left]{\scriptsize{Shr HH1}}
+}
+child[level distance=15mm,sibling distance=15mm]{node[label={[align=left,label distance=.01cm]280: \scriptsize{$u^{1}(c|1)$} \\ \scriptsize{$u^{2}(v)$} \\ \scriptsize{$u^{3}(c|1)$}  }]{} edge from parent node[right]{\scriptsize{Connect}}
+}
+edge from parent node[right]{ \scriptsize{Vendor}}
+}
+child[level distance=40mm,sibling distance=50mm]{node{\textbf{HH3}}
+child[level distance=15mm,sibling distance=25mm]{node[label={[align=left,label distance=.01cm]240: \scriptsize{$u^{1}(c|1)$} \\ \scriptsize{$u^{2}(c|1)$} \\ \scriptsize{$u^{3}(v)$}  }]{} edge from parent node[left]{\scriptsize{Vendor}}
+}
+child[level distance=15mm,sibling distance=35mm]{node[label={[align=left,label distance=.01cm]270: \scriptsize{$U_{1}(P,F-T_{3,1})$} \\ \scriptsize{$u^{2}(c|1)$} \\ \scriptsize{$u^{3}(s^{1}|\{ 1,3 \}) + T(\{ 1,3 \})$}  }]{} edge from parent node[left]{\scriptsize{Shr HH1}}
+}
+child[level distance=15mm,sibling distance=35mm]{node[label={[align=left,label distance=.01cm]270: \scriptsize{$u^{1}(c|1)$} \\ \scriptsize{$U_{2}(P_S,F-T_{3,2})$} \\ \scriptsize{$u^{3}(s^{2}|\{ 2,3 \}) + T(\{ 2,3 \})$}  }]{} edge from parent node[left]{\scriptsize{Shr HH2}}
+}
+child[level distance=15mm,sibling distance=25mm]{node[label={[align=left,label distance=.01cm]280: \scriptsize{$u^{1}(c|1)$} \\ \scriptsize{$u^{2}(c|1)$} \\ \scriptsize{$u^{3}(c|1)$}  }]{} edge from parent node[right]{\scriptsize{Connect}}
+}
+edge from parent node[right]{ \scriptsize{Connect}}
+}
+child[level distance=10mm,sibling distance=60mm]{node{\textbf{HH3}}
+child[level distance=15mm,sibling distance=20mm]{node[label={[align=left,label distance=.01cm]240: \scriptsize{$u^{1}(c|\{ 1,2 \}) + T(\{ 2 \})$} \\ \scriptsize{$u^{2}(s^{2}|\{ 1,2 \}) + T(\{ 1,2 \})$} \\ \scriptsize{$u^{3}(v)$}  }]{} edge from parent node[left]{\scriptsize{Vendor}}
+}
+child[level distance=15mm,sibling distance=25mm]{node[label={[align=left,label distance=.01cm]270: \scriptsize{$u^{1}(c|\{ 1,2,3 \}) + T(\{ 1,2,3 \})$} \\ \scriptsize{$u^{2}(s^{2}|\{ 1,2 \}) + T(\{ 1,2 \})$} \\ \scriptsize{$u^{3}(s^{1}|\{ 1,2,3 \}) + T(\{ 1,2,3 \})$}  }]{} edge from parent node[right]{\scriptsize{Shr HH1}}
+}
+child[level distance=30mm,sibling distance=30mm]{node[label={[align=left,label distance=.01cm]270: \scriptsize{$u^{1}(c|\{ 1,2 \}) + T(\{ 2 \})$} \\ \scriptsize{$u^{2}(s^{2}|\{ 1,2 \}) + T(\{ 1,2 \})$} \\ \scriptsize{$u^{3}(c|1)$}  }]{} edge from parent node[right]{\scriptsize{Vendor}}
+}
+edge from parent node[right]{ \scriptsize{Shr HH1}}
+}
+edge from parent node[below]{ \footnotesize{Connect} }
+}
+;
+%\node at($(0-1)!.7!(0-2)$){ \textbf{HH 2} };
+%\node at($(2-1)!.5!(2-2)$){ \textbf{HH 3} };
+\end{tikzpicture}
+}
+\end{turn}
+%\begin{itemize}
+%\item $p_v$: Vendor Price
+%\item $F_v$: Vendor Fee/Disutility
+%\item $T_{i,j}$: Transfer from household $i$ to household $j$
+%\item $P, P_S$: Tariff schedules for single and joint users
+%\item $p_{h}$: Hassle Cost
+%\end{itemize}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+\centering
+\caption{Share of New Connections Receiving a Discount}\label{figure:discountfirststage}
+\includegraphics[scale=.7]{tables/diff_595_first_stage.pdf}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+\centering
+\caption{Reduced Form: Connection Fee Discount}\label{figure:discountreducedform}
+\includegraphics[scale=.8]{tables/diff_595.pdf}
+%\includegraphics[scale=.57]{tables/diff_595_treated.pdf}
+\end{figure}
+\efloatseparator
+ 

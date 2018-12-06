@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  21 NOV 2018 14:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  26 NOV 2018 10:28
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**jmp_qje.tex
-(./jmp_qje.tex
+**jmp_wjv.tex
+(./jmp_wjv.tex
 LaTeX2e <2015/01/01>
 Babel <3.9l> and hyphenation patterns for 79 languages loaded.
 (/usr/local/texlive/2015/texmf-dist/tex/latex/base/article.cls
@@ -1001,8 +1001,8 @@ nd (jdm)
 \efloat@postttt=\write5
 \@ef@tttopen=\count183
 )
-(./jmp_qje.aux)
-\openout1 = `jmp_qje.aux'.
+(./jmp_wjv.aux)
+\openout1 = `jmp_wjv.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 71.
 LaTeX Font Info:    ... okay on input line 71.
@@ -1086,9 +1086,9 @@ LaTeX Info: Redefining \ref on input line 71.
 LaTeX Info: Redefining \pageref on input line 71.
 LaTeX Info: Redefining \nameref on input line 71.
 
-(./jmp_qje.out) (./jmp_qje.out)
+(./jmp_wjv.out) (./jmp_wjv.out)
 \@outlinefile=\write6
-\openout6 = `jmp_qje.out'.
+\openout6 = `jmp_wjv.out'.
 
 LaTeX Font Info:    Try loading font information for U+msa on input line 73.
 
@@ -1115,13 +1115,13 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <7> not available
 
 (./tables/hassle_percentage.tex)
 (./tables/tpt_improvement_percent_sharing_group.tex) [4] [5]
-\openout4 = `jmp_qje.fff'.
+\openout4 = `jmp_wjv.fff'.
 
- (jmp_qje.fff)
+ (jmp_wjv.fff)
 (./tables/vendor_total.tex) [6] [7] (./tables/incshr.tex) [8]
-\openout5 = `jmp_qje.ttt'.
+\openout5 = `jmp_wjv.ttt'.
 
- (jmp_qje.ttt)
+ (jmp_wjv.ttt)
 (./tables/shr_individual.tex) (./tables/shr_1hh.tex) (./tables/shr_2hh.tex)
 (./tables/vendor_total.tex) (./tables/vendor_well.tex)
 (./tables/vendor_peddler.tex) [9] [10]
@@ -1202,8 +1202,8 @@ Overfull \hbox (17.55884pt too wide) in paragraph at lines 1831--1831
 []\OT1/cmr/bx/n/17.28 Out of Sam-ple Test for Ven-dor Price Es-ti-mates 
  []
 
-[68] (./jmp_qje.bbl [69] [70]) AED endfloat: Processing end Figures and Tables
-[71] (./jmp_qje.fff
+[68] (./jmp_wjv.bbl [69] [70]) AED endfloat: Processing end Figures and Tables
+[71] (./jmp_wjv.fff
 <tables/tariff_structure.pdf, id=1071, 397.485pt x 289.08pt>
 File: tables/tariff_structure.pdf Graphic file (type pdf)
 
@@ -1332,7 +1332,7 @@ File: tables/diff_595.pdf Graphic file (type pdf)
 Package pdftex.def Info: tables/diff_595.pdf used on input line 230.
 (pdftex.def)             Requested size: 317.98842pt x 231.2643pt.
 
-[87 <./tables/diff_595.pdf>]) (./jmp_qje.ttt (./tables/new_descriptives.tex)
+[87 <./tables/diff_595.pdf>]) (./jmp_wjv.ttt (./tables/new_descriptives.tex)
 [88] (./tables/step_1_estimates_group.tex) [89]
 (./tables/elasticity_estimates.tex) [90] (./tables/sample_prediction.tex)
 [91] (./tables/corr_table_group.tex) [92] (./tables/step_2_estimates.tex)
@@ -1382,11 +1382,11 @@ Overfull \hbox (18.57417pt too wide) in paragraph at lines 1--246
 [115])
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1891.
 Package atveryend Info: Empty hook `AfterLastShipout' on input line 1891.
- (./jmp_qje.aux)
+ (./jmp_wjv.aux)
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1891.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1891.
 
-Package rerunfilecheck Info: File `jmp_qje.out' has not changed.
+Package rerunfilecheck Info: File `jmp_wjv.out' has not changed.
 (rerunfilecheck)             Checksum: 0CD94A1E1BF41439325787F5AA40768A;3715.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1891.
  ) 
@@ -1555,7 +1555,7 @@ live/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texli
 ve/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/local/texliv
 e/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/local/texlive
 /2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on jmp_qje.pdf (115 pages, 1399704 bytes).
+Output written on jmp_wjv.pdf (115 pages, 1399715 bytes).
 PDF statistics:
  1608 PDF objects out of 1728 (max. 8388607)
  1405 compressed objects within 15 object streams
