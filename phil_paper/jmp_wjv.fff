@@ -1,6 +1,6 @@
 \begin{figure}
 \centering
-\caption{Water Tariff in Manila}\label{figure:tariff}
+\caption{Marginal Prices in Manila}\label{figure:tariff}
 \begin{center}
 \includegraphics[scale=.7]{tables/tariff_structure.pdf}\\
 \footnotesize{1 USD = 50 PhP}
