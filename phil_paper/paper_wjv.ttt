@@ -1,0 +1,248 @@
+\begin{table}
+\centering
+%\captionsetup{justification=centering}
+\begin{threeparttable}
+\caption{ Water Connections  by Number of Households Served}\label{descriptives}
+\input{tables/new_descriptives}
+\begin{tablenotes}
+\item \footnotesize{The data include billing records merged with the connection survey.  Income is imputed using location, demographic variables, and their interactions.}
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\centering
+\caption{Demand Estimates}\label{table:demandestimates}
+\input{tables/step_1_estimates_group} \\
+\vspace{.2cm}
+{\footnotesize{Sample includes 349,265 billing months for 7,151 connections. } }
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\centering
+\begin{threeparttable}
+\caption{Demand Elasticities for Water Connections}\label{table:elasticity}
+\input{tables/elasticity_estimates}
+\begin{tablenotes}
+\item {\footnotesize Elasticities are calculated from 7,151 connections making 349,265 connection-months.  Income is imputed based on demographics, locations, and their interactions.  Standard errors are bootstrapped at the connection level.}
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\caption{Model Performance}\label{table:modelperformance}
+\centering
+\input{tables/sample_prediction}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\centering
+\begin{threeparttable}
+\caption{Correlation Estimates}\label{table:correstimates}
+\input{tables/corr_table_group}
+\begin{tablenotes}
+\item { \footnotesize Errors are bootstrapped at the connection level. }
+\end{tablenotes}
+\end{threeparttable}
+%\vspace{.3cm}
+%\footnotesize{1 indexes correlations with first movers \\ while 2 indexes correlations with second movers}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\centering
+\begin{threeparttable}
+\caption{Hassle Cost Estimates}\label{table:step2estimates}
+\input{tables/step_2_estimates}
+\begin{tablenotes}
+\item \footnotesize{Estimates include 548 leaking connections and 2,151 neighboring connections, totaling 20,299 connection-months.  \% single/home and neighbor distance are averages within wards.  Neighbor distance is in meters.   Standard errors are bootstrapped at the level of the leaking connection (and neighbors). }
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\centering
+\begin{threeparttable}
+\caption{Fixed Cost Estimates}\label{table:smmestimates}
+\input{tables/step_3_estimates_group}
+\begin{tablenotes}
+\item \footnotesize{  Fixed costs are in PhP/month and prices are in PhP/m3.   \input{tables/totalhhsmm_group} households across 599 wards are included in simulated method of moment estimation using source choices.  Standard errors are bootstrapped at the connection level }
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\centering
+\caption{Fixed Fee Discount Counterfactual}\label{table:fixedfeediscount}
+\input{tables/discount_estimates_group} \\
+\vspace{.2cm}
+\footnotesize{Low Users include the bottom 50\% of water users. \\
+Surplus and fixed fee are in PhP/month.}
+\end{table}
+\efloatseparator
+ 
+\begin{table}[!hbp]
+\centering
+\caption{Optimal Tariffs Without Sharing}\label{table:optimaltariffnosharing}
+\resizebox{\textwidth}{!}{%
+\input{tables/welfare_no_sharing_groups}
+} \\
+\footnotesize{The first-best fee does not include individual transfers imposed by the regulator. \\  Social tariffs place all welfare weight on the bottom 50\% of water users. All terms are monthly.}
+\end{table}
+\efloatseparator
+ 
+\begin{table}[!hbp]
+\centering
+\caption{Optimal Tariffs With Sharing}\label{table:optimaltariffsharing}
+\resizebox{\textwidth}{!}{%
+\input{tables/welfare_sharing_groups}
+}
+\footnotesize{The first-best fee does not include individual transfers imposed by the regulator. \\  Social tariffs place all welfare weight on the bottom 50\% of water users. \\ Surplus is measured in terms of PhP/month.}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\centering
+\caption{ Predicting Share of Connections Surveyed with \\ Connection Owner Demographics }\label{table:pawssampling}
+\input{tables/paws_sampling}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\centering
+\caption{Household Demographics across \\ Survey and Census Data by Water Source}\label{table:pawstocensus}
+\input{tables/descriptives_census_to_paws} \\
+\footnotesize{The data include connection survey data on households owning water connections \\ as well as 2010 Census data on households. This sample includes \\ overlapping wards between  surveys (67\%)}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\centering
+\caption{Mobile and PAWS Water Source Choices}\label{table:pollfishpawsmeans}
+\input{tables/pollfish_paws_means} \\
+\vspace{.3cm}
+\footnotesize{The PAWS data have been adjusted to reflect that \\ shared connections serve multiple households.}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\centering
+\caption{Mobile and PAWS Descriptives by Water Sharing Status}\label{table:pollfishpawssharing}
+\input{tables/pollfish_paws_diff}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\caption{Simulation Estimates for Linear Approximation}\label{table:linapproxsim}
+\centering
+\input{tables/approx_simulation} \\
+\footnotesize{The prices as well as the $\gamma$ terms are sampled from a uniform distribution on the given interval.  Approx. DGP stands for approximated data generating process, which generates consumption values using the linear approximation.  Exact DGP calculates consumption using the true demand function.   }
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\caption{Descriptives for Estimation Sample}\label{table:descriptivesestsample}
+\begin{center}
+\input{tables/new_descriptives_est_sample}
+\end{center}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\centering
+\caption{Summary Statistics and Comparison of Means for Residential, Semi-Business, and Upgraded Connections}\label{table:semittests}
+\resizebox{\textwidth}{!}{
+\input{tables/sem_compare_means}
+}\\
+\footnotesize{Data are from the connection survey.}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\centering
+\caption{Alternative Demand Specification Estimates}\label{table:sigguess}
+\input{tables/sig_guess_estimates}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\caption{Sharing and Distance to Leaking Connection}\label{table:neighbordistance}
+\centering
+\input{tables/neighbor_distance}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\centering
+\caption{Descriptives and Balance Test for Non-Leaking and Leaking Connections}\label{table:leakbalance}
+\input{tables/mean_diff_leak} \\
+\footnotesize{Drink is a dummy for drinking tap water.  Water flow is a dummy for low water pressure. \\ Water storage is a dummy for owning a water storage container.  Std. errors result from a T-test of differences in means.}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\centering
+\caption{Balance Test for Disconnection among Leaking Connections}\label{table:leakbalancedc}
+\input{tables/mean_diff_DC.tex} \\
+\footnotesize{Drink is a dummy for drinking tap water.  Water flow is a dummy for low water pressure. \\ Water storage is a dummy for owning a water storage container. Std. errors result from a T-test of differences in means.}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\centering
+\caption{Leak Demand Response and Rank of Baseline Usage in Neighborhood}
+\input{tables/neighbor_selection}\label{table:neighborselection}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\centering
+\caption{Neighborhood Usage Response and Quintile of Usage for Leaking Connection}\label{table:leakerselection}
+\input{tables/leaker_selection}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\centering
+\caption{Difference-in-Differences Estimate for Full Priced Connections}\label{table:difffullpriced}
+\input{tables/diff_595_reg_secondary}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\centering
+\caption{Difference-in-Differences Estimate}\label{table:diffdiscountreducedform}
+\input{tables/diff_595_reg_primary}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\centering
+\caption{Connection Fee Discount: Out-of-Sample Test Results}\label{table:oosestimates}
+\input{tables/oos_discount_estimates_group} \\
+\vspace{.2cm}
+\footnotesize{Fixed fee and consumer surplus are in PhP/month.}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\centering
+\caption{Simulation Test for Incidental Parameter Bias}\label{table:incidentalparameters}
+\input{tables/incidental_parameters}\\
+\footnotesize{T refers to months observed for each connections.  The first sample includes half of the time periods per connection (around 35 months), while the second sample includes all months.  Both samples include 5,000 accounts.}
+\end{table}
+\efloatseparator
+ 
+\begin{table}
+\centering
+\caption{Simulated Method of Moments Model Fit}\label{table:modelfit}
+\input{tables/smm_moments}
+\end{table}
+\efloatseparator
+ 
