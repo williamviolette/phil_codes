@@ -50,6 +50,13 @@
 \efloatseparator
  
 \begin{figure}
+
+\includegraphics{tables/tariff_pic.pdf}
+
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
 \caption{Consumption Histogram}\label{figure:consumptionhistogram}
 \begin{center}
 \includegraphics[scale=.7]{tables/consumption_histogram.pdf}\\
