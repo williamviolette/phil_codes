@@ -1,9 +1,9 @@
 \begin{figure}
 \centering
-\caption{Marginal Prices in Manila}\label{figure:tariff}
+\caption{Tariff in Manila}\label{figure:tariff}
 \begin{center}
 \includegraphics[scale=.7]{tables/tariff_structure.pdf}\\
-\footnotesize{1 USD = 50 PhP}
+\footnotesize{Figure includes average marginal prices from 2010 to 2015. \\  1 USD $\sim$ 50 PhP}
 \end{center}
 \end{figure}
 \efloatseparator
@@ -50,9 +50,11 @@
 \efloatseparator
  
 \begin{figure}
-
-\includegraphics{tables/tariff_pic.pdf}
-
+\caption{Residential Tariff Presented to Consumers}\label{figure:tarifftrue}
+\begin{center}
+\includegraphics[scale=.8]{tables/tariff_pic_png.png} \\
+\footnotesize{``conn.'' refers to connection, ``cu.m.'' refers to cubic meters of usage \\ per month, and \textbf{P} refers to Philippine Pesos.}
+\end{center}
 \end{figure}
 \efloatseparator
  
