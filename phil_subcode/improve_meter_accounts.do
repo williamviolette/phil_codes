@@ -35,6 +35,7 @@ if "`run_meterseri_prep'" == "1" {
 
 	cap program drop merge_to_mcf
 	prog define merge_to_mcf
+	* local 1 tondo
 		use "${billingdata}`1'_mcf_2009_2015.dta", clear
 		keep conacct DEVICE_NB
 			ren DEVICE_NB meter_seri

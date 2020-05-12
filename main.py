@@ -38,14 +38,22 @@ generated = analysis + 'phil_generated/'
 db = generated+'phil.db'
 
 
-_1_a_IMPORT 	   		= 0
+
+
+_1_ab_IMPORT_NEW 		= 0
 _1_b_NEIGHBORS     		= 0
 _1_c_EXPORT_STATA  		= 0
 _1_d_PAWNEAR   	   		= 0   ## NEED TO IMPORT PAWS FIRST BEFORE RUNNING PAWNEAR
+_1_e_NEARPAW   	   		= 0
+_1_f_NEARRATECHANGE     = 0
 
-_2_a_AREASTATS		    = 1   ## NEEDS FULL EXPORT STATA
+
+_2_a_AREASTATS		    = 0   ## NEEDS FULL EXPORT STATA
 
 
+
+
+_1_a_IMPORT 	   		= 0
 
 ## JUST A FUNCTION THAT WE USE A LOT ##
 
@@ -57,6 +65,8 @@ def runsubcode(dofile):
 
 
 ###### STEP 1 : SET UP DATABASE ######
+
+
 
 if _1_a_IMPORT == 1:  # import GIS DATA
 	
@@ -89,6 +99,78 @@ if _1_a_IMPORT == 1:  # import GIS DATA
 
 	print '\n', " Done ! ", '\n'
 
+
+if _1_ab_IMPORT_NEW == 1:
+
+	print 'start'
+	# def add_mru(gis_folder,db):
+	# 	cmd = ['ogr2ogr -f "SQLite" -update','-a_srs http://spatialreference.org/ref/epsg/25393/',
+	# 	db, gis_folder+'MRU.shp','-nln mru', '-overwrite -skipfailures']
+	# 	subprocess.call(' '.join(cmd),shell=True)
+	# 	return 0
+
+	# def add_dma(gis_folder,db):
+	# 	cmd = ['ogr2ogr -f "SQLite" -update','-a_srs http://spatialreference.org/ref/epsg/25393/',
+	# 	db, gis_folder+'DMA_BOUNDARY.shp','-nln dma', '-overwrite -skipfailures']
+	# 	subprocess.call(' '.join(cmd),shell=True)
+	# 	return 0
+
+	# add_mru(gis_folder,db)
+	# add_dma(gis_folder,db)
+
+
+	def int_mru_dma(db):
+
+		print 'start this'
+		name = 'mru_dma_int'
+
+	    # connect to DB
+		con = sql.connect(db)
+		con.enable_load_extension(True)
+		con.execute("SELECT load_extension('mod_spatialite');")
+		cur = con.cursor()
+
+	    # chec_qry = '''
+	    #            SELECT type,name from SQLite_Master
+	    #            WHERE type="table" AND name ="{}";
+	    #            '''.format(name)
+
+	    # drop_qry = '''
+	    #            SELECT DisableSpatialIndex('{}','GEOMETRY');
+	    #            SELECT DiscardGeometryColumn('{}','GEOMETRY');
+	    #            DROP TABLE IF EXISTS idx_{}_GEOMETRY;
+	    #            DROP TABLE IF EXISTS {};
+	    #            '''.format(name,name,name,name)
+
+	    # cur.execute(chec_qry)
+	    # result = cur.fetchall()
+	    # if result:
+	    #     cur.executescript(drop_qry)
+		cur.execute('DROP TABLE IF EXISTS {};'.format(name))   
+
+		print 'running ... '
+
+		make_qry = '''
+	                   CREATE TABLE {} AS 
+                		SELECT A.OGC_FID as ogc_fid_mru,
+                		A.mru_no as mru,
+                		G.OGC_FID as ogc_fid_dma,
+                		G.dma_id, 
+                        st_area(st_intersection(ST_MAKEVALID(A.GEOMETRY),ST_MAKEVALID(G.GEOMETRY))) AS area
+                FROM mru as A, dma as G
+                WHERE A.ROWID IN (SELECT ROWID FROM SpatialIndex 
+                WHERE f_table_name='mru' AND search_frame=ST_MAKEVALID(G.GEOMETRY))
+                AND st_intersects(ST_MAKEVALID(A.GEOMETRY),ST_MAKEVALID(G.GEOMETRY))
+	                    ;
+			              '''.format(name)
+		cur.execute(make_qry)
+	    
+	    # cur.execute("SELECT RecoverGeometryColumn('{}','GEOMETRY',2046,'MULTIPOLYGON','XY');".format(name))
+	    # cur.execute("SELECT CreateSpatialIndex('{}','GEOMETRY');".format(name))
+
+		return
+
+	# int_mru_dma(db)
 
 
 
@@ -220,6 +302,143 @@ if _1_d_PAWNEAR == 1:
 	con.close()
 
 	print '\n', " Done :) ... ", '\n'
+
+#### FOR EACH PAWS OBS COMPUTE THE NEAREST 10 METERS
+
+if _1_e_NEARPAW == 1:
+
+	print '\n', " Compute Nearest PAWS TO CONACCT Table ! ", '\n'
+
+	tablename = 'neighborp_50'
+
+	con = sql.connect(db)
+	con.enable_load_extension(True)
+	con.execute("SELECT load_extension('mod_spatialite');")
+	cur=con.cursor()
+
+	qry = '''
+   		SELECT DISTINCT st_x(e.GEOMETRY) AS x, st_y(e.GEOMETRY) AS y,
+                  B.conacct AS conacct
+            FROM meter AS e 
+            JOIN conacctseri AS B ON e.OGC_FID = B.OGC_FID
+            WHERE B.conacct>0
+    	'''
+	cur.execute(qry)
+	mat = np.array(cur.fetchall())
+	
+	qry = '''
+        SELECT DISTINCT st_x(e.GEOMETRY) AS x, st_y(e.GEOMETRY) AS y,
+                  B.conacct AS conacct
+            FROM meter AS e 
+            JOIN conacctseri AS B ON e.OGC_FID = B.OGC_FID
+            JOIN (SELECT conacct FROM paws GROUP BY conacct) AS p ON B.conacct = p.conacct
+            WHERE B.conacct>0
+    	'''
+	cur.execute(qry)
+	mat_paws = np.array(cur.fetchall())
+
+	def dist_calc(in_mat,targ_mat):
+
+	    nbrs = NearestNeighbors(n_neighbors=51, algorithm='auto').fit(targ_mat)
+	    dist, ind = nbrs.kneighbors(in_mat)
+
+	    return [dist,ind]
+
+	res=dist_calc(mat_paws[:,:2], mat[:,:2])
+
+	cur.execute('DROP TABLE IF EXISTS {};'.format(tablename))
+	cur.execute(''' CREATE TABLE {} (
+	                conacctp    INTEGER,
+	                conacct     INTEGER, 
+	                rank    	INTEGER, 
+	                distance    numeric(10,10) );'''.format(tablename))
+
+	rowsqry = '''INSERT INTO {} VALUES (?,?,?,?);'''.format(tablename)
+
+	for i in range(0,len(mat_paws)):
+		for j in range(1,51):
+			cur.execute(rowsqry, [mat_paws[i][2],mat[res[1][i][j]][2],j,res[0][i][j]])	
+		# cur.execute(rowsqry, [mat_paws[i][2],mat[res[1][i][0]][2],res[0][i][0]])		
+		#print [mat[i][2],mat_paws[res[1][i][0]][2],res[0][i][0]]
+
+	cur.execute('''CREATE INDEX {}_cp_ind ON {} (conacctp);'''.format(tablename,tablename))
+	cur.execute('''CREATE INDEX {}_c_ind ON {} (conacct);'''.format(tablename,tablename))
+
+	con.commit()
+	con.close()
+
+	print '\n', " Done :) ... ", '\n'
+
+
+
+
+
+if _1_f_NEARRATECHANGE == 1:
+
+	print '\n', " Compute Nearest RATE CHANGE TO CONACCT Table ! ", '\n'
+
+	tablename = 'neighbor_rs_20'
+	nc = 20 + 1
+
+	con = sql.connect(db)
+	con.enable_load_extension(True)
+	con.execute("SELECT load_extension('mod_spatialite');")
+	cur=con.cursor()
+
+	qry = '''
+   		SELECT DISTINCT st_x(e.GEOMETRY) AS x, st_y(e.GEOMETRY) AS y,
+                  B.conacct AS conacct
+            FROM meter AS e 
+            JOIN conacctseri AS B ON e.OGC_FID = B.OGC_FID
+            WHERE B.conacct>0
+    	'''
+	cur.execute(qry)
+	mat = np.array(cur.fetchall())
+	
+	qry = '''
+        SELECT DISTINCT st_x(e.GEOMETRY) AS x, st_y(e.GEOMETRY) AS y,
+                  B.conacct AS conacct
+            FROM meter AS e 
+            JOIN conacctseri AS B ON e.OGC_FID = B.OGC_FID
+            JOIN (SELECT conacct FROM conacct_rch) AS p ON B.conacct = p.conacct
+            WHERE B.conacct>0
+    	'''
+	cur.execute(qry)
+	mat_paws = np.array(cur.fetchall())
+
+	def dist_calc(in_mat,targ_mat):
+
+	    nbrs = NearestNeighbors(n_neighbors=nc, algorithm='auto').fit(targ_mat)
+	    dist, ind = nbrs.kneighbors(in_mat)
+
+	    return [dist,ind]
+
+	res=dist_calc(mat_paws[:,:2], mat[:,:2])
+
+	cur.execute('DROP TABLE IF EXISTS {};'.format(tablename))
+	cur.execute(''' CREATE TABLE {} (
+	                conacctp    INTEGER,
+	                conacct     INTEGER, 
+	                rank    	INTEGER, 
+	                distance    numeric(10,10) );'''.format(tablename))
+
+	rowsqry = '''INSERT INTO {} VALUES (?,?,?,?);'''.format(tablename)
+
+	for i in range(0,len(mat_paws)):
+		for j in range(1,nc):
+			cur.execute(rowsqry, [mat_paws[i][2],mat[res[1][i][j]][2],j,res[0][i][j]])	
+		# cur.execute(rowsqry, [mat_paws[i][2],mat[res[1][i][0]][2],res[0][i][0]])		
+		#print [mat[i][2],mat_paws[res[1][i][0]][2],res[0][i][0]]
+
+	cur.execute('''CREATE INDEX {}_cp_ind ON {} (conacctp);'''.format(tablename,tablename))
+	cur.execute('''CREATE INDEX {}_c_ind ON {} (conacct);'''.format(tablename,tablename))
+
+	con.commit()
+	con.close()
+
+	print '\n', " Done :) ... ", '\n'
+
+
 
 
 

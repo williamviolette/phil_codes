@@ -1,14 +1,14 @@
 # Fdb version 3
-["bibtex paper_wjv"] 1548984739 "paper_wjv.aux" "paper_wjv.bbl" "paper_wjv" 1548984757
+["bibtex paper_wjv"] 1548984739 "paper_wjv.aux" "paper_wjv.bbl" "paper_wjv" 1587575452
   "/usr/local/texlive/2015/texmf-dist/bibtex/bst/natbib/abbrvnat.bst" 1233624470 26532 66bed5cc59495faaa3f9ae9af9fa5e42 ""
   "library.bib" 1548787526 17399 2c73e20de073fa28d01dd18b430b200f ""
-  "paper_wjv.aux" 1548984745 34209 44ebda6f5fef861c22bced946d2088f6 ""
+  "paper_wjv.aux" 1587575451 34209 44ebda6f5fef861c22bced946d2088f6 ""
   "paper_wjv.bcf" 0 -1 0 ""
   (generated)
-  "paper_wjv.bbl"
   "paper_wjv.blg"
-["pdflatex"] 1548984744 "paper_wjv.tex" "paper_wjv.pdf" "paper_wjv" 1548984757
-  "./paper_wjv.out" 1548984745 3725 a77d72219665182eef56b2389750cd9b ""
+  "paper_wjv.bbl"
+["pdflatex"] 1587575450 "paper_wjv.tex" "paper_wjv.pdf" "paper_wjv" 1587575452
+  "./paper_wjv.out" 1587575451 3725 a77d72219665182eef56b2389750cd9b ""
   "./tables/cdf_approx.png" 1506356933 10984 8bc923350f732701acb7fd20f93a3a97 ""
   "./tables/consumption_histogram.pdf" 1540912903 24881 e94b4ead0d958b825379a05c3c95cbff ""
   "./tables/diff_595.pdf" 1536872144 23509 4270edc64e0986c7390ce87dfd8fe60f ""
@@ -278,10 +278,10 @@
   "/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1432479641 1764542 91654ba72bdb667e84ea24f076ae16d8 ""
   "/usr/local/texlive/2015/texmf-var/web2c/pdftex/pdflatex.fmt" 1432479681 3849859 39a7d258195bde2394e244961601fbc5 ""
   "/usr/local/texlive/2015/texmf.cnf" 1432479636 577 0d611272082f3cdb8e80e09a3c69cf07 ""
-  "paper_wjv.aux" 1548984745 34209 44ebda6f5fef861c22bced946d2088f6 ""
+  "paper_wjv.aux" 1587575451 34209 44ebda6f5fef861c22bced946d2088f6 ""
   "paper_wjv.bbl" 1548984739 9721 65594b2473e5283eab17ae5aa1b23d4c "bibtex paper_wjv"
-  "paper_wjv.out" 1548984745 3725 a77d72219665182eef56b2389750cd9b ""
-  "paper_wjv.tex" 1548984751 248989 5306dbef687c9945c25c38ce2216a69d ""
+  "paper_wjv.out" 1587575451 3725 a77d72219665182eef56b2389750cd9b ""
+  "paper_wjv.tex" 1587487507 249003 e68d11b5870cad56c3c9390b0f33304c ""
   "tables/access_fetch.tex" 1536157422 2 aab3238922bcc25a6f606eb525ffdc56 ""
   "tables/access_pipes.tex" 1536157422 2 7f39f8317fbdb1988ef4c628eba02591 ""
   "tables/access_single_tap.tex" 1536157422 2 8e296a067a37563370ded05f5a3bf3ec ""
@@ -341,7 +341,7 @@
   "tables/no_use.tex" 1536157422 2 ea5d2f1c4608232e07d3aa3d998e5135 ""
   "tables/oos_discount_estimates_group.tex" 1537565519 259 c239d45042a0bc2d14a8b536595cbfd7 ""
   "tables/out_of_sample_inc_ind_conn_group.tex" 1536945459 4 24caf2a1ab226ee53800559422ccd52b ""
-  "tables/paws_sampling.tex" 1536930585 816 caa92b822d380992a3d71cb7c621f99f ""
+  "tables/paws_sampling.tex" 1551279278 791 d77817b82a970a3bd7c3921884c75e3f ""
   "tables/percent_increase_discount.tex" 1536872150 3 804066a6a5042090a2a0b25c55f38e72 ""
   "tables/pollfish_paws_diff.tex" 1540995278 1605 19496a0533dcdfca5b4898b8812069d6 ""
   "tables/pollfish_paws_means.tex" 1536157422 351 573ed9cf1389560a10c98dcfb3a9319b ""
@@ -389,9 +389,9 @@
   "tables/welfare_sharing_groups.tex" 1540999930 530 d7f5f75035c05fa5393068e2012a05aa ""
   "tables/would_have_added.tex" 1536872150 3 2058eb305f47c3a279a0bf56de7b626c ""
   (generated)
-  "paper_wjv.ttt"
+  "paper_wjv.aux"
   "paper_wjv.pdf"
+  "paper_wjv.ttt"
+  "paper_wjv.fff"
   "paper_wjv.out"
   "paper_wjv.log"
-  "paper_wjv.aux"
-  "paper_wjv.fff"

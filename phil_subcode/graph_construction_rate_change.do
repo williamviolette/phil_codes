@@ -39,9 +39,69 @@ save "${temp}r_to_s.dta", replace
 }
 
 
+
 use "${temp}r_to_s.dta", clear
 		
-		keep if R_to_S_max == 1
+		* keep if R_to_S_max == 1
+
+*** START NEW TEST  ***
+		ren SHH S1
+		replace c = c/S1
+		g SHH=S1>1
+		g rsd_id=date if R_to_S==1 & date!=596
+		gegen rsd=min(rsd_id), by(conacct)
+
+		g T = date-rsd
+
+
+		gegen mc=mean(c), by(T)
+		gegen tt = tag(T)
+
+		gegen ttshr=tag(T SHH)
+		* twoway scatter mc T if tt==1 & T>=-36 & T<=36
+
+		gegen mcshr=mean(c), by(T SHH)
+
+		twoway scatter mc T if tt==1 & T>=-24 & T<=24
+
+
+		twoway  scatter mcshr T if ttshr==1 & T>=-12 & T<=12 & SHH==0 || ///
+				scatter mcshr T if ttshr==1 & T>=-12 & T<=12 & SHH==1 
+
+
+		* twoway  scatter mcshr T if ttshr==1 & T>=-24 & T<=24 & SHH==1 || ///
+		* 		scatter mcshr T if ttshr==1 & T>=-24 & T<=24 & SHH==2 || ///
+		* 		scatter mcshr T if ttshr==1 & T>=-24 & T<=24 & SHH==3
+
+
+		sort conacct date
+		by conacct: g S_to_R =class[_n-1]==2 & class[_n]==2 & class[_n+1]==1 & class[_n+2]==1
+
+		g srd_id=date if S_to_R==1
+		gegen srd=min(srd_id), by(conacct)
+
+		g Ts = date-srd
+
+		gegen mcs=mean(c), by(Ts)
+		gegen tts = tag(Ts)
+
+		gegen mc_shr=mean(c), by(Ts SHH)
+		gegen tts_shr = tag(Ts SHH)
+
+
+		twoway scatter mcs Ts if tts==1 & Ts>=-24 & Ts<=24
+
+
+		twoway  scatter mc_shr Ts if tts_shr==1 & Ts>=-24 & Ts<=24 & SHH==0 || ///
+				scatter mc_shr Ts if tts_shr==1 & Ts>=-24 & Ts<=24 & SHH==1 
+
+		* twoway  scatter mc_shr Ts if tts_shr==1 & Ts>=-24 & Ts<=24 & SHH==1 || ///
+		* 		scatter mc_shr Ts if tts_shr==1 & Ts>=-24 & Ts<=24 & SHH==2 || ///
+		* 		scatter mc_shr Ts if tts_shr==1 & Ts>=-24 & Ts<=24 & SHH==3
+
+*** END NEW TEST  ***
+
+
 
 		bys conacct: g c_n=_n==1
 		egen S=sum(c_n)
@@ -222,5 +282,5 @@ use "${temp}r_to_s.dta", clear
 collabels("Residential" "Semi-Business" "Upgraded to Semi-Business" "T-Test: Semi to Res"  "T-Test: Semi to Semi-Upgrade" ) tex replace label
 
 
-rm "${temp}r_to_s.dta"
+* rm "${temp}r_to_s.dta"
 		

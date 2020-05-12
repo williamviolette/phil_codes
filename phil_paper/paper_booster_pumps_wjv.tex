@@ -1,0 +1,152 @@
+\documentclass[12pt]{article}
+\usepackage[margin=1in] {geometry}                
+\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
+\pagestyle{plain}                           % Eliminates both the header and footer
+\usepackage[parfill]{parskip}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{epstopdf}
+\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
+\usepackage{amsmath, amsthm, amssymb}
+\usepackage{array}
+\usepackage{threeparttable}
+%\usepackage{pgfplots}
+\usepackage{tikz}
+\usepackage{tkz-euclide}
+\usepackage{longtable}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{verbatim}  %so that you can comment blocks of code
+\usepackage{setspace}  %change the spacing
+\usepackage[authoryear]{natbib}
+\usepackage{bbm}
+\usetikzlibrary{calc}
+%\usepackage{csvsimple}
+\usepackage[toc,page]{appendix}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{rotating}
+\usepackage{booktabs}
+\usepackage{authblk}
+\usepackage[bottom]{footmisc}
+\usepackage{titling}
+%% \newcommand{\KEYtitle}{Even Weights}
+%\usepackage[nomarkers]{endfloat}
+%\bibliography{library} 
+%\renewcommand{\efloatseparator}{\mbox{}}
+\usepackage{rotating}
+\usepackage{pdflscape}
+\usepackage[export]{adjustbox}
+\usetikzlibrary{positioning}
+
+%\usepackage{datetime}
+%\newdateformat{monthyeardate}{\monthname[\THEMONTH]}
+
+
+% \usepackage[notablist,nofiglist]{endfloat}
+
+%\renewcommand{\efloatseparator}{\mbox{}}
+
+% \renewcommand{\thetable}{\Roman{table}}
+% \renewcommand{\thefigure}{\Roman{figure}}
+
+% \renewcommand{\thesection}{\Roman{section}} 
+% \renewcommand{\thesubsection}{\thesection.\Alph{subsection}}
+% \renewcommand{\thesubsubsection}{\thesubsection.\roman{subsubsection}}
+
+
+%\usepackage[dvipsnames]{xcolor}
+%\usepackage{cite}
+\onehalfspacing
+\usepackage{natbib}  
+\title{ Optimal Pricing and Informal Sharing: \\ Evidence from Piped Water in Manila }
+%\title{OPTIMAL PRICING AND INFORMAL SHARING: \\ EVIDENCE FROM PIPED WATER IN MANILA}
+
+\author{William Violette\thanks{Contact: Federal Trade Commission, Washington, DC: william.j.violette@gmail.com \\ I am grateful to Andrew Foster, Matthew Turner, Jesse Shapiro, Daniel Bj\"{o}rkegren, and Bryce Steinberg for guidance and encouragement.  For helpful conversations, I am also grateful to John Friedman, Edward Glaeser, Emily Oster, Brian Knight, and Lint Barrage.  In Manila, thank you to the staff of my water company partner, government regulators at MWSS, as well as the USAID Be-Secure project for access to data and excellent conversations.  This work was supported through the Watson Institute for International and Public Affairs.  Any opinions and conclusions expressed herein are those of the author and do not necessarily represent the views of the the Federal Trade Commission or its Commissioners.}
+ }
+%\\ 
+%[Job Market Paper: \href{https://drive.google.com/file/d/1dM41qZLZY3EPtUqHbca6MIS-nT77hv_-/view?usp=sharing}{\textcolor{blue}{Link to Current Version}}]}
+
+
+\date{Current Version: March, 2019}
+\begin{document}
+
+\maketitle
+\begin{abstract}
+
+%	High costs of connecting to public utilities often 
+
+%	lead households to share a connection with their neighbors instead of purchasing their own connection.  
+
+%This paper analyzes how sharing connections affects optimal pricing for water utilities. 
+
+	% Households often share connections to public utilities with their neighbors in order to split set-up and maintenance costs.  With microdata from 1.5 million water connections in Manila, this paper estimates water demand when connections are shared and solves the regulator's problem: setting prices that maximize consumer surplus while covering production costs.  In practice, cities often set low fixed prices so that more households connect and high marginal prices to cover production costs.  Instead, the optimal policy covers production costs with high fixed prices, which are split between sharing households, and sets low marginal prices to encourage consumption.  Counterfactual exercises find increases in shared connections, total piped water consumption, and social welfare from the optimal policy compared to current prices in Manila.
+
+%Sharing households split fixed prices with their neighbors to access the low marginal prices.  
+
+%	Yet, I find that low fixed and high marginal prices also weaken incentives to share water between neighbors.  
+
+
+%	Shared connections may have large implications for optimal pricing for public utilities especially 
+%	Households often offset the costs of connecting to public utilities by sharing a connection with their neighbors.  
+%	Sharing neighbor's connections 
+% In developing cities, high costs of connecting to piped water lead many households to use low-quality, non-piped sources.  
+% In response, cities often set low fixed prices so that more households connect and high marginal prices to cover production costs.  
+% This paper identifies a common alternative source --- sharing a neighbor's connection --- that has large implications for optimal water pricing.  
+
+
+
+\end{abstract} 
+\vspace{1cm}
+{\bf JEL-Classification:} H23, L95, L98, O13, O17, O18 \\
+\vspace{.1cm}
+{\bf Keywords:} Water demand, non-linear pricing, informal sector, developing countries. 
+
+\section{Introduction}
+
+- Discusses use of booster pumps in Clean Water Act 2004:  https://www.manilatimes.net/2018/11/04/legal-advice/dearpao/use-of-booster-pumps/461829/  http://r12.emb.gov.ph/ra-9275-the-philippine-clean-water-act/
+
+- https://idl-bnc-idrc.dspacedirect.org/bitstream/handle/10625/14878/108376.pdf?sequence=5
+
+- illegal booster pumps :  Consequence of El Niño 1997-98 on Manila water resources: new perspectives in water shortage management
+
+- seizing booster pumps : https://timesofindia.indiatimes.com/city/navi-mumbai/booster-pumps-used-by-some-socs-leading-to-water-crunch/articleshow/68856763.cms , https://timesofindia.indiatimes.com/city/nagpur/215-booster-pumps-seized/articleshow/69804589.cms
+
+
+
+{
+\small
+\nocite{*}
+\bibliographystyle{abbrvnat}
+\setcitestyle{authoryear,open={((},close={))}}
+\bibliography{library}
+}
+
+
+
+%\begin{center}
+%  \input{mean_diff_leak1}
+%\end{center}
+
+%\begin{center}
+%    \input{mean_diff_DC1}
+%\end{center}
+
+
+
+% \begin{table}[]
+% \centering
+% \caption{Source Choices}
+% \label{my-label}
+% \begin{tabular}{|l|c|c|c|}
+% \hline
+%                 & Fixed Price                  & Marginal Price                 & Tariff Kink Points      \\ \hline
+% Individual (I)  & $F$                          & $P_k$                         & $\overline{w}_{k}$                         \\ \hline
+% Shared   (S)    & $\frac{F}{2}$                & $P_k + P_{h}$                 & $\frac{\overline{w}_{k}}{2}$                            \\ \hline
+% Vendor   (V)    & $0$                          & $P_{v}$                        & $0$                          \\ \hline
+% \end{tabular}
+% \end{table}
+%\bibliography{lib}
+
+
+\end{document}  
