@@ -38,8 +38,29 @@ drop class
 
 
 
-
-
+use "${temp}paws_pipes_bill.dta", clear
+drop class
+	g dated=dofm(date)
+	g year=year(dated)
+		drop dated
+	keep if year<=2011
+	merge m:1 conacct using "${temp}paws_pipes_ranking.dta", keep(3) nogen 
+	global nn = 12
+	forvalues r=1/$nn {
+		global z = $nn + 1 - `r'
+		g BB_up${z}_b=B_up${z}==1
+		g BB_up${z}_n=B_up${z}!=.
+	}
+	forvalues r=1/$nn {
+		g BB_down`r'_b=B_down`r'==1
+		g BB_down`r'_n=B_down`r'!=.
+	}
+replace c = . if c>100
+egen up_sum 	= rowtotal(BB_up*b)
+egen down_sum 	= rowtotal(BB_down*b)
+areg c BM up_sum down_sum p1d p1r i.year if year<=2011,  cluster(p3id) a(p3id)
+areg c BB_up*b BB_down*b p1d i.year if year<=2011, a(p3id) cluster(p3id)
+	coefplot, keep(*BB*b*) vertical
 
 
 
@@ -52,18 +73,20 @@ drop class
 	g year=year(dated)
 		drop dated
 	* keep if year<=2013
-	merge m:1 conacct using "${temp}paws_pipes_only_ranking.dta", keep(3) nogen 
+	merge m:1 conacct using "${temp}paws_pipes_ranking.dta", keep(3) nogen 
 	g BM_b = BM==1
 	g BM_n = BM==0
-	forvalues r=1/6 {
-		global z = 7 - `r'
+
+	global nn = 24
+	forvalues r=1/$nn {
+		global z = $nn + 1 - `r'
 		g BB_up${z}_b=B_up${z}==1
 		g BB_up${z}_n=B_up${z}!=.
 		g BMB_up${z}_b=BB_up${z}_b*BM
 		g BMB_up${z}_n=BB_up${z}_n*BM
 	}
 
-	forvalues r=1/6 {
+	forvalues r=1/$nn {
 		g BB_down`r'_b=B_down`r'==1
 		g BB_down`r'_n=B_down`r'!=.
 		g BMB_down`r'_b=BB_down`r'_b*BM
@@ -80,13 +103,14 @@ g down_sum_BM = down_sum*BM
 areg c BM up_sum down_sum p1d p1r i.year if year<=2011,  cluster(p3id) a(p3id)
 areg c BM up_sum up_sum_BM down_sum down_sum_BM p1d p1r i.year  if year<=2011,  cluster(p3id) a(p3id)
 
-areg c BM BB_up*b BB_down*b p1d i.date,  cluster(p3id) a(p3id)
+areg c BB_up*b BB_down*b p1d i.year if year<=2011 & BM==0, a(p3id) cluster(p3id)
 	coefplot, keep(*BB*b*) vertical
 
+* areg c BM BB_up*b BB_down*b p1d i.date,  cluster(p3id) a(p3id)
+* 	coefplot, keep(*BB*b*) vertical
 * reg c BM up_sum down_sum p1d p1r i.year,  cluster(p3id)
 * reg c BM up_sum up_sum_BM down_sum down_sum_BM p1d p1r i.year,  cluster(p3id)
-* reg c BB_up*b BB_down*b p1d i.date,  cluster(p3id)
-* 	coefplot, keep(*BB*b*) vertical
+
 * egen nup_sum 	= rowtotal(BB_up*n)  robust to this!
 * egen ndown_sum 	= rowtotal(BB_down*n)
 
@@ -154,116 +178,7 @@ areg c BM BB_up*b BB_down*b p1d i.date,  cluster(p3id) a(p3id)
 
 
 
-reg c up_sum down_sum p1d i.p1r i.date,  cluster(p3id)
 
-
-
-reg c up_sum down_sum p1d i.p1r i.date if BM==0,  cluster(p3id)
-
-
-
-reg c BM up_sum* down_sum* p1d i.p1r i.date,  cluster(p3id)
-
-reg c BM up_sum*BM down_sum*BM Nup_sum*BM Ndown_sum*BM  p1d i.p1r i.date,  cluster(p3id)
-
-
-areg c BM up_sum* down_sum* p1d p1r i.date,  cluster(p3id) a(p3id)
-
-areg c BM up_sum* down_sum* p1d p1r i.date if date<=2010,  cluster(p3id) a(p3id)
-
-
-
-
-reg c BM up_sum* down_sum* nup_sum* ndown_sum* p1d i.p1r i.date,  cluster(p3id)
-
-
-
-
-* reg c BM BB_up* BB_down* BMB_up* BMB_down* p1d i.date,  cluster(p3id)
-	* coefplot, keep(*BB*b* *BMB*b* ) vertical
-
-reg c BM BB_up* BB_down* p1d i.date,  cluster(p3id)
-	coefplot, keep(*BB*b*) vertical
-
-reg c BB_up* BB_down* p1d i.date if BM==0,  cluster(p3id)
-	coefplot, keep(*BB*b*) vertical
-reg c BB_up* BB_down* p1d i.date if BM==1,  cluster(p3id)
-	coefplot, keep(*BB*b*) vertical
-
-
-reg c BB_up*b BB_down*b p1d i.date,  cluster(p3id)
-	coefplot, keep(*BB*b*) vertical
-
-
-reg c BB_up*b BB_down*b p1d i.date if BM==1,  cluster(p3id)
-	coefplot, keep(*BB*b*) vertical
-
-
-
-areg c BB_up* BB_down* p1d i.date if BM==0,  cluster(p3id) a(p3id)
-
-	coefplot, keep(*BB*b*) vertical
-
-
-areg c BB_up* BB_down* p1d i.date if BM==0,  cluster(p3id) a(p3id)
-
-coefplot, keep(*BB*b*) vertical
-
-
-
-
-
-
-
-use "${temp}paws_pipes_bill.dta", clear
-drop class
-	g dated=dofm(date)
-	g year=year(dated)
-		drop dated
-
-	keep if year<=2012
-
-	merge m:1 conacct using "${temp}paws_pipes_ranking.dta", keep(1 3) nogen 
-
-	g BM_b = BM==1
-	g BM_n = BM==0
-
-
-	forvalues r=1/10 {
-		global z = 11 - `r'
-		g BB_up${z}_b=B_up${z}==1
-		g BB_up${z}_n=B_up${z}==0
-	}
-
-	forvalues r=1/10 {
-		g BB_down`r'_b=B_down`r'==1
-		g BB_down`r'_n=B_down`r'==0	
-	}
-
-
-replace c = . if c>100 
-
-
-areg c BM_b BM_n BB_up* BB_down* p1d i.date, a(p3id) cluster(p3id)
-	coefplot, keep(*BB_*_b*) vertical
-
-
-reg c BM_b BM_n BB_up* BB_down* p1d, cluster(p3id)
-	coefplot, keep(*BB_*_b*) vertical
-
-
-reg c BB_up* BB_down* p1d i.date if BM==0,  cluster(p3id)
-
-	coefplot, keep(*BB*b*) vertical
-
-reg c BB_up* BB_down* p1d i.date if BM==1,  cluster(p3id)
-
-	coefplot, keep(*BB*b*) vertical
-
-
-areg c BB_up* BB_down* p1d i.date if BM==0,  cluster(p3id) a(p3id)
-
-coefplot, keep(*BB*b*) vertical
 
 
 
@@ -539,12 +454,17 @@ areg p1d yes_flow flow_hrs single i.wave, a(barangay_id)
 
 
 
+	areg c B yes_flow i.date , a(conacct) cluster(conacct) r
 
+areg c B1 yes_flow1 i.date , a(conacct) cluster(conacct) r
 
-areg c B1 i.date , a(conacct) cluster(conacct) r-
 
 areg c1_down B1 i.date , a(conacct) cluster(conacct) r
 areg c1_up B1 i.date , a(conacct) cluster(conacct) r
+
+
+
+areg c B1 i.date , a(conacct) cluster(conacct) r
 
 areg c1_down B1  B1_post post i.date , a(conacct) cluster(conacct) r
 areg c1_up B1  B1_post post i.date , a(conacct) cluster(conacct) r
@@ -920,14 +840,19 @@ areg cy i.pT i.year if yt==1 , a(conacct) cluster(mru) r
 
 
 
+
+
 use "${temp}bill_paws_full.dta", clear
 
 replace c=. if c>100
+	
 
+merge 1:1 conacct date using "${temp}amount_paws_full.dta", keep(1 3) nogen
 merge m:1 conacct using "${temp}conacct_rate.dta", keep(1 3) nogen
 	drop dc-datec
 merge m:1 mru using "${temp}pipe_year_old.dta", keep(1 3) nogen
 merge m:1 conacct date using "${temp}paws_aib.dta", keep(1 3) nogen
+	drop year
 
 gegen BM=max(B), by(conacct)
 gegen DM=max(drum), by(conacct)
@@ -972,32 +897,45 @@ gegen date_rs = min(date_rs_id), by(conacct)
 
 g price_post = date>date_rs & date<.
 
-g price_post_wind = 
+g price = amount/c
+replace price=. if price<5 | price>50
 
 cap drop T
 g T = date-date_rs
 replace T = 1000 if T<-36 | T>36
 replace T = T+100
 
-reg c i.T
-coefplot, vertical keep(*T*)
+
+* reg c i.T
+* coefplot, vertical keep(*T*)
 
 areg c i.T i.date, a(conacct)
 coefplot, vertical keep(*T*)
 
 
+reg price price_post if T>=-24+100 & T<=24+100
 
 reg c price_post if T>=-24+100 & T<=24+100
+
+
+reg c price_post if T>=-6+100 & T<=24+100
 
 
 g TM = T==1100
 g T1 = T
 replace T1 = 0 if T==1100
 
+g T2 = T1
+replace T2 = 0 if T2>100
+
 g price_post_post=price_post*post
 
 
-reg c post price_post i.class_max i.class_min T1 TM, cluster(mru) r
+reg c price_post i.class_max i.class_min T1 TM, cluster(mru) r
+
+
+reg c post price_post  i.class_max i.class_min T1 TM, cluster(mru) r
+
 
 reg c post price_post price_post_post i.class_max i.class_min T1 TM, cluster(mru) r
 

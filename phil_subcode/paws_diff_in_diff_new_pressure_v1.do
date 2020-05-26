@@ -1,95 +1,6 @@
 
 
 
-		** THIS APPROACH IS THE NUTS!		** THIS APPROACH IS THE NUTS!	
-		** THIS APPROACH IS THE NUTS!		** THIS APPROACH IS THE NUTS!
-		** THIS APPROACH IS THE NUTS!		** THIS APPROACH IS THE NUTS!
-		** THIS APPROACH IS THE NUTS!		** THIS APPROACH IS THE NUTS!
-		** THIS APPROACH IS THE NUTS!		** THIS APPROACH IS THE NUTS!
-		** THIS APPROACH IS THE NUTS!		** THIS APPROACH IS THE NUTS!
-		** THIS APPROACH IS THE NUTS!		** THIS APPROACH IS THE NUTS!
-		** THIS APPROACH IS THE NUTS!		** THIS APPROACH IS THE NUTS!
-		** THIS APPROACH IS THE NUTS!		** THIS APPROACH IS THE NUTS!
-		
-		
-	
-***** CAN'T REPRODUCE THIS SAMPLE UNFORTUNATELY!!! 
-
-	
-use "/Users/williamviolette/Documents/Philippines/data/cf.dta", clear
-
-	ren v5 conacct
-	ren v17 ba2
-
-
-gegen is = sum(v14), by(conacct)
-
-gegen ctag=tag(conacct)
-
-g year = substr(v16,1,4)
-g month = substr(v16,6,2)
-destring year, replace force
-
-g datecf=ym(year,month)
-
-g adl=regexm(v26,"ADD")==1
-
-g napc=regexm(v26,"NAPC")==1
-
-g bnk= regexm(v26,"BNK")==1 |  ///
-	   regexm(v26,"CL")==1 | ///
-	   regexm(v26,"MTR B")==1 | ///
-	   regexm(v26,"CL")==1 | ///
-	   regexm(v26,"BK")==1 
-
-gegen napc1=max(napc), by(conacct)
-
-bys is: g isN=_N
-
-tab is if adl==1 & isN>5000
-
-tab is if napc==1 & isN>5000
-
-g disc=is>2300 & is<=2800
-
-tab disc napc1
-tab disc bnk
-
-tab v26 if disc==1
-
-
-hist is if is<10000 & ctag==1, by(ab)
-
-g ab 
-
-sort conacct v16
-browse conacct v16 v10 v14 v15
-
-
-g o=1
-gegen ss = sum(o), by(v26)
-
-tab v26 if ss>=500
-
-g o=1
-gegen cn=sum(o), by(conacct)
-
-
-
-keep if ctag==1
-keep conacct
-	merge m:1 conacct using "${temp}conacct_rate.dta" // 	* keep if _merge==3
-	g M=_merge==3
-
-* tab datec M
-* 	gegen mm = mean(M), by(datec)
-* 	gegen dtag=tag(datec)
-* twoway scatter mm datec if dtag==1  // * around 90% of new accounts after 613!!
-
-
-
-
-
 
 use "/Users/williamviolette/Documents/Philippines/data/cf.dta", clear
 
@@ -153,12 +64,189 @@ save "${temp}cf_inst.dta", replace   // * around 90% of new accounts after 613!!
 
 
 
+*** MRU pros:  full data          cons: noisy eligibility measure, not full gps
+*** STR pros: gps, clean measure  cons: gps subset, streets big enough?
 
+
+
+
+
+
+
+
+
+
+use ${phil_folder}diff_in_diff_595/input/mcf_2015.dta, clear
+	
+		merge 1:1 conacct using "${temp}cf_inst.dta"
+		drop if _merge==2
+		g minst=_merge==3
+		drop _merge
+
+		merge m:1 conacct using "${temp}b_mc.dta", keep(1 3) nogen
+
+g icat= 1 if inst<=2800
+replace icat=2 if inst>2800 & inst<5500
+replace icat=3 if inst>=5500 & inst<.
+
+	g msg=mru
+
+	gegen napcm=max(napc), by(msg)
+	g dpre=date_c<=590
+	gegen dpres=sum(dpre), by(msg)
+	g dpost=date_c>630
+	gegen dposts=sum(dpost), by(msg)
+
+	keep if dpres>5 & dpres<. 
+	keep if dposts>5 & dposts<.
+	keep if date_c>=550
+
+ 	g       bps = 0 if date_c>=620 & icat==3 
+ 	replace bps = 1 if date_c>=620 & icat==1
+ 	* g bps = napc==1
+
+ 	gegen mrub=mean(bps), by(msg)
+
+ 	g o =1 
+ 	gegen tn = sum(o), by(msg date_c)
+ 	g oadd=icat==2
+ 	gegen tnadd=sum(oadd), by(msg date_c)
+
+ 	gegen mcm =mean(mc), by(msg date_c)
+
+ 	duplicates drop msg date_c, force
+
+ 	keep tn tnadd date_c mrub msg inst mcm
+ 	tsset msg date_c
+ 	tsfill, full
+
+ 	replace tn=0 if tn==.
+ 	replace tnadd=0 if tnadd==.
+ 	gegen mrub_id=max(mrub), by(msg)
+ 	drop mrub
+ 	ren mrub_id mrub
+
+g tnl=tn if tn<=50
+g tnladd=tnadd if tnadd<=50
+
+g dated=dofm(date_c)
+g year=year(dated)
+
+cap drop tr
+cap drop tnm
+cap drop tt
+cap drop isl
+cap drop mp
+cap drop tm
+cap drop tty
+cap drop tny 
+cap drop yt
+cap drop insty
+cap drop mcmm
+
+g tr = 0 if mrub<.5
+replace tr=1 if mrub>=.5 & mrub<=1
+
+* g tr = 0 if mrub<=0
+* replace tr=1 if mrub>0 & mrub<=1
+
+gegen tnm = mean(tnl), by(date_c tr)
+gegen tnmadd = mean(tnladd), by(date_c tr)
+gegen tt = tag(date_c tr)
+sort date_c tr tt
+
+
+sort date_c tr tt
+twoway  line tnm date_c if tt==1 & tr==0 || ///
+	 	line tnm date_c if tt==1 & tr==1   , ///
+	 	legend(order( 1 "0" 2 "1" )) xline(595)
+
+
+
+gegen mcmm=mean(mcm), by(date_c tr)
+twoway  line mcmm date_c if tt==1 & tr==0   || ///
+	 	line mcmm date_c if tt==1 & tr==1  , ///
+	 	legend(order( 1 "0" 2 "1" )) xline(595)
+twoway  line mcmm date_c if tt==1 & tr==0  & date_c>=580 & date_c<=630 || ///
+	 	line mcmm date_c if tt==1 & tr==1  & date_c>=580 & date_c<=630 , ///
+	 	legend(order( 1 "0" 2 "1" )) xline(595)
+
+
+
+
+gegen tny = sum(tnl), by(year msg)
+gegen yt = tag(year msg)
+
+gegen tm = mean(tny), by(year tr)
+
+gegen tty = tag(year tr)
+
+twoway  line tm year if tty==1 & tr==0 & year>2005 & year<2015 || ///
+	 	line tm year if tty==1 & tr==1 & year>2005 & year<2015, ///
+	 	legend(order( 1 "0" 2 "1" )) xline(595)
+
+
+
+gegen insty=mean(instm), by(year tr)
+
+twoway  line insty year if tty==1 & tr==0 & year>2005 & year<2015 || ///
+	 	line insty year if tty==1 & tr==1 & year>2005 & year<2015, ///
+	 	legend(order( 1 "0" 2 "1" ))
+
+
+	 	
+
+
+gegen instm=mean(inst), by(date_c tr)
+
+twoway  line instm date_c if tt==1 & tr==0 || ///
+	 	line instm date_c if tt==1 & tr==1 , ///
+	 	legend(order( 1 "0" 2 "1" )) xline(595)
+
+
+
+g post = date_c>595
+g treat = mrub>.5 & mrub<=1
+ * g treat = mrub>0 & mrub<=1
+g post_treat = post*treat
+
+reg mcm post treat post_treat if date_c<=620 
+
+
+reg tnl  post treat post_treat
+reg inst post treat post_treat
+
+
+
+reg tnl post treat post_treat if date_c<620
+reg tnl post treat post_treat if date_c<650
+
+areg tnl post post_treat if date<610, a(mru) cluster(mru) r
+
+
+sort date_c tt tr
+by date_c tt: g tnm_ch=tnm[_n]-tnm[_n-1]
+
+twoway  line tnm_ch date_c if tt==1 & tr==1, xline(595)
+
+
+sort date_c tr tt
+twoway  line tnmadd date_c if tt==1 & tr==0 || ///
+	 	line tnmadd date_c if tt==1 & tr==1 , ///
+	 	legend(order( 1 "0" 2 "1" ))
+
+
+
+
+/*
 
 cap prog drop data_prep_mru_c
 prog  define  data_prep_mru_c
+	
+	  * local 1 qc_04
 		use descriptives/output/`1'_billing_2008_2015.dta, clear
 		
+		keep if billclass=="0001"
 			ren CONTRACT_A conacct
 			keep conacct PREV PRES year month
 			destring PREV PRES  year month, replace force
@@ -170,16 +258,48 @@ prog  define  data_prep_mru_c
 			
 			keep conacct date c
 
+			g cnm=c>0 & c<=200
+			gegen cnms=sum(cnm), by(conacct)
+			g cn_id = c if cnms>=70
+
 			merge m:1 conacct using "${temp}conacct_rate.dta"
 			keep if _merge==3
 			drop _merge
 
 			keep if datec<580
-			keep mru c date
+
+			merge m:1 conacct using "${temp}neighbor_datec.dta"
+			drop if _merge==2
+			drop _merge
+
+			* cap drop dt
+			* cap drop dt_id
+			* cap drop T
+			* cap drop cT
+			* cap drop tt
+			* g dt_id=date if date==datecn
+			* gegen dt=max(dt_id), by(conacct)
+			* g T = date-dt
+			* gegen cT=mean(c), by(T)
+			* gegen tt=tag(T)
+				* twoway scatter cT T if tt==1 & T>=-24 & T<=24
+
+			sort conacct date
+			by conacct: g cn_ch_id = c[_n+2] - c[_n-2] if date==datecn
+
+			g cshr_id = c if datecn>580 & datecn<.
+			g cnshr_id = c if datecn<=580
+
+			keep mru c cn_id cshr_id cnshr_id date cn_ch_id
 			gegen cm = mean(c), by(mru date)
+			gegen cn = mean(cn_id), by(mru date)
+			gegen cshr = mean(cshr_id), by(mru date)
+			gegen cnshr = mean(cnshr_id), by(mru date)
+			gegen cnch = mean(cn_ch_id), by(mru date)
+			drop cn_id cshr_id cnshr_id
 			gegen mtag=tag(mru date)
 			keep if mtag==1
-			keep cm mru date
+			keep cm cn cshr cnshr cnch mru date 
 			ren cm c
 		
 		save "${temp}`1'_mru_c.dta", replace
@@ -189,6 +309,7 @@ foreach v in bacoor muntin tondo pasay val samp qc_04 qc_12 qc_09 so_cal cal_100
 	data_prep_mru_c `v'
 }
 	
+
 use  "${temp}tondo_mru_c.dta", clear
 	foreach v in bacoor muntin pasay val samp qc_04 qc_12 qc_09 so_cal cal_1000 para  {	
 	append using "${temp}`v'_mru_c.dta"
@@ -205,15 +326,50 @@ use "${temp}mru_c.dta", clear
 		keep if _merge==3
 		drop _merge
 
+keep if date>588
+
+* g tr1 = 0 if mrub==0
+* replace tr1=1 if mrub>.8 & mrub<=1
+
+* gegen cmshr = mean(cshr), by(date tr)
+* gegen cmnshr=mean(cnshr), by(date tr)
+* gegen tt1 = tag(date tr1)
+
+* sort tt1 date tr1
+* twoway line cmshr date if tt1==1 & tr1==0 & date<=620 || ///
+* 	line cmnshr date if tt1==1 & tr1==0 & date<=620 || ///
+* 	line cmshr date if tt1==1 & tr1==1 & date<=620 || ///
+* 	line cmnshr date if tt1==1 & tr1==1 & date<=620, 	legend(order(1 "0" 2 "1" 3 "2" 4 "3" ))
+
+* g cdiff=cmshr-cmnshr
+
+* twoway line cdiff date if tt1==1 & tr1==0 & date<=620 || ///
+* 	line cdiff date if tt1==1 & tr1==1 & date<=620 
+
 g tr = 0 if mrub==0
 replace tr=1 if mrub>0 & mrub<.25
 replace tr=2 if mrub>=.25 & mrub<.5
 replace tr=3 if mrub>=.5 & mrub<.75
 replace tr=4 if mrub>=.75 & mrub<=1
 
-keep if date>588
+
+
+* drop c
+* ren cn c
+
+drop c
+ren cnch c
+
+
 gegen cm = mean(c), by(date tr)
 gegen tt = tag(date tr)
+
+sort tt date tr
+by tt date: g cm_ch1 = cm-cm[_n-1]
+by tt date: g cm_ch2 = cm-cm[_n-2]
+by tt date: g cm_ch3 = cm-cm[_n-3]
+by tt date: g cm_ch4 = cm-cm[_n-4]
+
 
 * keep if date>=590
 
@@ -226,11 +382,15 @@ twoway  line cm date if tt==1 & tr==0 || ///
 	 	legend(order(1 "0" 2 "1" 3 "2" 4 "3" 5 "4"))
 
 
-sort tt date tr
-by tt date: g cm_ch1 = cm-cm[_n-1]
-by tt date: g cm_ch2 = cm-cm[_n-2]
-by tt date: g cm_ch3 = cm-cm[_n-3]
-by tt date: g cm_ch4 = cm-cm[_n-4]
+twoway  line cm date if tt==1 & tr==0 & date<=620 || ///
+	 	line cm date if tt==1 & tr==1 & date<=620 || ///
+	 	line cm date if tt==1 & tr==2 & date<=620 || ///
+	 	line cm date if tt==1 & tr==3 & date<=620 || ///
+	 	line cm date if tt==1 & tr==4 & date<=620, ///
+	 	legend(order(1 "0" 2 "1" 3 "2" 4 "3" 5 "4"))
+
+
+
 
 
 twoway line cm_ch1 date if tt==1 & tr==1 || ///
@@ -250,218 +410,91 @@ twoway	 line cm_ch1 date if tt==1 & tr==2 || ///
 	 	line cm_ch2 date if tt==1 & tr==4
 
 
-twoway  line cm date if tt==1 & tr==0 || ///
-	 	line cm date if tt==1 & tr==2, yaxis(2)
+twoway  line cm_ch1 date if tt==1 & tr==1 & date<620
+
+twoway  line cm_ch2 date if tt==1 & tr==2 & date<620
+
+twoway  line cm_ch3 date if tt==1 & tr==3 & date<620
+
+twoway  line cm_ch3 date if tt==1 & tr==4 & date<620
+
+
+twoway  line cm_ch4 date if tt==1 & tr==4 & date<650
+
+
+twoway  line cm date if tt==1 & tr==0 & date<630 || ///
+	 	line cm date if tt==1 & tr==4 & date<630
 
 
 	
 
-odbc load, exec("SELECT A.msa_type, A.street_nam, C.conacct FROM meter AS A JOIN conacctseri AS C ON A.OGC_FID = C.OGC_FID")  dsn("phil") clear  
-	drop if conacct==0
-	duplicates drop conacct, force
-	ren street_nam street
-	replace street=subinstr(street,".","",.)
-	replace street=subinstr(street,"RD","",.)
-	replace street=subinstr(street,"ST","",.)
-	replace street=subinstr(street,"ROAD","",.)
-	replace street=subinstr(street,"STREET","",.)
-	replace street=subinstr(street,"AVE","",.)
-	replace street=strtrim(street)
-	drop if street==""
-	gegen stg = group(street)
-	g mtype = 0 
-	replace mtype = 1 if regexm(msa,"CLUSTERED")==1
-	replace mtype = 2 if regexm(ms,"B")==1
-	keep conacct mtype stg
-save "${temp}mtype.dta", replace
 
 
+***** ARE THE EFFECTS REALLY FOR ADDITIONAL METERS?!
 
-
-
+	local 1 qc_04
+		use descriptives/output/`1'_billing_2008_2015.dta, clear
 		
-	use ${phil_folder}diff_in_diff_595/input/mcf_2015.dta, clear
-	
-		merge 1:1 conacct using "${temp}cf_inst.dta"
-		drop if _merge==2
-		g MERGE=_merge==3
-		drop _merge
+		keep if billclass=="0001"
+			ren CONTRACT_A conacct
+			keep conacct PREV PRES year month
+			destring PREV PRES  year month, replace force
+			g date=ym(year,month)
+			drop year month
 
-		ren inst INST_SUM
+			g c=PRES-PREV
+			replace c=. if c<0 | c>200
+			
+			keep conacct date c
 
+			keep if datec<580
 
-g o=1
-gegen inc=sum(o), by(INST_SUM)
+			merge m:1 conacct using "${temp}neighbor_datec.dta"
+			drop if _merge==2
+			drop _merge
 
+			ren conacct conacct_true
+			ren conacctn conacct
+				merge m:1 conacct using "${temp}cf_inst.dta"
+				drop if _merge==2
+				drop _merge
+			ren conacct conacctn
+			ren conacct_true conacct
 
-tab date_c  INST_SUM if inc>500 & date_c>620 & INST_SUM<10000
-
-
-	merge 1:1 conacct using "${temp}mtype.dta"
-		g mm=_merge==3
-		drop if _merge==2
-		drop _merge
-
-		keep if mm==1
-
-
-ren date_cf datecf
-	* g cp = date_c == date_cf
-	* tab  date_c cp
-
-
-	gegen msg = group(stg mru)
-
-	g dpre=date_c<=590
-	gegen dpres=sum(dpre), by(msg)
-	g dpost=date_c>630
-	gegen dposts=sum(dpost), by(msg)
-
-	keep if date_c>550 &  date_c<640 & dpres>5 & dpres<. & dposts>5 & dposts<.
-
-	g b = INST_SUM>=500 & INST_SUM<2800
+		keep if datecn>590
 
 
-hist INST_SUM if INST_SUM<10000, by(mtype) discrete
+		g icat= 1 if inst<=2800
+		replace icat=2 if inst>2800 & inst<5500
+		replace icat=3 if inst>=5500 & inst<.
 
- 	g       bps = 0 if date_c>=610 
- 	replace bps = 1 if b==1 & date_c>=610
+		g T = date-datecn
 
- 	gegen bps_sum=sum(bps), by(msg)
+		gegen cT = mean(c), by(T)
+		gegen tt = tag(T)
 
- 	gegen mrub=mean(bps), by(msg)
+		twoway scatter cT T if tt==1 & T>=-12 & T<=12
 
- 	g o =1 
- 	gegen tn = sum(o), by(msg date_c)
- 	duplicates drop msg date_c, force
 
- 	keep tn date_c mrub msg
- 	tsset msg date_c
- 	tsfill, full
 
- 	replace tn=0 if tn==.
- 	gegen mrub_id=max(mrub), by(msg)
- 	drop mrub
- 	ren mrub_id mrub
+			gegen cTi = mean(c), by(T icat)
+			gegen tti = tag(T icat)
+		twoway scatter cTi T if tti==1 & T>=-12 & T<=12, by(icat, rescale)
 
-g tnl=tn if tn<=50
+
+			gegen cTin = mean(c), by(T napc)
+			gegen ttin = tag(T napc)
+		twoway scatter cTin T if ttin==1 & T>=-12 & T<=12, by(napc, rescale)
+
+
+
+			* merge m:1 conacct using "${temp}conacct_rate.dta"
+			* keep if _merge==3
+			* drop _merge
 
 
 
 
-cap drop tr
-cap drop tnm
-cap drop tt
-cap drop isl
-cap drop mp
-
-g tr = 0 if mrub==0
-replace tr=1 if mrub>0 & mrub<.25
-replace tr=2 if mrub>=.25 & mrub<.5
-replace tr=3 if mrub>=.5 & mrub<.75
-replace tr=4 if mrub>=.75 & mrub<=1
-
-gegen tnm = mean(tnl), by(date_c tr)
-gegen tt = tag(date_c tr)
-sort date_c tr tt
-
-sort date_c tr tt
-twoway  line tnm date_c if tt==1 & tr==0 || ///
-	 	line tnm date_c if tt==1 & tr==1 || ///
-	 	line tnm date_c if tt==1 & tr==2 || ///
-	 	line tnm date_c if tt==1 & tr==3 || ///
-	 	line tnm date_c if tt==1 & tr==4, ///
-	 	legend(order(1 "0" 2 "1" 3 "2" 4 "3" 5 "4"))
-	 	
-
-
-cap drop tr
-cap drop tnm
-cap drop tt
-cap drop isl
-cap drop mp
-
-g tr = 0 if mrub==0
-replace tr=1 if mrub>0 & mrub<.5
-replace tr=2 if mrub>=.5 & mrub<=1
-
-gegen tnm = mean(tnl), by(date_c tr)
-gegen tt = tag(date_c tr)
-sort date_c tr tt
-
-sort date_c tr tt
-twoway  line tnm date_c if tt==1 & tr==0 || ///
-	 	line tnm date_c if tt==1 & tr==1 || ///
-	 	line tnm date_c if tt==1 & tr==2 , ///
-	 	legend(order( 1 "0" 2 "1" 3 "2" ))
-	 	
-
-
-
-
-cap drop tr
-cap drop tnm
-cap drop tt
-cap drop isl
-cap drop mp
-
-g tr = 0 if mrub==0
-replace tr=1 if mrub>0 & mrub<=1
-
-gegen tnm = mean(tnl), by(date_c tr)
-gegen tt = tag(date_c tr)
-sort date_c tr tt
-
-sort date_c tr tt
-twoway  line tnm date_c if tt==1 & tr==0 || ///
-	 	line tnm date_c if tt==1 & tr==1 , ///
-	 	legend(order( 1 "0" 2 "1" ))
-
-
-	 	
-
-
-
-sort tt date tr
-by tt date: g tnm_ch1 = tnm-tnm[_n-1]
-by tt date: g tnm_ch2 = tnm-tnm[_n-2]
-by tt date: g tnm_ch3 = tnm-tnm[_n-3]
-by tt date: g tnm_ch4 = tnm-tnm[_n-4]
-
-
-twoway  line tnm_ch1 date_c if tt==1 & tr==1 || ///
-	 	line tnm_ch2 date_c if tt==1 & tr==2 || ///
-	 	line tnm_ch3 date_c if tt==1 & tr==3 || ///
-	 	line tnm_ch4 date_c if tt==1 & tr==4 || ///
-	 	, legend(order(1 "0" 2 "1" 3 "2" 4 "3" ))
-
-
-twoway	 line tnm_ch1 date_c if tt==1 & tr==2 || ///
-	 	 line tnm_ch2 date_c if tt==1 & tr==3 || ///
-	 	 line tnm_ch3 date_c if tt==1 & tr==4 || ///
-	 	, legend(order(1 "0" 2 "1" 3 "2"  ))
-
-
-twoway 	 	line tnm date_c if tt==1 & tr==1 || ///
-	 	line tnm date_c if tt==1 & tr==2 || ///
-	 	line tnm date_c if tt==1 & tr==3 || ///
-	 	line tnm date_c if tt==1 & tr==4, ///
-	 	legend(order(1 "1" 2 "2" 3 "3" 4 "4" ))
-
-twoway  line tnm date_c if tt==1 & tr==0 & date_c>590 || ///
-	 	line tnm date_c if tt==1 & tr==4 & date_c>590 , xline(613)
-
-twoway  line tnm date_c if tt==1 & tr==1 & date_c>590 || ///
-	 	line tnm date_c if tt==1 & tr==4 & date_c>590 , xline(613)
-
-
-twoway  line tnm date_c if tt==1 & tr==3 & date_c>590 || ///
-	 	line tnm date_c if tt==1 & tr==4 & date_c>590 , xline(613) yaxis(2)
-
-
-
-
-		
 	use ${phil_folder}diff_in_diff_595/input/mcf_2015.dta, clear
 	
 	

@@ -344,7 +344,6 @@ use ${phil_folder}diff_in_diff_595/input/mcf_2015.dta, clear
 		g minst=_merge==3
 		drop _merge
 
-
 g icat= 1 if inst<=2800
 replace icat=2 if inst>2800 & inst<5500
 replace icat=3 if inst>=5500 & inst<.
@@ -414,14 +413,22 @@ replace icat=3 if inst>=5500 & inst<.
 g tnl=tn if tn<=50
 g tnladd=tnadd if tnadd<=50
 
+g dated=dofm(date_c)
+g year=year(dated)
+
 cap drop tr
 cap drop tnm
 cap drop tt
 cap drop isl
 cap drop mp
+cap drop tm
+cap drop tty
+cap drop tny 
+cap drop yt
+cap drop insty
 
-g tr = 0 if mrub==0
-replace tr=1 if mrub>.8 & mrub<=1
+g tr = 0 if mrub<.5
+replace tr=1 if mrub>=.5 & mrub<=1
 
 gegen tnm = mean(tnl), by(date_c tr)
 gegen tnmadd = mean(tnladd), by(date_c tr)
@@ -434,12 +441,57 @@ twoway  line tnm date_c if tt==1 & tr==0 || ///
 	 	legend(order( 1 "0" 2 "1" )) xline(595)
 
 
+gegen tny = sum(tnl), by(year msg)
+gegen yt = tag(year msg)
+
+gegen tm = mean(tny), by(year tr)
+
+gegen tty = tag(year tr)
+
+twoway  line tm year if tty==1 & tr==0 & year>2005 & year<2015 || ///
+	 	line tm year if tty==1 & tr==1 & year>2005 & year<2015, ///
+	 	legend(order( 1 "0" 2 "1" )) xline(595)
+
+
+
+gegen insty=mean(instm), by(year tr)
+
+twoway  line insty year if tty==1 & tr==0 & year>2005 & year<2015 || ///
+	 	line insty year if tty==1 & tr==1 & year>2005 & year<2015, ///
+	 	legend(order( 1 "0" 2 "1" ))
+
+
+
+
+
 gegen instm=mean(inst), by(date_c tr)
 
 twoway  line instm date_c if tt==1 & tr==0 || ///
 	 	line instm date_c if tt==1 & tr==1 , ///
 	 	legend(order( 1 "0" 2 "1" )) xline(595)
 
+
+
+g post = date_c>595
+g treat = mrub>.5 & mrub<=1
+g post_treat = post*treat
+
+
+reg tnl  post treat post_treat
+reg inst post treat post_treat
+
+
+
+reg tnl post treat post_treat if date_c<620
+reg tnl post treat post_treat if date_c<650
+
+areg tnl post post_treat if date<610, a(mru) cluster(mru) r
+
+
+sort date_c tt tr
+by date_c tt: g tnm_ch=tnm[_n]-tnm[_n-1]
+
+twoway  line tnm_ch date_c if tt==1 & tr==1, xline(595)
 
 
 sort date_c tr tt

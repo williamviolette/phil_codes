@@ -189,7 +189,7 @@ if _2_DIST == 1:
 	tablename =  'pipe_tertiary_points_5m_dist' 
 	targettable = '( SELECT e.GEOMETRY, B.OGC_FID FROM chain_pipes AS e JOIN pipes AS B ON e.fid = B.OGC_FID WHERE B.pipe_class=="TERTIARY" AND ST_LENGTH(B.GEOMETRY)>5 )'
 	targetid = 'OGC_FID'
-	nearby(tablename,targetid,targettable,targetcond,0,1)
+	# nearby(tablename,targetid,targettable,targetcond,0,1)
 
 
 	targetcond = ' JOIN pmp_link AS PL ON PL.OGC_FID = B.OGC_FID '
@@ -210,7 +210,7 @@ if _2_DIST == 1:
 	tablename = 'ln_dist'
 	targettable = '(SELECT e.GEOMETRY, B.conacct AS conacctl FROM meter AS e JOIN conacctseri AS B ON e.OGC_FID = B.OGC_FID JOIN (SELECT 1 AS j, conacct FROM LN) AS L ON L.conacct=B.conacct  WHERE B.conacct>0 AND L.j==1)'
 	targetid = 'conacctl'
-	nearby(tablename,targetid,targettable,targetcond,0,10)
+	# nearby(tablename,targetid,targettable,targetcond,0,10)
 
 
 
@@ -249,6 +249,46 @@ if _2_DIST == 1:
 			return
 
 	# int_meter_dma(db)
+
+
+	def int_pipes_barangay(db):
+
+			print 'start this'
+			name = 'pipes_barangay_int'
+
+		    # connect to DB
+			con = sql.connect(db)
+			con.enable_load_extension(True)
+			con.execute("SELECT load_extension('mod_spatialite');")
+			cur = con.cursor()
+
+			cur.execute('DROP TABLE IF EXISTS {};'.format(name))   
+
+			print 'running ... '
+
+			make_qry = '''
+		                   CREATE TABLE {} AS 
+	                		SELECT G.OGC_FID AS OGC_FID_bar,
+	                		G.brgy AS bar,
+	                		G.municipali AS mun,
+	                		A.OGC_FID AS OGC_FID_pipes,
+	                		A.pipe_class,
+	                		A.year_inst,
+	                		ST_LENGTH(ST_INTERSECTION(A.GEOMETRY,G.GEOMETRY)) AS int_length
+	                FROM barangay as G, pipes as A
+	                WHERE  A.ROWID IN (SELECT ROWID FROM SpatialIndex 
+	                WHERE f_table_name='pipes' AND search_frame=ST_MAKEVALID(G.GEOMETRY))
+	                AND st_intersects(A.GEOMETRY,ST_MAKEVALID(G.GEOMETRY))
+		                    ;
+				              '''.format(name)
+			cur.execute(make_qry)
+			
+			# cur.execute('''CREATE INDEX {}_cp_ind ON {} (bar);'''.format(name,name))
+			# cur.execute('''CREATE INDEX {}_c_ind ON {} (dma_id);'''.format(name,name))
+
+			return
+
+	int_pipes_barangay(db)
 
 
 
