@@ -1,5 +1,200 @@
 * pressure.do
 
+* use "${temp}mru_pop.dta", clear
+
+		* merge 1:1 conacct using "${temp}cf_inst.dta"
+		* 		drop if _merge==2
+		* 		drop _merge
+
+
+odbc load, exec("SELECT * FROM mru")  dsn("phil") clear  
+		keep mru area
+		duplicates drop mru, force
+		ren mru mru
+		destring mru, replace force
+		drop if mru==.
+save "${temp}mru_area.dta", replace
+
+
+ use "${temp}activem.dta", clear
+ keep if date==660
+ drop date
+ save "${temp}activem_660.dta", replace
+
+
+
+
+use "${temp}conacct_rate.dta", clear
+
+	merge m:1 mru using "${temp}mru_area.dta", keep(3) nogen
+
+	gegen mrudc=min(datec), by(mru)
+	g oid = datec>=mrudc & datec<=mrudc+12
+	gegen ods=sum(oid), by(mru mrudc)
+	drop if ods<=5
+
+replace ods = ods/area
+
+duplicates drop mru, force
+
+	merge 1:1 mru using  "${temp}activem_660.dta", keep(3) nogen
+	merge 1:1 mru using "${temp}mru_pop.dta", keep(1 3) nogen
+
+* THAT'S A LOT OF MEASUREMENT ERROR!
+
+g asum_pop = asum/pop
+replace asum_pop=. if asum_pop>2
+sum asum_pop, detail
+
+
+* preserve
+* 	keep mru mrudc
+* 		odbc exec("DROP TABLE IF EXISTS mrudc;"), dsn("phil")
+* 			odbc insert, table("mrudc") dsn("phil") create
+* restore		
+
+gegen mmdc=mean(ods), by(mrudc ba)
+gegen mmtt=tag(mrudc ba)
+
+
+g post = mrudc>600 
+replace post = mrudc>612 if ba!=1700
+
+g asum_area = asum/area
+replace asum_area=. if asum_area>.027
+gegen mma=mean(asum_area), by(mrudc ba)
+
+gegen mmat=mean(asum_area), by(mrudc)
+gegen mdct=tag(mrudc)
+
+
+areg asum_area post if ba==1700 & mrudc>=590 & mrudc<=610 , a(zone_code)
+
+areg asum_area post if ba==1700 & mrudc>=580 & mrudc<=620 , a(zone_code)
+
+
+areg asum post if ba==1700 & mrudc>=580 & mrudc<=620 , a(zone_code)
+
+
+areg ods post if ba==1700 & mrudc>=580 & mrudc<=620 , a(zone_code)
+
+
+
+reg area post if area<=500000 &  ba==1700 & mrudc>=590 & mrudc<=610 
+reg pop post if area<=500000 &  ba==1700 & mrudc>=590 & mrudc<=610 
+
+
+
+twoway scatter mmdc mrudc if mmtt==1 & ///
+(ba==300 | ba==1100 | ba==800 | ba==1200 | ba==1700) & datec>545 & datec<=640, ///
+ by(ba) xline(612)
+
+
+twoway scatter mmdc mrudc if mmtt==1 & datec>545 & datec<=640,  by(ba) 
+twoway scatter mmdc mrudc if mmtt==1 & ba==1700
+
+
+
+sum mmdc if ba==1700 & mrudc>=580 & mrudc<=600 
+sum mmdc if ba==1700 & mrudc>=600 & mrudc<=620
+
+
+
+twoway scatter mmat mrudc if mdct==1
+
+
+
+twoway scatter mma mrudc if mmtt==1 & datec>545 & datec<=640 & ba==1700 || ///
+	   scatter mmdc mrudc if mmtt==1 & datec>545 & datec<=640 & ba==1700
+
+twoway scatter mma mrudc if mmtt==1 & datec>545 & datec<=640 & ba==300 || ///
+	   scatter mmdc mrudc if mmtt==1 & datec>545 & datec<=640 & ba==300
+
+twoway scatter mma mrudc if mmtt==1 & datec>545 & datec<=640 & ba==1100 || ///
+	   scatter mmdc mrudc if mmtt==1 & datec>545 & datec<=640 & ba==1100
+
+twoway scatter mma mrudc if mmtt==1 & datec>545 & datec<=640 & ba==800 || ///
+	   scatter mmdc mrudc if mmtt==1 & datec>545 & datec<=640 & ba==800
+
+
+
+sum asum_area if ba==1700 & mrudc>=590 & mrudc<=600 
+sum asum_area  if ba==1700 & mrudc>=600 & mrudc<=610
+
+sum asum_pop if ba==1700 & mrudc>=590 & mrudc<=600 
+sum asum_pop  if ba==1700 & mrudc>=600 & mrudc<=610
+
+
+
+twoway scatter mma mrudc if mmtt==1 & datec>545 & datec<=640,  by(ba) 
+
+
+
+
+
+
+reg asum_area post if  mrudc>=550 & mrudc<=640 
+reg area post if area<=500000 &   mrudc>=550 & mrudc<=640
+reg pop post if area<=500000 &  mrudc>=550 & mrudc<=640 
+
+
+
+
+reg asum_area post mrudc
+reg asum_area post mrudc if ba==1700
+
+
+reg asum_area post if mrudc>=580 & mrudc<=620 
+reg asum_area post if ba==1700 & mrudc>=580 & mrudc<=620 
+
+
+
+
+
+
+
+use "${temp}conacct_rate.dta", clear
+	gegen datecm =min(datec), by(mru)
+	gegen mt=tag(mru)
+	keep if mt==1
+	keep datecm mru ba
+save "${temp}mru_datecm.dta", replace
+
+
+use "${temp}conacct_rate.dta", clear
+	gegen datecm =min(datec), by(mru)
+	drop if datecm<550
+	keep if datec<=datecm+6
+	g o =1
+	gegen totc = sum(o), by(mru)
+	gegen mt=tag(mru)
+	keep if mt==1
+
+	drop if totc<10
+
+	keep datecm mru totc ba
+
+	* merge 1:1 mru using "${temp}mru_pop.dta", keep(3) nogen
+
+	g dens=totc/pop
+
+	replace dens=. if dens>8
+
+	gegen dm = mean(dens), by(datecm )
+	gegen dt=tag(datecm)
+
+	twoway scatter dm datecm if dt==1 
+
+
+	lowess dens datecm if datecm>580 & datecm<610
+
+** QUICK TNPL! 
+
+
+
+
+
+
 
 
 
@@ -8,7 +203,7 @@ use "${temp}conacct_rate.dta", clear
 
 drop if ba==1700
 
-	keep datec mru
+	keep datec mru ba
 g o=1
 gegen new=sum(o), by(mru datec)
 
@@ -23,72 +218,210 @@ tsset mru datec
 tsfill, full
 replace new=0 if new==.
 
-keep mru datec new
+gegen ba1=max(ba), by(mru)
+drop ba
+ren ba1 ba
+
+keep mru datec new ba
 
 save "${temp}mru_new.dta", replace
 
 use "${temp}mru_new.dta", clear
-keep mru
+keep mru ba
 duplicates drop mru, force
 save "${temp}mru_set.dta", replace
 
 
 
+* use "${temp}activem.dta", clear
+* 	merge m:1 mru using "${temp}mru_set.dta", keep(3) nogen
+* 	merge m:1 mru using "${temp}mru_cf.dta", keep(3) nogen
+* gegen am=mean(asum), by(date mrub)
+* gegen dt=tag(date mrub)
+* twoway scatter am date if dt==1 & mrub==0 || ///
+* 	   scatter am date if dt==1 & mrub==1
+* g post = date>595
+* g treat=mrub==1
+* g post_treat=post*treat
+* reg asum post treat post_treat
+
 
 use "${temp}activem.dta", clear
 
+	merge 1:1 mru date using "${temp}dcm.dta", keep(1 3) nogen
+	merge 1:1 mru date using "${temp}billm.dta", keep(1 3) nogen
 	merge m:1 mru using "${temp}mru_set.dta", keep(3) nogen
-	merge m:1 mru using "${temp}pipe_year_old.dta", keep(1 3) nogen
+	merge m:1 mru using "${temp}pipe_year_nold.dta", keep(1 3) nogen
 
 g dated=dofm(date)
 g year=year(dated)
 
 g pT = year-year_inst
-replace pT=1000 if pT>6 | pT<-6
+replace pT=1000 if pT>10 | pT<-3
+gegen min_pT=min(pT), by(mru)
 replace pT=pT+10
+replace pT=1 if pT==1010
 
-gegen ay=mean(asum), by(mru year)
-gegen cy=mean(csum), by(mru year)
-gegen my=mean(cmean), by(mru year)
+foreach var of varlist cpanel asum aressum csum cmean cread clow csumlow bm dct {
+	gegen `var'_y=mean(`var'), by(mru year)
+}
+gegen yt   = tag(mru year)
+
+xi: areg asum_y i.pT i.year*i.ba if yt==1, a(mru) cluster(mru) r 
+	coefplot, keep(*pT*) vertical
+
+xi: areg csum_y i.pT i.year*i.ba if yt==1, a(mru) cluster(mru) r 
+	coefplot, keep(*pT*) vertical
+
+xi: areg clow_y i.pT i.year*i.ba if yt==1, a(mru) cluster(mru) r 
+	coefplot, keep(*pT*) vertical
+
+
+xi: areg cmean_y i.pT i.year*i.ba if yt==1, a(mru) cluster(mru) r 
+	coefplot, keep(*pT*) vertical
+
+xi: areg bm_y i.pT i.year*i.mun if yt==1, a(mru) cluster(mru) r 
+	coefplot, keep(*pT*) vertical
+
+xi: areg dct_y i.pT i.year*i.mun if yt==1, a(mru) cluster(mru) r 
+	coefplot, keep(*pT*) vertical
+
+
+
+
+
+
+use "${temp}paws_aib.dta", clear
+
+replace year=2008 if year<2008
+
+	merge m:1 conacct using "${temp}conacct_rate.dta", keep(1 3) nogen 
+		drop ba zone_code dc-bus
+	merge m:1 mru using "${temp}mru_set.dta", keep(3) nogen
+	merge m:1 mru using "${temp}pipe_year_nold.dta", keep(1 3) nogen
+
+g post = 0 if  year<year_inst  & year_inst!=.
+replace post = 1 if  year>=year_inst & year_inst!=.
+
+replace age = 99 if age>99
+replace me =. if me>5000
+replace wrs=. if wrs>500
+g well = wrs_type==2
+replace well=. if wave==5
+g rs = wrs_type==1
+
+foreach var of varlist pf_cont_day_pr pf_cont_night_pr pf_day_pr_night_pr pf_flow_compl pf_flow_qual pf_qual_flow {
+	replace `var'=. if `var'==0 
+	replace `var'=0 if `var'==2
+}
+
+g pT = year-year_inst
+replace pT=1000 if pT>6 | pT<-3
+replace pT=pT+10
+replace pT=1 if pT==1010
+
 gegen yt=tag(mru year)
+gegen yesy=mean(yes_flow), by(mru year)
+
+foreach var of varlist yes_flow no_flow flow_hrs color smell taste stuff B drum gallon me hhsize hhemp S hho {
+	gegen `var'_y=mean(`var'), by(mru year)
+}
+
+xi: areg yes_flow_y i.pT i.year*i.ba, a(mru) cluster(mru) r
+	coefplot, vertical keep(*pT*)
+xi: areg no_flow_y i.pT i.year*i.ba, a(mru) cluster(mru) r
+	coefplot, vertical keep(*pT*)
+xi: areg flow_hrs_y i.pT i.year*i.ba, a(mru) cluster(mru) r
+	coefplot, vertical keep(*pT*)
+xi: areg B_y i.pT i.year*i.ba , a(mru) cluster(mru) r
+	coefplot, vertical keep(*pT*)
+xi: areg S_y i.pT i.year*i.ba , a(mru) cluster(mru) r
+	coefplot, vertical keep(*pT*)
+
+xi: areg hho_y i.pT i.year*i.ba , a(mru) cluster(mru) r
+	coefplot, vertical keep(*pT*)
+
+* xi: areg yes_flow i.pT i.year*i.ba, a(conacct) r *** ROBUST TO INDIVIDUAL FIXED EFFECTS
+* 	coefplot, vertical keep(*pT*)
+* xi: areg no_flow i.pT i.year*i.ba, a(conacct) r
+* 	coefplot, vertical keep(*pT*)
 
 
-areg cy i.pT i.year if yt==1 , a(mru) cluster(mru) r 
-	coefplot, keep(*pT*) vertical
 
-areg ay i.pT i.year if yt==1, a(mru) cluster(mru) r 
-	coefplot, keep(*pT*) vertical
+*** NOT ENOUGH PRE/POST PERIOD FOR BILL AND SUPP
 
-areg my i.pT i.year if yt==1, a(mru) cluster(mru) r 
-	coefplot, keep(*pT*) vertical
-
-	areg nrwm i.pT i.year if yt==1 , a(dg) cluster(dg) r 
-	coefplot, keep(*pT*) vertical
+	odbc load, exec("SELECT * FROM pipes_dma_int")  dsn("phil") clear  
+		keep if pipe_class=="TERTIARY"
+		destring year_inst, replace force
+		ren int_length length
+		egen ly=sum(length), by(dma_id year_inst)
+		egen max_l=max(ly), by(dma_id)
+		egen total_mru=sum(length), by(dma_id)
+		keep if ly==max_l
+		g shr=max_l/total_mru
+	*	keep if year_inst>=2008
+		keep length year_inst dma_id shr
+		duplicates drop dma_id, force
+		g str25 dma = dma_id
+		drop dma_id
+	save "${temp}pipe_year_old_dma.dta", replace
 	
 
 
+use "${temp}nrw.dta", clear
 
-use "${temp}mru_dma_link.dta", clear
+merge m:1 dma using "${temp}pipe_year_old_dma.dta", keep(1 3) nogen
 
-	merge m:1 mru using "${temp}mru_jump.dta"
-	gegen mjump=max(jump), by(dma)
-
-	merge m:1 mru using "${temp}pipe_year_old.dta", keep(1 3) nogen
-	gegen my=max(year_inst), by(dma)
-	keep my mjump dma
-	duplicates drop dma, force
-
-	merge 1:m dma using "${temp}nrw.dta", keep(1 3) nogen
+g ba_id=substr(dma,4,3)
+replace ba_id = lower(ba_id)
+gegen ba=group(ba_id)
 
 		g dated=dofm(date)
 		g year=year(dated)
 		drop dated
 
-	g pT = year-my
-	replace pT=1000 if pT>6 | pT<-6
+	g pT = year-year_inst
+	replace pT=1000 if pT>6 | pT<-4
 	replace pT=pT+10
+	replace pT=1 if pT==1010
+
+	gegen mpT=min(pT), by(dma)
+	* replace pT=1010 if mpT>=10	
+	* replace pT=1010 if shr<.7
+
+	gegen dg = group(dma)
 
 	g nrw = 1 - (bill/supp)
+	replace nrw=0 if nrw<0
+
+	gegen yt=tag(dg year)
+
+gegen nrwm=mean(nrw), by(dg year)
+gegen billm=mean(bill), by(dg year)
+gegen suppm=mean(supp), by(dg year)
+
+
+g ln_billm=log(billm)
+g ln_suppm=log(suppm)
+
+xi: areg nrwm i.pT i.year*i.ba if yt==1 , a(dg) cluster(dg) r 
+	coefplot, keep(*pT*) vertical
+
+xi: areg billm i.pT i.year*i.ba if yt==1 , a(dg) cluster(dg) r 
+	coefplot, keep(*pT*) vertical
+
+xi: areg suppm i.pT i.year*i.ba if yt==1 , a(dg) cluster(dg) r 
+	coefplot, keep(*pT*) vertical
+
+xi: areg ln_billm i.pT i.year*i.ba if yt==1 , a(dg) cluster(dg) r 
+	coefplot, keep(*pT*) vertical
+
+xi: areg ln_suppm i.pT i.year*i.ba if yt==1 , a(dg) cluster(dg) r 
+	coefplot, keep(*pT*) vertical
+
+
+
+
 
 
 
@@ -99,126 +432,54 @@ use "${temp}mru_dma_link.dta", clear
 
 use "${temp}conacct_rate.dta", clear
 
-drop if ba==1700
+	merge m:1 mru using "${temp}mru_set.dta", keep(3) nogen
+	merge m:1 mru using "${temp}pipe_year_nold.dta", keep(1 3) nogen
+	merge m:1 conacct using "${temp}ai_conacct.dta", keep(1 3) nogen
 
-g DC=dc!=.
-* keep if ba==500 | ba==600 | ba==700
-bys mru: g MN=_N
-bys mru: g mn=_n
-* sum MN if mn==1 & MN<3500
+	keep datec mru nat_ill ba
+	drop if mru==.
 
-merge m:1 conacct using "${temp}cf_inst.dta", keep(1 3) nogen
-merge m:1 conacct using "${temp}b_mc.dta", keep(1 3) nogen
-	
-	keep datec mru mc MN inst DC
-g o=1
-gegen new=sum(o), by(mru datec)
-gegen mcd = mean(mc), by(mru datec)
-gegen minst=mean(inst), by(mru datec)
-gegen mdc =mean(DC), by(mru datec)
-g pre_id= 1 if datec<550
-gegen pres=sum(pre_id), by(mru)
+g ill_id=nat_ill!=.
+g ill_tcd_id=nat_ill==10015 | nat_ill==10006
+gegen ill=sum(ill_id), by(mru datec)
+gegen ill_tcd=sum(ill_tcd_id), by(mru datec)
 
-keep if pres>10
-keep if datec>550
-drop o
 duplicates drop mru datec, force
 tsset mru datec
 tsfill, full
-replace new=0 if new==.
-* replace new=. if new>50
+replace ill=0 if ill==.
+replace ill_tcd=0 if ill_tcd==.
 
+gegen ba1=max(ba), by(mru)
+drop ba
+ren ba1 ba
 merge m:1 mru using "${temp}pipe_year_old.dta", keep(1 3) nogen
-
 g dated=dofm(date)
 g year=year(dated)
-
 g pT = year-year_inst
-replace pT=1000 if pT>6 | pT<-6
+replace pT=1000 if pT>4 | pT<-6
 replace pT=pT+10
 
-gegen mdcm=mean(mdc), by(mru year)
-gegen my=mean(mcd), by(mru year)
-gegen cy=sum(new), by(mru year)
+g n_id = ill-ill_tcd
+gegen mi=mean(ill), by(mru year)
+gegen ni=mean(n_id), by(mru year)
+gegen mit=mean(ill_tcd), by(mru year)
 gegen yt=tag(mru year)
 
 g post = year>=year_inst & year<.
 
-
-areg cy i.pT i.year if yt==1 , a(mru) cluster(mru) r 
+xi: areg ni i.pT i.year*i.ba if yt==1 , a(mru) cluster(mru) r 
 	coefplot, keep(*pT*) vertical
-
-
-areg mdcm i.pT i.year if yt==1 , a(mru) cluster(mru) r 
+xi: areg mit i.pT i.year*i.ba if yt==1 , a(mru) cluster(mru) r 
 	coefplot, keep(*pT*) vertical
-
-
-areg cy post i.year if yt==1 , a(mru) cluster(mru) r 
-
-areg my i.pT i.year if yt==1 , a(mru) cluster(mru) r 
-	coefplot, keep(*pT*) vertical
-
-
-gegen min_post=min(post), by(mru)
-
-areg inst i.pT i.year if yt==1 , a(mru) cluster(mru) r 
-	coefplot, keep(*pT*) vertical
-
-
-
-bys mru: g mn=_n
-sum MN if min_post==0  & mn==1
-sum MN if min_post==1  & mn==1
-
-
-* areg cy i.pT i.year if yt==1 & year_inst>2010, a(mru) cluster(mru) r 
+* xi: areg ni i.pT i.year*i.ba if yt==1 & year<2010, a(mru) cluster(mru) r 
+* 	coefplot, keep(*pT*) vertical
+* xi: areg mit i.pT i.year*i.ba if yt==1 & year<2010, a(mru) cluster(mru) r 
 * 	coefplot, keep(*pT*) vertical
 
 
 
-
-
-
-
-use "${temp}conacct_rate.dta", clear
-
-merge 1:m conacct using "${temp}paws_aib.dta", keep(3) nogen
-
-duplicates drop conacct, force
-keep datec mru
-
-g o=1
-gegen new=sum(o), by(mru datec)
-keep if datec>550
-drop o
-duplicates drop mru datec, force
-tsset mru datec
-tsfill, full
-replace new=0 if new==.
-replace new=. if new>10
-
-	merge m:1 mru using "${temp}pipe_year_old.dta", keep(1 3) nogen
-	merge m:1 mru using "${temp}mru_set.dta", keep(3) nogen
-
-g dated=dofm(date)
-g year=year(dated)
-
-g pT = year-year_inst
-replace pT=1000 if pT>6 | pT<-6
-replace pT=pT+10
-
-gegen cy=mean(new), by(mru year)
-gegen yt=tag(mru year)
-
-areg cy i.pT i.year if yt==1 , a(mru) cluster(mru) r 
-	coefplot, keep(*pT*) vertical
-
-
-
-
-
-
-
+***  WHO CONNECTS!?
 use "${temp}conacct_rate.dta", clear
 	merge 1:m conacct using "${temp}paws_aib.dta", keep(3) nogen
 	duplicates drop conacct, force
@@ -240,15 +501,15 @@ use "${temp}conacct_rate.dta", clear
 	g pre = pT>=7 & pT<=9
 	g pip = pT==10
 	g pos = pT>=11 & pT<=13
-
 	replace job = 0 if job==.
-
 	tab sclass, g(s_)
 
+	reg pip hhsize hhemp age sub single  i.job if pT>=4 & pT<=10, cluster(conacct) r 
+
+	reg pip hhsize hhemp age sub single  i.job s_* if pT>=7 & pT<=10, cluster(conacct) r 
+
 	reg pip hhsize hhemp age sub single  i.job s_* if pT>=7 & pT<=13, cluster(conacct) r 
-
 	reg pip hhsize hhemp age sub single  i.job s_* if pT!=1010, cluster(conacct) r 
-
 
 
 
@@ -256,17 +517,13 @@ use "${temp}paws_aib.dta", clear
 
 replace year=2008 if year<2008
 
-	merge m:1 conacct using "${temp}dist_tertiary_points_conacct.dta", keep(1 3) nogen
-		ren year_inst p3yr
 	merge m:1 conacct using "${temp}conacct_rate.dta", keep(1 3) nogen 
 		drop ba zone_code dc-bus
-	merge m:1 mru using "${temp}pipe_year_old.dta", keep(1 3) nogen
+	merge m:1 mru using "${temp}mru_set.dta", keep(3) nogen
+	merge m:1 mru using "${temp}pipe_year_nold.dta", keep(1 3) nogen
 
-g post =  0 if year<p3yr & p3yr!=.
-replace post = 1 if year>=p3yr & p3yr!=.
-replace post = 0 if post==. & year<year_inst  & year_inst!=.
-replace post = 1 if post==. & year>=year_inst & year_inst!=.
-
+g post = 0 if  year<year_inst  & year_inst!=.
+replace post = 1 if  year>=year_inst & year_inst!=.
 
 replace age = 99 if age>99
 replace me =. if me>5000
@@ -279,6 +536,55 @@ foreach var of varlist pf_cont_day_pr pf_cont_night_pr pf_day_pr_night_pr pf_flo
 	replace `var'=. if `var'==0 
 	replace `var'=0 if `var'==2
 }
+
+g pT = year-year_inst
+replace pT=1000 if pT>10 | pT<-4
+replace pT=pT+10
+replace pT=1 if pT==1010
+
+gegen yt=tag(mru year)
+gegen yesy=mean(yes_flow), by(mru year)
+
+foreach var of varlist yes_flow no_flow flow_hrs color smell taste stuff B drum gallon me hhsize hhemp shr {
+	gegen `var'_y=mean(`var'), by(mru year)
+}
+
+
+* xi: areg yes_flow i.pT i.year*i.ba, a(conacct) r
+* 	coefplot, vertical keep(*pT*)
+* xi: areg no_flow i.pT i.year*i.ba, a(conacct) r
+* 	coefplot, vertical keep(*pT*)
+
+
+
+xi: areg yes_flow_y i.pT i.year*i.ba, a(mru) cluster(mru) r
+	coefplot, vertical keep(*pT*)
+
+xi: areg no_flow_y i.pT i.year*i.ba, a(mru) cluster(mru) r
+	coefplot, vertical keep(*pT*)
+
+xi: areg flow_hrs_y i.pT i.year*i.ba, a(mru) cluster(mru) r
+	coefplot, vertical keep(*pT*)
+
+xi: areg B_y i.pT i.year*i.ba , a(mru) cluster(mru) r
+	coefplot, vertical keep(*pT*)
+
+xi: areg drum_y i.pT i.year*i.ba , a(mru) cluster(mru) r
+	coefplot, vertical keep(*pT*)
+
+
+xi: areg shr_y i.pT i.year*i.ba , a(mru) cluster(mru) r
+	coefplot, vertical keep(*pT*)
+
+
+
+* xi: areg hhsize_y i.pT i.year*i.ba , a(mru) cluster(mru) r
+* 	coefplot, vertical keep(*pT*)
+* xi: areg hhemp_y i.pT i.year*i.ba , a(mru) cluster(mru) r
+* 	coefplot, vertical keep(*pT*)
+
+
+
 
 gegen BM=max(B), by(conacct)
 gegen PM=min(post), by(barangay_id)

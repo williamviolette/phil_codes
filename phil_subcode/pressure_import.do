@@ -883,6 +883,25 @@ save "${temp}bar_map_list.dta", replace
 	
 
 
+	odbc load, exec("SELECT * FROM pipes_mru_int")  dsn("phil") clear  
+		keep if pipe_class=="TERTIARY"
+		destring year_inst mru, replace force
+		ren int_length length
+		egen ly=sum(length), by(mru year_inst)
+		egen max_l=max(ly), by(mru)
+		egen total_mru=sum(length), by(mru)
+		keep if ly==max_l
+		g shr=max_l/total_mru
+	*	keep if year_inst>=2008
+		keep length year_inst mru shr
+		duplicates drop mru, force
+		ren mru mru
+	save "${temp}pipe_year_nold.dta", replace
+
+
+
+
+
 	use  /Users/williamviolette/Documents/Philippines/non_payment_exploration/temp/pipe_mru, clear
 		keep if pipe_class=="TERTIARY"
 		g branch=substr(mru_no,1,4)
@@ -1156,16 +1175,27 @@ save "${temp}pipe_test.dta", replace
 
 *** ACTIVE ACCOUNTS BY MRU! 
 		forvalues r = 1/12 {
-			local bill_query " SELECT * FROM billing_`r' WHERE c>0 AND c<500"
+			local bill_query " SELECT * FROM billing_`r' WHERE c>=0 AND c<500"
 		odbc load, exec("`bill_query'")  dsn("phil") clear  
 		merge m:1 conacct using "${temp}conacct_rate.dta", keep(1 3) nogen
 			g o=1
+			g clow_id = c if c<100
+			g cread_id = c if read==1
+			g ares_id = o if class==1 | class==2
+
+			gegen c_count = sum(o), by(conacct)
+			g cpanel_id = c if (class==1 | class==2) & c_count>60
+			gegen cpanel=mean(cpanel_id), by(mru date)
 			gegen asum=sum(o), by(mru date)
+			gegen aressum=sum(ares_id), by(mru date)
 			gegen csum=sum(c), by(mru date)
 			gegen cmean=mean(c), by(mru date)
+			gegen clow=mean(clow_id), by(mru date)
+			gegen csumlow=sum(clow_id), by(mru date)
+			gegen cread=mean(cread_id), by(mru date)
 			gegen mt=tag(mru date)
 			keep if mt==1
-		keep date mru asum csum cmean
+		keep date mru asum aressum csum csumlow cmean clow cread cpanel
 		save "${temp}activem_`r'.dta", replace
 		}
 

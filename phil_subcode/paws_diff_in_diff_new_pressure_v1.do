@@ -2,6 +2,9 @@
 
 
 
+
+
+
 use "/Users/williamviolette/Documents/Philippines/data/cf.dta", clear
 
 		ren v5 conacct
@@ -106,6 +109,16 @@ replace icat=3 if inst>=5500 & inst<.
  	* g bps = napc==1
 
  	gegen mrub=mean(bps), by(msg)
+
+
+	preserve
+		drop mru
+		ren msg mru
+		destring mru, replace force
+		keep mru mrub 
+		duplicates drop mru, force
+		save "${temp}mru_cf.dta", replace
+	restore
 
  	g o =1 
  	gegen tn = sum(o), by(msg date_c)

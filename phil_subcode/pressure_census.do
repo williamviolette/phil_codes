@@ -133,6 +133,11 @@ save "${temp}brgy_link.dta", replace
 
 
 
+*** total population of HHs in ( OR TOTAL MEMBERS?! )
+
+
+
+
 
 
 global j = 1
@@ -193,8 +198,161 @@ save "${temp}c10.dta", replace
 
 
 
+		use "${data}paws/clean/full_sample_b_1.dta", clear
+
+		keep if wave>3
+			merge m:1 conacct using "${temp}conacct_rate.dta", keep(1 3) nogen
+				destring shr_hh_extra, replace force
+			g SHH_id = shr_hh_extra
+			replace SHH_id=. if SHH>10
+			replace SHH_id = 0 if SHH_id==.
+			replace SHH_id = SHH_id+1
+			g o =1
+			gegen os=sum(o), by(mru)
+			g apart_id = regexm(house,"Apartment")==1
+			g single_id=regexm(house,"Single house")==1
+			gegen apart=mean(apart_id), by(mru)
+			gegen single=mean(single_id), by(mru)
+			keep if os>10
+				gegen SHH = mean(SHH), by(mru)
+				keep SHH mru apart single
+				duplicates drop mru, force
+				drop if mru==.
+		save "${temp}shh_mru.dta", replace
+
+
+
+
+**** POPULATION ANALYSIS HERE ****
+
+
+	odbc load, exec("SELECT B.*, C.prikey FROM barangay_mru_int AS B JOIN barangay AS C ON B.OGC_FID_bar = C.OGC_FID ")  dsn("phil") clear  
+		destring mru prikey, replace force
+		keep mru prikey  *_area
+	save "${temp}bar_mru_int.dta", replace
+
+
+use "${temp}activem.dta", clear
+
+g dated=dofm(date)
+g year=year(dated)
+g month=month(dated)
+keep if (year==2010 | year==2015) & month==1
+
+keep mru year aressum
+reshape wide aressum, i(mru) j(year)
+keep if aressum2010!=. & aressum2015!=.
+
+merge m:1 mru using "${temp}shh_mru.dta", keep(1 3) nogen
+
+merge 1:m mru using "${temp}bar_mru_int.dta", keep(1 3) nogen
+
+g mru_shr = int_area/mru_area
+
+g as2010_id = aressum2010*mru_shr
+g as2015_id = aressum2015*mru_shr
+
+gegen as2010 = sum(as2010_id), by(prikey)
+gegen as2015 = sum(as2015_id), by(prikey)
+
+keep prikey as2010 as2015 SHH single apart
+duplicates drop prikey, force
+save "${temp}mrut_prikey.dta", replace
+
+
+
 use "${temp}c15.dta", clear
-	
+	egen tot15 = rowtotal(wd15_*)
+	keep bar tot15
+save "${temp}c15_tot.dta", replace
+
+use "${temp}c10.dta", clear
+	egen tot10 = rowtotal(wd15_*)
+	keep bar tot10
+save "${temp}c10_tot.dta", replace
+
+
+*** MAKE POP PER MRU ! ***
+
+
+use "${temp}c15_tot.dta", clear
+	ren tot15 pop
+
+		ren bar id
+			merge m:1 id using "${temp}brgy_link.dta", keep(3) nogen
+		ren id bar
+		ren prikeyc254 prikey
+			merge 1:m prikey using "${temp}bar_mru_int.dta", keep(3) nogen
+
+		drop if int_area==0
+		g imp = int_area/bar_area
+
+		gegen int_per = sum(int_area), by(mru)
+		g int_shr = int_per/mru_area
+		replace int_shr=1 if int_shr>1 & int_shr<.
+
+	g pop_imp=pop*imp
+	gegen pops = sum(pop_imp), by(mru)
+	replace pops=pops/int_shr
+
+	keep mru pops
+	ren pops pop
+	duplicates drop mru, force
+save "${temp}mru_pop.dta", replace
+
+
+
+use "${temp}c15_tot.dta", clear
+	g bst=string(bar,"%10.0g")
+	g mun=substr(bst,1,4)
+	destring mun, replace force
+	keep if mun==7404
+	gegen ts=sum(tot15)
+
+use "${temp}c10_tot.dta", clear
+	g bst=string(bar,"%10.0g")
+	g mun=substr(bst,1,4)
+	destring mun, replace force
+	keep if mun==7404
+	gegen ts=sum(tot10)
+
+
+use "${temp}c15_tot.dta", clear
+
+	merge 1:1 bar using  "${temp}c10_tot.dta", keep(1 3) nogen
+	ren bar id
+		merge m:1 id using "${temp}brgy_link.dta", keep(3) nogen
+	ren id bar
+
+	ren prikeyc254 prikey
+	merge m:1 prikey using "${temp}mrut_prikey.dta", keep(3) nogen
+
+	replace tot10 = tot10*5
+
+	replace as2010 = . if as2010>6000
+	replace as2015 = . if as2015>8000
+	replace tot10 = . if tot10>4000
+	replace tot15 = . if tot15>8000
+
+	keep if tot10!=. & tot15!=.
+
+	g asp15 = as2015*SHH
+	g asp10 = as2010*SHH
+
+	sum asp10
+	sum tot10 if asp10!=.
+
+	sum asp15
+	sum tot15 if asp15!=.
+
+	sum asp15 if            single>.5 & single<.
+	sum tot15 if asp15!=. & single>.5 & single<.
+
+
+**** PIPES ANALYSIS HERE ****
+
+
+use "${temp}c15.dta", clear
 	g year=2015
 	append using "${temp}c10.dta"
 	replace year=2010 if year==.	
@@ -204,7 +362,6 @@ use "${temp}c15.dta", clear
 	ren id bar
 	ren prikeyc254 prikey
 	merge m:1 prikey using "${temp}brgy_pipe_key_date.dta", keep(1 3) nogen
-
 save "${temp}c_analysis.dta", replace
 
 

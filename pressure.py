@@ -288,8 +288,125 @@ if _2_DIST == 1:
 
 			return
 
-	int_pipes_barangay(db)
+	# int_pipes_barangay(db)
 
+
+	def int_pipes_dma(db):
+
+			print 'start this'
+			name = 'pipes_dma_int'
+
+		    # connect to DB
+			con = sql.connect(db)
+			con.enable_load_extension(True)
+			con.execute("SELECT load_extension('mod_spatialite');")
+			cur = con.cursor()
+
+			cur.execute('DROP TABLE IF EXISTS {};'.format(name))   
+
+			print 'running ... '
+
+			make_qry = '''
+		                   CREATE TABLE {} AS 
+	                		SELECT G.OGC_FID AS OGC_FID_dma,
+	                		G.dma_id AS dma_id,
+	                		A.OGC_FID AS OGC_FID_pipes,
+	                		A.pipe_class,
+	                		A.year_inst,
+	                		ST_LENGTH(ST_INTERSECTION(A.GEOMETRY,G.GEOMETRY)) AS int_length
+	                FROM dma as G, pipes as A
+	                WHERE  A.ROWID IN (SELECT ROWID FROM SpatialIndex 
+	                WHERE f_table_name='pipes' AND search_frame=ST_MAKEVALID(G.GEOMETRY))
+	                AND st_intersects(A.GEOMETRY,ST_MAKEVALID(G.GEOMETRY))
+		                    ;
+				              '''.format(name)
+			cur.execute(make_qry)
+			
+			# cur.execute('''CREATE INDEX {}_cp_ind ON {} (bar);'''.format(name,name))
+			# cur.execute('''CREATE INDEX {}_c_ind ON {} (dma_id);'''.format(name,name))
+
+			return
+
+	# int_pipes_dma(db)
+
+
+	def int_pipes_mru(db):
+
+			print 'start this'
+			name = 'pipes_mru_int'
+
+		    # connect to DB
+			con = sql.connect(db)
+			con.enable_load_extension(True)
+			con.execute("SELECT load_extension('mod_spatialite');")
+			cur = con.cursor()
+
+			cur.execute('DROP TABLE IF EXISTS {};'.format(name))   
+
+			print 'running ... '
+
+			make_qry = '''
+		                   CREATE TABLE {} AS 
+	                		SELECT G.OGC_FID AS OGC_FID_mru,
+	                		G.mru_no AS mru,
+	                		A.OGC_FID AS OGC_FID_pipes,
+	                		A.pipe_class,
+	                		A.year_inst,
+	                		ST_LENGTH(ST_INTERSECTION(A.GEOMETRY,G.GEOMETRY)) AS int_length
+	                FROM mru as G, pipes as A
+	                WHERE  A.ROWID IN (SELECT ROWID FROM SpatialIndex 
+	                WHERE f_table_name='pipes' AND search_frame=ST_MAKEVALID(G.GEOMETRY))
+	                AND st_intersects(A.GEOMETRY,ST_MAKEVALID(G.GEOMETRY))
+		                    ;
+				              '''.format(name)
+			cur.execute(make_qry)
+			
+			# cur.execute('''CREATE INDEX {}_cp_ind ON {} (bar);'''.format(name,name))
+			# cur.execute('''CREATE INDEX {}_c_ind ON {} (dma_id);'''.format(name,name))
+
+			return
+	
+	# int_pipes_mru(db)
+
+	def int_barangay_mru(db):
+
+			print 'start this'
+			name = 'barangay_mru_int'
+
+		    # connect to DB
+			con = sql.connect(db)
+			con.enable_load_extension(True)
+			con.execute("SELECT load_extension('mod_spatialite');")
+			cur = con.cursor()
+
+			cur.execute('DROP TABLE IF EXISTS {};'.format(name))   
+
+			print 'running ... '
+
+			make_qry = '''
+		                   CREATE TABLE {} AS 
+	                		SELECT G.OGC_FID AS OGC_FID_bar,
+	                		G.brgy AS bar,
+	                		G.municipali AS mun,
+	                		A.OGC_FID AS OGC_FID_mru,
+	                		A.mru_no AS mru,
+	                		ST_AREA(G.GEOMETRY) AS bar_area,
+	                		ST_AREA(A.GEOMETRY) AS mru_area,
+	                		ST_AREA(ST_INTERSECTION(A.GEOMETRY,G.GEOMETRY)) AS int_area
+	                FROM barangay as G, mru as A
+	                WHERE  A.ROWID IN (SELECT ROWID FROM SpatialIndex 
+	                WHERE f_table_name='mru' AND search_frame=ST_MAKEVALID(G.GEOMETRY))
+	                AND st_intersects(A.GEOMETRY,ST_MAKEVALID(G.GEOMETRY))
+		                    ;
+				              '''.format(name)
+			cur.execute(make_qry)
+			
+			# cur.execute('''CREATE INDEX {}_cp_ind ON {} (bar);'''.format(name,name))
+			# cur.execute('''CREATE INDEX {}_c_ind ON {} (dma_id);'''.format(name,name))
+
+			return
+	
+	int_barangay_mru(db)
 
 
 	# def int_mru_dma(db):

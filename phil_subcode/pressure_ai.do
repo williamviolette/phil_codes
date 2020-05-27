@@ -111,7 +111,7 @@ import delimited using ais/input/ais_data/AITF_CRMS_DATA_EDIT.csv, delimiter(","
 		destring conacct_c, replace force
 		duplicates drop ref_no, force
 		destring branch, replace force
-		keep conacct_c date ref_no branch nt_illegal
+		keep conacct_c date ref_no branch nt_illegal finding
 
 		replace nt_illegal=lower(nt_illegal)
 		g nti=""
@@ -132,7 +132,6 @@ use "${temp}ai_inv.dta", clear
 
 	g need_fix 		 = 0 if phystatspipe!=.
 	replace need_fix = 1 if phystatspipe==111 | phystatspipe==333
-
 
 	tab wat_press if or==0
 	tab wat_press if or==1
@@ -159,6 +158,29 @@ use "${temp}ai_crms.dta", clear
 
 	keep if conacct!=.
 
+	keep if nat_ill>10000 & nat_ill<.
+	keep conacct nat_ill date
+	gegen md=min(date), by(conacct)
+	keep if md==date
+	drop md
+	ren date date_ai
+	duplicates drop conacct, force
+
+save "${temp}ai_conacct.dta", replace
+
+
+
+
+
+use "${temp}ai_crms.dta", clear
+
+	merge 1:1 ref_no using "${temp}ai_inv.dta", keep(1 3) nogen
+		g double conacct = conacct_c
+		replace conacct= conacct_t if conacct==. & conacct_t!=.
+		replace conacct= conacct_t2 if conacct==. & conacct_t2!=.
+
+	keep if conacct!=.
+
 	* ren conacct_c conacct
 	duplicates drop conacct date, force
 
@@ -166,19 +188,23 @@ use "${temp}ai_crms.dta", clear
 		drop ba zone_code dc-datec
 
 replace nt=lower(nt)
-g o = 1
-gegen tot=sum(o), by(mru date)
-g tcd_id = regexm(nt,"tcd")==1
+gegen tot=sum(finding), by(mru date)
+g nf = finding==0
+gegen ntot=sum(nf), by(mru date)
+* g tcd_id = regexm(nti,"tcd")==1
+g tcd_id = nat_ill==10015 | nat_ill==10006
 gegen tcd=sum(tcd_id), by(mru date)
-g outright_id = regexm(nt,"outright")
+* g outright_id = regexm(nti,"outright")
+g outright_id = nat_ill!=10000 & tcd_id!=1
 gegen outright = sum(outright_id), by(mru date)
 
-keep mru date tot tcd outright
+keep mru date tot ntot tcd outright
 duplicates drop mru date, force
 tsset mru date
 tsfill, full
 
 replace tot=0 		if tot==.
+replace ntot=0 if ntot==.
 replace tcd=0 		if tcd==.
 replace outright=0  if outright==.
 
@@ -189,7 +215,7 @@ g dated=dofm(date)
 g year=year(dated)
 
 g pT = year-year_inst
-replace pT=1000 if pT>4 | pT<-4
+replace pT=1000 if pT>6 | pT<-6
 replace pT=pT+10
 
 tab pT
@@ -202,12 +228,16 @@ g ntc=tot-tcd
 gegen ntcy=mean(ntc), by(mru year)
 gegen yt=tag(mru year)
 
-areg outrighty i.pT i.year if yt==1 , a(mru) cluster(mru) r 
-	coefplot, keep(*pT*) vertical
+
 areg toty i.pT i.year if yt==1 , a(mru) cluster(mru) r 
 	coefplot, keep(*pT*) vertical
+
+areg outrighty i.pT i.year if yt==1 , a(mru) cluster(mru) r 
+	coefplot, keep(*pT*) vertical
+
 areg tcdy i.pT i.year if yt==1 , a(mru) cluster(mru) r 
 	coefplot, keep(*pT*) vertical
+
 areg ntcy i.pT i.year if yt==1 , a(mru) cluster(mru) r 
 	coefplot, keep(*pT*) vertical
 

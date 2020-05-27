@@ -21,6 +21,7 @@
 * areg B flow_hrs, a(p3id) cluster(p3id) r
 
 
+
 use "${temp}paws_pipes_bill.dta", clear
 drop class
 	g dated=dofm(date)
