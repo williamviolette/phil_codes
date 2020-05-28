@@ -92,6 +92,7 @@ g icat= 1 if inst<=2800
 replace icat=2 if inst>2800 & inst<5500
 replace icat=3 if inst>=5500 & inst<.
 
+
 	g msg=mru
 
 	gegen napcm=max(napc), by(msg)
@@ -103,6 +104,13 @@ replace icat=3 if inst>=5500 & inst<.
 	keep if dpres>5 & dpres<. 
 	keep if dposts>5 & dposts<.
 	keep if date_c>=550
+
+* g inm_id=inst!=.
+* gegen inm=mean(inm_id), by(date_c)
+* gegen im=mean(inst), by(date_c)
+* gegen dt=tag(date_c)
+* twoway scatter im date_c if dt==1 || ///
+* 	scatter inm date_c if dt==1, yaxis(2) xline(595)
 
  	g       bps = 0 if date_c>=620 & icat==3 
  	replace bps = 1 if date_c>=620 & icat==1
@@ -126,10 +134,12 @@ replace icat=3 if inst>=5500 & inst<.
  	gegen tnadd=sum(oadd), by(msg date_c)
 
  	gegen mcm =mean(mc), by(msg date_c)
+ 	gegen instm=mean(inst), by(msg date_c)
+
 
  	duplicates drop msg date_c, force
 
- 	keep tn tnadd date_c mrub msg inst mcm
+ 	keep tn tnadd date_c mrub msg instm mcm
  	tsset msg date_c
  	tsfill, full
 
@@ -145,6 +155,13 @@ g tnladd=tnadd if tnadd<=50
 g dated=dofm(date_c)
 g year=year(dated)
 
+ren date_c date
+ren msg mru
+	merge 1:1 mru date using  "${temp}activem.dta", keep(1 3)
+ren date date_c
+ren mru msg
+
+
 cap drop tr
 cap drop tnm
 cap drop tt
@@ -156,23 +173,32 @@ cap drop tny
 cap drop yt
 cap drop insty
 cap drop mcmm
+cap drop amm
+
 
 g tr = 0 if mrub<.5
-replace tr=1 if mrub>=.5 & mrub<=1
+replace tr=1 if mrub>=.8 & mrub<=1
 
 * g tr = 0 if mrub<=0
 * replace tr=1 if mrub>0 & mrub<=1
 
+gegen amm=mean(asum), by(date_c tr)
 gegen tnm = mean(tnl), by(date_c tr)
 gegen tnmadd = mean(tnladd), by(date_c tr)
 gegen tt = tag(date_c tr)
 sort date_c tr tt
 
-
 sort date_c tr tt
 twoway  line tnm date_c if tt==1 & tr==0 || ///
 	 	line tnm date_c if tt==1 & tr==1   , ///
 	 	legend(order( 1 "0" 2 "1" )) xline(595)
+
+
+***** NOT CONVINCING
+twoway  line amm date_c if tt==1 & tr==0  & date_c!=653 & date_c!=601  || ///
+	 	line amm date_c if tt==1 & tr==1   & date_c!=653 & date_c!=601 , ///
+	 	legend(order( 1 "0" 2 "1" )) xline(595)
+
 
 
 
@@ -184,6 +210,19 @@ twoway  line mcmm date_c if tt==1 & tr==0  & date_c>=580 & date_c<=630 || ///
 	 	line mcmm date_c if tt==1 & tr==1  & date_c>=580 & date_c<=630 , ///
 	 	legend(order( 1 "0" 2 "1" )) xline(595)
 
+
+
+* gegen tnt=mean(tnl), by(date_c)
+* gegen ttn=tag(date_c)
+* gegen tim=mean(instm), by(date_c)
+* g ii=instm!=.
+* gegen tii = mean(ii), by(date_c)
+
+* twoway line tnt date_c if ttn==1, xline(600)
+
+* twoway line tim date_c if ttn==1 || ///
+* line tii date_c if ttn==1  ///
+* , yaxis(2) xline(600)
 
 
 

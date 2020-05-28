@@ -1184,7 +1184,7 @@ save "${temp}pipe_test.dta", replace
 			g ares_id = o if class==1 | class==2
 
 			gegen c_count = sum(o), by(conacct)
-			g cpanel_id = c if (class==1 | class==2) & c_count>60
+			g cpanel_id = c if (class==1 | class==2) & c_count>60 & read==1 & c<200
 			gegen cpanel=mean(cpanel_id), by(mru date)
 			gegen asum=sum(o), by(mru date)
 			gegen aressum=sum(ares_id), by(mru date)
