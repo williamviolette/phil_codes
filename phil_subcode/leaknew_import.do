@@ -229,6 +229,79 @@ save "${temp}ln_bill_full.dta", replace
 
 
 
+use "${temp}ln_bill.dta", clear
+	tsset conacct date
+	tsfill, full
+
+		fmerge m:1 conacct using "${temp}conacct_rate.dta", keep(3) nogen
+		fmerge m:1 mru using "${temp}pipe_year_nold.dta", keep(3) nogen
+
+merge 1:1 conacct date using "${temp}demand_leak.dta"
+	g LD = _merge==3
+	drop if _merge==2
+	drop _merge
+
+
+g dated=dofm(date)
+g year=year(dated)
+
+g post = year>=year_inst & year<.
+gegen mpost=min(post), by(conacct)
+
+g cm=c==.
+replace cm=. if date==592 | date==593 | date==595 | date==653
+
+drop if date==592 | date==593 | date==595 | date==653
+
+g cr=0
+replace cr = 1 if date==664 & cm==1
+sort conacct date
+forvalues r=1/50 {
+	by conacct: replace cr=1 if cr[_n+1]==1 & cm==1
+}
+ 
+
+
+g datel_id=date if LD==1
+gegen datel = min(datel_id), by(conacct)
+
+g Tl=date-datel
+replace Tl=1000 if Tl<-24 | Tl>24
+replace Tl=Tl+100
+replace Tl = 1 if Tl==1100
+
+
+g leak_size = c if Tl==100
+gegen leaks = max(leak_size), by(conacct)
+
+
+g big=leaks>64 & leaks<.
+
+g Tl_big = Tl*big
+
+
+areg cm i.Tl i.date if ((Tl>=94 & Tl<=106 & post==0) | Tl==1), a(conacct)
+	coefplot, vertical keep(*Tl*)
+
+areg cm i.Tl i.date if ((Tl>=94 & Tl<=106  & mpost==0 & post==1) | Tl==1), a(conacct)
+	coefplot, vertical keep(*Tl*)
+
+
+areg cm i.Tl i.Tl_big i.date, a(conacct)
+	coefplot, vertical keep(*Tl*)
+
+
+
+areg cm i.Tl i.date if leaks>64 & leaks<., a(conacct)
+	coefplot, vertical keep(*Tl*)
+
+areg cm i.Tl i.date if leaks<64 , a(conacct)
+	coefplot, vertical keep(*Tl*)
+
+
+areg cr i.Tl i.date, a(conacct)
+	coefplot, vertical keep(*Tl*)
+
 
 
 

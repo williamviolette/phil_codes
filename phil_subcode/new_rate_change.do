@@ -459,7 +459,7 @@ save "${temp}neighbor_dc_full.dta", replace
 
 
 
-/*
+
 
 *** GENERATE MORE NEIGHBOR MEASURES
 
@@ -510,7 +510,7 @@ use  "${temp}tondo_rate_change_neighbor.dta", clear
 
 
 
-/*
+
 
 
 
@@ -555,6 +555,11 @@ gegen t_rs=tag(T_rs rcat)
 g T_rs1 = T_rs+100
 
 
+cap drop T_rs2
+g T_rs2= T_rs
+replace T_rs2=1000 if T_rs2<-36 | T_rs2>36
+replace T_rs2=T_rs2+100
+
 g cnm=c>0 & c<.
 gegen cns=sum(cnm), by(conacct)
 
@@ -563,8 +568,11 @@ gegen cns=sum(cnm), by(conacct)
 * missing matters  a lot!
 * 
 
+areg c i.T_rs2 i.date, a(conacct)  r
+	coefplot, vertical keep(*T_rs2*)
 
-areg c i.T_rs1 i.date if T_rs>=-36 & T_rs<=48  & datec<=550, a(conacct) cluster(conacct) r
+
+areg c i.T_rs1 i.date if T_rs>=-36 & T_rs<=48  & datec<=550, a(conacct)  r
 	coefplot, vertical keep(*T_rs1*)
 
 
@@ -589,6 +597,8 @@ areg cm0 i.T_rs1 i.date if T_rs>=-36 & T_rs<=48 & rcat==1001, a(conacct) cluster
 	coefplot, vertical keep(*T_rs1*)
 
 
+areg cm0 i.T_rs1 i.date if T_rs>=-36 & T_rs<=48 , a(conacct) cluster(conacct) r
+	coefplot, vertical keep(*T_rs1*)
 
 
 

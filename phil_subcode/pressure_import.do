@@ -941,7 +941,18 @@ save "${temp}bar_map_list.dta", replace
 	
 
 
-
+		use ${database}clean/mcf/2015/full_2015.dta, clear
+				drop if Col3=="Row Count"
+		ren Col12 conacct
+		g year=substr(Col19,1,4)
+		g month=substr(Col19,6,2)
+		g day = substr(Col19,9,2)
+		destring year month day, replace force
+		g dayc = mdy(month,day,year)
+		keep conacct dayc
+		drop if conacct==.
+		duplicates drop conacct, force
+		save "${temp}dayc.dta", replace
 
 		use ${database}clean/mcf/2015/full_2015.dta, clear
 				drop if Col3=="Row Count"
@@ -953,6 +964,7 @@ save "${temp}bar_map_list.dta", replace
 		ren Col52 bus_id
 		ren Col46 rateclass_key
 		ren Col39 dc
+		duplicates tag Col16 Col17, g(ndup)
 		g year=substr(Col19,1,4)
 		g month=substr(Col19,6,2)
 		destring year month, replace force
@@ -980,7 +992,7 @@ save "${temp}bar_map_list.dta", replace
 
 	local bill_query ""
 	forvalues r = 1/12 {
-		local bill_query "`bill_query' 	SELECT A.c, A.conacct, A.date, A.class FROM billing_`r' AS A JOIN (SELECT DISTINCT conacct FROM paws) AS B ON A.conacct = B.conacct"
+		local bill_query "`bill_query' 	SELECT A.c, A.conacct, A.date, A.class, A.read FROM billing_`r' AS A JOIN (SELECT DISTINCT conacct FROM paws) AS B ON A.conacct = B.conacct"
 		if `r'!=12 {
 			local bill_query "`bill_query' UNION ALL"
 		}
@@ -1005,7 +1017,46 @@ save "${temp}bar_map_list.dta", replace
 	save "${temp}amount_paws_full.dta", replace
 
 
+	local bill_query ""
+	forvalues r = 1/12 {
+		local bill_query "`bill_query' 	SELECT A.* FROM ar_`r' AS A JOIN (SELECT DISTINCT conacct FROM paws) AS B ON A.conacct = B.conacct"
+		if `r'!=12 {
+			local bill_query "`bill_query' UNION ALL"
+		}
+	}
+	odbc load, exec("`bill_query'")  dsn("phil") clear  
 
+	duplicates drop conacct date, force
+	save "${temp}ar_paws_full.dta", replace
+
+
+	local bill_query ""
+	forvalues r = 1/12 {
+		local bill_query "`bill_query' 	SELECT A.* FROM coll_`r' AS A JOIN (SELECT DISTINCT conacct FROM paws) AS B ON A.conacct = B.conacct"
+		if `r'!=12 {
+			local bill_query "`bill_query' UNION ALL"
+		}
+	}
+	odbc load, exec("`bill_query'")  dsn("phil") clear  
+
+	duplicates drop conacct date, force
+	save "${temp}pay_paws_full.dta", replace
+
+
+	local bill_query ""
+	forvalues r = 1/12 {
+		local bill_query "`bill_query' 	SELECT A.* FROM mcf_`r' AS A JOIN (SELECT DISTINCT conacct FROM paws) AS B ON A.conacct = B.conacct"
+		if `r'!=12 {
+			local bill_query "`bill_query' UNION ALL"
+		}
+	}
+	odbc load, exec("`bill_query'")  dsn("phil") clear  
+
+	duplicates drop conacct date, force
+	save "${temp}dc_paws_full.dta", replace
+
+
+		
 		
 
 	odbc load, exec("SELECT * FROM mru_dma_int")  dsn("phil") clear  
@@ -1106,11 +1157,36 @@ save "${temp}pipe_test.dta", replace
 
 
 		forvalues r = 1/12 {
-			local bill_query " SELECT A.conacct, AVG(A.c) as mc FROM billing_`r' AS A WHERE A.c<=100 AND A.date>=640 GROUP BY conacct"
+			* local bill_query " SELECT A.conacct, AVG(A.c) as mc FROM billing_`r' AS A WHERE A.c<=100 AND A.date>=640 GROUP BY conacct"
+			local bill_query " SELECT * FROM billing_`r' "
 		odbc load, exec("`bill_query'")  dsn("phil") clear  
+
+		gegen mc = mean(c), by(conacct)
+		g clow=c if c<100
+		gegen mclow = mean(clow), by(conacct)
+		g clate = c if date>=640
+		gegen mclate = mean(clate), by(conacct)
+		g clowlate=c if date>=640 & c<100
+		gegen mclowlate=mean(clowlate), by(conacct)
+		g cnm_id =  c!=.
+		gegen mcn=sum(cnm_id), by(conacct)
+		g cnm_late_id = c!=. & date>=640
+		gegen mcnlate=sum(cnm_late_id), by(conacct)
+
+		g cres = c if class==1 
+		gegen mcres=mean(cres), by(conacct)
+		g cresmed=c if class==1 & c<200
+		gegen mcresmed=mean(cresmed), by(conacct)
+		g cmed = c if c<200
+		gegen mcmed=mean(cmed), by(conacct)
+
+		gegen tc=tag(conacct)
+		keep if tc==1
+
+		keep conacct mc mclow mclate mclowlate mcn mcnlate mcres mcresmed mcmed
+
 		save "${temp}b_mc_`r'.dta", replace
 		}
-
 
 		use   "${temp}b_mc_1.dta", clear
 		erase "${temp}b_mc_1.dta"
@@ -1122,6 +1198,34 @@ save "${temp}pipe_test.dta", replace
 		save "${temp}b_mc.dta", replace		
 
 
+
+
+
+		forvalues r = 1/12 {
+			local bill_query " SELECT A.* FROM coll_`r' AS A"
+		odbc load, exec("`bill_query'")  dsn("phil") clear 
+		merge m:1 conacct using "${temp}conacct_rate.dta", keep(1 3) nogen
+		ren pay pay1
+		replace pay1=. if pay1>10000
+		gegen pay=mean(pay1), by(mru date)
+		gegen pays=sum(pay1), by(mru date)
+		g pay_id = pay1!=.
+		gegen payc=sum(pay_id), by(mru date)
+		gegen mt=tag(mru date)
+		keep if mt==1
+		drop mt
+		keep mru date pay pays payc 
+		save "${temp}pay_`r'.dta", replace
+		}
+
+		use   "${temp}pay_1.dta", clear
+		erase "${temp}pay_1.dta"
+		forvalues r = 2/12 {
+			append using "${temp}pay_`r'.dta"
+			erase "${temp}pay_`r'.dta"
+		}
+		duplicates drop mru date, force
+		save "${temp}pay.dta", replace		
 
 
 *** DISCONNECTION BY MRU! 
@@ -1211,9 +1315,202 @@ save "${temp}pipe_test.dta", replace
 
 
 
+**** YEAR PANEL! ****
+		forvalues r = 1/12 {
+			local bill_query " SELECT * FROM billing_`r' WHERE c>=0 AND c<500"
+		odbc load, exec("`bill_query'")  dsn("phil") clear  
+		fmerge m:1 conacct using "${temp}conacct_rate.dta", keep(3) nogen
+			tsset conacct date
+			tsfill, full
+			drop if date<datec
+			g dated=dofm(date)
+			g year=year(dated)
+
+			gegen mc = mean(c), by(conacct year)
+			g cm=c==.
+			replace cm=. if date==592 | date==593 | date==595 | date==653
+			gegen mcm = mean(cm), by(conacct year)
+
+			gegen mt=tag(conacct year)
+			keep if mt==1
+		keep conacct year mc mcm
+		save "${temp}year_billm_`r'.dta", replace
+		}
+
+		use   "${temp}year_billm_1.dta", clear
+		erase "${temp}year_billm_1.dta"
+		forvalues r = 2/12 {
+			append using "${temp}year_billm_`r'.dta"
+			erase "${temp}year_billm_`r'.dta"
+		}
+		duplicates drop conacct year, force
+		save "${temp}year_billm.dta", replace	
 
 
-/*   ** NOT A LOT OF EVIDENCE OF NEIGHBORS WITH ILLEGAL CONNECTIONS ! **
+**** YEAR PANEL! FOR AMOUNT! *** ****
+		forvalues r = 1/12 {
+			* local r 1
+			local bill_query " SELECT A.amount, A.conacct, A.date  FROM bill_total_`r' AS A"
+		odbc load, exec("`bill_query'")  dsn("phil") clear  
+			tsset conacct date
+			tsfill, full
+			fmerge m:1 conacct using "${temp}conacct_rate.dta", keep(3) nogen
+			keep amount conacct date datec
+			drop if date<datec
+			g dated=dofm(date)
+			g year=year(dated)
+
+			gegen ma = mean(amount), by(conacct year)
+			g am=amount==.
+			replace am=. if date==592 | date==593 | date==595 | date==653
+			gegen mam = mean(am), by(conacct year)
+
+			gegen mt=tag(conacct year)
+			keep if mt==1
+		keep conacct year ma mam
+		save "${temp}year_amountm_`r'.dta", replace
+		}
+
+		use   "${temp}year_amountm_1.dta", clear
+		erase "${temp}year_amountm_1.dta"
+		forvalues r = 2/12 {
+			append using "${temp}year_amountm_`r'.dta"
+			erase "${temp}year_amountm_`r'.dta"
+		}
+		duplicates drop conacct year, force
+		save "${temp}year_amountm.dta", replace	
+
+
+**** YEAR PANEL! FOR PAYMENTS! *** ****
+
+		forvalues r = 1/12 {
+			local bill_query " SELECT A.* FROM coll_`r' AS A"
+		odbc load, exec("`bill_query'")  dsn("phil") clear  
+		fmerge m:1 conacct using "${temp}conacct_rate.dta", keep(3) nogen
+			tsset conacct date
+			tsfill, full
+			drop if date<datec
+			g dated=dofm(date)
+			g year=year(dated)
+
+			gegen mp = mean(pay), by(conacct year)
+			g pm=pay==.
+			gegen mpm = mean(pm), by(conacct year)
+
+			gegen mt=tag(conacct year)
+			keep if mt==1
+		keep conacct year mp mpm
+		save "${temp}year_paym_`r'.dta", replace
+		}
+
+		use   "${temp}year_paym_1.dta", clear
+		erase "${temp}year_paym_1.dta"
+		forvalues r = 2/12 {
+			append using "${temp}year_paym_`r'.dta"
+			erase "${temp}year_paym_`r'.dta"
+		}
+		duplicates drop conacct year, force
+		save "${temp}year_paym.dta", replace	
+
+
+
+
+
+
+
+forvalues r = 1/12 {
+	* local r 1
+			local bill_query " SELECT * FROM billing_`r' WHERE c>=0 AND c<100"
+		odbc load, exec("`bill_query'")  dsn("phil") clear  
+		fmerge m:1 conacct using "${temp}conacct_rate.dta", keep(3) nogen
+			keep if datec<=580
+			* g o=1
+			g dated=dofm(date)
+			g year=year(dated)
+			g or = 1 if read==1
+			gegen cden=sum(or), by(c mru year)
+			g onr = 1 if read==0
+			gegen cdennr = sum(onr), by(c mru year)
+			gegen mt=tag(c mru year)
+			keep if mt==1
+		keep year mru cden cdennr c 
+		save "${temp}cd_`r'.dta", replace
+		}
+
+		use   "${temp}cd_1.dta", clear
+		erase "${temp}cd_1.dta"
+		forvalues r = 2/12 {
+			append using "${temp}cd_`r'.dta"
+			erase "${temp}cd_`r'.dta"
+		}
+		duplicates drop mru c year, force
+		save "${temp}cd.dta", replace	
+
+
+
+
+*** PANEL OF AVERAGE CONS AND DISCONNECTIONS! 
+		forvalues r = 1/12 {
+			local bill_query " SELECT * FROM billing_`r' WHERE c>=0 AND c<500"
+		odbc load, exec("`bill_query'")  dsn("phil") clear  
+		fmerge m:1 conacct using "${temp}conacct_rate.dta", keep(3) nogen
+			keep if datec<=550
+			tsset conacct date
+			tsfill, full
+			drop if date<datec
+			gegen mc = mean(c), by(mru date)
+			g cm=c==.
+			replace cm=. if date==592 | date==593 | date==595 | date==653
+			gegen mcm = mean(cm), by(mru date)
+
+			gegen mt=tag(mru date)
+			keep if mt==1
+		keep date mru mc mcm
+		save "${temp}panel_billm_`r'.dta", replace
+		}
+
+		use   "${temp}panel_billm_1.dta", clear
+		erase "${temp}panel_billm_1.dta"
+		forvalues r = 2/12 {
+			append using "${temp}panel_billm_`r'.dta"
+			erase "${temp}panel_billm_`r'.dta"
+		}
+		duplicates drop mru date, force
+		save "${temp}panel_billm.dta", replace	
+
+
+	**** READ ACCOUNTS
+
+		forvalues r = 1/12 {
+			local bill_query " SELECT * FROM billing_`r' WHERE c>=0 AND c<500"
+		odbc load, exec("`bill_query'")  dsn("phil") clear  
+		merge m:1 conacct using "${temp}conacct_rate.dta", keep(1 3) nogen
+			g read_early = read if datec<580
+			gegen rem=mean(read), by(mru date)
+			gegen reme=mean(read_early), by(mru date)
+			gegen mt=tag(mru date)
+			keep if mt==1
+		keep date mru rem reme
+		save "${temp}rem_`r'.dta", replace
+		}
+
+		use   "${temp}rem_1.dta", clear
+		erase "${temp}rem_1.dta"
+		forvalues r = 2/12 {
+			append using "${temp}rem_`r'.dta"
+			erase "${temp}rem_`r'.dta"
+		}
+		duplicates drop mru date, force
+		save "${temp}rem.dta", replace	
+
+
+
+
+
+
+/*  
+
+ ** NOT A LOT OF EVIDENCE OF NEIGHBORS WITH ILLEGAL CONNECTIONS ! **
 
 	use "${complaintdata}cc_12_2012_all.dta", clear
 	 	g year="2012"

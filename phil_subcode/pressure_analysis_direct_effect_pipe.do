@@ -1,36 +1,100 @@
 * pressure.do
 
 
+*** NOT MUCH DIFFERENCE AT THE PIPE LEVEL!!! ***
+
+* use "${temp}conacct_rate.dta", clear
+* ren datec date
+* 	merge m:1 mru using "${temp}mru_set.dta", keep(3) nogen
+* 	merge 1:1 conacct using "${temp}dist_tertiary_points_conacct.dta", keep(3) nogen
+
+* ren pipe_id mru
+
+* keep if date>550
+* g dated=dofm(date)
+* g year=year(dated)
+
+* g pT = year-year_inst
+* replace pT=1000 if pT>12 | pT<-6
+* gegen min_pT=min(pT), by(mru)
+* gegen max_pT=max(pT), by(mru)
+* replace pT=pT+10
+* replace pT=1 if pT==1010
+* 	merge 1:1 conacct using "${temp}b_mc.dta", keep(3) nogen
+* g DC = dc!=.
+* g res=rateclass=="Residential"
+* foreach var of varlist mc mclow mclate mclowlate mcn mcnlate DC res mcres mcresmed mcmed {
+* 	gegen `var'_M=mean(`var'), by(pT)
+* 	gegen `var'_Y=mean(`var'), by(mru year)
+* }
+* gegen yt = tag(mru year)
+* gegen ptt=tag(pT)
+* * g bt = bus=="Bayan Tubig"
+* * gegen bt_Y = mean(bt), by(mru year)  // NOTHING HERE! 
+* xi: areg res_Y i.pT i.year*i.ba if yt==1, a(mru) cluster(mru) r
+* 	coefplot, vertical keep(*pT*)
+* xi: areg mcmed_Y i.pT i.year*i.ba if yt==1, a(mru) cluster(mru) r
+* 	coefplot, vertical keep(*pT*)
+* xi: areg DC_Y i.pT  i.year*i.ba if yt==1, a(mru) cluster(mru) r
+* 	coefplot, vertical keep(*pT*)
+
+
+
+
+use "${temp}dayc.dta", clear
+
+	merge 1:1 conacct using "${temp}dist_tertiary_points_conacct.dta", keep(3) nogen
+	ren pipe_id mru
+
+g year = year(dayc)
+drop if year==2005
+g o=1
+gegen dayt=sum(o), by(dayc mru)
+
+gegen ds=sum(o), by(year mru)
+gegen daytm=max(dayt), by(year mru)
+g dm = daytm/ds 
+
+duplicates drop mru year, force
+
+g pT = year-year_inst
+replace pT=1000 if pT>6 | pT<-6
+replace pT=pT+10
+replace pT=1 if pT==1010
+
+gegen dmm=mean(dm), by(pT)
+gegen tt=tag(pT)
+
+twoway scatter dmm pT if tt==1
+
+
+
+
+
 
 
 
 use "${temp}conacct_rate.dta", clear
 
-drop if ba==1700
+	keep conacct datec mru
+	merge 1:1 conacct using "${temp}dist_tertiary_points_conacct.dta", keep(1 3) nogen
 
-	keep datec mru ba
-g o=1
-gegen new=sum(o), by(mru datec)
+	g pm = pipe_id!=.
+		gegen pm_m=mean(pm), by(datec)
+		gegen dt=tag(datec)
+		scatter pm_m datec if dt==1
 
-g pre_id= 1 if datec<550
-gegen pres=sum(pre_id), by(mru)
+	g tm = 0 if datec<=642
+	replace tm = 1 if pm==1 & datec<=642
 
-keep if pres>100 & pres<.
-keep if datec>550
-drop o
-duplicates drop mru datec, force
-tsset mru datec
-tsfill, full
-replace new=0 if new==.
 
-gegen ba1=max(ba), by(mru)
-drop ba
-ren ba1 ba
+	gegen tmm=mean(tm), by(mru)
+	gegen mt=tag(mru)
 
-keep mru datec new ba
-keep mru ba
-duplicates drop mru, force
-save "${temp}mru_set_big.dta", replace
+	sum tmm if mt==1, detail
+	hist tmm if mt==1
+
+	
 
 
 
@@ -131,16 +195,14 @@ gegen max_pT=max(pT), by(mru)
 replace pT=pT+10
 replace pT=1 if pT==1010
 
-g anres=asum-aressum
-
-foreach var of varlist cpanel asum aressum anres csum cmean cread clow csumlow bm dct  minst mbnk mnapc pay pays payc {
+foreach var of varlist cpanel asum aressum csum cmean cread clow csumlow bm dct  minst mbnk mnapc pay pays payc {
 	gegen `var'_y=mean(`var'), by(mru year)
 }
-foreach var of varlist cpanel asum aressum anres csum cmean cread clow csumlow bm dct  minst mbnk mnapc pay pays payc {
+foreach var of varlist cpanel asum aressum csum cmean cread clow csumlow bm dct  minst mbnk mnapc pay pays payc {
 	gegen `var'_M=mean(`var'), by(pT)
 }
 g oset = min_pT<=-3 & max_pT>=3 & max_pT<1000
-foreach var of varlist cpanel asum aressum anres csum cmean cread clow csumlow bm dct  minst mbnk mnapc pay pays payc {
+foreach var of varlist cpanel asum aressum csum cmean cread clow csumlow bm dct  minst mbnk mnapc pay pays payc {
 	g `var'_o = `var' if oset==1
 	gegen `var'_O=mean(`var'_o), by(pT)
 	drop `var'_o
@@ -168,36 +230,6 @@ sum asum_M if pT==10
 sum asum_M if pT==10
 
 
-twoway scatter asum_M pT if		 	ptt==1 & pT>=6 & pT<=16
-
-
-sum aressum if pT==9  | pT==8
-sum aressum if pT==11 | pT==12
-
-
-reg aressum post i.year if pT>=8 & pT<=12 & yt==1
-
-
-reg aressum_y post year i.ba if yt==1, cluster(mru) r 
-
-
-
-
-xi: areg aressum_y post i.year*i.ba if yt==1   , a(mru) cluster(mru) r 
-
-
-xi: areg aressum_y i.pT i.year*i.ba if yt==1   , a(mru) cluster(mru) r 
-	coefplot, keep(*pT*) vertical
-
-xi: areg anres_y i.pT i.year*i.ba if yt==1   , a(mru) cluster(mru) r 
-	coefplot, keep(*pT*) vertical
-
-xi: areg csum_y i.pT i.year*i.ba if yt==1   , a(mru) cluster(mru) r 
-	coefplot, keep(*pT*) vertical
-
-
-xi: reg aressum_y post i.year*i.ba if yt==1   , cluster(mru) r 
-
 * twoway scatter csumlow_M pT if 		ptt==1 & pT>=6 & pT<=16
 * twoway scatter clow_M pT if 		ptt==1 & pT>=6 & pT<=16
 * twoway scatter cmean_M pT if 		ptt==1 & pT>=6 & pT<=16
@@ -205,6 +237,8 @@ xi: reg aressum_y post i.year*i.ba if yt==1   , cluster(mru) r
 * twoway scatter clow_M pT if 		ptt==1 
 
 twoway scatter cpanel_M pT if 		ptt==1 
+
+
 
 
 
@@ -390,131 +424,77 @@ xi: areg ln_suppm i.pT i.year*i.ba if yt==1 , a(dg) cluster(dg) r
 
 
 
+
+
+
+
+
+
 use "${temp}conacct_rate.dta", clear
-	merge m:1 conacct using "${temp}bulk_conacct.dta", keep(1 3)
-	g bulk=_merge==3
-	drop _merge
+
 	merge m:1 mru using "${temp}mru_set.dta", keep(3) nogen
 	merge m:1 mru using "${temp}pipe_year_nold.dta", keep(1 3) nogen
+	merge m:1 conacct using "${temp}ai_conacct.dta", keep(1 3) nogen
+
+	keep datec mru nat_ill ba
+	drop if mru==.
+
+g ill_id=nat_ill!=.
+g ill_tcd_id=nat_ill==10015 | nat_ill==10006
+gegen ill=sum(ill_id), by(mru datec)
+gegen ill_tcd=sum(ill_tcd_id), by(mru datec)
+
+duplicates drop mru datec, force
+tsset mru datec
+tsfill, full
+replace ill=0 if ill==.
+replace ill_tcd=0 if ill_tcd==.
+
+gegen ba1=max(ba), by(mru)
+drop ba
+ren ba1 ba
+merge m:1 mru using "${temp}pipe_year_old.dta", keep(1 3) nogen
 g dated=dofm(date)
 g year=year(dated)
 g pT = year-year_inst
-replace pT=1000 if pT>5 | pT<-6
+replace pT=1000 if pT>4 | pT<-6
 replace pT=pT+10
-replace pT=1 if pT==1010
-g D=ndup>0
-gegen dm = mean(D), by(pT)
-gegen pt = tag(pT)
-twoway scatter dm pT if pt==1
+
+g n_id = ill-ill_tcd
+gegen mi=mean(ill), by(mru year)
+gegen ni=mean(n_id), by(mru year)
+gegen mit=mean(ill_tcd), by(mru year)
+gegen yt=tag(mru year)
+
+g post = year>=year_inst & year<.
+
+g posti = pT==10
+
+xi: areg ni i.pT i.year*i.ba if yt==1 , a(mru) cluster(mru) r 
+	coefplot, keep(*pT*) vertical
+xi: areg mit i.pT i.year*i.ba if yt==1 , a(mru) cluster(mru) r 
+	coefplot, keep(*pT*) vertical
+
+xi: areg ni  posti i.year*i.ba if yt==1 , a(mru) cluster(mru) r 
+xi: areg mit posti i.year*i.ba if yt==1 , a(mru) cluster(mru) r 
 
 
-areg bulk i.pT i.year if year_inst>2011, a(mru)
-coefplot, vertical keep(*pT*)
-
-
-areg D i.pT i.year, a(mru)
-coefplot, vertical keep(*pT*)
-
-g res= rateclass=="Residential"
-
-xi: areg res i.pT i.year*i.ba, a(mru)
-coefplot, vertical keep(*pT*)
+* xi: areg ni i.pT i.year*i.ba if yt==1 & year<2010, a(mru) cluster(mru) r 
+* 	coefplot, keep(*pT*) vertical
+* xi: areg mit i.pT i.year*i.ba if yt==1 & year<2010, a(mru) cluster(mru) r 
+* 	coefplot, keep(*pT*) vertical
 
 
 
 
-
+***  WHO CONNECTS!?
 use "${temp}conacct_rate.dta", clear
+	merge 1:m conacct using "${temp}paws_aib.dta", keep(3) nogen
+	duplicates drop conacct, force
+	keep if datec>541
 
-	merge m:1 mru using "${temp}mru_set.dta", keep(3) nogen
-	merge m:1 conacct using "${temp}ai_conacct.dta", keep(1 3) nogen
-	keep datec nat_ill mru ba
 	merge m:1 mru using "${temp}pipe_year_nold.dta", keep(1 3) nogen
-
-g ill=nat_ill!=.
-g ill_tcd=nat_ill==10015 | nat_ill==10006
-
-ren datec date
-g dated=dofm(date)
-g year=year(dated)
-g pT = year-year_inst
-replace pT=1000 if pT>5 | pT<-6
-replace pT=pT+10
-
-gegen pt=tag(pT)
-gegen illm=mean(ill), by(pT)
-
-twoway scatter illm pT if pt==1 & pT<100
-
-reg ill i.pT i.year i.ba , r 
-	coefplot, keep(*pT*) vertical
-
-xi: reg ill i.pT i.year*i.ba , r 
-	coefplot, keep(*pT*) vertical
-
-xi: areg ill i.pT i.year*i.ba , a(mru) cluster(mru) r 
-	coefplot, keep(*pT*) vertical
-
-
-
-
-
-*** WHO STEALS !? !? !? 
-use "${temp}conacct_rate.dta", clear
-	merge 1:m conacct using "${temp}paws_aib.dta", keep(3) nogen
-	duplicates drop conacct, force
-	* keep if datec>541
-
-		drop date year
-	ren datec date
-
-	g dated=dofm(date)
-	g year=year(dated)
-
-	merge m:1 conacct using "${temp}ai_conacct.dta", keep(1 3) nogen
-	merge 1:1 conacct using "${temp}b_mc.dta", keep(1 3) nogen
-	* keep datec nat_ill mru ba
-
-	replace job = 0 if job==.
-	tab sclass, g(s_)
-	g low_skill = job==1 | job==0
-
-	g low_class = sclass=="D" | sclass=="E"
-
-	g ill=nat_ill!=.
-	g ill_tcd= nat_ill==10015 | nat_ill==10016
-	g ill_other = nat_ill!=. & ill_tcd==0
-
-	areg ill mcresmed low_skill hhsize hhemp age sub single i.year, a(mru)
-	areg ill_tcd mcresmed low_skill hhsize hhemp age sub single i.year, a(mru)
-	areg ill_other mcresmed low_skill hhsize hhemp age sub single i.year, a(mru)
-
-	sum mcresmed if ill==0
-	sum mcresmed if ill==1
-	sum mcresmed if ill_tcd==1
-	sum mcresmed if ill_other==1
-
-	sum mclow if ill==0
-	sum mclow if ill==1
-
-	sum age if ill==0
-	sum age if ill==1
-
-	sum hhsize if ill==0
-	sum hhsize if ill==1
-
-
-
-
-***  WHO CONNECTS!?   BY PIPE! ****
-use "${temp}conacct_rate.dta", clear
-	merge 1:m conacct using "${temp}paws_aib.dta", keep(3) nogen
-	duplicates drop conacct, force
-	* keep if datec>541
-
-	merge 1:1 conacct using "${temp}dist_tertiary_points_conacct.dta", keep(3) nogen
 	merge m:1 mru using "${temp}mru_set.dta", keep(3) nogen
-	merge 1:1 conacct using "${temp}b_mc.dta", keep(1 3) nogen
 
 	drop date year
 	ren datec date
@@ -526,8 +506,6 @@ use "${temp}conacct_rate.dta", clear
 	replace pT=1000 if pT>6 | pT<-6
 	replace pT=pT+10
 	replace pT=1 if pT==1010
-	replace pT=1 if year==2005
-	replace pT=1 if year_inst<=2005
 
 	g pre = pT>=7 & pT<=9
 	g pip = pT==10
@@ -544,152 +522,72 @@ use "${temp}conacct_rate.dta", clear
 
 	gegen tt=tag(pT)
 
-	g emp_shr=hhemp/hhsize
-	replace emp_shr=1 if emp_shr>1 & emp_shr<.
-
-
-	gegen treat=max(pip), by(mru)
-
-	*** ITS THE YEAR CONTROL! ***
-
-	reg low_skill pip treat pre pos year
-
-	areg low_skill pip pre pos, a(mru)
-
-	xi: areg low_skill pip pre pos i.year*i.ba , a(mru)
-
-
-	areg low_skill i.pT i.year i.ba , r a(pipe_id)
-	coefplot, vertical keep(*pT*)
-
-
-	reg sub i.pT , r cluster(pipe_id)
-	coefplot, vertical keep(*pT*)
-
-
-	areg sub i.pT i.year if pT==1 | (pT>=7 & pT<=12), r cluster(pipe_id) a(pipe_id)
-	coefplot, vertical keep(*pT*)
-
-	areg low_skill i.pT if pT==1 | (pT>=7 & pT<=12), r cluster(pipe_id) a(pipe_id)
-	coefplot, vertical keep(*pT*)
-
-	* reg pip low_skill hhsize hhemp sub i.year i.ba , r  cluster(pipe_id)
-
-
-
-
-
-
-***  WHO CONNECTS!? BY MRU! 
-use "${temp}conacct_rate.dta", clear
-	merge 1:m conacct using "${temp}paws_aib.dta", keep(3) nogen
-	duplicates drop conacct, force
-	* keep if datec>541
-
-	merge m:1 mru using "${temp}pipe_year_nold.dta", keep(1 3) nogen
-		* merge m:1 mru using "${temp}mru_set.dta", keep(3) nogen
-
-	merge m:1 mru using "${temp}mru_set.dta", keep(3) nogen
-merge 1:1 conacct using "${temp}b_mc.dta", keep(1 3) nogen
-
-
-
-	drop date year
-	ren datec date
-
-	g dated=dofm(date)
-	g year=year(dated)
-
-	g pT = year-year_inst
-	replace pT=1000 if pT>6 | pT<-6
-	replace pT=pT+10
-	replace pT=1 if pT==1010
-	replace pT=1 if year==2005
-	replace pT=1 if year_inst<=2005
-
-	g pre = pT>=7 & pT<=9
-	g pip = pT==10
-	g pos = pT>=11 & pT<=13
-	replace job = 0 if job==.
-	tab sclass, g(s_)
-	g low_skill = job==1 | job==0
-
-	g low_class = sclass=="D" | sclass=="E"
-
-	foreach var of varlist hhsize hhemp age sub single {
-		gegen `var'_m = mean(`var'), by(pT)
-	}
-
-
-
-	gegen tt=tag(pT)
+	hist pT
 
 	g emp_shr=hhemp/hhsize
 	replace emp_shr=1 if emp_shr>1 & emp_shr<.
 
 
-	gegen treat=max(pip), by(mru)
-
-	*** ITS THE YEAR CONTROL! ***
-
-	reg  sub pip pre pos
-
-
-	areg sub pip i.year if pT==1 | (pT>=7 & pT<=10), r a(mru)
-
-
-
-	reg  sub i.pT if pT==1 | (pT>=7 & pT<=11), r 
+	xi: areg emp_shr i.pT i.year*i.ba if pT<=13 & pT!=4, a(barangay_id)  r
 	coefplot, vertical keep(*pT*)
 
-	reg  sub i.pT i.year if pT==1 | (pT>=7 & pT<=11), r 
-	coefplot, vertical keep(*pT*)
-
-	areg sub i.pT i.year if pT==1 | (pT>=7 & pT<=11) & year<2010, r a(mru) cluster(mru)
-	coefplot, vertical keep(*pT*)
-
-	areg low_skill i.pT i.year if pT==1 | (pT>=7 & pT<=11), r a(mru)
+	xi: areg hhsize i.pT i.year*i.ba if pT<=13 & pT!=4, a(barangay_id)  r
 	coefplot, vertical keep(*pT*)
 
 
-	areg age i.pT i.year if pT==1 | (pT>=7 & pT<=11) & year<2010, r a(mru)
+
+	xi: reg emp_shr i.pT i.year*i.ba if pT<=13 & pT!=4,   r
+	coefplot, vertical keep(*pT*)
+
+	xi: reg hhsize i.pT i.year*i.ba if pT<=13 & pT!=4,   r
+	coefplot, vertical keep(*pT*)
+	xi: reg hhemp i.pT i.year*i.ba if pT<=13 & pT!=4,   r
+	coefplot, vertical keep(*pT*)
+
+	xi: reg low_skill i.pT i.year*i.ba if pT<=13 & pT!=4,   r
+	coefplot, vertical keep(*pT*)
+
+	xi: reg low_skill i.pT i.year*i.ba if pT<=13 & pT!=4,   r
+	coefplot, vertical keep(*pT*)
+
+	xi: reg sub i.pT i.year*i.ba if pT<=13 & pT!=4,   r
+	coefplot, vertical keep(*pT*)
+
+	xi: reg single i.pT i.year*i.ba if pT<=13 & pT!=4,   r
 	coefplot, vertical keep(*pT*)
 
 
- 
-	areg hhsize i.pT if pT==1 | (pT>=7 & pT<=11), r a(mru)
+	xi: reg age i.pT i.year*i.ba if pT<=13 & pT!=4,   r
 	coefplot, vertical keep(*pT*)
 
-	areg hhsize i.pT i.year if pT==1 | (pT>=7 & pT<=11), r a(mru)
+	xi: reg hho i.pT i.year*i.ba if pT<=13 & pT!=4,   r
 	coefplot, vertical keep(*pT*)
 
-
-	reg low_skill i.pT year i.ba  if (pT<=13 | pT==1010) & pT!=4 , r
-	coefplot, vertical keep(*pT*)
-
-	reg hhsize i.pT year i.ba  if (pT<=13 | pT==1010) & pT!=4, r
-	coefplot, vertical keep(*pT*)
-
-	reg hhemp i.pT year i.ba if (pT<=13 | pT==1010) & pT!=4,  r
-	coefplot, vertical keep(*pT*)
-
-	reg sub i.pT year i.ba if (pT<=13 | pT==1010) & pT!=4,  r
-	coefplot, vertical keep(*pT*)
-
-	reg single i.pT year i.ba if (pT<=13 | pT==1010) & pT!=4,  r
-	coefplot, vertical keep(*pT*)
-
-	areg age i.pT year i.ba if (pT<=13 | pT==1010) & pT!=4,  r a(mru)
+	xi: reg low_class i.pT i.year*i.ba if pT<=13 & pT!=4,   r
 	coefplot, vertical keep(*pT*)
 
 
-	reg mcresmed i.pT year i.ba if pT<=13 & pT!=4,  r
+
+	xi: reg sub i.pT i.year*i.ba,   r
 	coefplot, vertical keep(*pT*)
 
-	reg mclowlate i.pT year i.ba if pT<=13 & pT!=4,  r
+	xi: reg low_skill i.pT i.year*i.ba,   r
+	coefplot, vertical keep(*pT*)
+
+	xi: reg hho i.pT i.year*i.ba,   r
+	coefplot, vertical keep(*pT*)
+
+	xi: reg age i.pT i.year*i.ba,   r
 	coefplot, vertical keep(*pT*)
 
 
+	xi: reg B i.pT i.year*i.ba,   r
+	coefplot, vertical keep(*pT*)
+
+	* xi: reg B i.pT i.year*i.ba,   r
+	* coefplot, vertical keep(*pT*)
+	* xi: reg S i.pT i.year*i.ba,   r
+	* coefplot, vertical keep(*pT*)
 
 
 	twoway scatter hhsize_m pT if tt==1 & pT<14 & pT>5
@@ -698,8 +596,6 @@ merge 1:1 conacct using "${temp}b_mc.dta", keep(1 3) nogen
 	twoway scatter single_m pT if tt==1 & pT<14 & pT>5
 	twoway scatter age_m pT if tt==1 & pT<14 & pT>5
 
-	sum low_skill 	if pip==0 & pT!=1010
-	sum low_skill 	if pip==1 & pT!=1010
 
 	sum hhsize 	if pip==0 & pT!=1010
 	sum hhsize 	if pip==1 & pT!=1010
@@ -718,24 +614,12 @@ merge 1:1 conacct using "${temp}b_mc.dta", keep(1 3) nogen
 
 
 	areg pip emp_shr hhsize age sub single  i.job  i.wave if pT>=4 & pT<=16, cluster(conacct) r a(ba)
-	reg  pip hhsize hhemp age sub single  i.job if pT>=4 & pT<=10, cluster(conacct) r 
-	reg  pip hhsize hhemp age sub single  i.job s_* if pT>=7 & pT<=10, cluster(conacct) r 
-	reg  pip hhsize hhemp age sub single  i.job s_* if pT>=7 & pT<=13, cluster(conacct) r 
 
+	reg pip hhsize hhemp age sub single  i.job if pT>=4 & pT<=10, cluster(conacct) r 
 
+	reg pip hhsize hhemp age sub single  i.job s_* if pT>=7 & pT<=10, cluster(conacct) r 
 
-
-
-
-***  WHO CONNECTS!? BY MRU! TRY SHARING CAREFULLY !!!!!!!
-
-
-
-
-
-
-
-
+	reg pip hhsize hhemp age sub single  i.job s_* if pT>=7 & pT<=13, cluster(conacct) r 
 
 
 
@@ -747,6 +631,7 @@ replace year=2008 if year<2008
 		drop ba zone_code dc-bus
 	merge m:1 mru using "${temp}mru_set.dta", keep(3) nogen
 	merge m:1 mru using "${temp}pipe_year_nold.dta", keep(1 3) nogen
+
 g post = 0 if  year<year_inst  & year_inst!=.
 replace post = 1 if  year>=year_inst & year_inst!=.
 
@@ -770,11 +655,15 @@ replace pT=1 if pT==1010
 gegen yt=tag(mru year)
 gegen yesy=mean(yes_flow), by(mru year)
 
-g sd=hho>0
-
-foreach var of varlist yes_flow no_flow flow_hrs color smell taste stuff B drum gallon me hhsize hhemp hho sd {
+foreach var of varlist yes_flow no_flow flow_hrs color smell taste stuff B drum gallon me hhsize hhemp shr {
 	gegen `var'_y=mean(`var'), by(mru year)
 }
+
+
+* xi: areg yes_flow i.pT i.year*i.ba, a(conacct) r
+* 	coefplot, vertical keep(*pT*)
+* xi: areg no_flow i.pT i.year*i.ba, a(conacct) r
+* 	coefplot, vertical keep(*pT*)
 
 
 
@@ -794,10 +683,7 @@ xi: areg drum_y i.pT i.year*i.ba , a(mru) cluster(mru) r
 	coefplot, vertical keep(*pT*)
 
 
-xi: areg sd_y i.pT i.year*i.ba , a(mru) cluster(mru) r
-	coefplot, vertical keep(*pT*)
-
-xi: areg hho_y i.pT i.year*i.ba , a(mru) cluster(mru) r
+xi: areg shr_y i.pT i.year*i.ba , a(mru) cluster(mru) r
 	coefplot, vertical keep(*pT*)
 
 
@@ -987,11 +873,8 @@ areg cy i.pT i.year if yt==1 & class==1 , a(conacct) cluster(conacct) r
 
 
 use "${temp}bill_paws_full.dta", clear
-tsset conacct date
-tsfill, full
 	merge m:1 conacct using "${temp}conacct_rate.dta", keep(3) nogen
 		keep c conacct date class mru datec
-		drop if date<datec
 	merge m:1 mru using "${temp}mru_set.dta", keep(3) nogen
 	merge m:1 mru using "${temp}pipe_year_nold.dta", keep(1 3) nogen
 g dated=dofm(date)
@@ -1003,17 +886,10 @@ gegen min_pT=min(pT), by(mru)
 replace pT=pT+10
 replace pT=1 if pT==1010
 
-
-g cm=c==.
-gegen cmy=mean(cm), by(conacct year)
 gegen cy = mean(c), by(conacct year)
 gegen yt = tag(conacct year)
 
 g treat=min_pT<0
-
-
-areg cmy i.pT i.year if yt==1 , a(conacct) r 
-	coefplot, keep(*pT*) vertical
 
 
 areg cy i.pT i.year if yt==1 , a(conacct) cluster(conacct) r 
@@ -1397,8 +1273,7 @@ g dated=dofm(date)
 g year=year(dated)
 
 g pT = year-year_inst
-* replace pT=1000 if pT>12 | pT<-6
-replace pT=1000 if pT>5 | pT<-6
+replace pT=1000 if pT>12 | pT<-6
 gegen min_pT=min(pT), by(mru)
 gegen max_pT=max(pT), by(mru)
 replace pT=pT+10
@@ -1406,10 +1281,9 @@ replace pT=1 if pT==1010
 	merge 1:1 conacct using "${temp}b_mc.dta", keep(3) nogen
 
 g DC = dc!=.
-g DCF = dc==13 | dc==14
 g res=rateclass=="Residential"
 
-foreach var of varlist mc mclow mclate mclowlate mcn mcnlate DC DCF res mcres mcresmed mcmed {
+foreach var of varlist mc mclow mclate mclowlate mcn mcnlate DC res mcres mcresmed mcmed {
 	gegen `var'_M=mean(`var'), by(pT)
 	gegen `var'_Y=mean(`var'), by(mru year)
 }
@@ -1420,47 +1294,39 @@ gegen ptt=tag(pT)
 * gegen bt_Y = mean(bt), by(mru year)  // NOTHING HERE! 
 
 
-**** LESS RESIDENTIAL! ****
-reg res_Y i.pT i.year i.ba if yt==1,  r
+xi: areg mc_Y i.pT i.year*i.ba if yt==1, a(mru) cluster(mru) r
+	coefplot, vertical keep(*pT*)
+xi: areg mclow_Y i.pT i.year*i.ba if yt==1, a(mru) cluster(mru) r
 	coefplot, vertical keep(*pT*)
 
-	xi: areg res_Y i.pT i.year*i.ba if yt==1, a(mru) cluster(mru) r
+xi: areg mcres_Y i.pT i.year*i.ba if yt==1, a(mru) cluster(mru) r
+	coefplot, vertical keep(*pT*)
+xi: areg mcresmed_Y i.pT i.year*i.ba if yt==1, a(mru) cluster(mru) r
+	coefplot, vertical keep(*pT*)
+
+xi: areg mcmed_Y i.pT i.year*i.ba if yt==1, a(mru) cluster(mru) r
 	coefplot, vertical keep(*pT*)
 
 
-**** MORE DISCONNECTIONS! ****  ( MORE FROM DELINQUENCY! )
-reg DC_Y i.pT i.year i.ba if yt==1,  r
+
+xi: areg mcn_Y i.pT i.year*i.ba if yt==1, a(mru) cluster(mru) r
+	coefplot, vertical keep(*pT*)
+xi: areg mcnlate_Y i.pT i.year*i.ba if yt==1, a(mru) cluster(mru) r
 	coefplot, vertical keep(*pT*)
 
-	xi: areg DC_Y i.pT  i.year*i.ba if yt==1, a(mru) cluster(mru) r
+
+xi: areg DC_Y i.pT  i.year*i.ba if yt==1, a(mru) cluster(mru) r
+	coefplot, vertical keep(*pT*)
+xi: areg res_Y i.pT  i.year*i.ba  if yt==1, a(mru) cluster(mru) r
 	coefplot, vertical keep(*pT*)
 
-	**** LESS FROM LEAVING !
-	reg DCF_Y i.pT i.year i.ba if yt==1,  r
-		coefplot, vertical keep(*pT*)
 
-
-**** LESS CONSUMPTION! ****
-reg mcresmed_Y i.pT i.year i.ba if yt==1, r
+xi: areg bt_Y i.pT  i.year*i.ba  if yt==1, a(mru) cluster(mru) r
 	coefplot, vertical keep(*pT*)
 
-	xi: areg mcresmed_Y i.pT i.year*i.ba if yt==1, a(mru) cluster(mru) r
-		coefplot, vertical keep(*pT*)
 
 
-***** NO!!! THESE DO NOT TSFILL!!!!! SO THEY DON'T COUNT!!! ****
-*** LESS LATE ! CONSISTENT WITH DC! (BUT NOT!!! with fixed effects...)
-* reg mcnlate_Y i.pT i.year i.ba if yt==1,  r
-* 	coefplot, vertical keep(*pT*)
 
-* 	xi: areg mcnlate_Y i.pT i.year*i.ba if yt==1, a(mru) cluster(mru) r
-* 		coefplot, vertical keep(*pT*)
-* *** not clear missing consumption... not consistent with DC?
-* reg mcn_Y i.pT i.year i.ba if yt==1,  r
-* 	coefplot, vertical keep(*pT*)
-
-* 	xi: areg mcn_Y i.pT i.year*i.ba if yt==1, a(mru) cluster(mru) r
-* 		coefplot, vertical keep(*pT*)
 
 
 

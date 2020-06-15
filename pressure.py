@@ -214,6 +214,40 @@ if _2_DIST == 1:
 
 
 
+	def int_meter_barangay(db):
+
+			print 'start this barangay'
+			name = 'meter_barangay_int'
+
+		    # connect to DB
+			con = sql.connect(db)
+			con.enable_load_extension(True)
+			con.execute("SELECT load_extension('mod_spatialite');")
+			cur = con.cursor()
+
+			cur.execute('DROP TABLE IF EXISTS {};'.format(name))   
+
+			print 'running ... '
+
+			make_qry = '''
+		                   CREATE TABLE {} AS 
+	                		SELECT B.conacct,
+	                		G.OGC_FID as ogc_fid_barangay,
+	                		G.prikey
+	                FROM barangay as G, meter as A JOIN conacctseri AS B ON A.OGC_FID = B.OGC_FID
+	                WHERE B.conacct>0 AND A.ROWID IN (SELECT ROWID FROM SpatialIndex 
+	                WHERE f_table_name='meter' AND search_frame=G.GEOMETRY)
+	                AND st_intersects(A.GEOMETRY,G.GEOMETRY)
+		                    ;
+				              '''.format(name)
+			cur.execute(make_qry)
+			
+			cur.execute('''CREATE INDEX {}_cp_ind ON {} (conacct);'''.format(name,name))
+			cur.execute('''CREATE INDEX {}_c_ind ON {} (prikey);'''.format(name,name))
+
+			return
+
+	# int_meter_barangay(db)
 
 	def int_meter_dma(db):
 
@@ -406,7 +440,7 @@ if _2_DIST == 1:
 
 			return
 	
-	int_barangay_mru(db)
+	# int_barangay_mru(db)
 
 
 	# def int_mru_dma(db):

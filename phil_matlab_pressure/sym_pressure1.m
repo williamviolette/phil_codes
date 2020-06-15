@@ -45,12 +45,7 @@ diff(ua,S)
 
  matlabFunction(simplify(wa,'IgnoreAnalyticConstraints',true,'Steps',steps),'File','wp.m')
  matlabFunction(simplify(ua,'IgnoreAnalyticConstraints',true,'Steps',steps),'File','up.m')
- 
-% matlabFunction(simplify(wa,'IgnoreAnalyticConstraints',true,'Steps',steps),'File','wa.m')
-% matlabFunction(simplify(ua,'IgnoreAnalyticConstraints',true,'Steps',steps),'File','ua.m')
-% 
 
-% ua_B = subs(ua,[y,S],[y-c,S+gamma])
 
 
 

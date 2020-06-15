@@ -845,7 +845,7 @@ areg cy i.pT i.year if yt==1 , a(conacct) cluster(mru) r
 
 use "${temp}bill_paws_full.dta", clear
 
-replace c=. if c>100
+replace c=. if c>200
 	
 
 merge 1:1 conacct date using "${temp}amount_paws_full.dta", keep(1 3) nogen

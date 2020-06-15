@@ -4,7 +4,7 @@
 clear;
 % cd_dir ='/Users/williamviolette/Documents/Philippines/phil_analysis/phil_codes/phil_matlab_new/';
 
-syms y p pi pr a1 a2 a3 g g1 g2 g3 w x F l ws wbar1 wbar2 wbar3 es esq t1 t2 S
+syms y p pi pr a1 a2 a3 g g1 g2 g3 w x F l ws wbar1 wbar2 wbar3 es esq t1 t2 S a0h a1h th
 syms alpha0 alpha1 p1 theta0 theta1
 assume(y>0)
 assume(p1>0)
@@ -23,9 +23,13 @@ steps=10;
 
 %%% ALONE %%%
 
-BC = ( y -   (p1*w+x) ) 
+p = pi+pr*w;
+
+BC = ( y -   (p*w+x) ) 
 
 u = x + (1/alpha1).*(theta1*S*w - .5*( w - alpha0 )^2)
+
+% u = x + alpha1*sqrt(w)
 lan  =  u  + l*BC
 
 dw = simplify(diff(lan,w))
@@ -36,21 +40,31 @@ dl = diff(lan,l)
 
 expand(wa)
 
+
 ua = simplify(subs(u,[w,x],[wa,xa]));
 
+wa
+
+expand(wa)
+
+alpha0h = alpha0/(2*alpha1*pr+1)
+alpha1h = alpha1/(2*alpha1*pr+1)
+thetah  = theta1/(2*alpha1*pr+1)
+
+% [a0s,a1s,ts]=solve([alpha0h-a0h,alpha1h-a1h,thetah-th],[alpha0,alpha1,theta1])
+
+
+
 simplify(ua)
+
+
 expand(ua)
 
 diff(ua,S)
 
- matlabFunction(simplify(wa,'IgnoreAnalyticConstraints',true,'Steps',steps),'File','wp.m')
- matlabFunction(simplify(ua,'IgnoreAnalyticConstraints',true,'Steps',steps),'File','up.m')
- 
-% matlabFunction(simplify(wa,'IgnoreAnalyticConstraints',true,'Steps',steps),'File','wa.m')
-% matlabFunction(simplify(ua,'IgnoreAnalyticConstraints',true,'Steps',steps),'File','ua.m')
-% 
+ matlabFunction(simplify(wa,'IgnoreAnalyticConstraints',true,'Steps',steps),'File','wnl.m')
+ matlabFunction(simplify(ua,'IgnoreAnalyticConstraints',true,'Steps',steps),'File','unl.m')
 
-% ua_B = subs(ua,[y,S],[y-c,S+gamma])
 
 
 

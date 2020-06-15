@@ -129,16 +129,164 @@ save "${temp}brgy_link.dta", replace
 
 
 
+
+	odbc load, exec("SELECT B.*, C.prikey FROM barangay_mru_int AS B JOIN barangay AS C ON B.OGC_FID_bar = C.OGC_FID ")  dsn("phil") clear  
+		destring mru prikey, replace force
+		keep mru prikey  *_area
+	save "${temp}bar_mru_int.dta", replace
+
+
+
+
+
 *** THIS WORKS PRETTY WELL! *** 
 
 
 
 *** total population of HHs in ( OR TOTAL MEMBERS?! )
 
+*** HOUSEHOLD DEMOGRAPHICS
+
+global j = 1
+foreach v in "R13_CITY OF LAS PIAS _PRV7601.DAT"  "R13_CALOOCAN CITY _PRV7501.DAT" "R13_CITY OF MAKATI _PRV7602.DAT" "R13_CITY OF MALABON_PRV7502.DAT" "R13_CITY OF MANDALUYONG _PRV7401.DAT" "R13_CITY OF MANILA_PRV39.DAT" "R13_CITY OF MARIKINA_PRV7402.DAT" "R13_CITY OF MUNTINLUPA_PRV7603.DAT" "R13_CITY OF NAVOTAS_PRV7503.DAT" "R13_CITY OF PARAAQUE_PRV7604.DAT" "R13_CITY OF PASIG _PRV7403.DAT" "R13_CITY OF SAN JUAN _PRV7405.DAT" "R13_CITY OF VALENZUELA _PRV7504.DAT" "R13_PASAY CITY _PRV7605.DAT" "R13_PATEROS_PRV7606.DAT" "R13_QUEZON CITY _PRV7404.DAT" "R13_TAGUIG CITY_PRV7607.DAT" {
+	 
+	 * local v "R13_CITY OF MANILA_PRV39.DAT"
+	infix str rec 27-28 str b1 3-4 str b2 9-10 str b3 11-13   ///
+	str waterdrink 34-35 str watercook 36-37 ///
+	str building 29   str tenure 38   /// 
+	 using "/Users/williamviolette/Downloads/2015/puf/Microdatafile 2 (Provinces of Region 9 to 17)/`v'", clear
+	keep if rec=="23"
+	g bar = b1+b2+b3
+	destring bar, replace force
+
+	g single=building=="1"
+	g duplex=building=="2"
+	g apartment=building=="3"
+
+	g own =tenure=="1" | tenure=="3" | tenure=="4"
+	g rent=tenure=="2" | tenure=="6"
+	g squat=tenure=="5" | tenure=="7"
+
+	g pipe_own=watercook=="01"
+	g pipe_shr=watercook=="02"
+	g well_peddler=watercook=="03" | watercook=="04" | watercook=="10"
+
+	foreach var of varlist pipe_own pipe_shr well_peddler single duplex apartment  own rent squat  {
+		ren `var' `var'_1
+		gegen `var'=mean(`var'_1), by(bar)
+		drop `var'_1
+	}
+	keep bar   pipe_own pipe_shr well_peddler   single duplex apartment  own rent squat
+	duplicates drop bar, force
+	save "${temp}c15_${j}_demo_hh.dta", replace
+	global j = $j +1
+}
+
+use "${temp}c15_1_demo_hh.dta", clear
+forvalues r=2/17 {
+	append using "${temp}c15_`r'_demo_hh.dta"
+}
+save "${temp}c15_demo_hh.dta", replace
 
 
+*** PERSON DEMOGRAPHICS
+
+global j = 1
+foreach v in "R13_CITY OF LAS PIAS _PRV7601.DAT"  "R13_CALOOCAN CITY _PRV7501.DAT" "R13_CITY OF MAKATI _PRV7602.DAT" "R13_CITY OF MALABON_PRV7502.DAT" "R13_CITY OF MANDALUYONG _PRV7401.DAT" "R13_CITY OF MANILA_PRV39.DAT" "R13_CITY OF MARIKINA_PRV7402.DAT" "R13_CITY OF MUNTINLUPA_PRV7603.DAT" "R13_CITY OF NAVOTAS_PRV7503.DAT" "R13_CITY OF PARAAQUE_PRV7604.DAT" "R13_CITY OF PASIG _PRV7403.DAT" "R13_CITY OF SAN JUAN _PRV7405.DAT" "R13_CITY OF VALENZUELA _PRV7504.DAT" "R13_PASAY CITY _PRV7605.DAT" "R13_PATEROS_PRV7606.DAT" "R13_QUEZON CITY _PRV7404.DAT" "R13_TAGUIG CITY_PRV7607.DAT" {
+	* local v "R13_CITY OF MANILA_PRV39.DAT"
+	infix str rec 27-28 str b1 3-4 str b2 9-10 str b3 11-13   ///
+	str age 36-37   str grade 45-47   str occ 53-54  /// 
+	 using "/Users/williamviolette/Downloads/2015/puf/Microdatafile 2 (Provinces of Region 9 to 17)/`v'", clear
+	keep if rec=="22"
+
+	g bar = b1+b2+b3
+	destring bar, replace force
+
+	g o=1
+	gegen pop=sum(o), by(bar)
+
+	destring age grade occ, replace force
+
+	g emp = occ!=9 & occ<99
+	g prof_emp = occ>=11 & occ<=61
+	g low_emp = occ>61 & occ<99
+
+	g post_grad = grade>=800 & grade<.
+	g college_grad = grade>=300 & grade<.
+	g hs_grad = grade>=250 & grade<.
+
+	foreach var of varlist post_grad college_grad hs_grad emp prof_emp low_emp   {
+		replace `var'=. if age<=25
+		ren `var' `var'_1
+		gegen `var'=mean(`var'_1), by(bar)
+		drop `var'_1
+	}
+	ren age age_1
+	gegen age = mean(age_1), by(bar)
+	keep bar pop age  post_grad college_grad hs_grad  emp prof_emp low_emp
+	duplicates drop bar, force
+	save "${temp}c15_${j}_demo_pers.dta", replace
+	global j = $j +1
+}
+
+use "${temp}c15_1_demo_pers.dta", clear
+forvalues r=2/17 {
+	append using "${temp}c15_`r'_demo_pers.dta"
+}
+save "${temp}c15_demo_pers.dta", replace
 
 
+* MAKE PERSON AND HH DEMOGRAPHICS FOR 15
+
+use "${temp}c15_demo_hh.dta", clear
+		merge 1:1 bar using "${temp}c15_demo_pers.dta", keep(3) nogen
+
+		ren bar id
+			merge m:1 id using "${temp}brgy_link.dta", keep(3) nogen
+		ren id bar
+		ren prikeyc254 prikey
+			merge 1:m prikey using "${temp}bar_mru_int.dta", keep(3) nogen
+
+		drop if int_area==0
+		g imp = int_area/bar_area
+
+		gegen int_per = sum(int_area), by(mru)
+		g int_shr = int_per/mru_area
+		replace int_shr=1 if int_shr>1 & int_shr<.
+
+		g int_ratio = int_area/int_per
+
+	foreach var of varlist pop  {
+		g `var'_imp=`var'*imp
+		gegen `var's = sum(`var'_imp), by(mru)
+		replace `var's=`var's/int_shr
+		drop `var'_imp `var'
+		ren `var's `var'
+	}
+
+	foreach var of varlist  age  post_grad college_grad hs_grad  emp prof_emp low_emp pipe_own pipe_shr well_peddler   single duplex apartment  own rent squat {
+		g `var'_imp=`var'*int_ratio
+		gegen `var's = sum(`var'_imp), by(mru)
+		drop `var'
+		ren `var's `var'
+	}
+
+	g pop_density=pop/mru_area
+
+	keep mru pop pop_density mru_area age  post_grad college_grad hs_grad  emp prof_emp low_emp  pipe_own pipe_shr well_peddler   single duplex apartment  own rent squat
+	duplicates drop mru, force
+save "${temp}mru_demo.dta", replace
+
+
+* import delimited using census/input/2010/RT02_1339.CSV, delimiter(",") clear
+* 	g bar = prov*100000 + mun*1000 + bgy
+* 	destring sh3a_drink sh3b_cook sh3c_laundry, replace force
+* 	*** CORRELATION IS WAYYYYYY TOO SMALL! ***
+* 	g well_peddler = sh3b_cook!=1 & sh3b_cook!=2 & sh3b_cook!=11
+* 	reg well_peddler i.hb1_bldg
+
+
+**** MAKE POPULATION FOR 15
 
 global j = 1
 foreach v in "R13_CITY OF LAS PIAS _PRV7601.DAT"  "R13_CALOOCAN CITY _PRV7501.DAT" "R13_CITY OF MAKATI _PRV7602.DAT" "R13_CITY OF MALABON_PRV7502.DAT" "R13_CITY OF MANDALUYONG _PRV7401.DAT" "R13_CITY OF MANILA_PRV39.DAT" "R13_CITY OF MARIKINA_PRV7402.DAT" "R13_CITY OF MUNTINLUPA_PRV7603.DAT" "R13_CITY OF NAVOTAS_PRV7503.DAT" "R13_CITY OF PARAAQUE_PRV7604.DAT" "R13_CITY OF PASIG _PRV7403.DAT" "R13_CITY OF SAN JUAN _PRV7405.DAT" "R13_CITY OF VALENZUELA _PRV7504.DAT" "R13_PASAY CITY _PRV7605.DAT" "R13_PATEROS_PRV7606.DAT" "R13_QUEZON CITY _PRV7404.DAT" "R13_TAGUIG CITY_PRV7607.DAT" {
@@ -170,7 +318,8 @@ save "${temp}c15.dta", replace
 
 
 foreach r in 1339 1375 13741 13742 13761 13762 {
-* local r 1375
+
+local r 1339
 import delimited using census/input/2010/RT02_`r'.CSV, delimiter(",") clear
 
 	g bar = prov*100000 + mun*1000 + bgy
@@ -195,6 +344,29 @@ foreach r in 1375 13741 13742 13761 13762  {
 	append using "${temp}c10_`r'.dta"
 }
 save "${temp}c10.dta", replace
+
+
+
+
+foreach r in 1339 1375 13741 13742 13761 13762 {
+* local r 1339
+import delimited using census/input/2010/RT01_`r'.CSV, delimiter(",") clear
+	g bar = prov*100000 + mun*1000 + bgy
+	keep bar
+	g o=1
+	gegen pop10 = sum(o), by(bar)
+	drop o
+	duplicates drop bar, force
+save "${temp}c10_`r'_pop.dta", replace 
+}
+
+
+use "${temp}c10_1339_pop.dta", clear
+foreach r in 1375 13741 13742 13761 13762  {
+	append using "${temp}c10_`r'_pop.dta"
+}
+save "${temp}c10_pop.dta", replace
+
 
 
 
@@ -223,13 +395,34 @@ save "${temp}c10.dta", replace
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 **** POPULATION ANALYSIS HERE ****
 
 
-	odbc load, exec("SELECT B.*, C.prikey FROM barangay_mru_int AS B JOIN barangay AS C ON B.OGC_FID_bar = C.OGC_FID ")  dsn("phil") clear  
-		destring mru prikey, replace force
-		keep mru prikey  *_area
-	save "${temp}bar_mru_int.dta", replace
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 use "${temp}activem.dta", clear
@@ -400,6 +593,7 @@ gegen mm=max(post), by(bar)
 
 g just_before = year_inst<2010 & year_inst>2000
 
+g pre = year_inst<2010 & year_inst>2000 & year==2010
 * areg pc just_before if year==2010, a(city)
 
 
@@ -460,7 +654,7 @@ areg pd post i.year if pc10<.99, a(bar) cluster(bar)
 
 
 
-areg pc1 post i.year, a(bar) cluster(bar)
+areg pc1 post pre i.year, a(bar) cluster(bar)
 
 
 areg pc post i.year if pc10<.96, a(bar) cluster(bar)
