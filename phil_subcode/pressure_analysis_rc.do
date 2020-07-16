@@ -2,6 +2,75 @@
 
 
 
+* SELECTION INTO RS AND SR !
+use "${temp}bill_rc.dta", clear
+
+	fmerge m:1 conacct using "${temp}conacct_rate.dta", keep(3) nogen 
+	keep conacct date c class read class_max class_min mru datec ba
+
+drop if class_max==4 | class_max==5
+keep if datec<=580
+
+sort conacct date
+by conacct: g date_rs_id = class[_n-1]==1 & class[_n]==2
+by conacct: g date_sr_id = class[_n-1]==2 & class[_n]==1
+
+gegen drs = sum(date_rs_id), by(mru date)
+gegen dsr = sum(date_sr_id), by(mru date)
+
+g c_avg_id = c if date<=580
+gegen c_avg = mean(c), by(conacct)
+
+g crs_id = c_avg if date_rs_id == 1
+g csr_id = c_avg if date_sr_id == 1
+
+gegen crs=mean(crs_id), by(mru date)
+gegen csr=mean(csr_id), by(mru date)
+
+keep mru date drs dsr crs csr
+duplicates drop mru date, force
+
+tsset mru date
+tsfill, full
+replace drs=0 if drs==.
+replace dsr=0 if dsr==.
+
+g dated=dofm(date)
+g year=year(dated)
+
+	fmerge m:1 mru using "${temp}pipe_year_nold.dta", keep(1 3) nogen
+
+g pT = year-year_inst
+replace pT=1000 if pT>3 | pT<-3
+replace pT=pT+10
+replace pT=1 if pT==1010
+
+g post = year>year_inst & year<.
+gegen minpost=min(post), by(mru)
+
+
+areg drs i.pT i.date , a(mru)
+	coefplot, vertical keep(*pT*)
+
+areg dsr i.pT i.date , a(mru)
+	coefplot, vertical keep(*pT*)
+
+
+reg drs i.pT i.date
+	coefplot, vertical keep(*pT*)
+
+reg dsr i.pT i.date
+	coefplot, vertical keep(*pT*)
+
+
+reg crs i.pT i.date
+	coefplot, vertical keep(*pT*)
+
+reg csr i.pT i.date
+	coefplot, vertical keep(*pT*)
+
+
+
 use "${temp}bill_rc.dta", clear
 
 	fmerge m:1 conacct using "${temp}conacct_rate.dta", keep(3) nogen 
@@ -142,458 +211,6 @@ areg c i.Tsr i.date if c<200, a(conacct)
 
 
 
-areg ln_c post post_c_2 post_c_3 i.year , a(conacct)
-
-
-
-areg ln_c c_2 post post_c_2 i.year if class_max==2 & class_min==1, a(conacct) cluster(conacct)
-
-
-areg ln_c c_2 post post_c_2 i.year if class_max==2 & class_min==1 & minpost==0, a(conacct) cluster(conacct)
-
-
-areg ln_c c_2 c_3 post post_c_2 post_c_3 i.year, a(conacct) cluster(conacct)
-
-
-areg c c_2 post post_c_2 i.year if class_max==2 & class_min==1 & minpost==0, a(conacct) cluster(conacct)
-
-
-
-areg ln_c c_2  i.year if class_max==2 & post==0, a(conacct) cluster(conacct)
-
-areg ln_c c_2  i.year if class_max==2 & post==1, a(conacct) cluster(conacct)
-
-
-
-
-areg mcm i.pT1 i.year if datec<545, a(conacct)
-coefplot, keep(*pT*) vertical
-
-
-
-
-
-use "${temp}cd.dta", clear
-	fmerge m:1 mru using "${temp}pipe_year_nold.dta", keep(3) nogen
-
-forvalues r=1/25 {
-g c`r'_id = cden if c==`r'
-gegen c`r' = max(c`r'_id), by(mru year)
-g c_c_`r'=c`r'
-drop c`r'_id
-}
-forvalues r=1/25 {
-g c`r'_id = cdennr if c==`r'
-gegen cnr`r' = max(c`r'_id), by(mru year)
-g c_nrc_`r'=cnr`r'
-drop c`r'_id
-}
-
-* egen rt = rowtotal(c5-c15)
-* g c10_9=(c10-c9)/c15
-* g c10r = c10/rt
-* g c12r = c12/rt
-* g c9r = c8/rt
-* gegen ctot=sum(cden), by(mru year)
-
-
-g post = year>=year_inst
-
-gegen minpost=min(post), by(mru)
-
-
-g pT = year-year_inst
-replace pT=1000 if pT>3 | pT<-3
-replace pT=pT+10
-replace pT=1 if pT==1010
-
-
-gegen mt=tag(mru year)
-
-g ln_c10=log(c10)
-g ln_c13=log(c13)
-
-g c10_11d = c10-c11
-g c10_9d = c10-c9
-
-
-areg c10_11d i.pT i.year if mt==1 , a(mru)
-		coefplot, vertical keep(*pT*)
-
-areg c10_9d i.pT i.year if mt==1, a(mru)
-		coefplot, vertical keep(*pT*)
-
-
-ren c_c_7 c_cd_7
-	areg c7 c_c_* i.pT i.year if mt==1 , a(mru)
-		coefplot, vertical keep(*pT*)
-ren c_cd_7 c_c_7
-
-ren c_c_8 c_cd_8
-	areg c8 c_c_* i.pT i.year if mt==1 , a(mru)
-		coefplot, vertical keep(*pT*)
-ren c_cd_8 c_c_8
-
-ren c_c_9 c_cd_9
-	areg c9 c_c_* i.pT i.year if mt==1 , a(mru) cluster(mru)
-		coefplot, vertical keep(*pT*)
-ren c_cd_9 c_c_9
-
-
-ren c_c_10 c_cd_10
-	areg c10 c_c_* i.pT i.year if mt==1 , a(mru) cluster(mru)
-		coefplot, vertical keep(*pT*)
-	* areg c10 c_c_* post i.year if mt==1 , a(mru) cluster(mru)
-ren c_cd_10 c_c_10
-
-ren c_nrc_10 c_nrcd_10
-	areg cnr10 c_nrc_* i.pT i.year if mt==1 , a(mru) cluster(mru)
-		coefplot, vertical keep(*pT*)
-ren c_nrcd_10 c_nrc_10
-
-
-ren c_c_10 c_cd_10
-	areg c10 c_c_* i.pT i.year if mt==1 , a(mru) cluster(mru)
-		coefplot, vertical keep(*pT*)
-	areg c10 c_c_* post i.year if mt==1 , a(mru) cluster(mru)
-ren c_cd_10 c_c_10
-
-
-	* areg c10  i.pT i.year if mt==1 , a(mru)
-		* coefplot, vertical keep(*pT*)
-
-ren c_c_20 c_cd_20
-	areg c20 c_c_* i.pT i.year if mt==1 , a(mru) cluster(mru)
-		coefplot, vertical keep(*pT*)
-	areg c20 c_c_* post i.year if mt==1 , a(mru) cluster(mru)
-ren c_cd_20 c_c_20
-
-
-
-ren c_c_12 c_cd_12
-	areg c12 c_c_* i.pT i.year if mt==1, a(mru)
-		coefplot, vertical keep(*pT*)
-ren c_cd_12 c_c_12
-
-ren c_c_13 c_cd_13
-	areg c13 c_c_* i.pT i.year if mt==1, a(mru)
-		coefplot, vertical keep(*pT*)
-ren c_cd_13 c_c_13
-
-
-
-
-ren c_c_10 c_cd_10
-	areg c10 c_c_* i.pT i.year if mt==1 & minpost==0, a(mru)
-		coefplot, vertical keep(*pT*)
-ren c_cd_10 c_c_10
-
-
-ren c_c_13 c_cd_13
-	areg c13 c_c_* i.pT i.year if mt==1 & minpost==0, a(mru)
-		coefplot, vertical keep(*pT*)
-ren c_cd_13 c_c_13
-
-ren c_c_8 c_cd_8
-	areg c8 c_c_* i.pT i.year if mt==1 & minpost==0, a(mru)
-		coefplot, vertical keep(*pT*)
-ren c_cd_8 c_c_8
-
-ren c_c_6 c_cd_6
-	areg c6 c_c_* i.pT i.year if mt==1 & minpost==0, a(mru)
-		coefplot, vertical keep(*pT*)
-ren c_cd_6 c_c_6
-
-
-	areg c21 i.pT i.year if mt==1 & minpost==0, a(mru)
-		coefplot, vertical keep(*pT*)
-
-
-areg c12 i.pT i.year if mt==1, a(mru)
-	coefplot, vertical keep(*pT*)
-
-areg c9 i.pT i.year if mt==1, a(mru)
-	coefplot, vertical keep(*pT*)
-
-
-
-gegen ht = sum(cden), by(c pT minpost)
-
-gegen tt=tag(c pT minpost)
-
-twoway scatter ht c if tt==1 & pT>1 & c<=15 & c>=5 & minpost==0, by(pT, rescale)
-
-
-gegen ht1= sum(cden), by(c pT)
-gegen tt1=tag(c pT)
-
-twoway scatter ht1 c if tt1==1 & pT>1 & c<=15 & c>=5, by(pT, rescale)
-
-
-gegen htr1= sum(cdennr), by(c pT)
-gegen ttr1=tag(c pT)
-
-twoway scatter htr1 c if ttr1==1 & pT>1 & c<=15 & c>=5, by(pT, rescale)
-
-
-
-use "${temp}bill_neg_paws_full.dta", clear
-
-	fmerge m:1 conacct using  "${temp}conacct_rate.dta", keep(3) nogen
-	drop zone_code dc bus_id rateclass_key bus
-	fmerge m:1 mru using "${temp}pipe_year_nold.dta", keep(3) nogen
-
-g dated=dofm(date)
-g year=year(dated)
-
-g post= year>=year_inst
-gegen minpost=min(post), by(mru)
-
-g c= pres-prev
-g calt=prev-pres
-replace c=. if c<0
-replace c= calt if year==2008
-replace c=. if c<0
-replace c=. if pres==0 | prev==0
-replace c=. if read==0
-
-sort conacct date
-by conacct: replace c=. if read[_n+1]==0 | read[_n-1]==0 | read[_n+2]==0 | read[_n-2]==0
-
-g co = pres-prev
-replace co=abs(co)
-replace co=. if co<0 | co>500
-
-g o=1
-gegen os1=sum(o), by(c read)
-gegen ot1=tag(c read)
-
-gegen oso1=sum(o), by(co read)
-gegen oto1=tag(co read)
-
-scatter oso1 co if oto1==1  & co<60 & read==1 || ///
-scatter os1 c if ot1==1  & c<60 & read==1, xline(10 20 30 40 50) 
-
-
-scatter oso1 co if oto1==1  & co<40 & co>20 & read==1 || ///
-scatter os1 c if ot1==1  & c<40 & c>20 &  read==1
-scatter os1 c if ot1==1  & c<60 & read==1
-
-sum oso1 if co==29 & oto1==1 & read==1
-global r1 = `=r(mean)'
-sum oso1 if co==30 & oto1==1 & read==1
-global r2 = `=r(mean)'
-sum oso1 if co==31 & oto1==1 & read==1
-global r3 = `=r(mean)'
-
-disp $r2/($r1+$r3)
-
-sum os1 if c==29 & ot1==1 & read==1
-global r1 = `=r(mean)'
-sum os1 if c==30 & ot1==1 & read==1
-global r2 = `=r(mean)'
-sum os1 if c==31 & ot1==1 & read==1
-global r3 = `=r(mean)'
-
-disp $r2/($r1+$r3)
-
-
-
-
-use "${temp}bill_paws_full.dta", clear
-
-* keep if read==1
-	fmerge m:1 conacct using  "${temp}conacct_rate.dta", keep(3) nogen
-	drop zone_code dc bus_id rateclass_key bus
-	fmerge m:1 mru using "${temp}pipe_year_nold.dta", keep(3) nogen
-keep if datec<580
-
-g dated=dofm(date)
-g year=year(dated)
-
-g post= year>=year_inst
-gegen minpost=min(post), by(mru)
-
-* g post= year>2011
-* drop if year==year_inst
-
-* gegen minpost = min(post), by(mru)
-
-g o=1
-gegen os=sum(o), by(c post minpost year)
-gegen ot = tag(c post minpost year)
-
-gegen os1=sum(o), by(c post read)
-gegen ot1 = tag(c post read)
-
-
-gegen osy=sum(o), by(c post year)
-gegen oty = tag(c post year)
-
-
-twoway scatter os1 c if ot1==1 & post==0  & c<60 & read==0 || ///
-scatter os1 c if ot1==1 & post==0  & c<60 & read==1, xline(10 20 30 40 50) yaxis(2)
-
-
-twoway scatter os1 c if ot1==1 & post==1  & c<60  , xline(10 20 30 40 50)
-
-
-
-twoway scatter osy c if oty==1 & post==0  & c<60 & year==2010 || ///
- 	   scatter osy c if oty==1 & post==1  & c<60 & year==2010 , yaxis(2) xline(10 20 30 40 50)
-
-
-twoway scatter osy c if oty==1 & post==0  & c<60 & year==2011 || ///
- 	   scatter osy c if oty==1 & post==1  & c<60 & year==2011 , yaxis(2) xline(10 20 30 40 50)
-
-
-twoway scatter os1 c if ot1==1 & post==0  & c<60  || ///
-	scatter os1 c if ot1==1 & post==1 & c<60 , yaxis(2)  xline(10) xline(20)
-
-
-twoway scatter os c if ot==1 & post==0 & minpost==0 & c<60 & year==2010 || ///
-	scatter os c if ot==1 & post==1 & minpost==0 & c<60 & year==2010, yaxis(2)  xline(10) xline(20)
-
-
-twoway scatter os c if ot==1 & post==0 & minpost==0 & c<60 & year==2009 || ///
-	scatter os c if ot==1 & post==1 & minpost==0 & c<60 & year==2009, yaxis(2)  xline(10)
-
-
-twoway scatter os c if ot==1 & post==0 & minpost==0 & c<60 & year==2011 || ///
-	scatter os c if ot==1 & post==1 & minpost==0 & c<60 & year==2011, yaxis(2) xline(10)
-
-
-
-g c9=c==9
-g c10=c==10
-g c11=c==11
-
-gegen ms=sum(o), by(mru year)
-gegen c9s=sum(c9), by(mru year)
-gegen c10s=sum(c10), by(mru year)
-gegen c11s=sum(c11), by(mru year)
-
-g s9=c9s/ms
-g s10=c10s/ms
-g s11=c11s/ms
-
-gegen mt = tag(mru year)
-
-g pT = year-year_inst
-replace pT=1000 if pT>3 | pT<-3
-replace pT=pT+10
-replace pT=1 if pT==1010
-
-g ss10=s10-s11
-
-g cso=c10s-c9s
-
-areg cso i.pT i.year if mt==1 & minpost==0, a(mru)
-coefplot, vertical keep(*pT*)
-
-
-
-sort conacct date
-by conacct: g date_rs_id = date if class[_n]==1 & class[_n+1]==2
-replace date_rs_id=. if date_rs_id==576
-gegen date_rs=min(date_rs_id), by(conacct)
-
-by conacct: g date_sr_id = date if class[_n]==2 & class[_n+1]==1
-gegen date_sr=min(date_sr_id), by(conacct)
-
-
-g Trs = date-date_rs
-replace Trs=1000 if Trs>48 | Trs<-48
-replace Trs=Trs+100
-replace Trs=1 if Trs==1100
-
-g Trs_t = Trs
-replace Trs_t = 1 if Trs<100-24 | Trs>100+24
-
-g Tsr = date-date_sr
-replace Tsr=1000 if Tsr>48 | Tsr<-48
-replace Tsr=Tsr+100
-replace Tsr=1 if Tsr==1100
-
-g pT = year-year_inst
-replace pT=1000 if pT>3 | pT<-3
-replace pT=pT+10
-replace pT=1 if pT==1010
-
-g pT1 = pT
-replace pT1=1 if year_inst<=2008
-
-
-tab class, g(c_)
-
-foreach var of varlist c_* {
-	g post_`var'=post*`var'
-}
-
-g ln_c = log(c)
-
-
-areg c i.Trs_t i.date, a(conacct)
-	coefplot, vertical keep(*Trs*)
-
-
-
-g Trs_pre = Trs
-replace Trs_pre=1 if post==1
-
-g Trs_post = Trs
-replace Trs_post=1 if post==0
-
-replace Trs_pre=1 if Trs_pre<100-12 | Trs_pre>100+12
-replace Trs_post=1 if Trs_post<100-12 | Trs_post>100+12
-
-g trs = Trs>100 & Trs<.
-
-g trs_pre = trs
-replace trs_pre = 0 if post==1
-g trs_post = trs
-replace trs_post = 0 if post==0
-
-areg c post i.Trs_pre i.Trs_post i.date , a(conacct)
-	coefplot, vertical keep(*Trs*)
-
-
-areg c post trs_pre trs_post i.date, a(conacct)
-
-
-areg c i.Trs_t i.date if minpost==0 & post==1, a(conacct)
-	coefplot, vertical keep(*Trs*)
-
-
-
-
-
-use "${temp}year_amountm.dta", clear
-
-	fmerge m:1 conacct using  "${temp}conacct_rate.dta", keep(3) nogen
-	drop zone_code dc bus_id rateclass_key bus
-	fmerge m:1 mru using "${temp}pipe_year_nold.dta", keep(3) nogen
-
-g pT = year-year_inst
-replace pT=1000 if pT>3 | pT<-3
-replace pT=pT+10
-replace pT=1 if pT==1010
-
-g pT1 = pT
-replace pT1=1 if year_inst<=2008
-
-egen year_ba = group(year ba)
-
-areg ma i.pT1 i.year if datec<545, a(conacct)
-coefplot, keep(*pT*) vertical
-
-areg mam i.pT1 i.year_ba if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-
-
-
-
 
 
 
@@ -653,47 +270,39 @@ g post_semc = post*semc
 
 g amc = amount if amount>=0 & amount<=10000
 
+g Trs = date-date_rs
+replace Trs=1000 if Trs>48 | Trs<-48
+replace Trs=Trs+100
+replace Trs=1 if Trs==1100
+
 g Tsr = date-date_sr
 replace Tsr=1000 if Tsr>48 | Tsr<-48
 replace Tsr=Tsr+100
 replace Tsr=1 if Tsr==1100
 
-****
-* g TM = T==1100
-* g T1 = T
-* replace T1 = 0 if T==1100
-* g T2 = T1
-* replace T2 = 0 if T2>100
-* g price_post_post=price_post*post
-* reg c price_post i.class_max i.class_min T1 TM, cluster(mru) r
-* reg c post price_post  i.class_max i.class_min T1 TM, cluster(mru) r
-****
+cap drop TrsR
+cap drop TsrR
+g TrsR = round(Trs,6)
+g TsrR = round(Tsr,6)
+replace TrsR = 0 if TrsR<100-24 | TrsR>100+24
+replace TsrR = 0 if TsrR<100-24 | TsrR>100+24
 
+g TrsR_pre = TrsR
+replace TrsR_pre = 0 if post==1
+g TrsR_post = TrsR
+replace TrsR_post = 0 if post==0
 
-areg c i.Tsr i.date, a(conacct)
-coefplot, keep(*Tsr*) vertical
+g rs_pre=date_rs<date & date_rs<. & post==0
+g rs_post=date_rs<date & date_rs<. & post==1
 
+g sr_pre=date_sr<date & date_sr<. & post==0
+g sr_post=date_sr<date & date_sr<. & post==1
 
+g sem_pre = sem
+replace sem_pre = 0 if post==1
+g sem_post = sem
+replace sem_post = 0 if post==0
 
-reg c post_rs post post_rs_post class_min class_max i.date
-
-
-reg c post semc post_semc class_min class_max i.date
-
-
-areg c post_rs post post_rs_post i.date, a(conacct)
-
-
-areg c post sem post_sem i.date if class_max!=class_min, a(conacct)
-
-
-areg c post semc post_semc i.date, a(conacct) cluster(conacct) r
-
-
-areg c post semc post_semc i.date, a(conacct) cluster(mru) r
-
-
-**** THAT'S COOL! ****
 
 g pT = year-year_inst
 replace pT=1000 if pT>3 | pT<-3
@@ -711,6 +320,89 @@ replace pTl=1 if pTl==1010
 
 g pTl1 = pTl
 replace pTl1 = 1 if year_inst<=2008
+
+g ln_c = log(c)
+gegen minpost=min(post), by(mru)
+
+gegen cy=mean(c), by(year conacct)
+
+gegen csy=sd(c), by(year conacct)
+
+gegen tc=tag(year conacct)
+
+gegen year_ba=group(year ba)
+
+
+
+areg cy i.pTl if tc==1 & minpost==0, a(conacct)
+	coefplot, vertical keep(*pT*)
+
+areg csy i.pTl if tc==1 & minpost==0, a(conacct)
+	coefplot, vertical keep(*pT*)
+
+
+
+
+
+
+
+
+
+areg c i.TsrR i.date if post==0, a(conacct)
+coefplot, keep(*Tsr*) vertical
+
+areg c i.TsrR i.date if post==1 & minpost==0, a(conacct)
+coefplot, keep(*Tsr*) vertical
+
+
+areg c i.TrsR_pre i.TrsR_post post i.date, a(conacct)
+coefplot, keep(*Trs*) vertical
+
+
+areg c rs_pre rs_post sr_pre sr_post post i.date  if class_max!=class_min, a(conacct)
+
+areg c sem_pre sem_post post i.date  if class_max!=class_min, a(conacct)
+
+
+
+areg c i.TrsR i.date if post==1 & minpost==0, a(conacct)
+coefplot, keep(*Trs*) vertical
+
+
+areg c i.TrsR i.date, a(conacct)
+coefplot, keep(*Trs*) vertical
+
+
+
+areg c i.Trs i.date if post==1 & minpost==0, a(conacct)
+coefplot, keep(*Trs*) vertical
+
+
+
+areg c post sem post_sem i.date if class_max!=class_min, a(conacct)
+
+areg ln_c post sem post_sem i.date if class_max!=class_min, a(conacct)
+
+
+
+
+reg c post_rs post post_rs_post class_min class_max i.date
+
+
+reg c post semc post_semc class_min class_max i.date
+
+
+areg c post_rs post post_rs_post i.date, a(conacct)
+
+
+
+areg c post semc post_semc i.date, a(conacct) cluster(conacct) r
+
+
+areg c post semc post_semc i.date, a(conacct) cluster(mru) r
+
+
+**** THAT'S COOL! ****
 
 
 g behind = ar>30 & ar<.

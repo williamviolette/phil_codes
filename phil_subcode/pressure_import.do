@@ -1314,6 +1314,39 @@ save "${temp}pipe_test.dta", replace
 
 
 
+		forvalues r = 1/12 {
+			* local r 1
+			local bill_query " SELECT conacct, date FROM billing_`r' WHERE c>=0 AND c<500"
+		odbc load, exec("`bill_query'")  dsn("phil") clear  
+		fmerge m:1 conacct using "${temp}conacct_rate.dta", keep(3) nogen
+			keep if datec<=580
+			gegen dmax=max(date), by(conacct)
+			keep if date==dmax
+			keep if date<664
+
+			g house=regexm(bus,"House")==1
+			g bayan=regexm(bus,"Bayan")==1
+			g o=1
+			gegen ldc=sum(o), by(mru date)
+			gegen ldb=sum(bayan), by(mru date)
+			gegen ldh=sum(house), by(mru date)
+			gegen mt=tag(mru date)
+			keep if mt==1
+		keep date mru ldc ldb ldh
+		save "${temp}ldcm_`r'.dta", replace
+		}
+
+		use   "${temp}ldcm_1.dta", clear
+		erase "${temp}ldcm_1.dta"
+		forvalues r = 2/12 {
+			append using "${temp}ldcm_`r'.dta"
+			erase "${temp}ldcm_`r'.dta"
+		}
+		duplicates drop mru date, force
+		save "${temp}ldcm.dta", replace	
+
+
+
 
 **** YEAR PANEL! ****
 		forvalues r = 1/12 {

@@ -1,0 +1,1 @@
+function [valw,gw,hw] = GH(

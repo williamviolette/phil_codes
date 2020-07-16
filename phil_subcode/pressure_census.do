@@ -581,6 +581,9 @@ foreach r in d c  {
 }
 
 
+*** COULD BE A CHANGE IN SHARING BEHAVIOR! DON'T USE OWN TAP, INSTEAD USE NEIGHBORS!?
+
+
 g pdb = wd_11/dtot
 g pcb = wc_11/ctot
 replace pdb=0 if pdb==.
@@ -595,6 +598,12 @@ g just_before = year_inst<2010 & year_inst>2000
 
 g pre = year_inst<2010 & year_inst>2000 & year==2010
 * areg pc just_before if year==2010, a(city)
+
+
+sum pc
+
+reg pc1 mm if year==2010
+reg pc1 mm if year==2015
 
 
 

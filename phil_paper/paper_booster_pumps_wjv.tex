@@ -1,117 +1,368 @@
-\documentclass[12pt]{article}
-\usepackage[margin=1in] {geometry}                
-\geometry{letterpaper}                   % ... or a4paper or a5paper or ... 
-\pagestyle{plain}                           % Eliminates both the header and footer
-\usepackage[parfill]{parskip}
-\usepackage{graphicx}
-\usepackage{amssymb}
-\usepackage{epstopdf}
-\DeclareGraphicsRule{.tif}{png}{.png}{`convert #1 `dirname #1`/`basename #1 .tif`.png}
-\usepackage{amsmath, amsthm, amssymb}
-\usepackage{array}
-\usepackage{threeparttable}
-%\usepackage{pgfplots}
-\usepackage{tikz}
-\usepackage{tkz-euclide}
-\usepackage{longtable}
-\usepackage{caption}
-\usepackage{subcaption}
-\usepackage{verbatim}  %so that you can comment blocks of code
-\usepackage{setspace}  %change the spacing
-\usepackage[authoryear]{natbib}
-\usepackage{bbm}
-\usetikzlibrary{calc}
-%\usepackage{csvsimple}
-\usepackage[toc,page]{appendix}
-\usepackage{hyperref}
-\usepackage{cleveref}
-\usepackage{rotating}
-\usepackage{booktabs}
-\usepackage{authblk}
-\usepackage[bottom]{footmisc}
-\usepackage{titling}
-%% \newcommand{\KEYtitle}{Even Weights}
-%\usepackage[nomarkers]{endfloat}
-%\bibliography{library} 
-%\renewcommand{\efloatseparator}{\mbox{}}
-\usepackage{rotating}
-\usepackage{pdflscape}
-\usepackage[export]{adjustbox}
-\usetikzlibrary{positioning}
+\documentclass[12pt,table]{article}
 
-%\usepackage{datetime}
-%\newdateformat{monthyeardate}{\monthname[\THEMONTH]}
+\usepackage[table]{xcolor}
+% TEMPLATE DEFAULT PACKAGES
+\usepackage{amssymb,amsmath,amsfonts,eurosym,geometry,ulem,graphicx,xcolor,setspace,sectsty,comment,natbib,pdflscape,array,adjustbox,threeparttable}
+
+% ADDED PACKAGES FOR THIS MANUSCRIPT
+\usepackage{palatino,newtxmath,multirow,titlesec,threeparttable,tabu,booktabs,titlesec,threeparttable,mathtools,bm,bbm,subcaption,pdflscape,tcolorbox,mathrsfs,float}
+% endfloat,
 
 
-% \usepackage[notablist,nofiglist]{endfloat}
 
-%\renewcommand{\efloatseparator}{\mbox{}}
+%\usepackage{kbordermatrix}% http://www.hss.caltech.edu/~kcb/TeX/kbordermatrix.sty
+%\usepackage{amsmath}% http://ctan.org/pkg/amsmath
 
-% \renewcommand{\thetable}{\Roman{table}}
-% \renewcommand{\thefigure}{\Roman{figure}}
+\usepackage[colorinlistoftodos]{todonotes}
 
-% \renewcommand{\thesection}{\Roman{section}} 
-% \renewcommand{\thesubsection}{\thesection.\Alph{subsection}}
-% \renewcommand{\thesubsubsection}{\thesubsection.\roman{subsubsection}}
+\usepackage{afterpage}
+\usepackage[hyphens]{url}
+\usepackage[margin=1cm]{caption}
 
+\usepackage[draft]{hyperref}
+\newcommand{\tim}{$\,\times\,$}
+% FIGURES & TABLES CAPTION STYLING
+\captionsetup[figure]{labelfont={bf},name={Figure},labelsep=period}
+\captionsetup[table]{labelfont={bf},name={Table},labelsep=period}
 
-%\usepackage[dvipsnames]{xcolor}
-%\usepackage{cite}
-\onehalfspacing
-\usepackage{natbib}  
-\title{ Optimal Pricing and Informal Sharing: \\ Evidence from Piped Water in Manila }
-%\title{OPTIMAL PRICING AND INFORMAL SHARING: \\ EVIDENCE FROM PIPED WATER IN MANILA}
+% SECTION TITLE SETTINGS
+\titlelabel{\thetitle.\enskip}
+\titleformat*{\section}{\large\bfseries}
+\titleformat*{\subsection}{\normalsize\bfseries}
 
-\author{William Violette\thanks{Contact: Federal Trade Commission, Washington, DC: william.j.violette@gmail.com \\ I am grateful to Andrew Foster, Matthew Turner, Jesse Shapiro, Daniel Bj\"{o}rkegren, and Bryce Steinberg for guidance and encouragement.  For helpful conversations, I am also grateful to John Friedman, Edward Glaeser, Emily Oster, Brian Knight, and Lint Barrage.  In Manila, thank you to the staff of my water company partner, government regulators at MWSS, as well as the USAID Be-Secure project for access to data and excellent conversations.  This work was supported through the Watson Institute for International and Public Affairs.  Any opinions and conclusions expressed herein are those of the author and do not necessarily represent the views of the the Federal Trade Commission or its Commissioners.}
- }
-%\\ 
-%[Job Market Paper: \href{https://drive.google.com/file/d/1dM41qZLZY3EPtUqHbca6MIS-nT77hv_-/view?usp=sharing}{\textcolor{blue}{Link to Current Version}}]}
+% COLUMN TYPES
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}{>{\centering\arraybackslash}p{5.2em}}
+\newcolumntype{D}{>{\centering\arraybackslash}p{5em}}
+\newcolumntype{E}{>{\centering\arraybackslash}p{6em}}
+\newcolumntype{F}{>{\centering\arraybackslash}p{4em}}
 
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 
-\date{Current Version: March, 2019}
+\newcolumntype{J}{>{\raggedright\arraybackslash}p{5em}}
+\newcolumntype{K}{>{\raggedleft\arraybackslash}p{5em}}
+\newcolumntype{M}{>{\raggedleft\arraybackslash}p{6em}}
+
+\renewcommand{\arraystretch}{1.2} 
+
+% MARGINS AND SPACING
+\normalem
+\geometry{left=1.1in,right=1.1in,top=1.0in,bottom=1.0in}
+\setlength{\parskip}{2.5pt}
+
+% SPECIAL CELL 
+\newcommand{\specialcell}[2][c]{%
+	\begin{tabular}[#1]{@{}l@{}}#2\end{tabular}}
+
+% NO INDENT ON FOOTNOTES
+\usepackage[hang,flushmargin]{footmisc}
+
 \begin{document}
 
+\begin{titlepage} 
+%\title{{Borrowing with Unpaid Bills}\thanks{}}
+%\title{{Microcredit from Delaying Bill Payments}\thanks{}}
+\title{Microcredit from Delaying Bill Payments}
+\author{\\[3em]
+  William Violette\thanks{Federal Trade Commission, Washington, DC. E-mail: william.j.violette@gmail.com   Any opinions and conclusions expressed herein are those of the author and do not necessarily represent the views of the Federal Trade Commission or its Commissioners.  Many thanks to Matthew Panhans, Miriam Larson-Koester, Adrian Rubli-Ornelas, and Stefano Polloni.} \\
+ \\ 
+  }
+\vspace{30mm}
+\date{\vspace{5mm}This Version: \today}
 \maketitle
 \begin{abstract}
 
-%	High costs of connecting to public utilities often 
-
-%	lead households to share a connection with their neighbors instead of purchasing their own connection.  
-
-%This paper analyzes how sharing connections affects optimal pricing for water utilities. 
-
-	% Households often share connections to public utilities with their neighbors in order to split set-up and maintenance costs.  With microdata from 1.5 million water connections in Manila, this paper estimates water demand when connections are shared and solves the regulator's problem: setting prices that maximize consumer surplus while covering production costs.  In practice, cities often set low fixed prices so that more households connect and high marginal prices to cover production costs.  Instead, the optimal policy covers production costs with high fixed prices, which are split between sharing households, and sets low marginal prices to encourage consumption.  Counterfactual exercises find increases in shared connections, total piped water consumption, and social welfare from the optimal policy compared to current prices in Manila.
-
-%Sharing households split fixed prices with their neighbors to access the low marginal prices.  
-
-%	Yet, I find that low fixed and high marginal prices also weaken incentives to share water between neighbors.  
-
-
-%	Shared connections may have large implications for optimal pricing for public utilities especially 
-%	Households often offset the costs of connecting to public utilities by sharing a connection with their neighbors.  
-%	Sharing neighbor's connections 
-% In developing cities, high costs of connecting to piped water lead many households to use low-quality, non-piped sources.  
-% In response, cities often set low fixed prices so that more households connect and high marginal prices to cover production costs.  
-% This paper identifies a common alternative source --- sharing a neighbor's connection --- that has large implications for optimal water pricing.  
+Delaying bill payments to public utilities may provide an important strategy for households with volatile incomes to smooth their consumption.  At the same time, tolerating late payments may reduce net revenues for utilities, which often leads to higher prices to cover costs.  Using billing records from a large water utility in Manila, this paper estimates a household consumption and savings model to evaluate counterfactual payment policies.  A popular proposal to ensure upfront payments --- prepaid metering --- recoups less revenue than is needed to compensate households for their loss of consumption smoothing.  Alternatively, a revenue-neutral policy allowing more late payments increases welfare by encouraging greater consumption smoothing.
 
 
 
-\end{abstract} 
-\vspace{1cm}
-{\bf JEL-Classification:} H23, L95, L98, O13, O17, O18 \\
-\vspace{.1cm}
-{\bf Keywords:} Water demand, non-linear pricing, informal sector, developing countries. 
+\vspace{1in}
+\textbf{Keywords:} credit constraints; consumption smoothing; water utilities. \\
+\textbf{JEL Codes:} O13; E21; L95. \\
+\bigskip
+\end{abstract}
+\setcounter{page}{0}
+\thispagestyle{empty}
+\end{titlepage}
+\pagebreak \newpage
+
+%\spacing{1.5}
+\onehalfspacing
 
 \section{Introduction}
 
-- Discusses use of booster pumps in Clean Water Act 2004:  https://www.manilatimes.net/2018/11/04/legal-advice/dearpao/use-of-booster-pumps/461829/  http://r12.emb.gov.ph/ra-9275-the-philippine-clean-water-act/
+Key notes to fill in later:
+- Ignore externalities of booster pumps
+- No quantity margin because of splitting of taps and because census data indicates really high coverage
+- Reweight by household number
+- Also measure by closest pipe for robustness
 
-- https://idl-bnc-idrc.dspacedirect.org/bitstream/handle/10625/14878/108376.pdf?sequence=5
 
-- illegal booster pumps :  Consequence of El Niño 1997-98 on Manila water resources: new perspectives in water shortage management
 
-- seizing booster pumps : https://timesofindia.indiatimes.com/city/navi-mumbai/booster-pumps-used-by-some-socs-leading-to-water-crunch/articleshow/68856763.cms , https://timesofindia.indiatimes.com/city/nagpur/215-booster-pumps-seized/articleshow/69804589.cms
+Section: Data
 
+	- only households connected earlier (explain) (what share are those?!)
+	- consumption per HH
+	- reweight data for household level?!
+
+	- Put in a table describing pipe-replacement;  describe staggered approach; predict pipe-replacement?
+
+Section: Descriptives and defending model and approach
+
+
+\section{Descriptives}
+
+Descriptive evidence indicates that fixing pipes improves water pressure, quality, and reliability, which may each affect consumer welfare.  Table~\ref{table:descriptives} tracks water service improvements by comparing average household survey responses before and after pipe replacement.   [summarize the findings]
+
+Consumers also invest in products and behaviors to compensate for low piped water service quality.  These investments help reveal which aspects of piped water service are most valuable to consumers as well as most affected by pipe replacement.  
+
+Large investments in booster pumps suggest that households strongly value water pressure.  Before pipe replacement, 40\% of households invest in booster pumps that increase water pressure.  Booster pumps are both expensive to purchase (PhP 6,000) and operate (benchmark with electricity costs).  After pipe replacement, the share of households using booster pumps drops to 15\%.  This finding is consistent with booster pumps providing an important substitute to pressure from new water pipes.
+
+Small investments in water filters combined with frequent purchases of filtered water both before and as well as after pipe replacement indicate that households may not derive large benefits from improvements in piped water quality.  Only 12\% of households use water filters both before and after pipe replacements.  Averaging ([cost of filters]), filters are also much less expensive than booster pumps.  Low filter usage may stem from the fact that less than half of households report drinking from the tap while over 70\% of households report purchasing filtered water from local water-refilling stations.  These behaviors remain constant after pipe replacements.  Taken together, these findings indicate that water quality improvements from pipe replacements may not be primary drivers of changes in household welfare.
+
+Households cope with unreliable water supply by investing in water storage tanks.  Before pipe replacement, 43\% of households report using water storage tanks.  This percentage only drops to 36\% following pipe replacement, which is consistent with households continuing to report frequent water outages even after pipe replacement.  While households seems to value reliable service, small changes in storage tank use suggest that reliability improvements are unlikely to account for a large share of the welfare gains from pipe replacements.
+
+\begin{table}[h!] 
+\centering
+\caption{Average Survey Responses Before and After Pipe Replacement}\label{table:descriptives}
+\vspace{-2mm}
+\begin{threeparttable}
+\begin{tabular}{@{}l*{1}{KKK}@{}}
+\toprule
+  & Before & After  & All \\
+\midrule
+Piped Water Quality \\[.5em]
+\hspace{1em}$\text{Water has strong pressure (6pm-12am)}^{\dagger}$ & \input{tables/yes_flow_6mid} \\
+\hspace{1em}$\text{Water has no pressure (6pm-12am)}^{\dagger}$  & \input{tables/no_flow_6mid} \\
+% \hspace{1em}$\text{Hours with pressure per day}^{\dagger}$ & \input{tables/flow_hrs} \\
+\hspace{1em}Water interruptions in last 3 months & \input{tables/stop_freq} \\
+\hspace{1em}Water has foreign bodies & \input{tables/foreign_bodies} \\
+\hspace{1em}Water is discolored & \input{tables/discolored} \\
+\hspace{1em}Water has unusual taste/smell & \input{tables/taste_smell} \\
+\\[-.5em]
+Private Water Quality Investments \\[.5em]
+\hspace{1em}Has booster pump & \input{tables/booster} \\
+\hspace{1em}Hours booster pump is used per day & \input{tables/booster_use} \\
+\hspace{1em}Has water storage tank & \input{tables/drum} \\
+\hspace{1em}Has water filter & \input{tables/filter} \\
+\hspace{1em}Purchases filtered water & \input{tables/station} \\
+\hspace{1em}Purchases from a deepwell & \input{tables/deepwell} \\
+\hspace{1em}Spending on non-piped water (PhP) & \input{tables/wrs_exp} \\
+\hspace{1em}Drinks from the tap & \input{tables/drink} \\
+% \hspace{1em}Boils tap water before drinking & \input{tables/boil} \\
+\\[-.5em]
+Demographics \\[.5em]
+\hspace{1em}Household size & \input{tables/hhsize} \\
+\hspace{1em}Employed members & \input{tables/hhemp} \\
+\hspace{1em}High-skilled employment & \input{tables/good_job} \\
+\hspace{1em}Lives in duplex& \input{tables/sub} \\
+\hspace{1em}Lives in single house& \input{tables/single} \\
+\hspace{1em}Other households sharing tap& \input{tables/SHO} \\
+\\[-.5em]
+Households & \input{tables/pawsn} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item  $\dagger$ when not using booster pump.  Bill, Unpaid Balance, Payment, and Income are in PhP.  Measures exclude months where households remain disconnected through the end of the sample period.  Billing data include households for household-month observations.  Income data include households for household-month observations.  45 PhP = 1 USD \,\,
+% See Appendix~\ref{appendix:sampleconstruction} for more details on the sample construction.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+Increases in water pressure from pipe replacements may lead households to increase their monthly water consumption.  Rapid water flow allows households to complete a greater number of water-using activities (like cleaning and bathing) in the same amount of time.  Greater water pressure may also allow households to engage in new activities that require minimum pressure levels such as showering.\footnote{By contrast, water quality improvements may have an ambiguous effect on water consumption.  On one hand, cleaner water may induce households to use more tap water for cooking and cleaning.  On the other hand, cleaner water may increase the productivity of cleaning and bathing, which may lead households to use less piped water.}  Figure~\ref{figure:pipecons} plots average monthly water usage per household in the 4 years before and 6 after pipe replacement.  Usage increases from an average of \input{tables/c_pre}m3 before pipe replacement to \input{tables/c_post}m3 after pipe replacement, which represents an \input{tables/c_diff_per}\unskip\% increase.  The increase in usage occurs abruptly at the year of pipe replacement and remains at roughly the same level in the following 6 years.  This sustained increase in consumption suggests that pipe replacement may provide sustained impacts on household welfare.  
+
+The absence of strong pre-trends in usage suggests that replacement projects are not targeted to areas with particular trends in local water demand.  Instead, this pattern is consistent with the company's stated goal of sequentially replacing old pipes according to engineering specifications.  Table~\ref{table:descriptives} further supports this theory by indicating few demographic differences between households that receive pipe replacement projects (columns (1) and (2)) and all households (column (3)).  Also, demographic characteristics appear relatively similar before and after pipe replacement, which suggests that pipe replacements were not coupled with other policies that may have also affected demand for water.  
+
+\begin{figure}
+\begin{center}
+\caption{Average Consumption per Household with Years to Pipe Replacement}\label{figure:pipecons}
+\includegraphics[scale=1]{tables/pipe_cons.pdf}
+\end{center}
+%%% add counts and average change in discussion
+\end{figure}
+% discuss dynamics!!! of figure!!
+
+Mapping these increases in consumption into household welfare requires measuring how households trade off water usage and price.  Prices are determined by the government regulator who imposes an increasing tariff schedule according to monthly usage, which is standard among public utilities (\cite{hoque2013state}).  Despite steep increases in marginal price at specific levels of usage, households do not appear to be sensitive to these price changes because households are not observed adjusting their consumption strategically to avoid higher prices (cite appendix).  The regulator also increases prices gradually over time to ensure that the company continues to cover operating costs.  Since households also gradually increase their average usage over this interval, it is unclear whether households are responsive to these price increases (cite appendix).
+
+The government regulator also gives the water company discretion to assign households to a high-price tariff schedule if they have any business activity at their residence, which provides a novel source of price variation in the context of public utilities.  In the vast majority of cases, the high price tariff is applied to households that operate small food stands (or ``Sari-Sari'' stores).  For a household with average monthly usage, the high-price tariff results in an average price of \input{tables/p_s}PhP/m3 while the regular tariff results in an average price of \input{tables/p_r}PhP/m3 (cite appendix for tariff).  The water company periodically visits consumers and updates prices according to the activities observed at each consumer's residence.  In some cases, consumers request price changes, which prompts the company to investigate the household and determine the appropriate price.  Table~\ref{table:pricechangestatistics} provides average characteristics of households that are always observed with the regular price (in column (1)), that are always observed with the high price (in column (2)), and that are observed changing prices during the sample (in column (3)).  While the 2,442 households that experience price changes use more water than other households, they share similar demographic characteristics, which suggests that they may also share similar price-sensitivities.  
+
+Figure~\ref{figure:usagepricechanges} plots average usage 4 years before and after households are switched from the regular price to the high price (in red) as well as before and after households are switched from the high price to the regular price (in blue).  Before the price change, average usage for both groups follows relatively constant trends.  The price change is associated with a usage jump for households switched to the regular price and a corresponding usage slide for households switched to the high price.  The changes in consumption appear relatively persistent up to 4 four years after the price changes.  These patterns indicate that household water usage is sensitive to large, discrete price changes.  
+
+
+\begin{table}[h!] % PUT IN DEMOGRAPHICS PLEASE ?!?!?
+\centering
+\caption{Average Household Characteristics by Prices Charged}\label{table:pricechangestatistics}
+\vspace{-2mm}
+\begin{threeparttable}
+\begin{tabular}{@{}l*{1}{KKK}@{}}
+\toprule
+  & Always Reg. Price & Always High Price  & Change Price \\
+\midrule
+Usage per Household (m3)& \input{tables/cv_rs} \\
+Household size & \input{tables/hhsize_rs} \\
+Employed members & \input{tables/hhemp_rs} \\
+High-skilled employment & \input{tables/good_job_rs} \\
+Lives in duplex& \input{tables/sub_rs} \\
+Lives in single house& \input{tables/single_rs} \\
+Other households sharing tap& \input{tables/SHO_rs} \\
+\\[-.5em]
+Households & \input{tables/N_rs} \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item  Reg. refers to regular price.  
+
+Pressure is 6 to midnight! Bill, Unpaid Balance, Payment, and Income are in PhP.  Measures exclude months where households remain disconnected through the end of the sample period.  Billing data include households for household-month observations.  Income data include households for household-month observations.  45 PhP = 1 USD \,\,
+% See Appendix~\ref{appendix:sampleconstruction} for more details on the sample construction.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+\begin{figure}
+\begin{center}
+\caption{Usage and Price Changes}\label{figure:usagepricechanges}
+\includegraphics[scale=1]{tables/r_to_s_graph.pdf}
+\end{center}
+\end{figure}
+
+
+
+ % If households were sensitive to price increases at specific consumption levels, then households would be expected to frequently consume just below these levels.  However, Appendix Figure plots the frequency 
+
+
+
+
+
+
+% The welfare benefits of fixing water pipes depends on which dimensions of service quality are improved by pipe replacement.  Table~\ref{table:descriptives} compares average household survey responses before and after pipe replacement.
+
+% Allow services that they couldn't before
+
+% Before pipe replacement, households experience weak water pressure and low water quality.  30\% of households report generally having no water pressure from 6 pm to 12 am in the absence of an extra household pump to boost water pressure.  23\% of households report that their piped water generally has foreign bodies.
+
+% To compensate for low piped water quality, many households invest in private water booster pumps, storage drums, water filters, and purchases of non-piped water.  
+
+% Both pressure and water quality improve substantially following pipe replacement.  The shares of households reporting no water pressure, water discoloration, foreign bodies, and unusual tastes/smells all drop to below 6\%.  
+
+% - Quality complements more consumption
+% - Water quality implies that consume the same, just enjoy it wayyy more
+% 	- maybe need to clean things longer
+% 	- maybe clean things the same but get way more utility
+
+% - Pressure implies that quantity is positively linked to quality!
+% 	- has the same feature?
+% 	- use the same water, just less time...
+% 	- costly to push for that extra water..... from a time perspective
+% 		- Natural to think of relieving the pressure as leading to greater consumption!
+
+
+
+
+	% Table: 
+	% 	(A) What does pipe fixing mean?
+	% 		- Quality, Hours, Flow
+
+	% 	(B) How do households change their investments?
+
+	% 	(C) How do households use their water?
+
+	% 	(D) Household demographics including sharing
+	% 		* N 
+	% 	(E) Household consumption/payments/disconnection/standard deviation! (from billing data N)
+	% 		* N
+
+
+
+
+%%%% PIPE AGE %%%  possibly lower quality as well
+% http://www.mayniladwater.com.ph/news-article.php?id=656
+% West Zone concessionaire Maynilad Water Services, Inc. (Maynilad) replaced a total of 196 kilometers of old pipes in 2016, bringing the total length of pipes replaced within its concession area to 1,709 kilometers—about the same distance from Manila to Hanoi, Vietnam—since the company’s re-privatization in 2007.
+% Maynilad invested ₱1.85 billion for its pipe replacement projects in 2016 alone. The old pipelines rehabilitated last year were located mostly in Quezon City, Manila and Bacoor City, where “pipe age” ranged from 30 to 40 years.
+% http://www.mayniladwater.com.ph/news-article.php?id=366
+% Maynilad spends 77M to replace 24km pipes in Malabon
+% July 03, 2013
+
+% West Zone concessionaire Maynilad Water Services, Inc. (Maynilad) is replacing 23.6 kilometers of secondary and tertiary pipes in Malabon City to improve services to more than 12,800 households in the area. The water company is spending some P77 million to replace the 30-year old pipes by the 3rd quarter of 2013.
+
+% % doesn't dramatically change substitution to other sources!
+
+% Reference Hanoi for how households may care about water use
+% 	- percentages
+
+% --- Water pump depreciation!?
+
+% Figure consumption graph for effect dynamics (appendix with all other effect dynamics)
+
+% Figures no bunching; small changes over time
+% 	- Cite a bunch of other papers here... novel identification....
+
+% Figures price variation and selection into switchers...
+% 	- examine robustness to alternative alpha definitions...
+
+
+Section Model:
+	- What are the key model choices?
+		- Satiation in water consumption
+		- Linear term in quality
+			- need to include expectation?
+		- Booster error independence ! (keep assumption!) and sorting
+		- Booster externality assumption
+
+
+Section Estimation:
+	- show what happens when boosters are turned off
+
+
+Section Welfare:
+	- Welfare benefits with 10 yr 5\% loans (assume discount rates) or 50 yr 5\% loan?
+	- Welfare benefits with cash
+	- Are households willing to pay for pipe improvements?
+
+
+Robustness:
+	- Use nearest pipe replacement definition (selection into meter identification)
+
+
+
+% - Discusses use of booster pumps in Clean Water Act 2004:  https://www.manilatimes.net/2018/11/04/legal-advice/dearpao/use-of-booster-pumps/461829/  http://r12.emb.gov.ph/ra-9275-the-philippine-clean-water-act/
+% - https://idl-bnc-idrc.dspacedirect.org/bitstream/handle/10625/14878/108376.pdf?sequence=5
+% - illegal booster pumps :  Consequence of El Niño 1997-98 on Manila water resources: new perspectives in water shortage management
+% - seizing booster pumps : https://timesofindia.indiatimes.com/city/navi-mumbai/booster-pumps-used-by-some-socs-leading-to-water-crunch/articleshow/68856763.cms , https://timesofindia.indiatimes.com/city/nagpur/215-booster-pumps-seized/articleshow/69804589.cms
+
+
+\section{Appendix}
+
+
+
+
+
+
+
+\begin{figure}
+\caption{Price Time-Series}\label{figure:pricetimeseries}
+\begin{center}
+\includegraphics[scale=1]{tables/price_series.pdf}
+\end{center}
+\end{figure}
+
+
+\begin{figure}
+\caption{Tariff Schedule}
+\begin{center}
+\includegraphics[scale=1]{tables/rs_prices.pdf}
+\end{center}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+\caption{Consumption Histogram}
+\includegraphics[scale=1]{tables/consumption_histogram.pdf}
+\end{center}
+\end{figure}
 
 
 {

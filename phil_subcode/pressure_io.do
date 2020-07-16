@@ -81,8 +81,12 @@ save "${temp}pipes_paws_cbms.dta", replace
 * use "${data}backup_cbms/2005/pasay_hh_fin_1.dta", clear
 
 
-* use "${data}backup_cbms/2011/pasay_final2011_mem_1.dta", clear
-
+use "${data}backup_cbms/2011/pasay_final2011_mem_1.dta", clear
+keep if regexm(indust,"SARI")==1
+g sari = 1
+keep sari hcn
+duplicates drop hcn, force
+save "${temp}sari_hh_11.dta", replace
 
 use "${data}backup_cbms/2011/pasay_final2011_hh_1.dta", clear
 
@@ -94,6 +98,9 @@ use "${data}backup_cbms/2011/pasay_final2011_hh_1.dta", clear
 	g date=ym(year,month)
 
 duplicates drop hcn, force
+
+merge m:1 hcn using "${temp}sari_hh_11.dta", keep(1 3) nogen
+replace sari=0 if sari==.
 
 * keep if source_water == 1
 g sick=gsick==1
@@ -111,7 +118,7 @@ replace elec_price =elec_bill/100
 replace elec_price=. if elec_price>6000
 
 
-keep hcn source_water water bill hhsize hhemp inc ofw year brgy low_wsupp sick elec_price water_supply s_*
+keep hcn sari source_water water bill hhsize hhemp inc ofw year brgy low_wsupp sick elec_price water_supply s_*
 
 replace ofw =  ofw/12
 replace ofw = . if ofw>60000
@@ -125,7 +132,13 @@ save "${temp}cbms_temp_pressure_2011.dta", replace
 
 
 
-* use "${data}backup_cbms/2008/pasay_memfinal08_1.dta", clear
+use "${data}backup_cbms/2008/pasay_memfinal08_1.dta", clear
+keep if regexm(indust,"SARI")==1
+g sari = 1
+keep sari hcn
+duplicates drop hcn, force
+save "${temp}sari_hh_08.dta", replace
+
 
 use "${data}backup_cbms/2008/pasay_hhfinal08_1.dta", clear
 
@@ -155,6 +168,9 @@ g sick = wsick==1
 keep hcn water bill elec_price hhsize hhemp inc ofw year brgy sick
 
 duplicates drop hcn, force
+
+merge m:1 hcn using "${temp}sari_hh_08.dta", keep(1 3) nogen
+replace sari=0 if sari==.
 
 
 replace ofw =  ofw/12
@@ -205,7 +221,13 @@ g ww=water==1 | water==2
 g water_increase = 0 if water_supply!=.
 replace water_increase=1 if water_supply==2
 
+gegen msari=max(sari), by(hcn)
+
+
 areg ww post hhsize inc hhemp i.year, a(brgy) cluster(brgy) r
+
+
+areg inc post i.year if sari==1, a(brgy) cluster(brgy) r
 
 
 areg elec_price post hhsize inc hhemp i.year, a(brgy) cluster(brgy) r
@@ -377,8 +399,10 @@ save "${temp}brgy_year_water.dta", replace
 
 use "${temp}b_tot.dta", clear
 
-	merge 1:1 year brgy using "${temp}brgy_year_water.dta", keep(1 3) nogen
 
+	merge 1:1 year brgy using "${temp}brgy_year_water.dta", keep(1 3) nogen
+	* ren brgy bar
+	* merge m:1 bar using "${temp}brgy_pipe_date.dta", keep(1 3) nogen
 
 sort brgy year
 foreach var of varlist NF YF FH {
@@ -391,13 +415,17 @@ foreach var of varlist NF YF FH {
 }
 
 
-areg tot_b NF YF  i.year, a(brgy) cluster(brgy)
+areg tot_b YF  i.year, a(brgy) cluster(brgy)
 
-areg water_b NF YF  i.year, a(brgy) cluster(brgy)
+areg water_b YF  i.year, a(brgy) cluster(brgy)
 
-areg sari_b  NF YF  i.year, a(brgy) cluster(brgy)
+areg sari_b   YF  i.year, a(brgy) cluster(brgy)
 
-areg retail_b NF YF  i.year, a(brgy) cluster(brgy)
+
+areg sari_b  YF i.year if sari_b<10, a(brgy) cluster(brgy)
+
+
+areg retail_b YF  i.year, a(brgy) cluster(brgy)
 
 
 

@@ -2,6 +2,24 @@
 
 
 
+**** BUT! WHAT if this is a MASSIVE! welfare improvement?! AND GETS at the OTHER ASPECT OF QUALITY!?!
+
+
+****** How to think about problems with quantity?
+* (1) Large joint accounts closing RULE THIS OUT!?
+	* how to rule this out?!
+		* use AVERATE!!! (not flagged in early records?)
+		* should see accounts permanently disconnect when it comes in!
+		* look at TOTAL volume (including even high c!?)
+			***  i remember seeing a drop !
+		* date created: the probability that  
+
+* (2) Little change in census data (unreliable? look more carefully at it?!
+*              maybe there actually is a change? Law that you have to be connected?)
+
+* (3) Theft?  Unlikely (demographically identical..)
+
+
 
 
 use "${temp}conacct_rate.dta", clear
@@ -121,6 +139,7 @@ use "${temp}activem.dta", clear
 	merge m:1 mru using "${temp}mru_set.dta", keep(3) nogen
 	merge m:1 mru using "${temp}pipe_year_nold.dta", keep(1 3) nogen
 	merge 1:1 mru date using  "${temp}mru_inst.dta", keep(1 3) nogen
+	merge 1:1 mru date using  "${temp}ldcm.dta", keep(1 3) nogen
 g dated=dofm(date)
 g year=year(dated)
 
@@ -133,14 +152,14 @@ replace pT=1 if pT==1010
 
 g anres=asum-aressum
 
-foreach var of varlist cpanel asum aressum anres csum cmean cread clow csumlow bm dct  minst mbnk mnapc pay pays payc {
+foreach var of varlist cpanel asum aressum anres csum cmean cread clow csumlow bm dct  minst mbnk mnapc pay pays payc ldc ldb ldh {
 	gegen `var'_y=mean(`var'), by(mru year)
 }
-foreach var of varlist cpanel asum aressum anres csum cmean cread clow csumlow bm dct  minst mbnk mnapc pay pays payc {
+foreach var of varlist cpanel asum aressum anres csum cmean cread clow csumlow bm dct  minst mbnk mnapc pay pays payc ldc ldb ldh {
 	gegen `var'_M=mean(`var'), by(pT)
 }
 g oset = min_pT<=-3 & max_pT>=3 & max_pT<1000
-foreach var of varlist cpanel asum aressum anres csum cmean cread clow csumlow bm dct  minst mbnk mnapc pay pays payc {
+foreach var of varlist cpanel asum aressum anres csum cmean cread clow csumlow bm dct  minst mbnk mnapc pay pays payc ldc ldb ldh {
 	g `var'_o = `var' if oset==1
 	gegen `var'_O=mean(`var'_o), by(pT)
 	drop `var'_o
@@ -184,6 +203,26 @@ reg aressum_y post year i.ba if yt==1, cluster(mru) r
 
 
 xi: areg aressum_y post i.year*i.ba if yt==1   , a(mru) cluster(mru) r 
+
+
+
+xi: areg cmean_y i.pT i.year*i.ba if yt==1   , a(mru) cluster(mru) r 
+	coefplot, keep(*pT*) vertical
+
+
+xi: areg cpanel_y i.pT i.year*i.ba if yt==1   , a(mru) cluster(mru) r 
+	coefplot, keep(*pT*) vertical
+
+
+xi: areg ldc_y i.pT i.year*i.ba if yt==1   , a(mru) cluster(mru) r 
+	coefplot, keep(*pT*) vertical
+
+xi: areg ldb_y i.pT i.year*i.ba if yt==1   , a(mru) cluster(mru) r 
+	coefplot, keep(*pT*) vertical
+
+xi: areg ldh_y i.pT i.year*i.ba if yt==1   , a(mru) cluster(mru) r 
+	coefplot, keep(*pT*) vertical
+
 
 
 xi: areg aressum_y i.pT i.year*i.ba if yt==1   , a(mru) cluster(mru) r 

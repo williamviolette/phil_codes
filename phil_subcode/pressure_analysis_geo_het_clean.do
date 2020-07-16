@@ -353,6 +353,8 @@ sum tot_pop if year==2008
 sum tot_pop if year==2015
 
 
+g anres=asum-aressum
+
 
 reg tot_pop posta pop_density no_apt no_rent age hs_grad college_grad prof_emp low_emp i.year i.ba , cluster(mru) r
 
@@ -364,6 +366,7 @@ reg aressum posta  i.year i.ba , cluster(mru) r
 reg tot posta  i.year i.ba , cluster(mru) r
 
 reg pop posta  i.year i.ba if tot_pop<4, cluster(mru) r
+
 
 
 xi: areg tot_pop posta  i.year*i.ba  , cluster(mru) r a(mru)
@@ -463,6 +466,11 @@ xi: areg aressum_y i.pT i.year*i.ba if yt==1 & sub_mruh==0   , a(mru) cluster(mr
  	coefplot, keep(*pT*) vertical
 
 
+ areg anres i.pT i.year  , a(mru)  r 
+ 	coefplot, keep(*pT*) vertical
+ 	
+ areg aressum i.pT i.year  , a(mru)  r 
+ 	coefplot, keep(*pT*) vertical
 
 
 xi: areg payc_y i.pT i.year*i.ba if yt==1   , a(mru) cluster(mru) r 
