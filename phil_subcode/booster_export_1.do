@@ -18,6 +18,40 @@
 
 
 
+cap prog drop print_mean2
+program print_mean2
+    qui mean `2' [pweight = SHO ] if treated==1 & post==0 & paws==1
+    mat j=e(b)
+    local value1=string(`=j[1,1]*`4'',"`3'")
+    qui mean `2' [pweight = SHO ] if treated==1 & post==1 & paws==1
+    mat j=e(b)
+    local value2=string(`=j[1,1]*`4'',"`3'")
+    qui mean `2' [pweight = SHO ] if paws==1
+    mat j=e(b)
+    local value3=string(`=j[1,1]*`4'',"`3'")
+
+    file open newfile using "${output}`1'.tex", write replace
+    file write newfile "`value1' & `value2' & `value3'"
+    file close newfile    
+end
+
+
+cap prog drop print_mean2n
+program print_mean2n
+    qui sum `2' if minpost==0 & post==0, detail 
+    local value1=string(`=r(N)*`4'',"`3'")
+    qui sum `2' if minpost==0 & post==1, detail 
+    local value2=string(`=r(N)*`4'',"`3'")
+    qui sum `2', detail 
+    local value3=string(`=r(N)*`4'',"`3'")
+
+    file open newfile using "${output}`1'.tex", write replace
+    file write newfile "`value1' & `value2' & `value3'"
+    file close newfile    
+end
+
+
+
 		use "${data}paws/clean/full_sample_b_1.dta", clear
 
 		destring may_exp_extra, replace force
@@ -56,7 +90,7 @@
 
 		destring hhsize, replace force
 		g hhsize1 = hhsize
-		replace hhsize=. if hhsize>12
+		replace hhsize1=. if hhsize>12
 
 		destring shr_hh_extra, replace force
 		ren shr_hh_extra SHO
@@ -70,17 +104,22 @@
 		replace SHO = 3 if hho>5 & hho<=11 & wave==3
 		replace SHO = 4 if hho>11 & hho<. & wave==3
 		replace SHO = 1 if hho==0 & wave==3
-			replace hhsize = . if hhsize>12
-			replace hho = . if hho<0 | hho>14		
 
 		g B = booster=="Oo"
 		g S = storage!=""
 		destring hhemp, replace force
-		replace hhemp=. if hhemp>12
 
 			drop age
 			ren age age
 			destring age, replace force
+		
+		**** KEY DROP SECTION ****
+		drop if hhemp>12
+		drop if hhsize>16
+		drop if SHO==.
+		* drop if age>100 | age<12
+		
+
 			g sub=regexm(house,"Subdivided")==1
 			g single=regexm(house,"Single house")==1
 
@@ -102,8 +141,6 @@
 			destring job, replace force
 			ren class sclass
 
-
-			keep if SHO !=.
 		keep date year me conacct  SHO drink_freq filter fl_* hhsize drink boil wrs wrs_type no_flow yes_flow flow_hrs barangay B S wave balde drum gallon sub single hhemp hho job age  sclass
 
 		merge 1:1 conacct wave using "${temp}paws_prefs_b.dta", keep(1 3) nogen
@@ -140,6 +177,10 @@ g post = year>=year_inst & year_inst<.
 g sem = class==2
 
 gegen minpost=min(post), by(mru)
+g treated=minpost==0
+
+g month = month(dated)
+
 
 g w3_id = wave==3
 g w4_id = wave==4
@@ -162,10 +203,24 @@ sum B if post==1 & minpost==0
 global rpost=`=r(mean)'
 disp $rpost-$rpre
 
+* sum c, detail 
+g mc = 28 // plug in AVERAGE consumption
+
+g p1 = amt/c
+replace p1 = . if p1<5 | p1>100
+replace p1= . if c!=mc
+
+gegen pa = mean(p1), by(date class)
+
+g pa_adj = pa
+replace pa_adj = 15.6 if (date==584 | date==585)  &  class==1
+replace pa_adj = 21 if (date==584 | date==585 | date==587 | date==588 | date==590 | date==591)  &  class==2
+
+* gegen dct=tag(class date)
+* twoway scatter pa_adj date if dct==1
 
 
-
-foreach v in B SHO hhsize sub single hhemp good_job drum {
+foreach v in B SHO hho hhsize sub single hhemp good_job {
 	g `v'_3_id = `v' if wave==3
 	g `v'_4_id = `v' if wave==4
 	g `v'_5_id = `v' if wave==5
@@ -195,71 +250,16 @@ foreach v in B SHO hhsize sub single hhemp good_job drum {
 	drop `v'_3 `v'_4 `v'_5
 }
 
+* g class_change = class_max!=class_min
+	* reg c  post B pa_adj i.class_max class_change treated i.date 
+	* reg c  post B pa_adj i.class_max class_change treated  hhsize hhemp good_job  i.date
+	* areg c post pa_adj  i.class_max class_change i.date,  a(mru)
+	* areg c post pa_adj i.date,  a(conacct)
 
-g cv = c/SHO
+g tot_hh =  hho+hhsize
+g c_shr  = hhsize/tot_hh
 
-g p = amt/c
-
-sum c, detail
-global c_25p=`=r(p25)'
-global c_50p=`=r(p50)'
-global c_75p=`=r(p75)'
-
-	sum p if c<$c_25p & class==1, detail
-		global p_q1=`=r(mean)'
-	sum p if c>=$c_25p & c<$c_50p & class==1, detail
-		global p_q2=`=r(mean)'
-	sum p if c>=$c_50p & c<$c_75p & class==1, detail
-		global p_q3=`=r(mean)'
-	sum p if c>=$c_75p & class==1, detail
-		global p_q4=`=r(mean)'
-
-g p_r = ($p_q1 + $p_q2 + $p_q3 + $p_q4)/4
-
-	sum p if c<$c_25p & class==2, detail
-		global p2_q1=`=r(mean)'
-	sum p if c>=$c_25p & c<$c_50p & class==2, detail
-		global p2_q2=`=r(mean)'
-	sum p if c>=$c_50p & c<$c_75p & class==2, detail
-		global p2_q3=`=r(mean)'
-	sum p if c>=$c_75p & class==2, detail
-		global p2_q4=`=r(mean)'
-
-g p_s = ($p2_q1 + $p2_q2 + $p2_q3 + $p2_q4)/4
-
-g pm = p_r if class==1
-replace pm = p_s if class==2
-
-g ys = year-2008
-
-
-* reg SHO post i.year, cluster(mru)
-
-
-
-g p1 = p
-sum p1, detail
-replace p1 = . if p1>`=r(p99)'
-g pmiss=p1==.
-sort pmiss year c class
-by   pmiss year c class: g cn=_n
-g p_res_set = p1 if cn==1 & c<=80 & class==1
-g p_sem_set = p1 if cn==1 & c<=80 & class==2
-reg p_res_set c
-mat eres=e(b)
-g pi_res = eres[1,2]
-g pr_res = eres[1,1]
-reg p_sem_set c
-mat esem=e(b)
-g pi_sem = esem[1,2]
-g pr_sem = esem[1,1]
-g pi = pi_res if class==1
-replace pi = pi_sem if class==2
-g pr = pr_res if class==1
-replace pr = pr_sem if class==2
-
-
-
+g cv = c*c_shr
 
 cap drop rng_id 
 cap drop md
@@ -279,581 +279,360 @@ sort cch md rng_id conacct
 by cch: g cnch=_n
 gegen rdch=min(cnch), by(conacct)
 
+	foreach var of varlist  cv B post pa_adj year month  class_max class_min hhsize hhemp good_job  SHO {
+		drop if `var'==.
+	}
 
-** ** ** HOW ABOUT FE!? ** ** ** 
-
-* gegen Bmax=max(B), by(conacct)
-* gegen Bmin=min(B), by(conacct)
-* gegen ctag=tag(conacct)
-* tab Bmax Bmin if ctag==1
-* areg cv B post i.year, a(mru) cluster(conacct)
-* areg cv B post i.year, a(conacct) cluster(conacct)
-
-g B_drum = B*drum
+save "${temp}final_analysis.dta", replace
 
 
-reg cv pi pr drum B B_drum post class_max class_min hhsize ys, cluster(mru)
 
 
-reg cv pm drum B B_drum post class_max class_min hhsize ys, cluster(mru)
-reg cv pm post class_max class_min hhsize ys, cluster(mru)
-reg cv pm post class_max class_min hhsize ys if (rdch<=10000 & cch==1) | (rdch<=10000 & cch==0), cluster(mru)
-reg cv pm post class_max class_min hhsize good_job sub ys if (rdch<=10000 & cch==1) | (rdch<=10000 & cch==0), cluster(mru)
-reg cv pm post class_max class_min hhsize good_job sub ys if (rdch<=10000 & cch==1) | (rdch<=10000 & cch==0), cluster(mru)
-reg cv pm post class_max class_min hhsize hhemp good_job sub single SHO  ys if (rdch<=10000 & cch==1) | (rdch<=10000 & cch==0), cluster(mru)
-reg cv pm post class_max class_min hhsize hhemp good_job  SHO  ys if (rdch<=10000 & cch==1) | (rdch<=10000 & cch==0), cluster(mru)
-reg cv pm post class_max hhsize hhemp good_job  SHO  ys if (rdch<=10000 & cch==1) | (rdch<=10000 & cch==0), cluster(mru)
-reg cv pm post class_max class_min hhsize  if (rdch<=1000 & cch==1) | (rdch<=10000 & cch==0), cluster(mru)
 
 
-*** TREATED! ***
-g treated=minpost==0
+
+
+use "${temp}final_analysis.dta", clear
+
+	keep if cv<150
+	drop if date==653
+	g clmax=class_max==2
+	g clmin=class_min==2
+ 	g class_change = class_max!=class_min
+gegen dateg=group(date)
+	g post_treated=post*treated
+
+g paws=smell!=.
+
+**** HOUSEHOLD SAMPLE! ****
+* keep conacct SHO date 
+
+gegen ctag=tag(conacct)
+
+forvalues r=1/4 {
+	count if SHO==`r' & ctag==1
+	global N_S`r' = (1/(5-`r'))*`=r(N)'
+}
+
+set seed 3
+g ri = runiform()
+replace ri=. if ctag!=1
+gegen rn = max(ri), by(conacct)
+g rs = rn
+replace rn = 0 if class_change==1
+
+gegen md1 = min(date), by(conacct)
+g SHO1id=SHO if md1==date
+gegen SHO1 = max(SHO1id), by(conacct)
+replace md1 = 0 if md1==date
+sort SHO1 md1 rn conacct
+by SHO1: g cn1=_n
+gegen rd1 = min(cn1), by(conacct)
+
+g 		es = rd1<=$N_S1  if  SHO1==1
+replace es = rd1<=$N_S2  if  SHO1==2
+replace es = rd1<=$N_S3  if  SHO1==3
+replace es = rd1<=$N_S4  if  SHO1==4
+
+sort rs
+
+sum pa_adj if class==1
+g pa_adj1 = `=r(mean)'  if class==1
+sum pa_adj if class==2
+replace pa_adj1 = `=r(mean)' if class==2
+
+
+foreach var of varlist B {
+	gegen `var'_ma = max(B), by(year conacct)
+}
+foreach var of varlist cv post_treated pa_adj dateg clmax class_change hhsize hhemp good_job treated SHO {
+	gegen `var'_m = mean(`var'), by(year conacct)
+}
+gegen year_tag = tag(year conacct)
+
+gegen pa_adj_min = min(pa_adj), by(year conacct)
+
+gegen datem=min(date), by(conacct)
+g classm_id=class if datem==date
+gegen classm=min(classm_id), by(conacct)
+g semm = classm==2 & class_change==1
+g resm = classm==1 & class_change==1
+
+
+g post_treated_B=B*post_treated
+
+	reg cv_m post_treated_m pa_adj_m B_ma clmax_m semm resm  treated_m hhsize_m hhemp_m good_job_m  i.year if year_tag==1 &  es==1, cluster(mru)
+
+	* reg cv_m post_treated_m pa_adj_min  B_ma clmax_m class_change_m treated_m hhsize_m hhemp_m good_job_m  i.year if year_tag==1 &  es==1, cluster(mru)
+
+	reg cv  post_treated pa_adj B clmax semm resm treated  hhsize hhemp good_job  i.date if es==1, cluster(mru)
+
+
+	areg cv  post_treated pa_adj B clmax semm resm treated  hhsize hhemp good_job  i.date if es==1, a(mru) cluster(mru)
+
+
+	areg cv  post_treated pa_adj B post_treated_B clmax semm resm treated  hhsize hhemp good_job  i.date if es==1, a(mru) cluster(mru)
+
 
 
 
 preserve
-	keep if (rdch<=1000 & cch==1) | (rdch<=10000 & cch==0)
-	foreach var of varlist  cv B post pm ys  class_max class_min hhsize {
-		drop if `var'==.
-	}
-	keep if cv<150
-	keep cv B post pm ys  class_max class_min hhsize hhemp good_job sub
-   order cv B post pm ys  class_max class_min hhsize hhemp good_job sub
-   export delimited "${temp}booster_sample1_1.csv", delimiter(",") replace
+	keep if es==1 & year_tag==1
+	* keep if (rdch<=10000 & cch==1) | (rdch<=10000 & cch==0)
+	keep cv_m B_ma post_treated_m pa_adj_m year clmax_m class_change_m hhsize_m hhemp_m good_job_m treated_m SHO_m
+   order cv_m B_ma post_treated_m pa_adj_m year clmax_m class_change_m hhsize_m hhemp_m good_job_m treated_m SHO_m
+   export delimited "${temp}booster_sample_year.csv", delimiter(",") replace
 restore
+
+
+preserve
+	keep if es==1
+	keep if (rdch<=10000 & cch==1) | (rdch<=10000 & cch==0)
+	keep cv B post_treated pa_adj dateg clmax class_change hhsize hhemp good_job treated SHO
+   order cv B post_treated pa_adj dateg clmax class_change hhsize hhemp good_job treated SHO
+   export delimited "${temp}booster_sample_date.csv", delimiter(",") replace
+restore
+
+preserve
+	keep if es==1
+	keep if (rdch<=10000 & cch==1) | (rdch<=10000 & cch==0)
+	keep cv B post_treated pa_adj1 dateg clmax class_change hhsize hhemp good_job treated SHO
+   order cv B post_treated pa_adj1 dateg clmax class_change hhsize hhemp good_job treated SHO
+   export delimited "${temp}booster_sample_date_pa1.csv", delimiter(",") replace
+restore
+
+
+preserve 
+
+
+
+* reg cv i.date
+* predict cv_adj, resid
+* sum cv
+* replace cv_adj=cv_adj+`=r(mean)'
+
+	reg cv  post_treated pa_adj1  B clmax class_change treated if es==1
+
+	reg cv  post_treated pa_adj  B clmax class_change treated i.date,
+	reg cv  post_treated pa_adj B clmax class_change  treated  hhsize hhemp good_job  i.date if es==1
+	reg cv  post_treated pa_adj1 B clmax class_change  treated  hhsize hhemp good_job i.date if es==1
+
+	reg cv  post_treated pa_adj1 B clmax class_change  treated  hhsize hhemp good_job i.year if es==1
+
+	reg cv  post_treated pa_adj B clmax class_change  treated  hhsize hhemp good_job i.date if es==1
+
+	reg cv  post_treated pa_adj1 B clmax class_change  treated  hhsize hhemp good_job i.year i.month if es==1
+
+
+
+
+* browse date conacct SHO ctag ri rn md1 cn1 rd1 es
+* g es = rn<=.25 if SHO==1
+* replace es = rn<=.5 if SHO==2
+* replace es = rn<=.75 if SHO==3
+* replace es = rn<=1 if SHO==4
+
+	lab var post_treated "After Pipe Replacement"
+	lab var B "Use Booster Pump"
+	lab var cv "Usage per Household (m3)"
+
+	lab var pa_adj "Avg. Price (PhP)"
+	lab var clmax "Ever High Price"
+	lab var class_change "Ever Change Price"
+	lab var treated "Pipe Replacement Area"
+	lab var hhsize "Household Size"
+	lab var hhemp "Employed Household Members"
+	lab var good_job "High Skilled Employment"
+
+
+
+preserve
+	keep if es==1
+
+	reg cv  post_treated pa_adj  B clmax class_change treated i.date,  cluster(mru)
+		eststo cv1
+		sum cv if e(sample)==1, detail
+		estadd scalar varmean = `r(mean)'
+		estadd local  ctrl_time1 "\checkmark"
+		* estadd local  ctrl_time2 ""
+		estadd local  ctrl_place ""
+		estadd local  ctrl_ind ""
+
+	reg cv  post_treated pa_adj B clmax class_change  treated  hhsize hhemp good_job  i.date,  cluster(mru)
+		eststo cv2
+		sum cv if e(sample)==1, detail
+		estadd scalar varmean = `r(mean)'
+		estadd local  ctrl_time1 "\checkmark"
+		* estadd local  ctrl_time2 ""
+		estadd local  ctrl_place ""
+		estadd local  ctrl_ind ""
+
+	areg cv  post_treated pa_adj B clmax class_change hhsize hhemp good_job  i.date,  a(mru) cluster(mru)
+		eststo cv3
+		sum cv if e(sample)==1, detail
+		estadd scalar varmean = `r(mean)'
+		estadd local  ctrl_time1 "\checkmark"
+		* estadd local  ctrl_time2 ""
+		estadd local  ctrl_place "\checkmark"
+		estadd local  ctrl_ind ""
+
+	areg cv  post_treated pa_adj  i.date,  a(conacct)  cluster(mru)
+		eststo cv4
+		sum cv if e(sample)==1, detail
+		estadd scalar varmean = `r(mean)'
+		estadd local  ctrl_time1 "\checkmark"
+		* estadd local  ctrl_time2 "\checkmark"
+		estadd local  ctrl_place ""
+		estadd local  ctrl_ind "\checkmark"
+
+restore
+
+
+
+* ctrl_time2 
+
+estout cv1 cv2 cv3 cv4 using "${output}cv_reg.tex", replace  style(tex) ///
+	 keep(  post_treated pa_adj B  treated  clmax class_change hhsize hhemp good_job ) ///
+	order(  post_treated  pa_adj B  treated clmax class_change  hhsize hhemp good_job ) ///
+		  label noomitted ///
+		  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
+		  stats( varmean ctrl_time1 ctrl_place ctrl_ind r2 N , ///
+		  labels( "Mean" "Calendar Month FE"  "Small-Area FE" "Household FE" "$\text{R}^{2}$" "N"  )  ///
+		    fmt( %12.2fc  %12s   %12s %12s  %12.3fc %12.0fc  )   ) ///
+		  starlevels(  "\textsuperscript{c}" 0.10    "\textsuperscript{b}" 0.05  "\textsuperscript{a}" 0.01) 
+
+
+
+preserve
+	keep if es==1
+	reg B  post_treated treated i.date, cluster(mru) r
+			eststo B1
+		sum B if e(sample)==1, detail
+		estadd scalar varmean = `r(mean)'
+		estadd local  ctrl_time1 "\checkmark"
+		estadd local  ctrl_place ""
+
+	reg B  post_treated pa_adj clmax class_change treated  hhsize hhemp good_job i.date, cluster(mru)
+			eststo B2
+		sum B if e(sample)==1, detail
+		estadd scalar varmean = `r(mean)'
+		estadd local  ctrl_time1 "\checkmark"
+		estadd local  ctrl_place ""
+
+	areg B post_treated pa_adj clmax class_change treated  hhsize hhemp good_job i.date, a(mru) cluster(mru)
+			eststo B3
+		sum B if e(sample)==1, detail
+		estadd scalar varmean = `r(mean)'
+		estadd local  ctrl_time1 "\checkmark"
+		estadd local  ctrl_place "\checkmark"
+restore
+
+estout B1 B2 B3 using "${output}B_reg.tex", replace  style(tex) ///
+	keep(   post_treated treated pa_adj clmax class_change  hhsize hhemp good_job ) ///
+	order(  post_treated treated pa_adj clmax class_change   hhsize hhemp good_job ) ///
+		  label noomitted ///
+		  mlabels(,none)   collabels(none)  cells( b(fmt(3) star ) se(par fmt(3)) ) ///
+		  stats( varmean ctrl_time1 ctrl_place r2 N , ///
+		  labels( "Mean" "Calendar Month FE"  "Small-Area FE" "$\text{R}^{2}$" "N"  )  ///
+		    fmt( %12.2fc  %12s   %12s %12.3fc %12.0fc  )   ) ///
+		  starlevels(  "\textsuperscript{c}" 0.10    "\textsuperscript{b}" 0.05  "\textsuperscript{a}" 0.01) 
+
+
+
+
+
+
+sum pa_adj if class==1
+global p_r = `=r(mean)'
+    local value=string($p_r ,"%12.1fc")
+    file open newfile using "${output}p_r.tex", write replace
+    file write newfile "`value'"
+    file close newfile
+
+sum pa_adj if class==2
+global p_s = `=r(mean)'
+    local value=string( $p_s ,"%12.1fc")
+    file open newfile using "${output}p_s.tex", write replace
+    file write newfile "`value'"
+    file close newfile
+
+* reg  cv p_H1  post B class_min class_max hhsize hhemp good_job  treated i.year i.month
+* 	areg cv p_H1  post  i.year i.month, a(conacct) 
+
+
+
+
+
+reg  cv pa_adj  post B class_min class_max hhsize hhemp good_job  treated i.year i.month
+	areg cv pa_adj  post  i.year i.month, a(conacct)
+
 
 
 
 preserve
 	keep if (rdch<=10000 & cch==1) | (rdch<=10000 & cch==0)
-	foreach var of varlist  cv B post pm ys  class_max class_min hhsize hhemp good_job  SHO {
-		drop if `var'==.
-	}
-	keep if cv<150
-	keep cv B post pm ys  class_max class_min hhsize hhemp good_job  SHO
-   order cv B post pm ys  class_max class_min hhsize hhemp good_job  SHO
+	keep cv B post pa_adj year month class_max class_min hhsize hhemp good_job  SHO treated
+   order cv B post pa_adj year month class_max class_min hhsize hhemp good_job  SHO treated
    export delimited "${temp}booster_sample1_2.csv", delimiter(",") replace
 restore
 
 
 
 
-
 preserve
-	keep if (rdch<=10000 & cch==1) | (rdch<=10000 & cch==0)
-	foreach var of varlist  cv pi pr B post pm ys  class_max class_min hhsize hhemp good_job  SHO {
+	keep if (rdch<=1000 & cch==1) | (rdch<=10000 & cch==0)
+	foreach var of varlist  cv B post pa_adj year month  class_max class_min hhsize hhemp good_job  SHO {
 		drop if `var'==.
 	}
 	keep if cv<150
-	keep cv B post pi pr ys  class_max class_min hhsize hhemp good_job  SHO treated
-   order cv B post pi pr ys  class_max class_min hhsize hhemp good_job  SHO treated
-   export delimited "${temp}booster_sample1_2nl.csv", delimiter(",") replace
+	keep cv B post pa_adj year month class_max class_min hhsize hhemp good_job  SHO treated
+   order cv B post pa_adj year month class_max class_min hhsize hhemp good_job  SHO treated
+   export delimited "${temp}booster_sample1_1.csv", delimiter(",") replace
 restore
 
 
 
 
-reg cv pm post class_max class_min hhsize ys if (rdch<=10000 & cch==0), cluster(mru)
 
+preserve 
+	g no_flow_6mid = fl_6_mid==1
+	g yes_flow_6mid = fl_6_mid==4
+	g taste_smell= taste==1 | smell==1
+	replace booster_use = . if booster_use>=24
+	g deepwell = wrs_type==2
+	g station = wrs_type==1
 
+	keep if paws==1
+	g SHO1=SHO-1
 
-reg cv pm  if (rdch<=10000 & cch==0) & cv<150, cluster(mru)
+	print_mean2 flow_hrs flow_hrs  "%10.2fc" 1
+	print_mean2 stop_freq stop_freq  "%10.2fc" 1
+	print_mean2 yes_flow_6mid  yes_flow_6mid  "%10.2fc" 1
+	print_mean2 no_flow_6mid  no_flow_6mid    "%10.2fc" 1
+	print_mean2 foreign_bodies  stuff    "%10.2fc" 1
+	print_mean2 discolored  color        "%10.2fc" 1
+	print_mean2 taste_smell taste_smell  "%10.2fc" 1
 
+	print_mean2 booster  B "%10.2fc" 1
+	print_mean2 booster_use  booster_use "%10.2fc" 1
+	print_mean2 drum  drum "%10.2fc" 1
+	print_mean2 filter  filter "%10.2fc" 1
 
-reg cv ys hhsize if (rdch<=10000 & cch==0) & cv<150
+	print_mean2 station   station   "%10.2fc" 1
+	print_mean2 deepwell  deepwell  "%10.2fc" 1
+	print_mean2 wrs_exp   wrs       "%10.2fc" 1
+	print_mean2 drink  drink  "%10.2fc" 1
+	print_mean2 boil   boil   "%10.2fc" 1
 
+	print_mean2 hhsize  hhsize   "%10.2fc" 1
+	print_mean2 hhemp  hhemp   "%10.2fc" 1
+	print_mean2 good_job  good_job   "%10.2fc" 1
+	print_mean2 sub  sub   "%10.2fc" 1
+	print_mean2 single single  "%10.2fc" 1
+	print_mean2 SHO   SHO1   "%10.2fc" 1
 
-preserve
-	keep if (rdch<=10000 & cch==0)
-	foreach var of varlist  cv B post pm ys  class_max class_min hhsize {
-		drop if `var'==.
-	}
-	keep if cv<150
-	keep cv B post pm ys  class_max class_min hhsize 
-   order cv B post pm ys  class_max class_min hhsize
-   export delimited "${temp}booster_sample1_1ch.csv", delimiter(",") replace
+	print_mean2n pawsn B "%10.0fc" 1
 restore
-
-
-
-
-areg cv pm post class_max class_min i.year, cluster(mru) a(mru)
-
-
-
-
-reg cv pm post class_max class_min i.year, cluster(mru)
-
-
-reg cv sem post hhsize class_max class_min i.year, cluster(mru)
-
-
-
-reg cv sem post hhsize class_max class_min ys, cluster(mru)
-
-
-
-areg cv sem post class_max class_min i.year, a(conacct) cluster(mru)
-
-
-
-
-
-*** INTERPOLATION! ***
-* g paws=B!=.
-* gegen paws_per = sum(paws), by(conacct)
-
-* g paws_id = date if B!=.
-* gegen paws_first = min(paws_id), by(conacct)
-* gegen paws_last = max(paws_id), by(conacct)
-* g paws_mid_id = paws_id if paws_first!=paws_id & paws_last!=paws_id & paws_id!=.
-* gegen paws_mid = max(paws_mid_id), by(conacct)
-
-* * g post_date_id = date if year_inst==year
-* * gegen post_date = max(date), by(conacct)
-
-* drop paws_id paws_mid_id post_date_id
-
-
-* foreach v in SHO {
-* 	g `v'_first_id = `v' if date==paws_first
-* 	gegen `v'_first = max(`v'_first_id), by(conacct)
-* 	g `v'_mid_id = `v' if date==paws_mid
-* 	gegen `v'_mid = max(`v'_mid_id), by(conacct)
-* 	g `v'_last_id = `v' if date==paws_last
-* 	drop `v'_first_id
-
-* 	replace `v'=`v'_first if date<=paws_first
-
-* }
-
-
-******* R TO S ANALYSIS ! ********
-* sort conacct date
-* by conacct: g r_to_s_id = class[_n-1]==1 & class[_n]==2
-* g date_rs_id = date if r_to_s_id==1
-* replace date_rs_id=. if date_rs_id==577
-* gegen date_rs = min(date_rs_id), by(conacct)
-
-* by conacct: g date_sr_id = date if class[_n]==2 & class[_n+1]==1
-* gegen date_sr=min(date_sr_id), by(conacct)
-
-* g post_rs = date>date_rs & date<.
-* g post_rs_post = post*post_rs
-
-
-
-* g post_sem = post*sem
-* g semc = class==2 & class_min!=class_max
-* g post_semc = post*semc
-
-
-* g Trs = date-date_rs
-* replace Trs=1000 if Trs>48 | Trs<-48
-* replace Trs=Trs+100
-* replace Trs=1 if Trs==1100
-
-* g Tsr = date-date_sr
-* replace Tsr=1000 if Tsr>48 | Tsr<-48
-* replace Tsr=Tsr+100
-* replace Tsr=1 if Tsr==1100
-
-* cap drop TrsR
-* cap drop TsrR
-* g TrsR = round(Trs,6)
-* g TsrR = round(Tsr,6)
-* replace TrsR = 0 if TrsR<100-24 | TrsR>100+24
-* replace TsrR = 0 if TsrR<100-24 | TsrR>100+24
-
-* g TrsR_pre = TrsR
-* replace TrsR_pre = 0 if post==1
-* g TrsR_post = TrsR
-* replace TrsR_post = 0 if post==0
-
-* g rs_pre=date_rs<date & date_rs<. & post==0
-* g rs_post=date_rs<date & date_rs<. & post==1
-
-* g sr_pre=date_sr<date & date_sr<. & post==0
-* g sr_post=date_sr<date & date_sr<. & post==1
-
-* g sem_pre = sem
-* replace sem_pre = 0 if post==1
-* g sem_post = sem
-* replace sem_post = 0 if post==0
-
-
-* g pT = year-year_inst
-* replace pT=1000 if pT>3 | pT<-3
-* replace pT=pT+10
-* replace pT=1 if pT==1010
-
-* g pT1 = pT
-* replace pT1=1 if year_inst<=2008
-
-
-* g pTl = year-year_inst
-* replace pTl=1000 if pTl>6 | pTl<-6
-* replace pTl=pTl+10
-* replace pTl=1 if pTl==1010
-
-* g pTl1 = pTl
-* replace pTl1 = 1 if year_inst<=2008
-
-g ln_c = log(c)
-gegen minpost=min(post), by(mru)
-
-gegen cy=mean(c), by(year conacct)
-
-gegen csy=sd(c), by(year conacct)
-
-gegen tc=tag(year conacct)
-
-gegen year_ba=group(year ba)
-
-
-
-areg cy i.pTl if tc==1 & minpost==0, a(conacct)
-	coefplot, vertical keep(*pT*)
-
-areg csy i.pTl if tc==1 & minpost==0, a(conacct)
-	coefplot, vertical keep(*pT*)
-
-
-
-
-
-
-
-
-
-areg c i.TsrR i.date if post==0, a(conacct)
-coefplot, keep(*Tsr*) vertical
-
-areg c i.TsrR i.date if post==1 & minpost==0, a(conacct)
-coefplot, keep(*Tsr*) vertical
-
-
-areg c i.TrsR_pre i.TrsR_post post i.date, a(conacct)
-coefplot, keep(*Trs*) vertical
-
-
-areg c rs_pre rs_post sr_pre sr_post post i.date  if class_max!=class_min, a(conacct)
-
-areg c sem_pre sem_post post i.date  if class_max!=class_min, a(conacct)
-
-
-
-areg c i.TrsR i.date if post==1 & minpost==0, a(conacct)
-coefplot, keep(*Trs*) vertical
-
-
-areg c i.TrsR i.date, a(conacct)
-coefplot, keep(*Trs*) vertical
-
-
-
-areg c i.Trs i.date if post==1 & minpost==0, a(conacct)
-coefplot, keep(*Trs*) vertical
-
-
-
-areg c post sem post_sem i.date if class_max!=class_min, a(conacct)
-
-areg ln_c post sem post_sem i.date if class_max!=class_min, a(conacct)
-
-
-
-
-reg c post_rs post post_rs_post class_min class_max i.date
-
-
-reg c post semc post_semc class_min class_max i.date
-
-
-areg c post_rs post post_rs_post i.date, a(conacct)
-
-
-
-areg c post semc post_semc i.date, a(conacct) cluster(conacct) r
-
-
-areg c post semc post_semc i.date, a(conacct) cluster(mru) r
-
-
-**** THAT'S COOL! ****
-
-
-g behind = ar>30 & ar<.
-
-g DC= dc!=.
-replace DC=. if (year==2008 | year==2009)
-
-g cm=c==.
-replace cm=. if date==592 | date==593 | date==595 | date==653
-g amiss=amount==.
-replace amiss=. if date==592 | date==593 | date==595 | date==653
-
-gegen cms=sum(cm), by(conacct)
-
-egen year_ba = group(year ba)
-
-
-areg c i.pT1 i.date  if datec<545, a(conacct)
-coefplot, keep(*pT*) vertical
-
-
-
-cap drop pn_pre
-cap drop pnm
-cap drop ptt
-g pn_pre = pn if datec<=550
-gegen pnm=mean(pn_pre), by(pT1)
-gegen ptt=tag(pT1)
-twoway scatter pnm pT1 if ptt==1
-
-cap drop a_pre
-cap drop anm
-cap drop aptt
-g a_pre = amiss if datec<=550
-gegen anm=mean(a_pre), by(pT1)
-gegen aptt=tag(pT1)
-twoway scatter anm pT1 if aptt==1
-
-
-*** date controls reverses the effect
-
-
-**** C! ****
-
-areg c i.pT if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-areg c i.pT i.date if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-areg c i.pT i.date i.year_ba  if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-
-areg c i.pT1 if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-areg c i.pT1 i.date if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-areg c i.pT1 i.date i.year_ba  if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-
-
-forvalues year=2008/2015 {
-	** BROADLY INCREASING TREND! **
-	sum pn if year==`year'
-	sum pn_pre if year==`year'
-}
-
-
-**** PN! ****
-
-areg pn i.pT if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-areg pn i.pT i.date if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-areg pn i.pT i.date i.year_ba  if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-
-areg pn i.pT1 if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-areg pn i.pT1 i.date if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-areg pn i.pT1 i.date i.year_ba  if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-
-
-**** AMISS! ****  THERE MIGHT EVEN BE AN INCREASE!!!
-
-areg amiss i.pT if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-areg amiss i.pT i.date if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-areg amiss i.pT i.date i.year_ba  if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-
-areg amiss i.pT1 if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-areg amiss i.pT1 i.date if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-areg amiss i.pT1 i.date i.year_ba  if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-
-
-
-
-areg amiss i.pTl if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-areg amiss i.pTl i.date if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-areg amiss i.pTl i.date i.year_ba  if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-
-areg amiss i.pTl1 if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-areg amiss i.pTl1 i.date if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-areg amiss i.pTl1 i.date i.year_ba  if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-
-
-areg pn i.pTl1 i.date if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-
-
-areg ar i.pTl1 i.date i.year_ba if datec<550, a(conacct)
-coefplot, keep(*pT*) vertical
-
-
-
-
-
-use "${temp}bill_paws_full.dta", clear
-tsset conacct date
-tsfill, full
-	merge m:1 conacct using "${temp}conacct_rate.dta", keep(3) nogen
-		keep c conacct date class mru datec
-		drop if date<datec
-	merge m:1 mru using "${temp}mru_set.dta", keep(3) nogen
-	merge m:1 mru using "${temp}pipe_year_nold.dta", keep(1 3) nogen
-g dated=dofm(date)
-g year=year(dated)
-
-g pT = year-year_inst
-replace pT=1000 if pT>12 | pT<-6
-gegen min_pT=min(pT), by(mru)
-replace pT=pT+10
-replace pT=1 if pT==1010
-
-
-g cm=c==.
-gegen cmy=mean(cm), by(conacct year)
-gegen cy = mean(c), by(conacct year)
-gegen yt = tag(conacct year)
-
-g treat=min_pT<0
-
-
-areg cmy i.pT i.year if yt==1 , a(conacct) r 
-	coefplot, keep(*pT*) vertical
-areg cy i.pT i.year if yt==1 , a(conacct) cluster(conacct) r 
-	coefplot, keep(*pT*) vertical
-
-xi: areg cy i.pT i.year*i.treat i.year*i.ba if yt==1 , a(conacct) cluster(conacct) r 
-	coefplot, keep(*pT*) vertical
-
-areg cy i.pT i.year if yt==1 , a(conacct) cluster(conacct) r 
-	coefplot, keep(*pT*) vertical
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-*** NOT ENOUGH PRE/POST PERIOD FOR BILL AND SUPP
-
-	odbc load, exec("SELECT * FROM pipes_dma_int")  dsn("phil") clear  
-		keep if pipe_class=="TERTIARY"
-		destring year_inst, replace force
-		ren int_length length
-		egen ly=sum(length), by(dma_id year_inst)
-		egen max_l=max(ly), by(dma_id)
-		egen total_mru=sum(length), by(dma_id)
-		keep if ly==max_l
-		g shr=max_l/total_mru
-	*	keep if year_inst>=2008
-		keep length year_inst dma_id shr
-		duplicates drop dma_id, force
-		g str25 dma = dma_id
-		drop dma_id
-	save "${temp}pipe_year_old_dma.dta", replace
-	
-
-
-use "${temp}nrw.dta", clear
-
-merge m:1 dma using "${temp}pipe_year_old_dma.dta", keep(1 3) nogen
-
-g ba_id=substr(dma,4,3)
-replace ba_id = lower(ba_id)
-gegen ba=group(ba_id)
-
-		g dated=dofm(date)
-		g year=year(dated)
-		drop dated
-
-	g pT = year-year_inst
-	replace pT=1000 if pT>6 | pT<-4
-	replace pT=pT+10
-	replace pT=1 if pT==1010
-
-	gegen mpT=min(pT), by(dma)
-	* replace pT=1010 if mpT>=10	
-	* replace pT=1010 if shr<.7
-	gegen dg = group(dma)
-
-	g nrw = 1 - (bill/supp)
-	replace nrw=0 if nrw<0
-
-	gegen yt=tag(dg year)
-
-gegen nrwm=mean(nrw), by(dg year)
-gegen billm=mean(bill), by(dg year)
-gegen suppm=mean(supp), by(dg year)
-
-g ln_billm=log(billm)
-g ln_suppm=log(suppm)
-
-xi: areg nrwm i.pT i.year*i.ba if yt==1 , a(dg) cluster(dg) r 
-	coefplot, keep(*pT*) vertical
-
-xi: areg billm i.pT i.year*i.ba if yt==1 , a(dg) cluster(dg) r 
-	coefplot, keep(*pT*) vertical
-
-xi: areg suppm i.pT i.year*i.ba if yt==1 , a(dg) cluster(dg) r 
-	coefplot, keep(*pT*) vertical
-
-xi: areg ln_billm i.pT i.year*i.ba if yt==1 , a(dg) cluster(dg) r 
-	coefplot, keep(*pT*) vertical
-
-xi: areg ln_suppm i.pT i.year*i.ba if yt==1 , a(dg) cluster(dg) r 
-	coefplot, keep(*pT*) vertical
-
 
 
 

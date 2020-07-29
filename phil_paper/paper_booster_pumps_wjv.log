@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  16 JUL 2020 16:18
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  26 JUL 2020 13:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -959,41 +959,41 @@ Package footmisc Info: Declaring symbol style lamport*-robust on input line 924
 (./paper_booster_pumps_wjv.aux)
 \openout1 = `paper_booster_pumps_wjv.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 60.
-LaTeX Font Info:    Try loading font information for OML+ntxmi on input line 60
+LaTeX Font Info:    Checking defaults for OML/ntxmi/m/it on input line 66.
+LaTeX Font Info:    Try loading font information for OML+ntxmi on input line 66
 .
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/newtx/omlntxmi.fd
 File: omlntxmi.fd 2012/03/22 Fontinst v1.933 font definitions for OML/ntxmi.
 )
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for OMS/ntxsy/m/n on input line 60.
-LaTeX Font Info:    Try loading font information for OMS+ntxsy on input line 60
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for OMS/ntxsy/m/n on input line 66.
+LaTeX Font Info:    Try loading font information for OMS+ntxsy on input line 66
 .
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/newtx/omsntxsy.fd
 File: omsntxsy.fd 2012/11/14 Fontinst v1.933 font definitions for OMS/ntxsy.
 )
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 60.
-LaTeX Font Info:    Try loading font information for U+ntxexa on input line 60.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for U/ntxexa/m/n on input line 66.
+LaTeX Font Info:    Try loading font information for U+ntxexa on input line 66.
 
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/newtx/untxexa.fd
 File: untxexa.fd 2012/04/16 Fontinst v1.933 font definitions for U/ntxexa.
 )
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Try loading font information for OT1+ppl on input line 60.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for LMX/ntxexx/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 66.
+LaTeX Font Info:    ... okay on input line 66.
+LaTeX Font Info:    Try loading font information for OT1+ppl on input line 66.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/ot1ppl.fd
 File: ot1ppl.fd 2001/06/04 font definitions for OT1/ppl.
@@ -1072,7 +1072,7 @@ ABD: EveryShipout initializing macros
 
 Package hyperref Warning: Draft mode on.
 
-Package hyperref Info: Link coloring OFF on input line 60.
+Package hyperref Info: Link coloring OFF on input line 66.
 (/usr/local/texlive/2015/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2012/10/27 v2.43 Cross-referencing by name of section
 
@@ -1081,75 +1081,82 @@ Package: gettitlestring 2010/12/03 v1.4 Cleanup title references (HO)
 )
 \c@section@level=\count168
 )
-LaTeX Info: Redefining \ref on input line 60.
-LaTeX Info: Redefining \pageref on input line 60.
-LaTeX Info: Redefining \nameref on input line 60.
-LaTeX Font Info:    Try loading font information for U+msa on input line 73.
+LaTeX Info: Redefining \ref on input line 66.
+LaTeX Info: Redefining \pageref on input line 66.
+LaTeX Info: Redefining \nameref on input line 66.
+LaTeX Font Info:    Try loading font information for U+msa on input line 79.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 73.
+LaTeX Font Info:    Try loading font information for U+msb on input line 79.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for U+ntxmia on input line 73.
+LaTeX Font Info:    Try loading font information for U+ntxmia on input line 79.
 
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/newtx/untxmia.fd
 File: untxmia.fd 2012/04/16 Fontinst v1.933 font definitions for U/ntxmia.
 )
-LaTeX Font Info:    Try loading font information for U+ntxsym on input line 73.
+LaTeX Font Info:    Try loading font information for U+ntxsym on input line 79.
 
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/newtx/untxsym.fd
 File: untxsym.fd 2015/03/20 Fontinst v1.933 font definitions for U/ntxsym.
 )
-LaTeX Font Info:    Try loading font information for U+ntxsyc on input line 73.
+LaTeX Font Info:    Try loading font information for U+ntxsyc on input line 79.
 
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/newtx/untxsyc.fd
 File: untxsyc.fd 2012/04/12 Fontinst v1.933 font definitions for U/ntxsyc.
 )
-LaTeX Font Info:    Try loading font information for U+rsfs on input line 73.
+LaTeX Font Info:    Try loading font information for U+rsfs on input line 79.
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 )
 
 LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <10.5> not available
-(Font)              size <10.95> substituted on input line 73.
+(Font)              size <10.95> substituted on input line 79.
 
-LaTeX Font Info:    Try loading font information for OMS+ppl on input line 73.
+LaTeX Font Info:    Try loading font information for OMS+ppl on input line 79.
 (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/omsppl.fd
 File: omsppl.fd 
 )
 LaTeX Font Info:    Font shape `OMS/ppl/m/n' in size <10.5> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 73.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 79.
 
 
 LaTeX Font Warning: Font shape `OMS/cmsy/m/n' in size <10.5> not available
-(Font)              size <10.95> substituted on input line 73.
+(Font)              size <10.95> substituted on input line 79.
 
 
 LaTeX Font Warning: Font shape `U/rsfs/m/n' in size <5.5> not available
-(Font)              size <5> substituted on input line 73.
+(Font)              size <5> substituted on input line 79.
 
 LaTeX Font Info:    Font shape `OMS/ppl/m/n' in size <7.3> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 73.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 79.
 LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <10.95> not available
-(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 73.
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 79.
 [0
 
 {/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <14.4> not available
-(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 92.
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 98.
 
-[1]
+(./tables/median_inc.tex)
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 128.
+
+
+(/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/ot1pcr.fd
+File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
+) [1]
 LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 127.
- (./tables/yes_flow_6mid.tex) (./tables/no_flow_6mid.tex)
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 136.
+
+(./tables/yes_flow_6mid.tex) (./tables/no_flow_6mid.tex)
 (./tables/stop_freq.tex) (./tables/foreign_bodies.tex) (./tables/discolored.tex
 ) (./tables/taste_smell.tex) (./tables/booster.tex) (./tables/booster_use.tex)
 (./tables/drum.tex) (./tables/filter.tex) (./tables/station.tex)
@@ -1160,62 +1167,100 @@ LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <12> not available
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-(./tables/c_pre.tex) (./tables/c_post.tex) (./tables/c_diff_per.tex)
-<tables/pipe_cons.pdf, id=16, 397.485pt x 289.08pt>
+(./tables/c_pre.tex) (./tables/c_post.tex) (./tables/c_diff_per.tex) [2]
+[3] <tables/pipe_cons.pdf, id=24, 397.485pt x 289.08pt>
 File: tables/pipe_cons.pdf Graphic file (type pdf)
- <use tables/pipe_cons.pdf>
-Package pdftex.def Info: tables/pipe_cons.pdf used on input line 181.
-(pdftex.def)             Requested size: 397.48402pt x 289.07928pt.
 
-[2] [3 <./tables/pipe_cons.pdf>] [4] (./tables/p_s.tex) (./tables/p_r.tex)
-(./tables/cv_rs.tex) (./tables/hhsize_rs.tex) (./tables/hhemp_rs.tex)
-(./tables/good_job_rs.tex) (./tables/sub_rs.tex) (./tables/single_rs.tex)
-(./tables/SHO_rs.tex) (./tables/N_rs.tex)
+<use tables/pipe_cons.pdf>
+Package pdftex.def Info: tables/pipe_cons.pdf used on input line 190.
+(pdftex.def)             Requested size: 397.48402pt x 289.07928pt.
+ [4 <./tables/pipe_cons.pdf>] (./tables/p_s.tex)
+(./tables/p_r.tex) (./tables/cv_rs.tex) (./tables/hhsize_rs.tex)
+(./tables/hhemp_rs.tex) (./tables/good_job_rs.tex) (./tables/sub_rs.tex)
+(./tables/single_rs.tex) (./tables/SHO_rs.tex) (./tables/N_rs.tex)
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<tables/r_to_s_graph.pdf, id=37, 397.485pt x 289.08pt>
+<tables/r_to_s_graph.pdf, id=38, 397.485pt x 289.08pt>
 File: tables/r_to_s_graph.pdf Graphic file (type pdf)
 
 <use tables/r_to_s_graph.pdf>
-Package pdftex.def Info: tables/r_to_s_graph.pdf used on input line 228.
+Package pdftex.def Info: tables/r_to_s_graph.pdf used on input line 236.
 (pdftex.def)             Requested size: 397.48402pt x 289.07928pt.
- [5] [6 <./tables/r_to_s_graph.pdf>]
-<tables/price_series.pdf, id=55, 397.485pt x 289.08pt>
+
+Overfull \hbox (7.55882pt too wide) in paragraph at lines 242--243
+\OT1/ppl/m/n/12 A sim-ple model of house-hold wa-ter de-mand con-nects changes 
+in wa-ter us-age to changes
+ []
+
+[5] [6 <./tables/r_to_s_graph.pdf>] [7] [8]
+Overfull \hbox (3.97041pt too wide) in paragraph at lines 279--281
+\OT1/ppl/m/n/12 Combining these ex-pres-sions, the log-likelihood of ob-serv-in
+g each pair of booster pump
+ []
+
+LaTeX Font Info:    Try loading font information for U+bbm on input line 286.
+(/usr/local/texlive/2015/texmf-dist/tex/latex/bbm-macros/ubbm.fd
+File: ubbm.fd 1999/03/15 V 1.2 Font definition for bbm font - TH
+)
+
+LaTeX Font Warning: Font shape `U/bbm/m/n' in size <5.5> not available
+(Font)              size <5> substituted on input line 294.
+
+[9] [10] (./tables/est_gamma_1_1.tex) (./tables/est_gamma_sd_1_1.tex)
+(./tables/est_gamma_2_1.tex) (./tables/est_gamma_sd_2_1.tex)
+(./tables/est_gamma_3_1.tex) (./tables/est_gamma_sd_3_1.tex)
+(./tables/est_gamma_4_1.tex) (./tables/est_gamma_sd_4_1.tex)
+(./tables/est_gamma_5_1.tex) (./tables/est_gamma_sd_5_1.tex)
+(./tables/est_gamma_6_1.tex) (./tables/est_gamma_sd_6_1.tex)
+(./tables/est_alpha_1.tex) (./tables/est_alpha_sd_1.tex)
+(./tables/est_theta_1_1.tex) (./tables/est_theta_sd_1_1.tex)
+(./tables/est_theta_2_1.tex) (./tables/est_theta_sd_2_1.tex)
+(./tables/est_theta_3_1.tex) (./tables/est_theta_sd_3_1.tex)
+(./tables/est_sig_ep_1.tex) (./tables/est_sig_ep_sd_1.tex)
+(./tables/est_sig_up_1.tex) (./tables/est_sig_up_sd_1.tex)
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+[11]
+
+LaTeX Warning: Text page 12 contains only floats.
+
+[12] (./tables/cv_reg.tex)
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+(./tables/B_reg.tex)
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+<tables/price_series.pdf, id=84, 397.485pt x 289.08pt>
 File: tables/price_series.pdf Graphic file (type pdf)
 
 <use tables/price_series.pdf>
-Package pdftex.def Info: tables/price_series.pdf used on input line 348.
+Package pdftex.def Info: tables/price_series.pdf used on input line 525.
 (pdftex.def)             Requested size: 397.48402pt x 289.07928pt.
 
-<tables/rs_prices.pdf, id=56, 397.485pt x 289.08pt>
+<tables/rs_prices.pdf, id=85, 397.485pt x 289.08pt>
 File: tables/rs_prices.pdf Graphic file (type pdf)
  <use tables/rs_prices.pdf>
-Package pdftex.def Info: tables/rs_prices.pdf used on input line 356.
+Package pdftex.def Info: tables/rs_prices.pdf used on input line 533.
 (pdftex.def)             Requested size: 397.48402pt x 289.07928pt.
 
-<tables/consumption_histogram.pdf, id=57, 397.485pt x 289.08pt>
+<tables/consumption_histogram.pdf, id=86, 397.485pt x 289.08pt>
 File: tables/consumption_histogram.pdf Graphic file (type pdf)
 
 <use tables/consumption_histogram.pdf>
-Package pdftex.def Info: tables/consumption_histogram.pdf used on input line 36
-3.
+Package pdftex.def Info: tables/consumption_histogram.pdf used on input line 54
+0.
 (pdftex.def)             Requested size: 397.48402pt x 289.07928pt.
- (./paper_booster_pumps_wjv.bbl [7]
-[8 <./tables/price_series.pdf>] [9 <./tables/rs_prices.pdf>] [10 <./tables/cons
-umption_histogram.pdf>] [11]
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 234.
-
-
-(/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/ot1pcr.fd
-File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
-) [12]) [13]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 403.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 403.
-
-(./paper_booster_pumps_wjv.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 403.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 403.
+ (./paper_booster_pumps_wjv.bbl [13 <./tables/price_series.pdf>] [14 <./tables/
+rs_prices.pdf>] [15 <./tables/consumption_histogram.pdf>] [16] [17] [18]) [19]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 580.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 580.
+ (./paper_booster_pumps_wjv.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 580.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 580.
 
 
 LaTeX Font Warning: Size substitutions with differences
@@ -1223,25 +1268,34 @@ LaTeX Font Warning: Size substitutions with differences
 
  ) 
 Here is how much of TeX's memory you used:
- 23677 strings out of 493089
- 434871 string characters out of 6134842
- 516542 words of memory out of 5000000
- 26555 multiletter control sequences out of 15000+600000
- 76744 words of font info for 211 fonts, out of 8000000 for 9000
+ 23844 strings out of 493089
+ 437816 string characters out of 6134842
+ 523024 words of memory out of 5000000
+ 26591 multiletter control sequences out of 15000+600000
+ 93837 words of font info for 260 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 59i,15n,94p,1463b,566s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
-exlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/te
-xlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texl
-ive/2015/texmf-dist/fonts/type1/public/txfonts/txsy.pfb></usr/local/texlive/201
-5/texmf-dist/fonts/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2015/texmf-
-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2015/texmf-dist/fo
-nts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/typ
-e1/urw/palatino/uplri8a.pfb>
-Output written on paper_booster_pumps_wjv.pdf (14 pages, 267275 bytes).
+ 59i,18n,94p,1488b,542s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/base/8r.enc} </Users/will
+iamviolette/Library/texlive/2015/texmf-var/fonts/pk/ljfour/public/bbm/bbm12.600
+pk></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pf
+b></usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
+</usr/local/texlive/2015/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.
+pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/public/newtx/rntxmi.pfb></u
+sr/local/texlive/2015/texmf-dist/fonts/type1/public/txfonts/rtxmi.pfb></usr/loc
+al/texlive/2015/texmf-dist/fonts/type1/public/txfonts/rtxr.pfb></usr/local/texl
+ive/2015/texmf-dist/fonts/type1/public/newtx/txex-bar.pfb></usr/local/texlive/2
+015/texmf-dist/fonts/type1/public/txfonts/txex.pfb></usr/local/texlive/2015/tex
+mf-dist/fonts/type1/public/txfonts/txmia.pfb></usr/local/texlive/2015/texmf-dis
+t/fonts/type1/public/txfonts/txsy.pfb></usr/local/texlive/2015/texmf-dist/fonts
+/type1/urw/courier/ucrr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/u
+rw/palatino/uplb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/pala
+tino/uplr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/palatino/up
+lri8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/utmr8a.pfb>
+</usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on paper_booster_pumps_wjv.pdf (20 pages, 318365 bytes).
 PDF statistics:
- 137 PDF objects out of 1000 (max. 8388607)
- 98 compressed objects within 1 object stream
+ 198 PDF objects out of 1000 (max. 8388607)
+ 142 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
  38 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -116,7 +116,7 @@ for i=1:sa
 %             i=1;
             A_1 =  A(:,i);
             A_2 = 0;
-            alpha0_1 = a0(k);
+            alpha0_1 = a0(i);
             alpha0_2 = 0;
             AC  = A*a0 - A_1.*alpha0_1  ;
             

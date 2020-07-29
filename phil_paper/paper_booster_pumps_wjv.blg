@@ -3,12 +3,12 @@ Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: paper_booster_pumps_wjv.aux
 The style file: abbrvnat.bst
 Database file #1: library.bib
-You're missing a field name---line 258 of file library.bib
+You're missing a field name---line 274 of file library.bib
  :   
  :   %month  = "",
 (Error may have been on previous line)
 I'm skipping whatever remains of this entry
-Repeated entry---line 591 of file library.bib
+Repeated entry---line 607 of file library.bib
  : @book{mcintosh2003asian
  :                        ,
 I'm skipping whatever remains of this entry
@@ -16,45 +16,45 @@ Warning--empty journal in keener2010provision
 Warning--empty journal in komives2006distributional
 Warning--empty journal in nauges2006water
 Warning--empty note in wsup
-You've used 37 entries,
+You've used 39 entries,
             2773 wiz_defined-function locations,
-            812 strings with 10866 characters,
-and the built_in function-call counts, 15582 in all, are:
-= -- 1426
-> -- 754
-< -- 31
-+ -- 262
-- -- 225
-* -- 1190
-:= -- 2402
-add.period$ -- 111
-call.type$ -- 37
-change.case$ -- 183
-chr.to.int$ -- 37
-cite$ -- 78
-duplicate$ -- 751
-empty$ -- 1356
-format.name$ -- 286
-if$ -- 3247
+            821 strings with 11208 characters,
+and the built_in function-call counts, 16241 in all, are:
+= -- 1490
+> -- 774
+< -- 33
++ -- 270
+- -- 231
+* -- 1234
+:= -- 2510
+add.period$ -- 117
+call.type$ -- 39
+change.case$ -- 190
+chr.to.int$ -- 39
+cite$ -- 82
+duplicate$ -- 787
+empty$ -- 1417
+format.name$ -- 294
+if$ -- 3381
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 38
-newline$ -- 193
-num.names$ -- 148
-pop$ -- 355
+missing$ -- 39
+newline$ -- 203
+num.names$ -- 156
+pop$ -- 368
 preamble$ -- 1
-purify$ -- 149
+purify$ -- 155
 quote$ -- 0
-skip$ -- 567
+skip$ -- 592
 stack$ -- 0
-substring$ -- 663
-swap$ -- 55
+substring$ -- 689
+swap$ -- 57
 text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 387
+type$ -- 409
 warning$ -- 4
-while$ -- 166
+while$ -- 174
 width$ -- 0
-write$ -- 475
+write$ -- 501
 (There were 2 error messages)

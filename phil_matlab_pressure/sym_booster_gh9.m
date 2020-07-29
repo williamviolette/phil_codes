@@ -62,6 +62,7 @@ dl = diff(lan,l)
 [wa,xa,la]  =  solve([dw,dx,dl],[w,x,l]);
 
 ua = simplify(subs(u,[w,x],[wa,xa]));
+
 uab = subs(ua,[T_1,T_2,TC,y],[T_1b,T_2b,TCb,yb]);
 ua  = subs(ua,[T_1,T_2,TC],[T_1n,T_2n,TCn]);
 

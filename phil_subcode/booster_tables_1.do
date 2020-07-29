@@ -302,19 +302,50 @@ g p_r = ($p_q1 + $p_q2 + $p_q3 + $p_q4)/4
 g p_s = ($p2_q1 + $p2_q2 + $p2_q3 + $p2_q4)/4
 
 
-sum p_r
-global p_r = `=r(mean)'
-    local value=string($p_r ,"%12.1fc")
-    file open newfile using "${output}p_r.tex", write replace
-    file write newfile "`value'"
-    file close newfile
+gegen pt = tag(date)
 
-sum p_s
-global p_s = `=r(mean)'
-    local value=string( $p_s ,"%12.1fc")
-    file open newfile using "${output}p_s.tex", write replace
-    file write newfile "`value'"
-    file close newfile
+
+twoway scatter rp_H1 date if pt==1
+
+g p_H1 = rp_H1 if class==1
+replace p_H1 = sp_H1 if class==2
+g p_H2 = rp_H2 if class==1
+replace p_H2 = sp_H2 if class==2
+
+
+reg cv p_H1 class_max class_min
+reg cv p_H1 class_max class_min i.year i.month
+reg cv p_H1 class_max class_min i.date
+
+areg cv p_H1 i.date, a(conacct)
+
+
+areg cv p_H2 i.date, a(conacct)
+
+reg cv p_H2 class_max class_min i.date
+
+reg cv p_H1 class_max class_min i.date
+
+
+
+* areg cv class, a(conacct)
+* areg cv class i.date, a(conacct)
+
+
+
+* sum p_r
+* global p_r = `=r(mean)'
+*     local value=string($p_r ,"%12.1fc")
+*     file open newfile using "${output}p_r.tex", write replace
+*     file write newfile "`value'"
+*     file close newfile
+
+* sum p_s
+* global p_s = `=r(mean)'
+*     local value=string( $p_s ,"%12.1fc")
+*     file open newfile using "${output}p_s.tex", write replace
+*     file write newfile "`value'"
+*     file close newfile
 
 
 

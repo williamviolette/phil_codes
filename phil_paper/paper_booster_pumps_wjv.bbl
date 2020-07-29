@@ -1,4 +1,4 @@
-\begin{thebibliography}{37}
+\begin{thebibliography}{39}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -105,6 +105,13 @@ J.~J. Horton and R.~J. Zeckhauser.
   economy".
 \newblock Technical report, National Bureau of Economic Research, 2016.
 
+\bibitem[Ito(2014)]{ito2014consumers}
+K.~Ito.
+\newblock Do consumers respond to marginal or average price? evidence from
+  nonlinear electricity pricing.
+\newblock \emph{American Economic Review}, 104\penalty0 (2):\penalty0 537--63,
+  2014.
+
 \bibitem[Jimenez-Redal et~al.(2014)Jimenez-Redal, Parker, and
   Jeffrey]{jimenez2014factors}
 R.~Jimenez-Redal, A.~Parker, and P.~Jeffrey.
@@ -208,6 +215,12 @@ A.~Szab{\'o}.
 \newblock The value of free water: Analyzing south africa's free basic water
   policy.
 \newblock \emph{Econometrica}, 83\penalty0 (5):\penalty0 1913--1961, 2015.
+
+\bibitem[Taylor(2014)]{taylor2014reducing}
+D.~D.~J. Taylor.
+\newblock \emph{Reducing booster-pump-induced contaminant intrusion in Indian
+  water systems with a self-actuated, back-pressure regulating valve}.
+\newblock PhD thesis, Massachusetts Institute of Technology, 2014.
 
 \bibitem[Timmins(2002)]{timmins2002measuring}
 C.~Timmins.

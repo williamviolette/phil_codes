@@ -27,8 +27,13 @@
 		gegen mAN=max(A_N), by(date c)
 		keep if A_N==mAN
 		
-		g basic_charge_id=amount if c<=10 & amount<200
+		g basic_charge_id=amount if c==5 & amount<115 & amount>50
 		gegen basic_charge=mean(basic_charge_id), by(date)
+
+
+gegen dt=tag(date)
+scatter basic_charge date if dt==1
+
 		
 			g amount_id_1_l=amount-basic_charge if c==15 & amount<1000
 			g amount_id_1_h=amount-basic_charge if c==16 & amount<1000
