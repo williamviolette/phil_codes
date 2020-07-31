@@ -220,7 +220,7 @@ replace pa_adj = 21 if (date==584 | date==585 | date==587 | date==588 | date==59
 * twoway scatter pa_adj date if dct==1
 
 
-foreach v in B SHO hho hhsize sub single hhemp good_job {
+foreach v in B  filter drum SHO hho hhsize sub single hhemp good_job {
 	g `v'_3_id = `v' if wave==3
 	g `v'_4_id = `v' if wave==4
 	g `v'_5_id = `v' if wave==5
@@ -336,21 +336,20 @@ replace es = rd1<=$N_S4  if  SHO1==4
 
 sort rs
 
-sum pa_adj if class==1
-g pa_adj1 = `=r(mean)'  if class==1
-sum pa_adj if class==2
-replace pa_adj1 = `=r(mean)' if class==2
+* sum pa_adj if class==1
+* g pa_adj1 = `=r(mean)'  if class==1
+* sum pa_adj if class==2
+* replace pa_adj1 = `=r(mean)' if class==2
 
+* foreach var of varlist B {
+* 	gegen `var'_ma = max(B), by(year conacct)
+* }
+* foreach var of varlist cv post_treated pa_adj dateg clmax class_change hhsize hhemp good_job treated SHO {
+* 	gegen `var'_m = mean(`var'), by(year conacct)
+* }
+* gegen year_tag = tag(year conacct)
 
-foreach var of varlist B {
-	gegen `var'_ma = max(B), by(year conacct)
-}
-foreach var of varlist cv post_treated pa_adj dateg clmax class_change hhsize hhemp good_job treated SHO {
-	gegen `var'_m = mean(`var'), by(year conacct)
-}
-gegen year_tag = tag(year conacct)
-
-gegen pa_adj_min = min(pa_adj), by(year conacct)
+* gegen pa_adj_min = min(pa_adj), by(year conacct)
 
 gegen datem=min(date), by(conacct)
 g classm_id=class if datem==date
@@ -358,20 +357,45 @@ gegen classm=min(classm_id), by(conacct)
 g semm = classm==2 & class_change==1
 g resm = classm==1 & class_change==1
 
-
 g post_treated_B=B*post_treated
 
-	reg cv_m post_treated_m pa_adj_m B_ma clmax_m semm resm  treated_m hhsize_m hhemp_m good_job_m  i.year if year_tag==1 &  es==1, cluster(mru)
+* g post_treated_drum=drum*post_treated
+* g post_treated_filter = filter*post_treated
+* 	areg cv pa_adj post_treated B post_treated_B clmax semm resm treated hhsize hhemp good_job  i.date if es==1, a(mru) cluster(mru)
+* 	areg cv pa_adj post_treated B post_treated_B clmax semm resm treated hhsize hhemp good_job  i.date if es==1, a(mru) cluster(mru)
+* 	areg cv pa_adj post_treated drum post_treated_drum clmax semm resm treated hhsize hhemp good_job  i.date if es==1, a(mru) cluster(mru)
+* 	areg cv pa_adj post_treated B post_treated_B  filter post_treated_filter clmax semm resm treated hhsize hhemp good_job  i.date if es==1, a(mru)
+* 	areg filter  post_treated clmax semm resm treated hhsize hhemp good_job  i.date if es==1, a(mru) cluster(mru)
+* 	areg B       post_treated clmax semm resm treated hhsize hhemp good_job  i.date if es==1, a(mru) cluster(mru)
+* 	areg drum      post_treated clmax semm resm treated hhsize hhemp good_job  i.date if es==1, a(mru) cluster(mru)
 
-	* reg cv_m post_treated_m pa_adj_min  B_ma clmax_m class_change_m treated_m hhsize_m hhemp_m good_job_m  i.year if year_tag==1 &  es==1, cluster(mru)
 
-	reg cv  post_treated pa_adj B clmax semm resm treated  hhsize hhemp good_job  i.date if es==1, cluster(mru)
+	reg cv pa_adj post_treated B post_treated_B clmax semm resm treated  i.date [pweight = SHO]
+
+	reg cv pa_adj post_treated B post_treated_B clmax semm resm treated hhsize hhemp good_job  i.date [pweight = SHO]
+
+	areg cv pa_adj post_treated B post_treated_B clmax semm resm treated hhsize hhemp good_job  i.date [pweight = SHO], a(mru) cluster(mru)
+
+	areg cv pa_adj post_treated post_treated_B i.date [pweight = SHO], a(conacct) 
 
 
-	areg cv  post_treated pa_adj B clmax semm resm treated  hhsize hhemp good_job  i.date if es==1, a(mru) cluster(mru)
+mat def EB = e(b)
 
+g alpha1 = -EB[1,1]
+g theta1 = EB[1,2]
+g theta2 = EB[1,3]
+g theta3 = EB[1,4]
 
-	areg cv  post_treated pa_adj B post_treated_B clmax semm resm treated  hhsize hhemp good_job  i.date if es==1, a(mru) cluster(mru)
+predict fv, xb
+g alpha0 = fv - (  - alpha1*pa_adj + theta1*post_treated + theta2*B + theta3*post_treated_B)
+
+preserve
+	keep if es==1
+	keep if (rdch<=10000 & cch==1) | (rdch<=10000 & cch==0)
+	keep B alpha0 alpha1 theta1 theta2 theta3 post_treated pa_adj
+   order B alpha0 alpha1 theta1 theta2 theta3 post_treated pa_adj
+   export delimited "${temp}booster_sample_2s.csv", delimiter(",") replace
+restore
 
 
 
