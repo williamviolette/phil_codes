@@ -125,8 +125,9 @@ Descriptive evidence indicates that fixing pipes improves water pressure, qualit
 
 Consumers also invest in products and behaviors to compensate for low piped water service quality.  These investments help reveal which aspects of piped water service are most valuable to consumers as well as most affected by pipe replacement.  
 
-Large investments in booster pumps suggest that households strongly value water pressure.  Booster pumps are both expensive to purchase and operate. In Manila, booster pumps range in price from 1,200 to 15,000 PhP, which represents a large expense given average monthly household incomes of \input{tables/median_inc}PhP.\footnote{Figures come from scraping results from the first page of searching ``booster pumps'' on the popular online marketplace in Manila, \url{https://www.lazada.com.ph/},  yielding 22 entries with horsepower listed.  Median monthly household income is computed for Metro Manila using the 2015 Family Income and Expenditure Survey.}  The median booster pump uses a 0.75 horsepower engine, which generates monthly costs of around 405 PhP at prevailing energy prices.\footnote{A 1 horsepower engine uses around 0.786 Kw per hour.  Table~\ref{table:descriptives} indicates that households use their booster pumps for 2.6 hrs per day, which implies around 78 hours per month.  In 2012, tariffs for the electricity utility in Manila averaged around 8.8 PhP per KwH.}   Before pipe replacement, 40\% of households invest in booster pumps that increase water pressure.  After pipe replacement, the share of households using booster pumps drops to 15\%.  This finding is consistent with booster pumps providing an important substitute to pressure from new water pipes.
-
+Large investments in booster pumps suggest that households strongly value water pressure.  Booster pumps are both expensive to purchase and operate. In Manila, booster pumps range in price from 1,200 to 15,000 PhP, which represents a large expense given average monthly household incomes of \input{tables/median_inc}PhP.\footnote{Figures come from scraping results from the first page of searching ``booster pumps'' on the popular online marketplace in Manila, \url{https://www.lazada.com.ph/},  yielding 24 entries with horsepower listed.  Average monthly household income is computed for Metro Manila using the 2015 Family Income and Expenditure Survey.}  The average booster pump uses a 0.9 horsepower engine, which generates monthly costs of around 486 PhP at prevailing energy prices.\footnote{A 1 horsepower engine uses around 0.786 Kw per hour.  Table~\ref{table:descriptives} indicates that households use their booster pumps for 2.6 hrs per day, which implies around 78 hours per month.  In 2012, tariffs for the electricity utility in Manila averaged around 8.8 PhP per KwH.}   Before pipe replacement, 40\% of households invest in booster pumps that increase water pressure.  After pipe replacement, the share of households using booster pumps drops to 15\%.  This finding is consistent with booster pumps providing an important substitute to pressure from new water pipes.
+% = .9*.786*78*8.8
+% \footnote{A 1 horsepower engine uses around 0.786 Kw per hour.  Table~\ref{table:descriptives} indicates that households use their booster pumps for 2.6 hrs per day, which implies around 78 hours per month.  In 2012, tariffs for the electricity utility in Manila averaged around 8.8 PhP per KwH.}
 Small investments in water filters combined with frequent purchases of filtered water both before and as well as after pipe replacement indicate that households may not derive large benefits from improvements in piped water quality.  Only 12\% of households use water filters both before and after pipe replacements.  Low filter usage may stem from the fact that less than half of households report drinking from the tap while over 70\% of households report purchasing filtered water from local water-refilling stations.  These behaviors remain constant after pipe replacements.  Taken together, these findings indicate that water quality improvements from pipe replacements may not be primary drivers of changes in household welfare.
 
 Households cope with unreliable water supply by investing in water storage tanks.  Before pipe replacement, 43\% of households report using water storage tanks.  This percentage only drops to 36\% following pipe replacement, which is consistent with households continuing to report frequent water outages even after pipe replacement.  While households seems to value reliable service, small changes in storage tank use suggest that reliability improvements are unlikely to account for a large share of the welfare gains from pipe replacements.
@@ -166,7 +167,7 @@ Demographics \\[.5em]
 \hspace{1em}High-skilled employment & \input{tables/good_job} \\
 \hspace{1em}Lives in duplex& \input{tables/sub} \\
 \hspace{1em}Lives in single house& \input{tables/single} \\
-\hspace{1em}Other households sharing tap& \input{tables/SHO} \\
+\hspace{1em}Number of other households sharing tap& \input{tables/SHO} \\
 \\[-.5em]
 Households & \input{tables/pawsn} \\
 \bottomrule
@@ -244,46 +245,73 @@ A simple model of household water demand connects changes in water usage to chan
 Each month, household utility takes the following form
 \begin{align}
 \label{eq:utility}
-U\,=\,\frac{1}{\alpha} \, \Big[ \,  ( \theta_1 B \, +  \, \theta_2 R + \, \theta_3 B R ) \,  w  \, -\, \frac{1}{2}(w - \gamma + \epsilon)^2 \, \Big] \, + \, x
+U\,=\,\frac{1}{\alpha} \, \Big[ \,  Q(B,R) \,  w  \, -\, \frac{1}{2}(w - \gamma + \epsilon)^2 \, \Big] \, + \, x 
 \end{align}
-where $w$ is water consumption and $x$ represents a bundle of all other goods consumed by the household.  Water service quality is captured by $( \theta_1 B \, +  \, \theta_2 R + \, \theta_3 B R )$ where $B$ equals 1 if the household uses a booster pump (and zero otherwise) and $R$ equals 1 after pipe replacement (and zero otherwise).  The $\theta$ terms capture the household's preference for water service quality from booster pumps, pipe replacements, and the combination of the two.  For example, $\theta_3<0$ implies that booster pumps and pipe replacements are substitutable in producing water service quality.  Water service quality enters multiplicatively with water consumption, which nests the assumption that each unit of water consumption is affected equally by water service quality.  $\alpha$ reflects price sensitivity, and $\gamma$ reflects the satiation amount of water usage.  $\epsilon$ captures idiosyncratic monthly variation in satiation water usage such as changes in weather or in the number of household members using water.  $\epsilon$ is assumed to follow a normal distribution with zero mean and standard deviation $\sigma_{\epsilon}$.  This approach assumes that preferences for water are quasi-linear, which implies that water consumption does not depend on household income [ back this up with more evidence? ].  
+where $w$ is water consumption and $x$ represents a bundle of all other goods consumed by the household.  Water service quality given by $Q(B,R)$ depends on booster pump use where $B$ equals 1 if the household chooses to use a booster pump (and zero otherwise) and as well as pipe replacements where $R$ equals 1 after pipe replacement (and zero otherwise).  Water service quality enters multiplicatively with water consumption, which nests the assumption that each unit of water consumption is affected equally and positively by water service quality.  This assumption also excludes the possibility that improved water service quality affects household utility in ways that are not directly proportional to household water consumption such as by increasing housing values.  In this case, the approach would underestimate the welfare benefits of improved service quality.  $\alpha$ reflects price sensitivity, and $\gamma$ reflects the satiation amount of water usage.  This approach assumes that preferences for water are quasi-linear, which implies that water consumption does not depend on household income [ back this up with more evidence? ].  
+
+
+% $\epsilon$ captures idiosyncratic monthly variation in satiation water usage such as changes in weather or in the number of household members using water.  $\epsilon$ is assumed to follow a normal distribution with zero mean and standard deviation $\sigma_{\epsilon}$.  
+% The $\theta$ terms capture the household's preference for water service quality from booster pumps, pipe replacements, and the combination of the two.  
+% For example, $\theta_3<0$ implies that booster pumps and pipe replacements are substitutable in producing water service quality.  
 
 Households maximize utility subject to the following budget constraint
 \begin{align}
 \label{eq:bc}
-p\,w \,+\, x \, + (F + \upsilon) B \, = y 
+p\,w \,+\, x \, +  B \, F \, = y 
 \end{align}
-where $p$ is the average price of water while the price of all other goods, $x$, is normalized to 1.  This approach includes the simplifying assumption that households respond to a single, average water price $p$ despite facing marginal prices that increase with monthly consumption.  This assumption is consistent with descriptive evidence that households appear unresponsive to marginal prices (cite appendix).   $F$ is total cost of renting and using a booster pump each month.  This approach assumes that Manila has a competitive market for renting/selling booster pumps.  $\upsilon$ captures idiosyncratic monthly variation the booster pump cost such as changes in the electricity price or variation in installation costs. $\upsilon$ is assumed to follow a normal distribution that is assumed to be uncorrelated with $\epsilon$ and has zero mean and standard deviation $\sigma_{\upsilon}$.  $y$ is monthly household income.  
+where $p$ is the average price of water while the price of all other goods, $x$, is normalized to 1.  This approach includes the simplifying assumption that households respond to a single, average water price $p$ despite facing marginal prices that increase with monthly consumption.  This assumption is consistent with descriptive evidence that households appear unresponsive to marginal prices (cite appendix).   $F$ is total cost of renting and using a booster pump each month.  This approach assumes that Manila has a competitive market for renting/selling booster pumps that is unaffected by improvements in service quality.\footnote{This assumption is consistent with local service quality improvements and a city-wide market for booster pumps.}  $y$ is monthly household income.  
+
+% $\upsilon$ captures idiosyncratic monthly variation the booster pump cost such as changes in the electricity price or variation in installation costs. $\upsilon$ is assumed to follow a normal distribution that is assumed to be uncorrelated with $\epsilon$ and has zero mean and standard deviation $\sigma_{\upsilon}$.  
 
 % as well as other research on public utility price responsiveness (\cite{ito2014consumers}, and the water ito paper?).  
 
 Maximizing household utility in equation $(\ref{eq:utility})$ subject to the budget constraint in equation $(\ref{eq:bc})$ for a given choice of booster pump usage, $B$, yields the following expression for monthly water demand
 \begin{align}
-w^{*} \, = \, \gamma \, - \, \alpha p +  \theta_1 B \, + \, \theta_2 R  \,+ \, \theta_3 B R \,  + \, \epsilon
+\label{eq:demand}
+w^{*} \, = \, \gamma \, - \, \alpha p +  Q(B,R)
 \end{align}
-Water demand depends linearly on the satiation preference, $\gamma$, as well as price, booster pump use, and pipe repairs.  Given optimal water demand, $w^{*}$, households can then choose whether to use a booster pump by comparing expected utilities with and without booster pumps.  Households use booster pumps when the following expression is greater than zero
-\begin{align}
-E\Big[ \,V_{B=1 - B=0}^{*}\,\Big]  = (\theta_1 + \theta_3 R) \Big(  \frac{\theta_1 + \theta_3 R}{2\alpha} + \frac{\gamma +  \theta_2 R}{\alpha} - p  \, \Big) \, - \, (F \, + \upsilon)
-\end{align}
-% Since $\epsilon$ is assumed to be  normal, it falls out of the equation
-When booster pumps increase service quality $\theta_1>0$, booster pump use is increasing in household's fixed water preference, $\gamma$, and decreasing in the water price, $p$.  Booster pump use decreases following pipe replacements if $\theta_3$ is sufficiently negative.  
+Water demand depends linearly on the satiation preference, $\gamma$, price, and service quality.
 
-Given booster pump demand, the probability of observing a household choose to use a booster pump, $B^{*}$ can be expressed as follows
+Given optimal water demand, the indirect utility function at the optimal booster pump choice, $B^{*}$, is given by 
 \begin{align}
-Pr[B^{*}=1] \,\, = \,\, \Phi\Bigg( \, \frac{ (\theta_1 \theta_2 + \theta_1 \theta_3 + \theta_2 \theta_3) R + \frac{1}{2}(\theta_1^2 + \theta_3^2)  + \gamma (\theta_1 + \theta_3 R) \Big] - (\theta_1 + \theta_3 R) p \, - \, F }{\sigma_{\upsilon}} \, \Bigg)
+V\,=\,\frac{\alpha p^2}{2} - \gamma p + \frac{Q(B^{*},R)^{2}}{2\alpha} - p Q(B^{*},R) + \frac{\gamma Q(B^{*},R)}{\alpha} + y - B^{*} F
 \end{align}
-where $\Phi(.)$ is the cumulative distribution function of the standard normal distribution.  Conditional on booster pump use, the probabilities of observing households use a particular amount of water, $w^{obs}$, can be expressed as follows
+
+
 \begin{align}
-Pr[w^{*}=w^{obs} \,|\, B^{*}=1] \,\, &= \,\, \frac{1}{\sigma_{\epsilon}} \phi\Bigg( \, \frac{ w^{obs} - (\gamma \, - \, \alpha p +  \theta_1  + \, \theta_2 R  \,+ \, \theta_3 R )}{\sigma_\epsilon} \, \Bigg) \\
-Pr[w^{*}=w^{obs} \,|\, B^{*}=0] \,\, &= \,\, \frac{1}{\sigma_{\epsilon}} \phi\Bigg( \, \frac{ w^{obs} - (\gamma \, - \, \alpha p \, + \, \theta_2 R   )}{\sigma_\epsilon} \, \Bigg)
+\label{eq:dvdr}
+\frac{dV}{dR}\,=\,\frac{w^{*}}{\alpha} \frac{dQ}{dR} - F \frac{dB^{*}}{dR}
 \end{align}
-Combining these expressions, the log-likelihood of observing each pair of booster pump use and water use across households, $i$, is as follows
-\begin{align}
-\begin{split}
-LL = \sum_i & \mathbbm{1}\{ B^{obs}_i = 1 \} \,\Big[ \ln\big( Pr[B^{*}=1] \big) + \ln\big( Pr[w^{*}=w^{obs}_i \,|\, B^{*}=1] \big) \Big] \, + \\
- & \mathbbm{1}\{ B^{obs}_i = 0 \} \,\Big[ \ln\big( 1- Pr[B^{*}=1] \big) + \ln\big( Pr[w^{*}=w^{obs}_i \,|\, B^{*}=0] \big) \Big] 
- \end{split}
-\end{align}
+
+Advantage in terms of unobservables, disadvantage in terms of counterfactuals...
+
+- Surplus is increasing in consumption
+- 
+
+% Given optimal water demand, $w^{*}$, households can then choose whether to use a booster pump by comparing expected utilities with and without booster pumps.  
+% Households use booster pumps when the following expression is greater than zero
+% \begin{align}
+% E\Big[ \,V_{B=1 - B=0}^{*}\,\Big]  = (Q(1,R)-Q(0,R)) \Big(  \frac{Q(1,R)-Q(0,R)}{2\alpha} + \frac{\gamma +  \theta_2 R}{\alpha} - p  \, \Big) \, - \, F
+% \end{align}
+% Since $\epsilon$ is assumed to be  normal, it falls out of the equation
+
+
+% Given booster pump demand, the probability of observing a household choose to use a booster pump, $B^{*}$ can be expressed as follows
+% \begin{align}
+% Pr[B^{*}=1] \,\, = \,\, \Phi\Bigg( \, \frac{ (\theta_1 \theta_2 + \theta_1 \theta_3 + \theta_2 \theta_3) R + \frac{1}{2}(\theta_1^2 + \theta_3^2)  + \gamma (\theta_1 + \theta_3 R) \Big] - (\theta_1 + \theta_3 R) p \, - \, F }{\sigma_{\upsilon}} \, \Bigg)
+% \end{align}
+% where $\Phi(.)$ is the cumulative distribution function of the standard normal distribution.  Conditional on booster pump use, the probabilities of observing households use a particular amount of water, $w^{obs}$, can be expressed as follows
+% \begin{align}
+% Pr[w^{*}=w^{obs} \,|\, B^{*}=1] \,\, &= \,\, \frac{1}{\sigma_{\epsilon}} \phi\Bigg( \, \frac{ w^{obs} - (\gamma \, - \, \alpha p +  \theta_1  + \, \theta_2 R  \,+ \, \theta_3 R )}{\sigma_\epsilon} \, \Bigg) \\
+% Pr[w^{*}=w^{obs} \,|\, B^{*}=0] \,\, &= \,\, \frac{1}{\sigma_{\epsilon}} \phi\Bigg( \, \frac{ w^{obs} - (\gamma \, - \, \alpha p \, + \, \theta_2 R   )}{\sigma_\epsilon} \, \Bigg)
+% \end{align}
+% Combining these expressions, the log-likelihood of observing each pair of booster pump use and water use across households, $i$, is as follows
+% \begin{align}
+% \begin{split}
+% LL = \sum_i & \mathbbm{1}\{ B^{obs}_i = 1 \} \,\Big[ \ln\big( Pr[B^{*}=1] \big) + \ln\big( Pr[w^{*}=w^{obs}_i \,|\, B^{*}=1] \big) \Big] \, + \\
+%  & \mathbbm{1}\{ B^{obs}_i = 0 \} \,\Big[ \ln\big( 1- Pr[B^{*}=1] \big) + \ln\big( Pr[w^{*}=w^{obs}_i \,|\, B^{*}=0] \big) \Big] 
+%  \end{split}
+% \end{align}
 
 
 \section{Empirical Specification and Identification}

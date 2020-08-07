@@ -29,7 +29,7 @@ if data==1
     
         cs = readmatrix('/Users/williamviolette/Documents/Philippines/phil_analysis/phil_temp/booster_sample_2s.csv');
 
-            cs = cs(1:100000,:)  ;
+%              cs = cs(1:100000,:)  ;
        
             bobs    = cs(:,1);
             alpha0  = cs(:,2);
@@ -40,10 +40,26 @@ if data==1
             post    = cs(:,7);
             p_i     = cs(:,8);
             
-           given = [400];
-           input = [200];
+            given = [486];
+%           given = [2000];
+            input = [2000];
             
-               obj=@(input1)lbooster_2s(input1,alpha0,alpha1,theta1,theta2,theta3,bobs,p_i,post,given); 
+           
+            theta  = (post.*theta1);
+            thetab = (post.*(theta1+theta3))+theta2;
+           u_nb = up2s(alpha0,alpha1,p_i,theta,10000);
+           u_b = up2s(alpha0,alpha1,p_i,thetab,10000-given(1));           
+           bsim=u_b>u_nb;
+           mean(u_b>u_nb)
+           mean(bobs)
+           
+           corr(bsim,alpha0)
+           corr(bobs,alpha0)
+           
+           corr(bsim,post)
+           corr(bobs,post)
+
+            obj=@(input1)lbooster_2s(input1,alpha0,alpha1,theta1,theta2,theta3,bobs,p_i,post,given); 
 
     tic
     [t1,t2,t3]=obj(input)
@@ -109,20 +125,31 @@ else
 end
 
 
-%{
 
-cd_dir = '/Users/williamviolette/Documents/Philippines/phil_analysis/phil_codes/phil_paper/tables/'; 
-r = out;
-rb = zeros(size(r,1),1);
-ver = '1';
-print_estimates(cd_dir,r,rb,ver)
-
+% cd_dir = '/Users/williamviolette/Documents/Philippines/phil_analysis/phil_codes/phil_paper/tables/'; 
+% r = out;
+% rb = zeros(size(r,1),1);
+% ver = '1';
+% print_estimates(cd_dir,r,rb,ver)
 
 
 
-[ut,bobs,wobs] = counter_gh9( out ,A,Tb,Tn,p_i,y,c);
+
+
+
+
+
+[ut,bobs] = counter_2s(out,alpha0,alpha1,theta1,theta2,theta3,p_i,post,given);
     mean(ut(post==1)) - mean(ut(post==0))
-
+    mean(bobs)
+    mean(bobs(post==1))-mean(bobs(post==0))
+    
+    
+    
+%{
+    
+[ut,bobs] = counter_2s(input,alpha0,alpha1,theta1,theta2,theta3,p_i,post,given);
+    
 Tb     = [ones(size(wobs,1),Thet)  zeros(size(wobs,1),Thet)   zeros(size(wobs,1),Thet)  ]; % 2.5s, 60s
 Tn     = Tb.*[zeros(size(wobs,1),Thet)  ones(size(wobs,1),Thet)  zeros(size(wobs,1),Thet) ];
 [utpre,bobspre,wobspre] = counter_gh9( out ,A,Tb,Tn,p_i,y,c);

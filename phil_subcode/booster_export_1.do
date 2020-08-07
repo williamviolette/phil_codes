@@ -151,6 +151,7 @@ end
 		save "${temp}paws_aib1.dta", replace
 
 
+* reg B hhsize hhemp single sub
 
 
 
@@ -336,21 +337,6 @@ replace es = rd1<=$N_S4  if  SHO1==4
 
 sort rs
 
-* sum pa_adj if class==1
-* g pa_adj1 = `=r(mean)'  if class==1
-* sum pa_adj if class==2
-* replace pa_adj1 = `=r(mean)' if class==2
-
-* foreach var of varlist B {
-* 	gegen `var'_ma = max(B), by(year conacct)
-* }
-* foreach var of varlist cv post_treated pa_adj dateg clmax class_change hhsize hhemp good_job treated SHO {
-* 	gegen `var'_m = mean(`var'), by(year conacct)
-* }
-* gegen year_tag = tag(year conacct)
-
-* gegen pa_adj_min = min(pa_adj), by(year conacct)
-
 gegen datem=min(date), by(conacct)
 g classm_id=class if datem==date
 gegen classm=min(classm_id), by(conacct)
@@ -359,24 +345,89 @@ g resm = classm==1 & class_change==1
 
 g post_treated_B=B*post_treated
 
-* g post_treated_drum=drum*post_treated
-* g post_treated_filter = filter*post_treated
-* 	areg cv pa_adj post_treated B post_treated_B clmax semm resm treated hhsize hhemp good_job  i.date if es==1, a(mru) cluster(mru)
-* 	areg cv pa_adj post_treated B post_treated_B clmax semm resm treated hhsize hhemp good_job  i.date if es==1, a(mru) cluster(mru)
-* 	areg cv pa_adj post_treated drum post_treated_drum clmax semm resm treated hhsize hhemp good_job  i.date if es==1, a(mru) cluster(mru)
-* 	areg cv pa_adj post_treated B post_treated_B  filter post_treated_filter clmax semm resm treated hhsize hhemp good_job  i.date if es==1, a(mru)
-* 	areg filter  post_treated clmax semm resm treated hhsize hhemp good_job  i.date if es==1, a(mru) cluster(mru)
-* 	areg B       post_treated clmax semm resm treated hhsize hhemp good_job  i.date if es==1, a(mru) cluster(mru)
-* 	areg drum      post_treated clmax semm resm treated hhsize hhemp good_job  i.date if es==1, a(mru) cluster(mru)
+foreach var of varlist hhsize hhemp good_job sub single {
+	g `var'_treated=`var'*treated
+}
 
 
-	reg cv pa_adj post_treated B post_treated_B clmax semm resm treated  i.date [pweight = SHO]
+g post_treated_hhsize= post_treated*hhsize
+g post_treated_hhemp= post_treated*hhemp
+g post_treated_good_job= post_treated*good_job
+g post_treated_sub = post_treated*sub
+g post_treated_single = post_treated*single
 
-	reg cv pa_adj post_treated B post_treated_B clmax semm resm treated hhsize hhemp good_job  i.date [pweight = SHO]
+g B_treated=B*treated
 
-	areg cv pa_adj post_treated B post_treated_B clmax semm resm treated hhsize hhemp good_job  i.date [pweight = SHO], a(mru) cluster(mru)
 
-	areg cv pa_adj post_treated post_treated_B i.date [pweight = SHO], a(conacct) 
+
+* correlated coarse proxies of income from 
+
+
+	areg cv pa_adj post_treated ///
+	post_treated_hhsize hhemp post_treated_hhemp good_job post_treated_good_job ///
+	single post_treated_single sub post_treated_sub ///
+	clmax semm resm treated hhsize ///
+	hhsize_treated hhemp_treated good_job_treated sub_treated single_treated ///
+	 i.date [pweight = SHO] , a(mru)
+
+
+	areg cv pa_adj post_treated B post_treated_B ///
+	post_treated_hhsize hhemp post_treated_hhemp good_job post_treated_good_job ///
+	single post_treated_single sub post_treated_sub ///
+	clmax semm resm treated hhsize  i.date [pweight = SHO] if treated==1, a(mru) cluster(mru)
+
+
+	areg cv pa_adj post_treated B post_treated_B ///
+	hhemp good_job  ///
+	single post_treated_single sub post_treated_sub ///
+	clmax semm resm treated hhsize  i.date [pweight = SHO] if treated==1, a(mru) cluster(mru)
+
+	* areg cv pa_adj post_treated B post_treated_B clmax semm resm treated hhsize  hhemp  good_job  i.date [pweight = SHO], a(mru) cluster(mru)
+	* reg cv pa_adj post_treated B post_treated_B clmax semm resm treated  i.date [pweight = SHO]
+	* reg cv pa_adj post_treated B post_treated_B clmax semm resm treated hhsize hhemp good_job  i.date [pweight = SHO]
+	* areg cv pa_adj post_treated post_treated_B i.date [pweight = SHO], a(conacct) 
+
+
+	* areg cv pa_adj post_treated B post_treated_B clmax semm resm treated hhsize hhemp good_job  i.date [pweight = SHO] if treated==1, a(mru) cluster(mru)
+
+
+	areg cv pa_adj post_treated B drum filter  i.date [pweight = SHO], a(conacct) cluster(mru)
+
+
+	areg B pa_adj post_treated treated i.date [pweight = SHO], a(mru) cluster(mru)
+	areg B pa_adj post_treated  i.date [pweight = SHO], a(conacct) cluster(mru)
+
+
+
+	reg cv pa_adj post_treated B B_treated post_treated_B clmax semm resm treated hhsize hhemp good_job  i.date [pweight = SHO]
+
+
+	reg cv pa_adj post_treated B B_treated post_treated_B clmax semm resm treated hhsize hhemp good_job  i.date [pweight = SHO] if treated==1, cluster(mru)
+
+
+	areg cv pa_adj post_treated B post_treated_B ///
+	clmax semm resm hhsize hhemp good_job  i.date ///
+	[pweight = SHO] if treated==1, a(mru) 
+
+	areg cv pa_adj post_treated ///
+	clmax semm resm hhsize hhemp good_job  i.date ///
+	[pweight = SHO] if treated==1, a(mru) 
+
+
+
+* (1) people with un-observably bad water buy boosters:  then boosters should have no effect
+* (2) large users buy boosters; boosters don't interact with pipe fixes: then boosters shouldn't change
+* (3) boosters have 2 quality dimensions (1) affects consumption, and (2) affects fixed utility, which is substitute with fixes
+* (4) people with boosters benefit even more from the fixes
+* (5) Note: booster difference grows in small areas (bc people without boosters in immediate neighborhoods REALLY have bad water)
+
+
+
+boosters don't affect consumption directly, its all selection...
+* (2)
+
+
+	areg cv pa_adj post_treated B B_treated post_treated_B clmax semm resm treated hhsize hhemp good_job  i.date [pweight = SHO], a(mru) cluster(mru)
 
 
 mat def EB = e(b)
@@ -391,7 +442,7 @@ g alpha0 = fv - (  - alpha1*pa_adj + theta1*post_treated + theta2*B + theta3*pos
 
 preserve
 	keep if es==1
-	keep if (rdch<=10000 & cch==1) | (rdch<=10000 & cch==0)
+	* keep if (rdch<=10000 & cch==1) | (rdch<=10000 & cch==0)
 	keep B alpha0 alpha1 theta1 theta2 theta3 post_treated pa_adj
    order B alpha0 alpha1 theta1 theta2 theta3 post_treated pa_adj
    export delimited "${temp}booster_sample_2s.csv", delimiter(",") replace
