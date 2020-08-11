@@ -18,7 +18,8 @@ prog define load_data
 		replace c=abs(c)
 		replace readtag=upper(readtag)
 		g read = regexm(readtag,"ACT")==1
-		drop if c<0 | c>500
+		drop if c<0
+		* no censoring! 
 		drop PRES PREV
 		destring month year, replace force
 		g date = ym(year,month)

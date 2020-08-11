@@ -97,11 +97,30 @@ Delaying bill payments to public utilities may provide an important strategy for
 
 \section{Introduction}
 
+
+
 Key notes to fill in later:
 - Ignore externalities of booster pumps
 - No quantity margin because of splitting of taps and because census data indicates really high coverage
 - Reweight by household number
 - Also measure by closest pipe for robustness
+- Measure cost savings from less NRW! 
+	-- flag potential spillovers in NRW that we're missing...
+- could do non-linear pricing robustness check
+
+
+% This paper focuses on the costs of imperfect maintenance. Most of the large literature on water and
+% health has focused on initial access, not disruptions in water supply, and much of the work on water in
+% the developing world has focused either on point of use solutions or on rural areas (see, e.g. Ashraf, Berry
+% and Shapiro, 2010, Kremer et al, 2011). Fewtrell et al. (2005) and Esray et al. (1991) both provide
+% meta-analyses of the public health literatures on water and health. Typically, the papers that measure the
+% impact of piped water infrastructure find a negative correlation between piped water and disease (Merrick,
+% 1985; Galiani, Gertler and Schardrogsky, 2005; Gamper-Rabindran, Khan and Timmings, 2010), but not
+% in all cases (Fewtrell et al., 2005), perhaps because of maintenance problems, or perhaps because better
+% water reduces the incentives to engage in sanitary behavior (Bennett, 2012). Devoto et al. (2012) find
+% that increased household connections in urban areas lead to no difference in health but an improvement in
+% subjective well-being. Sasaki et al. (2008) also examine Lusaka, and test the impact of rainfall and poor
+% drainage on cholera epidemics in Lusaka.
 
 
 \section{Data}
@@ -285,8 +304,9 @@ V\,=\,\frac{\alpha p^2}{2} - \gamma p + \frac{Q(B^{*},R)^{2}}{2\alpha} - p Q(B^{
 
 Advantage in terms of unobservables, disadvantage in terms of counterfactuals...
 
-- Surplus is increasing in consumption
-- 
+- Surplus is increasing in consumption (by assumption! given the multiplicative aspect)
+
+
 
 % Given optimal water demand, $w^{*}$, households can then choose whether to use a booster pump by comparing expected utilities with and without booster pumps.  
 % Households use booster pumps when the following expression is greater than zero
@@ -342,46 +362,87 @@ While fixed monthly costs of booster pumps, $F$, are calibrated to equal the exp
 
 
 
+
+Fixed costs:
+
+On average, pipe replacement projects replace 25.3 km of pipes at a cost of 166 million PhP.  The average cost per pipe length is 9 million PhP per kilometer.  Since around 0.73 km of pipes are replaced per small area, total project costs per small area are around 6.6 million PhP.  With 275 connections per small area, project costs average 24,000 PhP per connection.   
+
+New Revenues:
+
+Residential connections are billed 68 PhP more per month while commercial connections are billed 145 PhP more per month.  Given that 94\% of connections are residential and 6\% of commercial, the total billing increase is around 73 PhP per month per connection.  
+
+Decrease in Marginal Costs:
+
+After pipe-replacement, usage per connection decreases by 21 m3 per month.  Given marginal costs of 5 PhP per m3, then this decrease implies a cost reduction of 105 PhP per month.  
+
+
+((73 )*12)/24000
+((400)*12)/24000
+((73 + 105 + 80)*12)/24000
+
+
 \begin{table}[h!] 
 \centering
-\caption{Structural Estimates}\label{table:estimates}
+\caption{Water and Booster Pump Use per Household Estimates}\label{table:mainregs}
 \vspace{-2mm}
 \begin{threeparttable}
-\begin{tabular}{@{}l*{1}{c}@{}}
+\begin{tabular}{@{}l*{1}{CCC}@{}}
 \toprule
-  &  (1)   \\
+  & (1)   & (2)   & (3)  \\
+  & Water Use & Water Use & Booster Pump Use \\
 \midrule
-Fixed Preferences & \\
-\hspace{1em}Intercept & \input{tables/est_gamma_1_1} \\
- 						& (\input{tables/est_gamma_sd_1_1}) \\
-\hspace{1em}Household Size & \input{tables/est_gamma_2_1} \\
- 							& (\input{tables/est_gamma_sd_2_1}) \\
-\hspace{1em}Employed Household Members & \input{tables/est_gamma_3_1} \\
- 						& (\input{tables/est_gamma_sd_3_1}) \\
-\hspace{1em}High Skill Employment & \input{tables/est_gamma_4_1} \\
- 						& (\input{tables/est_gamma_sd_4_1}) \\
-\hspace{1em}Ever High Price & \input{tables/est_gamma_5_1} \\
- 						& (\input{tables/est_gamma_sd_5_1}) \\
-\hspace{1em}Pipe Replacement Area & \input{tables/est_gamma_6_1} \\
- 						& (\input{tables/est_gamma_sd_6_1}) \\[.5em]
-Price Sensitivity & \input{tables/est_alpha_1} \\
- 						& (\input{tables/est_alpha_sd_1}) \\[.5em]
-Service Quality Preferences & \\
-\hspace{1em}Post Replacement & \input{tables/est_theta_1_1} \\
- 						& (\input{tables/est_theta_sd_1_1}) \\
-\hspace{1em}Booster Use & \input{tables/est_theta_2_1} \\
- 							& (\input{tables/est_theta_sd_2_1}) \\
-\hspace{1em}Post Replacement $\times$ Booster Use & \input{tables/est_theta_3_1} \\
- 						& (\input{tables/est_theta_sd_3_1}) \\[.5em]
-Usage Variability & \input{tables/est_sig_ep_1} \\
- 						& (\input{tables/est_sig_ep_sd_1}) \\[.5em]
-Booster Cost Variability & \input{tables/est_sig_up_1} \\
- 						& (\input{tables/est_sig_up_sd_1}) \\
+\input{tables/reg}
 \bottomrule
 \end{tabular}
 \begin{tablenotes}
 \footnotesize
-\item This table predicts usage per household with pipe replacement, booster pump use, and price with different fixed effects.   \regtext 45 PhP = 1 USD \,\,
+\item Weighting, discussion of different samples, clustering, controls (especially rate classes).  This table predicts usage per household with pipe replacement and price with different fixed effects.   \regtext 45 PhP = 1 USD \,\,
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+\begin{table}[h!] 
+\centering
+\caption{Usage per Household Regression Estimates}\label{table:nrwregs}
+\vspace{-2mm}
+\begin{threeparttable}
+\begin{tabular}{@{}l*{1}{CCCCC}@{}}
+\toprule
+  & (1)   & (2)   & (3) \\
+  & Volume Billed  & Volume Supplied & \% Non-Revenue Water \\
+\midrule
+\input{tables/nrw}
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item Say it includes both fixed effects (Describe fixed effects...) .  Weighting, discussion of different samples, clustering, controls (especially rate classes).  This table predicts usage per household with pipe replacement and price with different fixed effects.   \regtext 45 PhP = 1 USD \,\,
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+
+
+
+
+\begin{table}[h!] 
+\centering
+\caption{Usage per Connection Regression Estimates}\label{table:profitregs}
+\vspace{-2mm}
+\begin{threeparttable}
+\begin{tabular}{@{}l*{1}{cccc}@{}}
+\toprule
+  & (1) & (2) & (3) & (4)  \\
+  & Usage (m3) & Bill (PhP) & Usage (m3) & Bill (PhP) \\
+\midrule
+\input{tables/profitreg}
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item Weighting, discussion of different samples, clustering, controls (especially rate classes).  This table predicts usage per household with pipe replacement and price with different fixed effects.   \regtext 45 PhP = 1 USD \,\,
 \end{tablenotes}
 \end{threeparttable}
 \end{table}
@@ -392,15 +453,7 @@ Booster Cost Variability & \input{tables/est_sig_up_1} \\
 
 
 
-Need to fix the weighting of the estimates!!!!!!!!
 
-
-
-
-
-
-Section Estimation:
-	- show what happens when boosters are turned off
 
 
 Section Welfare:
@@ -408,6 +461,7 @@ Section Welfare:
 	- Welfare benefits with cash
 	- Are households willing to pay for pipe improvements?
 
+	- How do welfare estimates compare to traditional estimates from health measures?
 
 Robustness:
 	- Use nearest pipe replacement definition (selection into meter identification)
@@ -501,45 +555,26 @@ Robustness:
 
 
 
-\begin{table}[h!] 
-\centering
-\caption{Usage per Household Regression Estimates}\label{table:usageregs}
-\vspace{-2mm}
-\begin{threeparttable}
-\begin{tabular}{@{}l*{1}{cccc}@{}}
-\toprule
-  & (1) & (2) & (3) & (4) \\
-\midrule
-\input{tables/cv_reg}
-\bottomrule
-\end{tabular}
-\begin{tablenotes}
-\footnotesize
-\item This table predicts usage per household with pipe replacement, booster pump use, and price with different fixed effects.   \regtext 45 PhP = 1 USD \,\,
-\end{tablenotes}
-\end{threeparttable}
-\end{table}
 
 
-
-\begin{table}[h!] 
-\centering
-\caption{Booster Pump Use Regression Estimates}\label{table:boosterregs}
-\vspace{-2mm}
-\begin{threeparttable}
-\begin{tabular}{@{}l*{1}{ccc}@{}}
-\toprule
-  & (1) & (2) & (3)  \\
-\midrule
-\input{tables/B_reg}
-\bottomrule
-\end{tabular}
-\begin{tablenotes}
-\footnotesize
-\item This table predicts household booster pump use with pipe replacement including demographic controls and small-area fixed effects.   \regtext 45 PhP = 1 USD \,\,
-\end{tablenotes}
-\end{threeparttable}
-\end{table}
+% \begin{table}[h!] 
+% \centering
+% \caption{Booster Pump Use Regression Estimates}\label{table:boosterregs}
+% \vspace{-2mm}
+% \begin{threeparttable}
+% \begin{tabular}{@{}l*{1}{ccc}@{}}
+% \toprule
+%   & (1) & (2) & (3)  \\
+% \midrule
+% \input{tables/B_reg}
+% \bottomrule
+% \end{tabular}
+% \begin{tablenotes}
+% \footnotesize
+% \item This table predicts household booster pump use with pipe replacement including demographic controls and small-area fixed effects.   \regtext 45 PhP = 1 USD \,\,
+% \end{tablenotes}
+% \end{threeparttable}
+% \end{table}
 
 
 

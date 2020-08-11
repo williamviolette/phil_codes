@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  7 AUG 2020 10:27
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  11 AUG 2020 17:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1147,14 +1147,14 @@ LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <14.4> not available
 (Font)              Font shape `OT1/ppl/b/n' tried instead on input line 98.
 
 (./tables/median_inc.tex)
-LaTeX Font Info:    Try loading font information for OT1+pcr on input line 128.
+LaTeX Font Info:    Try loading font information for OT1+pcr on input line 147.
 
 
 (/usr/local/texlive/2015/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 ) [1]
 LaTeX Font Info:    Font shape `OT1/ppl/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 137.
+(Font)              Font shape `OT1/ppl/b/n' tried instead on input line 156.
 
 (./tables/yes_flow_6mid.tex) (./tables/no_flow_6mid.tex)
 (./tables/stop_freq.tex) (./tables/foreign_bodies.tex) (./tables/discolored.tex
@@ -1172,7 +1172,7 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 File: tables/pipe_cons.pdf Graphic file (type pdf)
 
 <use tables/pipe_cons.pdf>
-Package pdftex.def Info: tables/pipe_cons.pdf used on input line 191.
+Package pdftex.def Info: tables/pipe_cons.pdf used on input line 210.
 (pdftex.def)             Requested size: 397.48402pt x 289.07928pt.
  [4 <./tables/pipe_cons.pdf>] (./tables/p_s.tex)
 (./tables/p_r.tex) (./tables/cv_rs.tex) (./tables/hhsize_rs.tex)
@@ -1185,84 +1185,102 @@ LaTeX Warning: `!h' float specifier changed to `!ht'.
 File: tables/r_to_s_graph.pdf Graphic file (type pdf)
 
 <use tables/r_to_s_graph.pdf>
-Package pdftex.def Info: tables/r_to_s_graph.pdf used on input line 237.
+Package pdftex.def Info: tables/r_to_s_graph.pdf used on input line 256.
 (pdftex.def)             Requested size: 397.48402pt x 289.07928pt.
 
-Overfull \hbox (7.55882pt too wide) in paragraph at lines 243--244
+Overfull \hbox (7.55882pt too wide) in paragraph at lines 262--263
 \OT1/ppl/m/n/12 A sim-ple model of house-hold wa-ter de-mand con-nects changes 
 in wa-ter us-age to changes
  []
 
-[5] [6 <./tables/r_to_s_graph.pdf>] [7] [8] [9] [10]
-(./tables/est_gamma_1_1.tex) (./tables/est_gamma_sd_1_1.tex)
-(./tables/est_gamma_2_1.tex) (./tables/est_gamma_sd_2_1.tex)
-(./tables/est_gamma_3_1.tex) (./tables/est_gamma_sd_3_1.tex)
-(./tables/est_gamma_4_1.tex) (./tables/est_gamma_sd_4_1.tex)
-(./tables/est_gamma_5_1.tex) (./tables/est_gamma_sd_5_1.tex)
-(./tables/est_gamma_6_1.tex) (./tables/est_gamma_sd_6_1.tex)
-(./tables/est_alpha_1.tex) (./tables/est_alpha_sd_1.tex)
-(./tables/est_theta_1_1.tex) (./tables/est_theta_sd_1_1.tex)
-(./tables/est_theta_2_1.tex) (./tables/est_theta_sd_2_1.tex)
-(./tables/est_theta_3_1.tex) (./tables/est_theta_sd_3_1.tex)
-(./tables/est_sig_ep_1.tex) (./tables/est_sig_ep_sd_1.tex)
-(./tables/est_sig_up_1.tex) (./tables/est_sig_up_sd_1.tex)
+[5] [6 <./tables/r_to_s_graph.pdf>] [7] [8]
+
+LaTeX Warning: Reference `table:usageregs' on page 9 undefined on input line 34
+6.
+
+[9]
+
+LaTeX Warning: Reference `table:boosterregs' on page 10 undefined on input line
+ 350.
+
+
+LaTeX Warning: Reference `table:boosterregs' on page 10 undefined on input line
+ 352.
+
+
+LaTeX Warning: Reference `table:usageregs' on page 10 undefined on input line 3
+54.
+
+[10] (./tables/reg.tex)
+Underfull \hbox (badness 1132) in paragraph at lines 399--400
+[]\OT1/ppl/m/n/10 Weighting, dis-cus-sion of dif-fer-ent sam-ples, clus-ter-ing
+, con-trols (es-pe-cially rate
+ []
+
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-(./tables/cv_reg.tex)
+(./tables/nrw.tex)
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-(./tables/B_reg.tex)
+(./tables/profitreg.tex)
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
-<tables/price_series.pdf, id=74, 397.485pt x 289.08pt>
+[11]
+
+LaTeX Warning: Text page 12 contains only floats.
+
+
+Overfull \vbox (6.11438pt too high) has occurred while \output is active []
+
+
+[12] <tables/price_series.pdf, id=82, 397.485pt x 289.08pt>
 File: tables/price_series.pdf Graphic file (type pdf)
 
 <use tables/price_series.pdf>
-Package pdftex.def Info: tables/price_series.pdf used on input line 551.
+Package pdftex.def Info: tables/price_series.pdf used on input line 588.
 (pdftex.def)             Requested size: 397.48402pt x 289.07928pt.
 
-<tables/rs_prices.pdf, id=75, 397.485pt x 289.08pt>
+<tables/rs_prices.pdf, id=83, 397.485pt x 289.08pt>
 File: tables/rs_prices.pdf Graphic file (type pdf)
  <use tables/rs_prices.pdf>
-Package pdftex.def Info: tables/rs_prices.pdf used on input line 559.
+Package pdftex.def Info: tables/rs_prices.pdf used on input line 596.
 (pdftex.def)             Requested size: 397.48402pt x 289.07928pt.
 
-<tables/consumption_histogram.pdf, id=76, 397.485pt x 289.08pt>
+<tables/consumption_histogram.pdf, id=84, 397.485pt x 289.08pt>
 File: tables/consumption_histogram.pdf Graphic file (type pdf)
 
 <use tables/consumption_histogram.pdf>
-Package pdftex.def Info: tables/consumption_histogram.pdf used on input line 56
-6.
+Package pdftex.def Info: tables/consumption_histogram.pdf used on input line 60
+3.
 (pdftex.def)             Requested size: 397.48402pt x 289.07928pt.
- (./paper_booster_pumps_wjv.bbl [11]
-[12 <./tables/price_series.pdf>] [13 <./tables/rs_prices.pdf>] [14 <./tables/co
-nsumption_histogram.pdf>]
-
-LaTeX Warning: Text page 15 contains only floats.
-
-[15] [16] [17] [18]) [19]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 606.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 606.
+ (./paper_booster_pumps_wjv.bbl [13]
+[14 <./tables/price_series.pdf>] [15 <./tables/rs_prices.pdf>] [16 <./tables/co
+nsumption_histogram.pdf>] [17] [18]) [19]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 643.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 643.
  (./paper_booster_pumps_wjv.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 606.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 606.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 643.
+Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 643.
 
 
 LaTeX Font Warning: Size substitutions with differences
 (Font)              up to 0.5pt have occurred.
 
+
+LaTeX Warning: There were undefined references.
+
  ) 
 Here is how much of TeX's memory you used:
- 23800 strings out of 493089
- 437014 string characters out of 6134842
- 527024 words of memory out of 5000000
- 26568 multiletter control sequences out of 15000+600000
+ 23735 strings out of 493089
+ 435506 string characters out of 6134842
+ 526120 words of memory out of 5000000
+ 26572 multiletter control sequences out of 15000+600000
  88492 words of font info for 241 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 59i,15n,94p,1489b,548s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 59i,17n,94p,1489b,550s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2015/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/te
 xlive/2015/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/local/texl
@@ -1277,7 +1295,7 @@ palatino/uplb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/palatin
 o/uplr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/palatino/uplri
 8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></u
 sr/local/texlive/2015/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on paper_booster_pumps_wjv.pdf (20 pages, 310431 bytes).
+Output written on paper_booster_pumps_wjv.pdf (20 pages, 311540 bytes).
 PDF statistics:
  185 PDF objects out of 1000 (max. 8388607)
  132 compressed objects within 2 object streams

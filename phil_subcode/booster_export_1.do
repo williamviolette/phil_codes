@@ -1,20 +1,172 @@
 * pressure.do
 
 
+	use "${temp}capex_raw.dta", clear
+
+	keep var4 var3 var5 var9 var10 var39 
+	keep if var3!=""
+
+	ren var5 capex_year
+	destring capex_year, replace force
+
+	g yr_d = "20"+substr(var3,1,2)
+	destring yr_d, replace force
+	replace yr_d=. if yr_d==20
+
+	g yr_c = "20"+substr(var39,1,2)
+	destring yr_c, replace force
+	replace yr_c=. if yr_c==20
+
+	ren yr_d year_d
+	ren yr_c year_c
+	ren var4 dma
+
+	ren var9 cost
+	ren var10 pipe_l
+
+	replace cost = regexs(1) if regexm(cost,"(.+)/") 
+	replace pipe_l = regexs(1) if regexm(pipe_l,"(.+)/")
+
+	destring pipe_l cost, replace force
+	drop if pipe_l==. | cost==.
+
+	g cost_per = cost/pipe_l
+	
+	sum cost
+	sum pipe_l
+	sum cost_per, detail
+	disp `=r(mean)'*1000000
+
+	hist cost_per if cost_per < .5
+
+
+
+	* units are million PhP
+
+
+
+
+* reg B hhsize hhemp single sub
+
+
+use "${temp}conacct_rate.dta", clear
+	fmerge m:1 mru using "${temp}pipe_year_nold.dta", keep(3) nogen
+	g o = 1
+	gegen MS = sum(o), by(mru)
+	gegen mt = tag(mru)
+	sum MS if mt==1
+	* 275 accounts	
+
+
+g res = billclass_key<=2
+
+
+* odbc load, exec("SELECT * FROM dma")  dsn("phil") clear  
+* 	destring mru, replace force
+
+
+
+
+
+
+use "${temp}pipe_year_old_dma.dta", clear
+	merge 1:m dma using "${temp}nrw.dta", keep(3) nogen
+	g dated=dofm(date)
+	g year=year(dated)
+
+gegen dtag=tag(dma)
+
+g scaling_term = (270*5043)/1324
+
+g post = year>=year_inst & year_inst<.
+gegen minpost=min(post), by(dma)
+g treated=minpost==0
+g post_treated=post*treated
+
+* gegen last_date=max(date), by(dma)
+* g acct_last_id = acct if last_date==date
+* gegen acct_last = max(acct_last_id), by(dma)
+
+replace bill = 1000*30*bill/scaling_term
+replace supp = 1000*30*supp/scaling_term
+
+sum bill, detail
+
+g ln_bill = log(bill)
+g ln_supp = log(supp)
+
+g nrw=1-(bill/supp)
+
+
+areg bill post_treated i.date, a(dma) cluster(dma) r
+	est sto nrw1
+		sum bill, detail
+		estadd scalar varmean = `r(mean)'
+		estadd local  ctrl_time1 "\checkmark"
+		estadd local  ctrl_place "\checkmark"
+areg supp post_treated i.date, a(dma) cluster(dma) r
+	est sto nrw2
+		sum supp, detail
+		estadd scalar varmean = `r(mean)'
+		estadd local  ctrl_time1 "\checkmark"
+		estadd local  ctrl_place "\checkmark"
+* areg ln_bill post_treated i.date, a(dma) cluster(dma) r
+* 	est sto nrw3
+* 		sum ln_bill, detail
+* 		estadd scalar varmean = `r(mean)'
+* 		estadd local  ctrl_time1 "\checkmark"
+* 		estadd local  ctrl_place "\checkmark"
+* areg ln_supp post_treated i.date, a(dma) cluster(dma) r
+* 	est sto nrw4
+* 		sum ln_supp, detail
+* 		estadd scalar varmean = `r(mean)'
+* 		estadd local  ctrl_time1 "\checkmark"
+* 		estadd local  ctrl_place "\checkmark"
+areg nrw post_treated i.date, a(dma) cluster(dma) r
+	est sto nrw5
+		sum nrw, detail
+		estadd scalar varmean = `r(mean)'
+		estadd local  ctrl_time1 "\checkmark"
+		estadd local  ctrl_place "\checkmark"
+
+	lab var post_treated "After Pipe Replacement"
+
+	estout nrw1 nrw2 nrw5  using "${output}nrw.tex", replace  style(tex) ///
+	 keep(  post_treated  ) ///
+	order(  post_treated  ) ///
+		  label noomitted ///
+		  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
+		  stats( varmean  r2 N  , ///
+		  labels( "Mean"  "$\text{R}^{2}$"  "N"  )  ///
+		    fmt( %12.2fc   %12.3fc %12.0fc  )   ) ///
+		  starlevels(  "\textsuperscript{c}" 0.10    "\textsuperscript{b}" 0.05  "\textsuperscript{a}" 0.01) 
+
+
+	* estout nrw1 nrw2 nrw3 using "${output}nrw.tex", replace  style(tex) ///
+	*  keep(  post_treated  ) ///
+	* order(  post_treated  ) ///
+	* 	  label noomitted ///
+	* 	  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
+	* 	  stats( varmean ctrl_time1 ctrl_place r2 N  , ///
+	* 	  labels( "Mean" "Calendar Month FE"  "Household FE" "$\text{R}^{2}$"  "N"  )  ///
+	* 	    fmt( %12.2fc  %12s   %12s  %12.3fc %12.0fc  )   ) ///
+	* 	  starlevels(  "\textsuperscript{c}" 0.10    "\textsuperscript{b}" 0.05  "\textsuperscript{a}" 0.01) 
+
+
+
+
+
+	* .8 km * .19 million PhP/km = 152,000 PhP per MRU  ==  760 PhP per person
+
+	* 220 users * 400 PhP === Outstanding investment! 
+
+	* 5 yrs in between 
+
 
 *** SHARING INCREASES WITH PIPE FIXES! (but only by a tiny amount..)
 
 **  new accounts are still a mystery........... ( and come into play with uncertainty over pipe fixes... )
 
-
-
-* use "${temp}bill_paws_full.dta", clear
-* 	tsset conacct date
-* 	tsfill, full
-* 		fmerge m:1 conacct using  "${temp}conacct_rate.dta", keep(3) nogen
-* 		drop if date<datec
-* 	keep c conacct date class read
-* save "${temp}bill_paws_full_ts.dta", replace
 
 
 
@@ -151,7 +303,15 @@ end
 		save "${temp}paws_aib1.dta", replace
 
 
-* reg B hhsize hhemp single sub
+
+
+
+
+
+
+
+
+
 
 
 
@@ -181,7 +341,6 @@ gegen minpost=min(post), by(mru)
 g treated=minpost==0
 
 g month = month(dated)
-
 
 g w3_id = wave==3
 g w4_id = wave==4
@@ -284,24 +443,28 @@ gegen rdch=min(cnch), by(conacct)
 		drop if `var'==.
 	}
 
+	drop if date==653
+	g post_treated=post*treated
+
+// drops 2% of observations, likely measurement error!
+keep if c<200
+
 save "${temp}final_analysis.dta", replace
 
 
 
 
 
-
+global do_est = 1 
 
 
 use "${temp}final_analysis.dta", clear
 
-	keep if cv<150
-	drop if date==653
-	g clmax=class_max==2
-	g clmin=class_min==2
- 	g class_change = class_max!=class_min
-gegen dateg=group(date)
-	g post_treated=post*treated
+
+gegen mt=tag(mru)
+sum length_tot if mt==1 & treated==1
+
+
 
 g paws=smell!=.
 
@@ -310,45 +473,12 @@ g paws=smell!=.
 
 gegen ctag=tag(conacct)
 
-forvalues r=1/4 {
-	count if SHO==`r' & ctag==1
-	global N_S`r' = (1/(5-`r'))*`=r(N)'
-}
-
-set seed 3
-g ri = runiform()
-replace ri=. if ctag!=1
-gegen rn = max(ri), by(conacct)
-g rs = rn
-replace rn = 0 if class_change==1
-
-gegen md1 = min(date), by(conacct)
-g SHO1id=SHO if md1==date
-gegen SHO1 = max(SHO1id), by(conacct)
-replace md1 = 0 if md1==date
-sort SHO1 md1 rn conacct
-by SHO1: g cn1=_n
-gegen rd1 = min(cn1), by(conacct)
-
-g 		es = rd1<=$N_S1  if  SHO1==1
-replace es = rd1<=$N_S2  if  SHO1==2
-replace es = rd1<=$N_S3  if  SHO1==3
-replace es = rd1<=$N_S4  if  SHO1==4
-
-sort rs
-
 gegen datem=min(date), by(conacct)
 g classm_id=class if datem==date
 gegen classm=min(classm_id), by(conacct)
-g semm = classm==2 & class_change==1
-g resm = classm==1 & class_change==1
-
-g post_treated_B=B*post_treated
-
-foreach var of varlist hhsize hhemp good_job sub single {
-	g `var'_treated=`var'*treated
-}
-
+g semm = classm==2 & class_max!=class_min
+g resm = classm==1 & class_max!=class_min
+g clmax = class_max==2
 
 g post_treated_hhsize= post_treated*hhsize
 g post_treated_hhemp= post_treated*hhemp
@@ -356,260 +486,79 @@ g post_treated_good_job= post_treated*good_job
 g post_treated_sub = post_treated*sub
 g post_treated_single = post_treated*single
 
-g B_treated=B*treated
-
-
-
-* correlated coarse proxies of income from 
-
-
-	areg cv pa_adj post_treated ///
-	post_treated_hhsize hhemp post_treated_hhemp good_job post_treated_good_job ///
-	single post_treated_single sub post_treated_sub ///
-	clmax semm resm treated hhsize ///
-	hhsize_treated hhemp_treated good_job_treated sub_treated single_treated ///
-	 i.date [pweight = SHO] , a(mru)
-
-
-	areg cv pa_adj post_treated B post_treated_B ///
-	post_treated_hhsize hhemp post_treated_hhemp good_job post_treated_good_job ///
-	single post_treated_single sub post_treated_sub ///
-	clmax semm resm treated hhsize  i.date [pweight = SHO] if treated==1, a(mru) cluster(mru)
-
-
-	areg cv pa_adj post_treated B post_treated_B ///
-	hhemp good_job  ///
-	single post_treated_single sub post_treated_sub ///
-	clmax semm resm treated hhsize  i.date [pweight = SHO] if treated==1, a(mru) cluster(mru)
-
-	* areg cv pa_adj post_treated B post_treated_B clmax semm resm treated hhsize  hhemp  good_job  i.date [pweight = SHO], a(mru) cluster(mru)
-	* reg cv pa_adj post_treated B post_treated_B clmax semm resm treated  i.date [pweight = SHO]
-	* reg cv pa_adj post_treated B post_treated_B clmax semm resm treated hhsize hhemp good_job  i.date [pweight = SHO]
-	* areg cv pa_adj post_treated post_treated_B i.date [pweight = SHO], a(conacct) 
-
-
-	* areg cv pa_adj post_treated B post_treated_B clmax semm resm treated hhsize hhemp good_job  i.date [pweight = SHO] if treated==1, a(mru) cluster(mru)
-
-
-	areg cv pa_adj post_treated B drum filter  i.date [pweight = SHO], a(conacct) cluster(mru)
-
-
-	areg B pa_adj post_treated treated i.date [pweight = SHO], a(mru) cluster(mru)
-	areg B pa_adj post_treated  i.date [pweight = SHO], a(conacct) cluster(mru)
-
-
-
-	reg cv pa_adj post_treated B B_treated post_treated_B clmax semm resm treated hhsize hhemp good_job  i.date [pweight = SHO]
-
-
-	reg cv pa_adj post_treated B B_treated post_treated_B clmax semm resm treated hhsize hhemp good_job  i.date [pweight = SHO] if treated==1, cluster(mru)
-
-
-	areg cv pa_adj post_treated B post_treated_B ///
-	clmax semm resm hhsize hhemp good_job  i.date ///
-	[pweight = SHO] if treated==1, a(mru) 
-
-	areg cv pa_adj post_treated ///
-	clmax semm resm hhsize hhemp good_job  i.date ///
-	[pweight = SHO] if treated==1, a(mru) 
-
-
-
-* (1) people with un-observably bad water buy boosters:  then boosters should have no effect
-* (2) large users buy boosters; boosters don't interact with pipe fixes: then boosters shouldn't change
-* (3) boosters have 2 quality dimensions (1) affects consumption, and (2) affects fixed utility, which is substitute with fixes
-* (4) people with boosters benefit even more from the fixes
-* (5) Note: booster difference grows in small areas (bc people without boosters in immediate neighborhoods REALLY have bad water)
-
-
-
-boosters don't affect consumption directly, its all selection...
-* (2)
-
-
-	areg cv pa_adj post_treated B B_treated post_treated_B clmax semm resm treated hhsize hhemp good_job  i.date [pweight = SHO], a(mru) cluster(mru)
-
-
-mat def EB = e(b)
-
-g alpha1 = -EB[1,1]
-g theta1 = EB[1,2]
-g theta2 = EB[1,3]
-g theta3 = EB[1,4]
-
-predict fv, xb
-g alpha0 = fv - (  - alpha1*pa_adj + theta1*post_treated + theta2*B + theta3*post_treated_B)
-
-preserve
-	keep if es==1
-	* keep if (rdch<=10000 & cch==1) | (rdch<=10000 & cch==0)
-	keep B alpha0 alpha1 theta1 theta2 theta3 post_treated pa_adj
-   order B alpha0 alpha1 theta1 theta2 theta3 post_treated pa_adj
-   export delimited "${temp}booster_sample_2s.csv", delimiter(",") replace
-restore
-
-
-
-
-preserve
-	keep if es==1 & year_tag==1
-	* keep if (rdch<=10000 & cch==1) | (rdch<=10000 & cch==0)
-	keep cv_m B_ma post_treated_m pa_adj_m year clmax_m class_change_m hhsize_m hhemp_m good_job_m treated_m SHO_m
-   order cv_m B_ma post_treated_m pa_adj_m year clmax_m class_change_m hhsize_m hhemp_m good_job_m treated_m SHO_m
-   export delimited "${temp}booster_sample_year.csv", delimiter(",") replace
-restore
-
-
-preserve
-	keep if es==1
-	keep if (rdch<=10000 & cch==1) | (rdch<=10000 & cch==0)
-	keep cv B post_treated pa_adj dateg clmax class_change hhsize hhemp good_job treated SHO
-   order cv B post_treated pa_adj dateg clmax class_change hhsize hhemp good_job treated SHO
-   export delimited "${temp}booster_sample_date.csv", delimiter(",") replace
-restore
-
-preserve
-	keep if es==1
-	keep if (rdch<=10000 & cch==1) | (rdch<=10000 & cch==0)
-	keep cv B post_treated pa_adj1 dateg clmax class_change hhsize hhemp good_job treated SHO
-   order cv B post_treated pa_adj1 dateg clmax class_change hhsize hhemp good_job treated SHO
-   export delimited "${temp}booster_sample_date_pa1.csv", delimiter(",") replace
-restore
-
-
-preserve 
-
-
-
-* reg cv i.date
-* predict cv_adj, resid
-* sum cv
-* replace cv_adj=cv_adj+`=r(mean)'
-
-	reg cv  post_treated pa_adj1  B clmax class_change treated if es==1
-
-	reg cv  post_treated pa_adj  B clmax class_change treated i.date,
-	reg cv  post_treated pa_adj B clmax class_change  treated  hhsize hhemp good_job  i.date if es==1
-	reg cv  post_treated pa_adj1 B clmax class_change  treated  hhsize hhemp good_job i.date if es==1
-
-	reg cv  post_treated pa_adj1 B clmax class_change  treated  hhsize hhemp good_job i.year if es==1
-
-	reg cv  post_treated pa_adj B clmax class_change  treated  hhsize hhemp good_job i.date if es==1
-
-	reg cv  post_treated pa_adj1 B clmax class_change  treated  hhsize hhemp good_job i.year i.month if es==1
-
-
-
-
-* browse date conacct SHO ctag ri rn md1 cn1 rd1 es
-* g es = rn<=.25 if SHO==1
-* replace es = rn<=.5 if SHO==2
-* replace es = rn<=.75 if SHO==3
-* replace es = rn<=1 if SHO==4
-
 	lab var post_treated "After Pipe Replacement"
 	lab var B "Use Booster Pump"
 	lab var cv "Usage per Household (m3)"
 
 	lab var pa_adj "Avg. Price (PhP)"
 	lab var clmax "Ever High Price"
-	lab var class_change "Ever Change Price"
-	lab var treated "Pipe Replacement Area"
+	lab var semm "Change High to Low Price"
+	lab var resm "Change Low to High Price"
 	lab var hhsize "Household Size"
 	lab var hhemp "Employed Household Members"
 	lab var good_job "High Skilled Employment"
+	lab var sub "Subdivided House/Duplex"
+	lab var single "Freestanding House"
 
+	if $do_est == 1 {
+	areg cv post_treated pa_adj  ///
+	hhsize hhemp good_job sub single ///
+	clmax semm resm ///
+	 i.date [pweight = SHO] , a(mru) cluster(mru) r
+		est save "${temp}cv1", replace
 
+	areg cv post_treated pa_adj  ///
+	 i.date [pweight = SHO] , a(conacct) cluster(mru) r
+		est save "${temp}cv2", replace
 
-preserve
-	keep if es==1
+	areg B post_treated pa_adj  ///
+	hhsize hhemp good_job sub single ///
+	clmax semm resm ///
+	 i.date [pweight = SHO] if paws==1, a(mru) cluster(mru) r
+		est save "${temp}cv3", replace
+	}
 
-	reg cv  post_treated pa_adj  B clmax class_change treated i.date,  cluster(mru)
-		eststo cv1
-		sum cv if e(sample)==1, detail
+	est use "${temp}cv1"
+		sum cv, detail
 		estadd scalar varmean = `r(mean)'
 		estadd local  ctrl_time1 "\checkmark"
-		* estadd local  ctrl_time2 ""
-		estadd local  ctrl_place ""
-		estadd local  ctrl_ind ""
-
-	reg cv  post_treated pa_adj B clmax class_change  treated  hhsize hhemp good_job  i.date,  cluster(mru)
-		eststo cv2
-		sum cv if e(sample)==1, detail
-		estadd scalar varmean = `r(mean)'
-		estadd local  ctrl_time1 "\checkmark"
-		* estadd local  ctrl_time2 ""
-		estadd local  ctrl_place ""
-		estadd local  ctrl_ind ""
-
-	areg cv  post_treated pa_adj B clmax class_change hhsize hhemp good_job  i.date,  a(mru) cluster(mru)
-		eststo cv3
-		sum cv if e(sample)==1, detail
-		estadd scalar varmean = `r(mean)'
-		estadd local  ctrl_time1 "\checkmark"
-		* estadd local  ctrl_time2 ""
 		estadd local  ctrl_place "\checkmark"
 		estadd local  ctrl_ind ""
+		estadd local dataset "Billing Panel"
+	est save "${temp}cv1s", replace
 
-	areg cv  post_treated pa_adj  i.date,  a(conacct)  cluster(mru)
-		eststo cv4
-		sum cv if e(sample)==1, detail
+	est use "${temp}cv2"
+		sum cv, detail
 		estadd scalar varmean = `r(mean)'
 		estadd local  ctrl_time1 "\checkmark"
-		* estadd local  ctrl_time2 "\checkmark"
 		estadd local  ctrl_place ""
 		estadd local  ctrl_ind "\checkmark"
+		estadd local dataset "Billing Panel"
+	est save "${temp}cv2s", replace
 
-restore
-
-
-
-* ctrl_time2 
-
-estout cv1 cv2 cv3 cv4 using "${output}cv_reg.tex", replace  style(tex) ///
-	 keep(  post_treated pa_adj B  treated  clmax class_change hhsize hhemp good_job ) ///
-	order(  post_treated  pa_adj B  treated clmax class_change  hhsize hhemp good_job ) ///
-		  label noomitted ///
-		  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
-		  stats( varmean ctrl_time1 ctrl_place ctrl_ind r2 N , ///
-		  labels( "Mean" "Calendar Month FE"  "Small-Area FE" "Household FE" "$\text{R}^{2}$" "N"  )  ///
-		    fmt( %12.2fc  %12s   %12s %12s  %12.3fc %12.0fc  )   ) ///
-		  starlevels(  "\textsuperscript{c}" 0.10    "\textsuperscript{b}" 0.05  "\textsuperscript{a}" 0.01) 
-
-
-
-preserve
-	keep if es==1
-	reg B  post_treated treated i.date, cluster(mru) r
-			eststo B1
-		sum B if e(sample)==1, detail
-		estadd scalar varmean = `r(mean)'
-		estadd local  ctrl_time1 "\checkmark"
-		estadd local  ctrl_place ""
-
-	reg B  post_treated pa_adj clmax class_change treated  hhsize hhemp good_job i.date, cluster(mru)
-			eststo B2
-		sum B if e(sample)==1, detail
-		estadd scalar varmean = `r(mean)'
-		estadd local  ctrl_time1 "\checkmark"
-		estadd local  ctrl_place ""
-
-	areg B post_treated pa_adj clmax class_change treated  hhsize hhemp good_job i.date, a(mru) cluster(mru)
-			eststo B3
-		sum B if e(sample)==1, detail
+	est use "${temp}cv3"
+		sum B if paws==1, detail
 		estadd scalar varmean = `r(mean)'
 		estadd local  ctrl_time1 "\checkmark"
 		estadd local  ctrl_place "\checkmark"
-restore
+		estadd local  ctrl_ind ""
+		estadd local  dataset "Household Survey"
+	est save "${temp}cv3s", replace
 
-estout B1 B2 B3 using "${output}B_reg.tex", replace  style(tex) ///
-	keep(   post_treated treated pa_adj clmax class_change  hhsize hhemp good_job ) ///
-	order(  post_treated treated pa_adj clmax class_change   hhsize hhemp good_job ) ///
+
+	forvalues r=1/3 {
+		est use "${temp}cv`r's"
+		est sto cv`r's
+	}
+
+estout cv1s cv2s cv3s using "${output}reg.tex", replace  style(tex) ///
+	 keep(  post_treated pa_adj  hhsize hhemp good_job sub single clmax semm resm ) ///
+	order(  post_treated pa_adj  hhsize hhemp good_job sub single clmax semm resm  ) ///
 		  label noomitted ///
-		  mlabels(,none)   collabels(none)  cells( b(fmt(3) star ) se(par fmt(3)) ) ///
-		  stats( varmean ctrl_time1 ctrl_place r2 N , ///
-		  labels( "Mean" "Calendar Month FE"  "Small-Area FE" "$\text{R}^{2}$" "N"  )  ///
-		    fmt( %12.2fc  %12s   %12s %12.3fc %12.0fc  )   ) ///
+		  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
+		  stats( varmean ctrl_time1 ctrl_place ctrl_ind r2 N  dataset , ///
+		  labels( "Mean" "Calendar Month FE"  "Small-Area FE" "Household FE" "$\text{R}^{2}$"  "N" "Dataset" )  ///
+		    fmt( %12.2fc  %12s   %12s %12s  %12.3fc %12.0fc %12s  )   ) ///
 		  starlevels(  "\textsuperscript{c}" 0.10    "\textsuperscript{b}" 0.05  "\textsuperscript{a}" 0.01) 
 
 
@@ -617,57 +566,30 @@ estout B1 B2 B3 using "${output}B_reg.tex", replace  style(tex) ///
 
 
 
-sum pa_adj if class==1
-global p_r = `=r(mean)'
-    local value=string($p_r ,"%12.1fc")
-    file open newfile using "${output}p_r.tex", write replace
-    file write newfile "`value'"
-    file close newfile
 
-sum pa_adj if class==2
-global p_s = `=r(mean)'
-    local value=string( $p_s ,"%12.1fc")
-    file open newfile using "${output}p_s.tex", write replace
-    file write newfile "`value'"
-    file close newfile
-
-* reg  cv p_H1  post B class_min class_max hhsize hhemp good_job  treated i.year i.month
-* 	areg cv p_H1  post  i.year i.month, a(conacct) 
+		* eststo cv4
+		* sum cv if e(sample)==1, detail
+		* estadd scalar varmean = `r(mean)'
+		* estadd local  ctrl_time1 "\checkmark"
+		* estadd local  ctrl_place ""
+		* estadd local  ctrl_ind "\checkmark"
+		* estadd local dataset "Billing Panel"
 
 
+sum pa_adj, detail
+* 21 PhP
 
 
+* PER MRU : 152,000 PhP
 
-reg  cv pa_adj  post B class_min class_max hhsize hhemp good_job  treated i.year i.month
-	areg cv pa_adj  post  i.year i.month, a(conacct)
+* SURPLUS : 250 accounts * avg HHs (1.4) * HH surplus (1.8*(22/.15) use + .2*480 boost  ) 
+* = ( 264 use + 96 boost )* 350 
+* = 92,400 use + 33,600 boost
 
+* PROFITS : 250 accounts * 3.7 c per account * (21 price - 5 mc) = 14,680 PhP per MRU (12 months, paid for!)
 
-
-
-preserve
-	keep if (rdch<=10000 & cch==1) | (rdch<=10000 & cch==0)
-	keep cv B post pa_adj year month class_max class_min hhsize hhemp good_job  SHO treated
-   order cv B post pa_adj year month class_max class_min hhsize hhemp good_job  SHO treated
-   export delimited "${temp}booster_sample1_2.csv", delimiter(",") replace
-restore
-
-
-
-
-preserve
-	keep if (rdch<=1000 & cch==1) | (rdch<=10000 & cch==0)
-	foreach var of varlist  cv B post pa_adj year month  class_max class_min hhsize hhemp good_job  SHO {
-		drop if `var'==.
-	}
-	keep if cv<150
-	keep cv B post pa_adj year month class_max class_min hhsize hhemp good_job  SHO treated
-   order cv B post pa_adj year month class_max class_min hhsize hhemp good_job  SHO treated
-   export delimited "${temp}booster_sample1_1.csv", delimiter(",") replace
-restore
-
-
-
-
+*** World Bank reports on NRW
+*** Water and sanitation benefits!?
 
 preserve 
 	g no_flow_6mid = fl_6_mid==1
@@ -708,6 +630,121 @@ preserve
 
 	print_mean2n pawsn B "%10.0fc" 1
 restore
+
+
+
+
+
+use "${temp}final_analysis.dta", clear
+
+	replace amount = . if amount<0 | amount>60*200
+
+	if $do_est == 1 {
+	areg c post_treated i.date , a(conacct) cluster(mru) r
+	estimates save "${temp}c1", replace
+	areg amount post_treated i.date , a(conacct) cluster(mru) r
+	estimates save "${temp}c2", replace
+	}
+
+	estimates use "${temp}c1"
+		sum c, detail
+		estadd scalar varmean = `r(mean)'
+		estadd local  ctrl_time1 "\checkmark"
+		estadd local  ctrl_place "\checkmark"
+		estadd local  ctrl_dataset "Residential"
+	estimates save "${temp}c1s", replace
+
+	estimates use "${temp}c2"
+		sum amount, detail
+		estadd scalar varmean = `r(mean)'
+		estadd local  ctrl_time1 "\checkmark"
+		estadd local  ctrl_place "\checkmark"
+		estadd local  ctrl_dataset "Residential"
+	estimates save "${temp}c2s", replace
+
+
+
+
+use "${temp}comm_amountm.dta", clear
+	drop billclass_key
+	fmerge m:1 conacct using "${temp}conacct_rate.dta", keep(3) nogen
+	keep amount date billclass_key conacct mru datec
+	ren billclass_key billclass
+
+	fmerge m:1 conacct date using "${temp}comm_billm.dta", keep(3) nogen
+	fmerge m:1 mru using "${temp}pipe_year_nold.dta", keep(3) nogen
+
+	g dated=dofm(date)
+	g year=year(dated)
+
+	g post = year>=year_inst & year_inst<.
+	gegen minpost=min(post), by(mru)
+	g treated=minpost==0
+	g post_treated = post*treated
+
+	drop if date==653
+
+sum c, detail
+keep if c<`=r(p95)'
+replace amount = . if amount<=0 | amount>=`=r(p95)*80'
+
+
+
+if $do_est == 1 {
+areg c      post_treated i.date , a(conacct) cluster(mru) r
+	estimates save "${temp}c3", replace
+areg amount post_treated i.date , a(conacct) cluster(mru) r
+	estimates save "${temp}c4", replace
+}
+
+
+	estimates use "${temp}c3"
+		sum c, detail
+		estadd scalar varmean = `r(mean)'
+		estadd local  ctrl_time1 "\checkmark"
+		estadd local  ctrl_place "\checkmark"
+		estadd local  ctrl_dataset "Commercial"
+	estimates save "${temp}c3s", replace
+
+	estimates use "${temp}c4"
+		sum amount, detail
+		estadd scalar varmean = `r(mean)'
+		estadd local  ctrl_time1 "\checkmark"
+		estadd local  ctrl_place "\checkmark"
+		estadd local  ctrl_dataset "Commercial"
+	estimates save "${temp}c4s", replace
+
+
+	lab var post_treated "After Pipe Replacement"
+
+
+	forvalues r=1/4 {
+		est use "${temp}c`r's"
+		est sto c`r's
+	}
+
+	estout c1s c2s c3s c4s using "${output}profitreg.tex", replace  style(tex) ///
+	 keep(  post_treated  ) ///
+	order(  post_treated  ) ///
+		  label noomitted ///
+		  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
+		  stats( varmean  ctrl_dataset r2 N  , ///
+		  labels( "Mean" "Connection Type" "$\text{R}^{2}$"  "N"  )  ///
+		    fmt( %12.2fc  %12s  %12.3fc %12.0fc  )   ) ///
+		  starlevels(  "\textsuperscript{c}" 0.10    "\textsuperscript{b}" 0.05  "\textsuperscript{a}" 0.01) 
+
+	* estout c1s c2s c3s c4s using "${output}profitreg.tex", replace  style(tex) ///
+	*  keep(  post_treated  ) ///
+	* order(  post_treated  ) ///
+	* 	  label noomitted ///
+	* 	  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
+	* 	  stats( varmean ctrl_time1 ctrl_place ctrl_dataset r2 N  , ///
+	* 	  labels( "Mean" "Calendar Month FE"  "Household FE" "Connection" "$\text{R}^{2}$"  "N"  )  ///
+	* 	    fmt( %12.2fc  %12s   %12s %12s  %12.3fc %12.0fc  )   ) ///
+	* 	  starlevels(  "\textsuperscript{c}" 0.10    "\textsuperscript{b}" 0.05  "\textsuperscript{a}" 0.01) 
+
+
+
 
 
 
