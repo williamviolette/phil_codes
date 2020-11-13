@@ -1,6 +1,12 @@
 * pressure.do
 
 
+
+
+grstyle init
+grstyle set imesh, horizontal
+
+
 	use "${temp}capex_raw.dta", clear
 
 	keep var4 var3 var5 var9 var10 var39 
@@ -56,11 +62,8 @@ use "${temp}conacct_rate.dta", clear
 	gegen mt = tag(mru)
 	sum MS if mt==1
 	* 275 accounts	
-
-
 g res = billclass_key<=2
-
-
+sum res
 * odbc load, exec("SELECT * FROM dma")  dsn("phil") clear  
 * 	destring mru, replace force
 
@@ -166,42 +169,6 @@ areg nrw post_treated i.date, a(dma) cluster(dma) r
 *** SHARING INCREASES WITH PIPE FIXES! (but only by a tiny amount..)
 
 **  new accounts are still a mystery........... ( and come into play with uncertainty over pipe fixes... )
-
-
-
-
-cap prog drop print_mean2
-program print_mean2
-    qui mean `2' [pweight = SHO ] if treated==1 & post==0 & paws==1
-    mat j=e(b)
-    local value1=string(`=j[1,1]*`4'',"`3'")
-    qui mean `2' [pweight = SHO ] if treated==1 & post==1 & paws==1
-    mat j=e(b)
-    local value2=string(`=j[1,1]*`4'',"`3'")
-    qui mean `2' [pweight = SHO ] if paws==1
-    mat j=e(b)
-    local value3=string(`=j[1,1]*`4'',"`3'")
-
-    file open newfile using "${output}`1'.tex", write replace
-    file write newfile "`value1' & `value2' & `value3'"
-    file close newfile    
-end
-
-
-cap prog drop print_mean2n
-program print_mean2n
-    qui sum `2' if minpost==0 & post==0, detail 
-    local value1=string(`=r(N)*`4'',"`3'")
-    qui sum `2' if minpost==0 & post==1, detail 
-    local value2=string(`=r(N)*`4'',"`3'")
-    qui sum `2', detail 
-    local value3=string(`=r(N)*`4'',"`3'")
-
-    file open newfile using "${output}`1'.tex", write replace
-    file write newfile "`value1' & `value2' & `value3'"
-    file close newfile    
-end
-
 
 
 		use "${data}paws/clean/full_sample_b_1.dta", clear
@@ -380,7 +347,7 @@ replace pa_adj = 21 if (date==584 | date==585 | date==587 | date==588 | date==59
 * twoway scatter pa_adj date if dct==1
 
 
-foreach v in B  filter drum SHO hho hhsize sub single hhemp good_job {
+foreach v in B  filter drum SHO hho hhsize sub single hhemp good_job  barangay_id {
 	g `v'_3_id = `v' if wave==3
 	g `v'_4_id = `v' if wave==4
 	g `v'_5_id = `v' if wave==5
@@ -390,9 +357,9 @@ foreach v in B  filter drum SHO hho hhsize sub single hhemp good_job {
 	gegen `v'_5 = max(`v'_5_id), by(conacct)
 	drop  `v'_3_id `v'_4_id `v'_5_id
 
-	replace `v' = `v'_3 if year<=2010 & w3==1 & w4==0 & w5==0
-	replace `v' = `v'_4 if year<=2010 & w3==0 & w4==1 & w5==0
-	replace `v' = `v'_5 if year>=2010 & w3==0 & w4==0 & w5==1
+	replace `v' = `v'_3 if w3==1 & w4==0 & w5==0
+	replace `v' = `v'_4 if w3==0 & w4==1 & w5==0
+	replace `v' = `v'_5 if w3==0 & w4==0 & w5==1
 
 	replace `v' = `v'_4 if year<2010  & w3==0 & w4==1 & w5==1
 	replace `v' = `v'_5 if year>=2010 & w3==0 & w4==1 & w5==1
@@ -405,51 +372,38 @@ foreach v in B  filter drum SHO hho hhsize sub single hhemp good_job {
 
 	replace `v' = `v'_3 if year==2008 & w3==1 & w4==1 & w5==1
 	replace `v' = `v'_4 if year==2009 & w3==1 & w4==1 & w5==1
-	replace `v' = `v'_5 if year==2010 & w3==1 & w4==1 & w5==1
+	replace `v' = `v'_5 if year>=2010 & w3==1 & w4==1 & w5==1
 
 	drop `v'_3 `v'_4 `v'_5
 }
 
-* g class_change = class_max!=class_min
-	* reg c  post B pa_adj i.class_max class_change treated i.date 
-	* reg c  post B pa_adj i.class_max class_change treated  hhsize hhemp good_job  i.date
-	* areg c post pa_adj  i.class_max class_change i.date,  a(mru)
-	* areg c post pa_adj i.date,  a(conacct)
-
 g tot_hh =  hho+hhsize
 g c_shr  = hhsize/tot_hh
 
-g cv = c*c_shr
-
-cap drop rng_id 
-cap drop md
-cap drop cn
-cap drop rd
-
-set seed 3
-g rng_id = runiform()
-gegen md=min(date), by(conacct)
-replace md = 0 if md==date
-sort md rng_id conacct
-g cn=_n
-gegen rd = min(cn), by(conacct)
-
-g cch = class_max==class_min
-sort cch md rng_id conacct
-by cch: g cnch=_n
-gegen rdch=min(cnch), by(conacct)
-
-	foreach var of varlist  cv B post pa_adj year month  class_max class_min hhsize hhemp good_job  SHO {
-		drop if `var'==.
-	}
+* g cv = c*c_shr
+g cv = c/SHO
 
 	drop if date==653
 	g post_treated=post*treated
 
+fmerge m:1 barangay_id using "${temp}cbms_inc.dta", keep(1 3) nogen
+
+g inc = inc_2008 if year<=2010
+replace inc = inc_2011 if year>=2011
+drop inc_2008 inc_2011
+
 // drops 2% of observations, likely measurement error!
+drop if c==.
 keep if c<200
 
 save "${temp}final_analysis.dta", replace
+
+
+
+* IV IDEA
+
+
+
 
 
 
@@ -460,11 +414,12 @@ global do_est = 1
 
 use "${temp}final_analysis.dta", clear
 
+ keep if cv!=.
+
+replace inc = inc/10000
 
 gegen mt=tag(mru)
 sum length_tot if mt==1 & treated==1
-
-
 
 g paws=smell!=.
 
@@ -480,12 +435,12 @@ g semm = classm==2 & class_max!=class_min
 g resm = classm==1 & class_max!=class_min
 g clmax = class_max==2
 
-g post_treated_hhsize= post_treated*hhsize
-g post_treated_hhemp= post_treated*hhemp
-g post_treated_good_job= post_treated*good_job
-g post_treated_sub = post_treated*sub
-g post_treated_single = post_treated*single
-
+foreach var of varlist hhsize hhemp good_job sub single {
+	g post_treated_`var' = `var'*post_treated
+	g treated_`var' = `var'*treated
+}
+g inc__post_treated = inc*post_treated
+	
 	lab var post_treated "After Pipe Replacement"
 	lab var B "Use Booster Pump"
 	lab var cv "Usage per Household (m3)"
@@ -500,96 +455,433 @@ g post_treated_single = post_treated*single
 	lab var sub "Subdivided House/Duplex"
 	lab var single "Freestanding House"
 
+	lab var post_treated_hhsize "Post $\times$ Household Size"
+	lab var post_treated_hhemp "Post $\times$ Employed Household Members"
+	lab var post_treated_good_job "Post $\times$ High Skilled Employment"
+	lab var post_treated_sub "Post $\times$ Subdivided House/Duplex"
+	lab var post_treated_single "Post $\times$ Freestanding House"
+
+	lab var inc "Monthly Income (10,000 PhPs)"
+	lab var inc__post_treated "Post $\times$ Monthly Income (10,000 PhPs)"
+
+
+*** TRY CONTROLLING FOR PRETRENDS FOR ELASTICITY
+
+sort conacct date
+by conacct: g r_to_s_id = class[_n-1]==1 & class[_n]==2
+g date_rs_id = date if r_to_s_id==1
+replace date_rs_id=. if date_rs_id==577
+gegen date_rs = min(date_rs_id), by(conacct)
+
+by conacct: g date_sr_id = date if class[_n]==2 & class[_n+1]==1
+by conacct: g s_to_r_id = class[_n]==2 & class[_n+1]==1
+replace s_to_r_id=. if date_sr_id==577
+replace date_sr_id=. if date_sr_id==577
+gegen date_sr=min(date_sr_id), by(conacct)
+
+g Trs = date-date_rs
+g Tsr = date-date_sr
+
+
+		* areg cv post_treated pa_adj  i.date [pweight = SHO] , a(conacct) 
+
+*** HOW TO BEST CONTROL FOR TRENDS?!
+g Trs_pre = Trs if Trs<0
+replace Trs_pre = 0 if Trs_pre==. 
+g Trs_post = Trs if Trs>0
+replace Trs_post = 0 if Trs_post==. 
+g rs_post = Trs>0 & Trs<.
+
+g Trs_pre2=Trs_pre^2
+g Trs_post2=Trs_post^2
+g Trs_pre3=Trs_pre^3
+g Trs_post3=Trs_post^3
+
+
+g Tsr_pre = Tsr if Tsr<0
+replace Tsr_pre = 0 if Tsr_pre==. 
+g Tsr_post = Tsr if Tsr>0
+replace Tsr_post = 0 if Tsr_post==. 
+
+
+g TrsD=Trs+100
+
+
+
+
+areg cv i.TrsD i.date if Trs!=., a(conacct)
+	coefplot, vertical keep(*TrsD*)
+
+
+
+areg cv rs_post i.date if Trs!=., a(conacct)
+
+areg cv rs_post Trs_pre Trs_post  i.date if Trs!=., a(conacct)
+
+areg cv rs_post Trs_pre Trs_post  Trs_pre2 Trs_post2 i.date if Trs!=., a(conacct)
+
+areg cv rs_post Trs_pre Trs_post  Trs_pre2 Trs_post2 Trs_pre3 Trs_post3 i.date if Trs!=., a(conacct)
+
+
+ivreghdfe cv post_treated (pa_adj = rs_post ) if Trs!=., absorb(conacct date) 
+ivreghdfe cv post_treated Trs_pre Trs_post (pa_adj = rs_post ) if Trs!=., absorb(conacct date) 
+ivreghdfe cv post_treated Trs_pre Trs_post  Trs_pre2 Trs_post2 (pa_adj = rs_post ) if Trs!=., absorb(conacct date) 
+
+
+
+ivreghdfe cv post_treated (pa_adj = rs_post ) [pweight = SHO] , absorb(conacct date)  cluster(mru)
+
+ivreghdfe cv post_treated  Trs_pre Trs_post (pa_adj = rs_post ) , absorb(conacct date)  cluster(mru) 
+
+ivreghdfe cv post_treated  Trs_pre Trs_post  Trs_pre2 Trs_post2 (pa_adj = rs_post ) , absorb(conacct date)   cluster(mru)
+
+
+
+ivreghdfe cv  Trs_pre Trs_post i.date (pa_adj = rs_post ) if Trs!=., absorb(conacct)
+
+ivreghdfe cv  Trs_pre Trs_post i.date (pa_adj = rs_post ) if Trs!=. | Tsr!=., absorb(conacct)
+
+
+	areg cv pa_adj Trs_pre Trs_post if Trs!=., a(conacct) cluster(conacct)
+
+
+
+areg cv rs_post Trs_pre Trs_post if Trs!=., a(conacct) cluster(mru)
+
+areg cv sem Trs_pre Trs_post if Trs!=., a(conacct) cluster(mru)
+
+
+areg pa_adj rs_post Trs_pre Trs_post Trs_pre2 Trs_post2 if Trs!=., a(conacct) cluster(mru)
+
+
+
+
+
+
+areg cv sem Trs_pre Trs_post if Trs!=. & Trs>=-24 & Trs<=24, a(conacct)
+	areg cv pa_adj Trs_pre Trs_post if Trs!=. & Trs>=-24 & Trs<=24, a(conacct)
+
+
+
+		areg cv post_treated pa_adj  i.date [pweight = SHO] , a(conacct) 
+		areg cv post_treated pa_adj Trs_* Tsr_*  i.date [pweight = SHO] , a(conacct) 
+
+gegen rs_sum = sum(r_to_s_id), by(conacct)
+gegen sr_sum = sum(s_to_r_id), by(conacct)
+tab sr_sum rs_sum if ctag==1
+
+*** DOESN'T REALLY WORK...
+* g Trs_pre = Trs if Trs<0
+* replace Trs_pre = 0 if Trs_pre==. | Trs_pre<-24
+* g Trs_post = Trs if Trs>0
+* replace Trs_post = 0 if Trs_post==. | Trs_post>24
+* g Tsr_pre = Tsr if Tsr<0
+* replace Tsr_pre = 0 if Tsr_pre==. | Tsr_pre<-24
+* g Tsr_post = Tsr if Tsr>0
+* replace Tsr_post = 0 if Tsr_post==. | Tsr_post>24
+
+
+
+set seed 15
+
+
+global bno=10
+mat def ef = J($bno,3,0)
+
+forvalues r = 1/$bno {
+	global tag = "_`r'"
+	preserve
+		keep mru
+		gegen mtag=tag(mru)
+		keep if mtag==1
+		drop mtag
+		bsample
+		duplicates tag mru, g(D)
+		duplicates drop mru, force
+		replace D = D+1 
+		save "${temp}boot_temp.dta", replace
+	restore
+
+	preserve
+		merge m:1 mru using "${temp}boot_temp.dta", keep(3) nogen
+
+		sort mru conacct date
+		expand D
+		sort mru conacct date
+		by mru conacct date: g dn=_n
+
+		gegen conacct1=group(conacct dn)
+
+		areg cv post_treated pa_adj i.date [pweight = SHO] , a(conacct1) 
+		est save "${temp}cv_b`r'", replace
+		* est sto cv_b`r'
+		qui mean cv [pweight = SHO ] 
+		est save "${temp}mm_b`r'", replace
+  *   	mat j=e(b)
+		* estadd scalar varmean = `=j[1,1]'
+
+		areg B post_treated pa_adj i.date [pweight = SHO] if paws==1, a(conacct1)
+		est save "${temp}bb_b`r'", replace
+
+	restore
+}
+
+
+global F = 486
+
+forvalues r=1/$bno {
+est use "${temp}cv_b`r'"
+	mat def bb=e(b)
+	global dqdr = bb[1,1]
+	global alpha = bb[1,2]
+
+est use "${temp}bb_b`r'"
+	mat def bb=e(b)
+	global dbdr = bb[1,1]
+est use "${temp}mm_b`r'"
+	mat def bb=e(b)
+	global wstar = bb[1,1]
+
+mat ef[`r',1] =  $dqdr*($wstar/-$alpha)
+mat ef[`r',2] = -$dbdr*$F
+mat ef[`r',3] =  $dqdr*($wstar/-$alpha) -$dbdr*$F
+}
+
+
+preserve
+	clear
+	svmat ef 
+    sum ef1
+    local value1=string(`=r(sd)',"%12.1fc")
+    sum ef2
+    local value2=string(`=r(sd)',"%12.1fc")
+    sum ef3
+    local value3=string(`=r(sd)',"%12.1fc")
+
+    file open newfile using "${output}sd_welfare.tex", write replace
+    file write newfile "(`value1') & (`value2') & (`value3')"
+    file close newfile    
+restore
+
+
 	if $do_est == 1 {
-	areg cv post_treated pa_adj  ///
-	hhsize hhemp good_job sub single ///
-	clmax semm resm ///
-	 i.date [pweight = SHO] , a(mru) cluster(mru) r
-		est save "${temp}cv1", replace
+		areg cv post_treated pa_adj  ///
+		 i.date [pweight = SHO] , a(conacct) cluster(mru) r
+			est save "${temp}cv1", replace
 
-	areg cv post_treated pa_adj  ///
-	 i.date [pweight = SHO] , a(conacct) cluster(mru) r
-		est save "${temp}cv2", replace
-
-	areg B post_treated pa_adj  ///
-	hhsize hhemp good_job sub single ///
-	clmax semm resm ///
-	 i.date [pweight = SHO] if paws==1, a(mru) cluster(mru) r
-		est save "${temp}cv3", replace
+		areg B post_treated pa_adj  ///
+		 i.date [pweight = SHO] if paws==1, a(conacct) cluster(mru) r
+			est save "${temp}cv2", replace
 	}
 
-	est use "${temp}cv1"
-		sum cv, detail
-		estadd scalar varmean = `r(mean)'
-		estadd local  ctrl_time1 "\checkmark"
-		estadd local  ctrl_place "\checkmark"
-		estadd local  ctrl_ind ""
-		estadd local dataset "Billing Panel"
-	est save "${temp}cv1s", replace
 
-	est use "${temp}cv2"
-		sum cv, detail
-		estadd scalar varmean = `r(mean)'
+	qui mean cv [pweight = SHO ] 
+    	mat j=e(b)
+	est use "${temp}cv1"
+		mat ee=e(b)
+		estadd scalar varmean = `=j[1,1]'
+		global cm = `=j[1,1]'
+			global cm_st = string(`=j[1,1]',"%12.1fc")
+		    file open newfile using "${output}cm.tex", write replace
+    		file write newfile " $cm_st  "
+    		file close newfile 
+    	global dqdrm = `=ee[1,1]'
+			global dqdr_st = string(`=ee[1,1]',"%12.2fc")
+		    file open newfile using "${output}dqdrm.tex", write replace
+    		file write newfile " $dqdr_st  "
+    		file close newfile 
+    	global alpham = `=ee[1,2]'
+			global alpha_st = string(`=ee[1,2]',"%12.2fc")
+		    file open newfile using "${output}alpham.tex", write replace
+    		file write newfile " $alpha_st  "
+    		file close newfile 
 		estadd local  ctrl_time1 "\checkmark"
 		estadd local  ctrl_place ""
 		estadd local  ctrl_ind "\checkmark"
 		estadd local dataset "Billing Panel"
-	est save "${temp}cv2s", replace
+	est save "${temp}cv1s", replace
 
-	est use "${temp}cv3"
-		sum B if paws==1, detail
-		estadd scalar varmean = `r(mean)'
+	qui mean B [pweight = SHO ]  if paws==1
+    	mat j=e(b)
+	est use "${temp}cv2"
+		mat ee=e(b)
+			global bm = `=j[1,1]'
+			global bm_st = string(`=j[1,1]',"%12.1fc")
+		    file open newfile using "${output}bm.tex", write replace
+    		file write newfile " $bm_st "
+    		file close newfile 
+
+    		global dbdrm = `=ee[1,1]'
+			global dbdr_st = string(`=ee[1,1]',"%12.2fc")
+		    file open newfile using "${output}dbdrm.tex", write replace
+    		file write newfile " $dbdr_st  "
+    		file close newfile 
+		estadd scalar varmean = `=j[1,1]'
 		estadd local  ctrl_time1 "\checkmark"
 		estadd local  ctrl_place "\checkmark"
 		estadd local  ctrl_ind ""
 		estadd local  dataset "Household Survey"
-	est save "${temp}cv3s", replace
+	est save "${temp}cv2s", replace
+
+    local value1=string(`=$dqdrm*($cm/-$alpham)',"%12.1fc")
+    local value2=string(`=-$dbdrm*$F',"%12.1fc")
+    local value3=string(`=($dqdrm*($cm/-$alpham)) -$dbdrm*$F',"%12.1fc")
+
+	file open newfile using "${output}est_welfare.tex", write replace
+    file write newfile " `value1' & `value2' & `value3'"
+    file close newfile   
 
 
-	forvalues r=1/3 {
+	forvalues r=1/2 {
 		est use "${temp}cv`r's"
 		est sto cv`r's
 	}
 
-estout cv1s cv2s cv3s using "${output}reg.tex", replace  style(tex) ///
-	 keep(  post_treated pa_adj  hhsize hhemp good_job sub single clmax semm resm ) ///
-	order(  post_treated pa_adj  hhsize hhemp good_job sub single clmax semm resm  ) ///
+estout cv1s cv2s using "${output}reg.tex", replace  style(tex) ///
+	 keep(  post_treated pa_adj  ) ///
+	order(  post_treated pa_adj  ) ///
 		  label noomitted ///
 		  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
-		  stats( varmean ctrl_time1 ctrl_place ctrl_ind r2 N  dataset , ///
-		  labels( "Mean" "Calendar Month FE"  "Small-Area FE" "Household FE" "$\text{R}^{2}$"  "N" "Dataset" )  ///
-		    fmt( %12.2fc  %12s   %12s %12s  %12.3fc %12.0fc %12s  )   ) ///
+		  stats( varmean  r2 N dataset , ///
+		  labels( "Mean" "$\text{R}^{2}$"  "N" "Dataset" )  ///
+		    fmt( %12.2fc  %12.3fc %12.0fc %12s  )   ) ///
 		  starlevels(  "\textsuperscript{c}" 0.10    "\textsuperscript{b}" 0.05  "\textsuperscript{a}" 0.01) 
 
 
 
 
+	if $do_est == 1 {
+		areg cv post_treated pa_adj post_treated_* hhsize hhemp good_job sub single ///
+		 i.date [pweight = SHO] , a(conacct) cluster(mru) r
+		 est save "${temp}cv1h", replace
+		 areg cv post_treated pa_adj inc__post_treated inc  ///
+		 i.date [pweight = SHO] , a(conacct) cluster(mru) r
+		 est save "${temp}cv2h", replace
+		areg B post_treated pa_adj post_treated_*  hhsize hhemp good_job sub single ///
+		 i.date [pweight = SHO]  if  paws==1, a(mru) cluster(mru) r
+		 est save "${temp}cv3h", replace
+		areg B post_treated pa_adj inc__post_treated inc  ///
+		 i.date [pweight = SHO] if paws==1, a(mru) cluster(mru) r
+		 est save "${temp}cv4h", replace
+	}
+
+		qui mean cv [pweight = SHO ] 
+    	mat j=e(b)
+	est use "${temp}cv1h"
+		estadd scalar varmean = `=j[1,1]'
+		estadd local  ctrl_time1 "\checkmark"
+		estadd local  ctrl_place ""
+		estadd local  ctrl_ind "\checkmark"
+		estadd local dataset "Billing Panel"
+	est save "${temp}cv1hs", replace
+
+		qui mean cv [pweight = SHO ] 
+    	mat j=e(b)
+	est use "${temp}cv2h"
+		estadd scalar varmean = `=j[1,1]'
+		estadd local  ctrl_time1 "\checkmark"
+		estadd local  ctrl_place ""
+		estadd local  ctrl_ind "\checkmark"
+		estadd local dataset "Billing Panel"
+	est save "${temp}cv2hs", replace
+
+		qui mean B [pweight = SHO ]  if paws==1
+    	mat j=e(b)
+	est use "${temp}cv3h"
+		estadd scalar varmean = `=j[1,1]'
+		estadd local  ctrl_time1 "\checkmark"
+		estadd local  ctrl_place "\checkmark"
+		estadd local  ctrl_ind ""
+		estadd local  dataset "Household Survey"
+	est save "${temp}cv3hs", replace
+
+		qui mean B [pweight = SHO ]  if paws==1
+    	mat j=e(b)
+	est use "${temp}cv4h"
+		estadd scalar varmean = `=j[1,1]'
+		estadd local  ctrl_time1 "\checkmark"
+		estadd local  ctrl_place "\checkmark"
+		estadd local  ctrl_ind ""
+		estadd local  dataset "Household Survey"
+	est save "${temp}cv4hs", replace
 
 
 
-		* eststo cv4
-		* sum cv if e(sample)==1, detail
-		* estadd scalar varmean = `r(mean)'
-		* estadd local  ctrl_time1 "\checkmark"
-		* estadd local  ctrl_place ""
-		* estadd local  ctrl_ind "\checkmark"
-		* estadd local dataset "Billing Panel"
+	forvalues r=1/4 {
+		est use "${temp}cv`r'hs"
+		est sto cv`r'hs
+	}
+
+
+lab var post_treated "Post"
+
+estout cv1hs cv2hs cv3hs cv4hs using "${output}reghet.tex", replace  style(tex) ///
+	 keep(  post_treated pa_adj  ///
+	 		post_treated_hhsize post_treated_hhemp post_treated_good_job post_treated_sub post_treated_single inc__post_treated  ///
+	 		hhsize hhemp good_job sub single inc  ) ///
+	order(  post_treated pa_adj ///
+			post_treated_hhsize post_treated_hhemp post_treated_good_job post_treated_sub post_treated_single inc__post_treated  ///
+	 		hhsize hhemp good_job sub single inc ) ///
+		  label noomitted ///
+		  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
+		  stats( varmean ctrl_ind ctrl_place r2 N dataset , ///
+		  labels( "Mean" "Household FE" "Small Area FE" "$\text{R}^{2}$"  "N" "Dataset" )  ///
+		    fmt( %12.2fc  %12s %12s %12.3fc %12.0fc %12s  )   ) ///
+		  starlevels(  "\textsuperscript{c}" 0.10    "\textsuperscript{b}" 0.05  "\textsuperscript{a}" 0.01) 
 
 
 sum pa_adj, detail
 * 21 PhP
-
-
 * PER MRU : 152,000 PhP
-
 * SURPLUS : 250 accounts * avg HHs (1.4) * HH surplus (1.8*(22/.15) use + .2*480 boost  ) 
 * = ( 264 use + 96 boost )* 350 
 * = 92,400 use + 33,600 boost
-
 * PROFITS : 250 accounts * 3.7 c per account * (21 price - 5 mc) = 14,680 PhP per MRU (12 months, paid for!)
-
 *** World Bank reports on NRW
 *** Water and sanitation benefits!?
+
+
+
+
+
+cap prog drop print_mean2
+program print_mean2
+    qui mean `2' [pweight = SHO ] if treated==1 & post==0 & paws==1
+    mat j=e(b)
+    local value1=string(`=j[1,1]*`4'',"`3'")
+    qui mean `2' [pweight = SHO ] if treated==1 & post==1 & paws==1
+    mat j=e(b)
+    local value2=string(`=j[1,1]*`4'',"`3'")
+    qui mean `2' [pweight = SHO ] if paws==1
+    mat j=e(b)
+    local value3=string(`=j[1,1]*`4'',"`3'")
+
+    file open newfile using "${output}`1'.tex", write replace
+    file write newfile "`value1' & `value2' & `value3'"
+    file close newfile    
+end
+
+
+cap prog drop print_mean2n
+program print_mean2n
+    qui sum `2' if minpost==0 & post==0, detail 
+    local value1=string(`=r(N)*`4'',"`3'")
+    qui sum `2' if minpost==0 & post==1, detail 
+    local value2=string(`=r(N)*`4'',"`3'")
+    qui sum `2', detail 
+    local value3=string(`=r(N)*`4'',"`3'")
+
+    file open newfile using "${output}`1'.tex", write replace
+    file write newfile "`value1' & `value2' & `value3'"
+    file close newfile    
+end
+
+
+
+
+use "${temp}final_analysis.dta", clear
+
+g paws=smell!=.
 
 preserve 
 	g no_flow_6mid = fl_6_mid==1
@@ -630,6 +922,258 @@ preserve
 
 	print_mean2n pawsn B "%10.0fc" 1
 restore
+
+
+g class_ch=class_max!=class_min
+g cch = class
+replace cch=3 if class_ch==1
+
+
+cap prog drop print_mean2s
+program print_mean2s
+    qui mean `2' [pweight = SHO ] if cch==1 & paws==1
+    mat j=e(b)
+    local value1=string(`=j[1,1]*`4'',"`3'")
+    qui mean `2' [pweight = SHO ] if cch==2  & paws==1
+    mat j=e(b)
+    local value2=string(`=j[1,1]*`4'',"`3'")
+    qui mean `2' [pweight = SHO ] if cch==3  & paws==1
+    mat j=e(b)
+    local value3=string(`=j[1,1]*`4'',"`3'")
+    file open newfile using "${output}`1'.tex", write replace
+    file write newfile "`value1' & `value2' & `value3'"
+    file close newfile    
+end
+
+
+cap prog drop print_mean2Ns
+program print_mean2Ns
+    qui sum `2' if cch==1 & paws==1, detail 
+    local value1=string(`=r(N)*`4'',"`3'")
+    qui sum `2' if cch==2 &  paws==1, detail 
+    local value2=string(`=r(N)*`4'',"`3'")
+    qui sum `2' if cch==3 &  paws==1, detail 
+    local value3=string(`=r(N)*`4'',"`3'")
+
+    file open newfile using "${output}`1'.tex", write replace
+    file write newfile "`value1' & `value2' & `value3'"
+    file close newfile    
+end
+
+
+g SHO1=SHO
+replace SHO1=SHO1-1
+
+print_mean2s cv_rs  cv   "%10.2fc" 1
+print_mean2s hhsize_rs  hhsize   "%10.2fc" 1
+print_mean2s hhemp_rs  hhemp   "%10.2fc" 1
+print_mean2s good_job_rs  good_job   "%10.2fc" 1
+print_mean2s sub_rs  sub   "%10.2fc" 1
+print_mean2s single_rs single  "%10.2fc" 1
+print_mean2s SHO_rs   SHO1   "%10.2fc" 1
+
+print_mean2Ns N_rs  hhsize   "%10.0fc" 1
+
+
+
+
+
+
+
+
+use "${temp}final_analysis.dta", clear
+
+
+
+g pT = year-year_inst
+replace pT=. if pT>6 | pT<-6
+replace pT=. if minpost!=0
+gegen ptag=tag(pT)
+* gegen mcv = mean(cv), by(pT)
+
+asgen mcv = cv , w(SHO) by(pT)
+
+label var mcv "Water Use per Household (m3)"
+label var pT  "Years to Pipe Replacement"
+
+    mean cv [pweight = SHO ] if pT>=-4 & pT<0
+    mat j=e(b)
+    global c_pre = j[1,1]
+    local value=string($c_pre ,"%12.1fc")
+    file open newfile using "${output}c_pre.tex", write replace
+    file write newfile "`value'"
+    file close newfile   
+
+    mean cv [pweight = SHO ] if pT>=0 & pT<=6
+    mat j=e(b)
+    global c_post = j[1,1]
+    local value=string($c_post,"%12.1fc")
+    file open newfile using "${output}c_post.tex", write replace
+    file write newfile "`value'"
+    file close newfile   
+
+    local value=string($c_post - $c_pre ,"%12.1fc")
+    file open newfile using "${output}c_diff.tex", write replace
+    file write newfile "`value'"
+    file close newfile   
+
+	local value=string(100*($c_post - $c_pre)/$c_pre ,"%12.0fc")
+    file open newfile using "${output}c_diff_per.tex", write replace
+    file write newfile "`value'"
+    file close newfile   
+
+
+twoway scatter mcv pT if ptag==1 & pT>=-4 & pT<=6, ylabel(18(1)22) ///
+	note("Avg. Pre:  `=string($c_pre ,"%12.1fc")'    Avg. Post:  `=string($c_post ,"%12.1fc")' ")
+graph export "${output}pipe_cons.pdf", as(pdf) replace 
+
+
+
+g pTn = year - year_inst
+replace pTn = . if treated!=1
+replace pTn=10 if pTn==.
+replace pTn=pTn+10
+
+areg cv i.pTn i.date [pweight = SHO] , a(conacct) cluster(mru)
+coefplot, vertical keep(*pTn*)
+
+preserve
+	parmest, fast
+	g time = regexs(1) if regexm(parm,"(^[0-9]+).pTn")
+	destring time, replace
+	keep if time!=.
+	replace time= time-10
+	lab var time "Years to Pipe Replacement"
+	twoway rcap max95 min95 time || scatter estimate time , legend(off)
+	graph export "${output}time_to_event.pdf", as(pdf) replace
+restore
+
+
+
+
+
+
+
+use "${temp}final_analysis.dta", clear
+
+****** R TO S ANALYSIS ! ********
+sort conacct date
+by conacct: g r_to_s_id = class[_n-1]==1 & class[_n]==2
+g date_rs_id = date if r_to_s_id==1
+replace date_rs_id=. if date_rs_id==577
+gegen date_rs = min(date_rs_id), by(conacct)
+
+g year_rs_id = year if r_to_s_id==1
+* replace year_rs_id=. if year_rs_id==577
+gegen year_rs = min(year_rs_id), by(conacct)
+
+by conacct: g date_sr_id = date if class[_n]==2 & class[_n+1]==1
+gegen date_sr=min(date_sr_id), by(conacct)
+
+by conacct: g year_sr_id = year if class[_n]==2 & class[_n+1]==1
+gegen year_sr=min(year_sr_id), by(conacct)
+
+
+cap drop Trs
+cap drop Tsr
+cap drop cv_rs
+cap drop cv_sr
+cap drop rstag
+cap drop srtag
+
+* g Trs = year-year_rs
+* replace Trs=. if Trs>6 | Trs<-6
+* g Tsr = year-year_sr
+* replace Tsr=. if Tsr>6 | Tsr<-6
+
+g Trs = date-date_rs
+replace Trs=. if Trs>42 | Trs<-42
+g Tsr = date-date_sr
+replace Tsr=. if Tsr>42 | Tsr<-42
+
+asgen cv_rs =cv, by(Trs) w(SHO)
+asgen cv_sr =cv, by(Tsr) w(SHO)
+
+gegen rstag=tag(Trs)
+gegen srtag=tag(Tsr)
+
+lab var cv_rs "Regular Price to High Price"
+lab var cv_sr "High Price to Regular Price"
+
+lab var Trs "Months to Price Change"
+lab var Tsr "Months to Price Change"
+
+sum pa_adj if sem==1
+sum pa_adj if sem==0
+
+
+twoway scatter cv_rs Trs if rstag==1 & Trs>=-24 & Trs<=24
+
+
+
+
+
+twoway 	scatter cv_sr Tsr if srtag==1 & Tsr>=-36 & Tsr<=36,  msymbol(triangle) msize(medium)  || ///
+		scatter cv_rs Trs if rstag==1 & Trs>=-36 & Trs<=36,   ///
+		legend(order(2 "Regular Price to High Price" 1 "High Price to Regular Price") symx(6) col(1) ///
+    ring(0) position(2) bm(medium) rowgap(small)  ///
+    colgap(small) size(*.95) region(lwidth(none)))
+
+
+
+graph export "${output}r_to_s_graph.pdf", as(pdf) replace
+
+
+
+cap drop TrsD
+cap drop TsrD
+
+g TrsD= Trs + 100
+	replace TrsD=200 if TrsD==.
+
+g TsrD= Tsr + 100
+	replace TsrD=200 if TsrD==.
+
+areg cv i.TrsD i.TsrD i.date, a(conacct)
+	coefplot, vertical keep(*TrsD* *TsrD*)
+
+
+
+
+foreach v in rs sr {
+	 * local v "rs"
+
+    mean cv_`v' [pweight = SHO ] if `v'tag==1 & T`v'>=-4 & T`v'<0
+	    mat j=e(b)
+	    global c_pre_`v' = j[1,1]
+	    local value=string(${c_pre_`v'} ,"%12.1fc")
+	    file open newfile using "${output}c_pre_`v'.tex", write replace
+	    file write newfile "`value'"
+	    file close newfile    
+	mean cv_`v' if `v'tag==1 & T`v'>=0 & T`v'<=4
+	    mat j=e(b)
+	    global c_post_`v' = j[1,1]
+	    local value=string(${c_post_`v'} ,"%12.1fc")
+	    file open newfile using "${output}c_post_`v'.tex", write replace
+	    file write newfile "`value'"
+	    file close newfile   
+
+	    local value=string(${c_post_`v'} - ${c_pre_`v'} ,"%12.1fc")
+	    file open newfile using "${output}c_diff_`v'.tex", write replace
+	    file write newfile "`value'"
+	    file close newfile   
+
+		local value=string(100*(${c_post_`v'} - ${c_pre_`v'} )/${c_pre_`v'} ,"%12.0fc")
+	    file open newfile using "${output}c_diff_per_`v'.tex", write replace
+	    file write newfile "`value'"
+	    file close newfile   
+}
+
+
+
+
+
+
 
 
 

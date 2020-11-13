@@ -109,6 +109,7 @@ Key notes to fill in later:
 - could do non-linear pricing robustness check
 
 
+
 % This paper focuses on the costs of imperfect maintenance. Most of the large literature on water and
 % health has focused on initial access, not disruptions in water supply, and much of the work on water in
 % the developing world has focused either on point of use solutions or on rural areas (see, e.g. Ashraf, Berry
@@ -123,15 +124,77 @@ Key notes to fill in later:
 % drainage on cholera epidemics in Lusaka.
 
 
-\section{Data}
+
+
+\section{Data and Setting}
+
+As a pioneer in water infrastructure investments among developing cities, Manila provides a useful context to study the welfare effects of these types of investments.  In 1997, Manila awarded private concession contracts to two private companies to take over for the existing public utility.  Each company is assigned to provide water to their assigned halves of Metro Manila.  Both companies have gradually replaced the decaying pipe infrastructure inherited from the public utility.  
+
+To measure the effect of pipe replacements, one of the companies has provided a map of their water pipes including the installation year for each pipe as well as water billing records for their 1.5 million water connections from January, 2008 to June, 2015.  To measure each water connection's exposure to pipe replacement projects, connections are first located within ``small areas'' --- the smallest geographic designations used by the company each containing around 270 connections.  Next, since projects often replace many pipes in the same place at the same time, each small area is assigned a ``pipe replacement year'' according to the year when the greatest total length of tertiary pipes were installed within that small area.\footnote{Tertiary pipes installed in the replacement year account for 85\% of the total tertiary pipe length in small areas.}  Tertiary pipes act as local feeders transporting water from large primary and secondary pipes directly to households.  Therefore, tertiary pipe replacements likely affect service quality within local areas while primary and secondary pipe replacements may have diffuse impacts throughout the pipe network.  By excluding primary and secondary pipe replacements, this approach limits the potential for spillover effects of pipe replacements onto neighboring areas at the cost of potentially underestimating the total welfare gains from these projects.  
+
+Billing records measure monthly water prices and usage for each water connection, which may serve multiple households.  In order to link connection-level consumption to household welfare, billing records for each connection are merged to a survey of water connections conducted by an independent evaluator to monitor compliance with the water utility's service obligations.  This connection survey records demographics for the household that owns the connection as well as the number of other households and people that also use the connection.  Household-level water usage is calculated by dividing total connection usage by the number of households sharing the connection.  The survey also includes household demographics for the connection owner, different measures of water service quality, as well as household investments in booster pumps, water filters, and water storage tanks.
+
+The survey randomly interviewed water connection owners covering 15,000 connections in 2008, 24,000 connections in 2010, and 23,000 connections in 2012.  Because a similar sampling design was followed across survey rounds, 13\% of connections were interviewed in two years, and 1.4\% of connections were interviewed in three years while remaining connections were interviewed in only one year.  Since billing records form a monthly-panel, survey responses must be interpolated
+
+Since billing records are 
+
+
+To examine household demographics, billing data are merged at the connection-level to a water connection survey conducted independently to monitor the quality of the utility's service.  
+
+
+
+
+\footnote{Households using connections alone tend to be larger and wealthier than households that share connections with other households according to previous research (\cite{wjv}).}  
+
+% The connection survey includes demographics for the households that own their water connections.  Table~\ref{table:sampleconstruction} in Appendix~\ref{appendix:sampleconstruction} includes more details on how the final sample is constructed for the analysis.
+% This sample restriction ensures that connection-level is equal to household-level.
+
+
+The water connection survey also includes measures 
+
+
+
+
+Additional survey data also includes information on demographics and water quality as well as investments!
+
+Water pipes are linked to areas... 
+The utility locates water connections within small areas each containing around 270 connections.  
+
+Each small-area is assigned a pipe replacement year as the year when the greatest total length of tertiary pipes are installed within the small area.   This pattern is consistent with 
+
+
+  This calculation includes only tertiary pipes (excluding )
+
+ which allows for linking 
+
+
+The pipe map documents the installation year for each length of pipe, which forms the basis for the pipe replacement measure.   The 
+
+
+
+% For the company, these efforts ramped up dramatically between 2008 and 2015.  
+% Identifying the effects of water pipe investments requires detailed information on the condition and location of water pipes that are often kept confidential out of security concerns.  
+% A regulated water utility serving half of the area of Metro Manila, Philippines has provided confidential access to a map of the water pipes as well as water billing records for 1.5 million water connections.  
+
+
+
+% This utility provided access to monthly billing records for each connection as well as detailed information covering the regulatory structure and costs of production.  Monthly billing records include meter readings, billing amount, outstanding balances, and payments spanning January, 2008 to May, 2015. Over this period, the total number of connections increased from 900,000 to 1,500,000 as the water utility expanded service access.  Water connections are split into four categories: residential (90\%), semi-business (4\%), commercial (5\%), and industrial (1\%).  
+% To focus on household consumption decisions, only residential connections are included in the analysis.
+
+
+
+% A household panel survey from Pasay City provides information on household income dynamics in Manila.  Pasay City is a centrally located sub-municipality of Metro Manila accounting for 3.2\% of the population of Metro Manila as of 2015 and is roughly representative of households living in the utility's service area.  The panel survey covers over 60\% of the population of Pasay City and is the only survey to provide a household-level income panel over a similar time frame in Manila.  The analysis includes data from \input{tables/total_inc_hhs_all}households that were interviewed in both 2008 and 2011.
+
+
 
 Section: Data
 
 	- only households connected earlier (explain) (what share are those?!)
 	- consumption per HH
-	- reweight data for household level?!
-
+	- reweight data for household level?! YES!
+	- survey panel and other panel; date representation, how its imputed, etc.
 	- Put in a table describing pipe-replacement;  describe staggered approach; predict pipe-replacement?
+	- industrial/commercial footnote later!!
 
 Consumption is measured according to average consumption for not-shared households!  What extra assumption is that!!!  NEED ROBUSTNESS!!! 
 
@@ -259,14 +322,14 @@ Pressure is 6 to midnight! Bill, Unpaid Balance, Payment, and Income are in PhP.
 
 \section{Model}
 
-A simple model of household water demand connects changes in water usage to changes in household welfare as a result of pipe replacements.  In this model, households choose their monthly water usage as well as whether to use a booster pump to boost water pressure.  
+A simple model of household water demand connects changes in water usage and investments in water booster pumps to changes in household welfare as a result of pipe replacements.  In this model, households choose their monthly water usage as well as whether to use a booster pump to boost their water pressure.  
 
 Each month, household utility takes the following form
 \begin{align}
 \label{eq:utility}
-U\,=\,\frac{1}{\alpha} \, \Big[ \,  Q(B,R) \,  w  \, -\, \frac{1}{2}(w - \gamma + \epsilon)^2 \, \Big] \, + \, x 
+U\,=\,\frac{1}{\alpha} \, \Big[ \,  Q(B,R) \,  w  \, -\, \frac{1}{2}(w - \gamma)^2 \, \Big] \, + \, x 
 \end{align}
-where $w$ is water consumption and $x$ represents a bundle of all other goods consumed by the household.  Water service quality given by $Q(B,R)$ depends on booster pump use where $B$ equals 1 if the household chooses to use a booster pump (and zero otherwise) and as well as pipe replacements where $R$ equals 1 after pipe replacement (and zero otherwise).  Water service quality enters multiplicatively with water consumption, which nests the assumption that each unit of water consumption is affected equally and positively by water service quality.  This assumption also excludes the possibility that improved water service quality affects household utility in ways that are not directly proportional to household water consumption such as by increasing housing values.  In this case, the approach would underestimate the welfare benefits of improved service quality.  $\alpha$ reflects price sensitivity, and $\gamma$ reflects the satiation amount of water usage.  This approach assumes that preferences for water are quasi-linear, which implies that water consumption does not depend on household income [ back this up with more evidence? ].  
+where $w$ is water consumption and $x$ represents a bundle of all other goods consumed by the household.  Water service quality given by the function, $Q(B,R)$, depends on booster pump use where $B$ equals 1 if the household chooses to use a booster pump (and zero otherwise) and as well as pipe replacements where $R$ equals 1 after pipe replacement (and zero otherwise).  $Q(B,R)$ is assumed to be differentiable in $R$.  Water service quality enters multiplicatively with water consumption, which nests the assumption that each unit of water consumption is affected equally and positively by water service quality.  This assumption also excludes the possibility that improved water service quality affects household utility in ways that are not directly proportional to household water consumption such as by increasing housing values.  In this case, the approach would underestimate the welfare benefits of improved service quality.  $\alpha$ reflects price sensitivity, and $\gamma$ reflects the satiation amount of water usage.  This approach assumes that preferences for water are quasi-linear, which implies that water consumption does not depend on household income [ Footnote to heterogeneity table ].  
 
 
 % $\epsilon$ captures idiosyncratic monthly variation in satiation water usage such as changes in weather or in the number of household members using water.  $\epsilon$ is assumed to follow a normal distribution with zero mean and standard deviation $\sigma_{\epsilon}$.  
@@ -276,9 +339,9 @@ where $w$ is water consumption and $x$ represents a bundle of all other goods co
 Households maximize utility subject to the following budget constraint
 \begin{align}
 \label{eq:bc}
-p\,w \,+\, x \, +  B \, F \, = y 
+p\,w \,+\, x \, +  B \, F \, = Y
 \end{align}
-where $p$ is the average price of water while the price of all other goods, $x$, is normalized to 1.  This approach includes the simplifying assumption that households respond to a single, average water price $p$ despite facing marginal prices that increase with monthly consumption.  This assumption is consistent with descriptive evidence that households appear unresponsive to marginal prices (cite appendix).   $F$ is total cost of renting and using a booster pump each month.  This approach assumes that Manila has a competitive market for renting/selling booster pumps that is unaffected by improvements in service quality.\footnote{This assumption is consistent with local service quality improvements and a city-wide market for booster pumps.}  $y$ is monthly household income.  
+where $p$ is the average price of water while the price of all other goods, $x$, is normalized to 1.  This approach includes the simplifying assumption that households respond to a single, average water price $p$ despite facing marginal prices that increase with monthly consumption.  This assumption is consistent with descriptive evidence that households appear unresponsive to marginal prices (cite appendix).   $F$ is total cost of renting and using a booster pump each month.  This approach assumes that Manila has a competitive market for renting/selling booster pumps that is unaffected by improvements in piped water service quality.\footnote{This assumption is consistent with local service quality improvements and a city-wide market for booster pumps.}  $Y$ is monthly household income.  
 
 % $\upsilon$ captures idiosyncratic monthly variation the booster pump cost such as changes in the electricity price or variation in installation costs. $\upsilon$ is assumed to follow a normal distribution that is assumed to be uncorrelated with $\epsilon$ and has zero mean and standard deviation $\sigma_{\upsilon}$.  
 
@@ -295,69 +358,98 @@ Given optimal water demand, the indirect utility function at the optimal booster
 \begin{align}
 V\,=\,\frac{\alpha p^2}{2} - \gamma p + \frac{Q(B^{*},R)^{2}}{2\alpha} - p Q(B^{*},R) + \frac{\gamma Q(B^{*},R)}{\alpha} + y - B^{*} F
 \end{align}
-
-
+The derivative of $V$ with respect to pipe replacements, $R$, reflects the change in consumer welfare associated with pipe replacements.  This derivative takes the following form after substituting terms for $w^{*}$
 \begin{align}
 \label{eq:dvdr}
 \frac{dV}{dR}\,=\,\frac{w^{*}}{\alpha} \frac{dQ}{dR} - F \frac{dB^{*}}{dR}
 \end{align}
+This expression summarizes the consumer welfare effects of pipe replacements in terms of (1) the marginal effect on service quality weighted by water consumption and price sensitivity as well as (2) the marginal effect on booster pump usage weighted by the cost of booster pumps.  This approach assumes that welfare effects are proportional to consumption, $w^{*}$, implying that service quality improvements affect all units of water consumption.  Welfare effects are decreasing in price sensitivity, $\alpha$, which captures the intuition that households with many substitute water sources (ie. high $\alpha$) may benefit less from improvements in service quality.  According to this approach, welfare changes do not require measuring fixed preferences, $\gamma$, separately from levels of service quality, $Q(B^{*},R)$.  Therefore, this approach is robust to different patterns of selection into booster pump use based on different levels of service quality or fixed preferences for water consumption.  
 
-Advantage in terms of unobservables, disadvantage in terms of counterfactuals...
-
-- Surplus is increasing in consumption (by assumption! given the multiplicative aspect)
-
-
-
-% Given optimal water demand, $w^{*}$, households can then choose whether to use a booster pump by comparing expected utilities with and without booster pumps.  
-% Households use booster pumps when the following expression is greater than zero
-% \begin{align}
-% E\Big[ \,V_{B=1 - B=0}^{*}\,\Big]  = (Q(1,R)-Q(0,R)) \Big(  \frac{Q(1,R)-Q(0,R)}{2\alpha} + \frac{\gamma +  \theta_2 R}{\alpha} - p  \, \Big) \, - \, F
-% \end{align}
-% Since $\epsilon$ is assumed to be  normal, it falls out of the equation
+% This feature is especially useful in the empirical setting where booster pump use is non-random across households.  
+% The advantage of this approach is that welfare estimates do not require 
+% Advantage in terms of unobservables, disadvantage in terms of counterfactuals...
+% - Surplus is increasing in consumption (by assumption! given the multiplicative aspect)
 
 
-% Given booster pump demand, the probability of observing a household choose to use a booster pump, $B^{*}$ can be expressed as follows
-% \begin{align}
-% Pr[B^{*}=1] \,\, = \,\, \Phi\Bigg( \, \frac{ (\theta_1 \theta_2 + \theta_1 \theta_3 + \theta_2 \theta_3) R + \frac{1}{2}(\theta_1^2 + \theta_3^2)  + \gamma (\theta_1 + \theta_3 R) \Big] - (\theta_1 + \theta_3 R) p \, - \, F }{\sigma_{\upsilon}} \, \Bigg)
-% \end{align}
-% where $\Phi(.)$ is the cumulative distribution function of the standard normal distribution.  Conditional on booster pump use, the probabilities of observing households use a particular amount of water, $w^{obs}$, can be expressed as follows
-% \begin{align}
-% Pr[w^{*}=w^{obs} \,|\, B^{*}=1] \,\, &= \,\, \frac{1}{\sigma_{\epsilon}} \phi\Bigg( \, \frac{ w^{obs} - (\gamma \, - \, \alpha p +  \theta_1  + \, \theta_2 R  \,+ \, \theta_3 R )}{\sigma_\epsilon} \, \Bigg) \\
-% Pr[w^{*}=w^{obs} \,|\, B^{*}=0] \,\, &= \,\, \frac{1}{\sigma_{\epsilon}} \phi\Bigg( \, \frac{ w^{obs} - (\gamma \, - \, \alpha p \, + \, \theta_2 R   )}{\sigma_\epsilon} \, \Bigg)
-% \end{align}
-% Combining these expressions, the log-likelihood of observing each pair of booster pump use and water use across households, $i$, is as follows
-% \begin{align}
-% \begin{split}
-% LL = \sum_i & \mathbbm{1}\{ B^{obs}_i = 1 \} \,\Big[ \ln\big( Pr[B^{*}=1] \big) + \ln\big( Pr[w^{*}=w^{obs}_i \,|\, B^{*}=1] \big) \Big] \, + \\
-%  & \mathbbm{1}\{ B^{obs}_i = 0 \} \,\Big[ \ln\big( 1- Pr[B^{*}=1] \big) + \ln\big( Pr[w^{*}=w^{obs}_i \,|\, B^{*}=0] \big) \Big] 
-%  \end{split}
-% \end{align}
+\section{Empirical Strategy}
 
+The estimation strategy recovers household price sensitivity as well as the changes in service quality and booster pump use in response to pipe replacement projects. These estimated quantities along with observed water use and booster pump costs summarize the change in consumer welfare from pipe replacement projects as given by equation (\ref{eq:dvdr}).  The estimating equation takes the following form
+\begin{align}
+\label{eq:esteq}
+y_{itl} \,=\, \beta_1 \, \text{After Pipe Replacement}_{tl} \,+\, \beta_2 \, p_{it} \, + \, \theta_t \, + \, \lambda_i \, + \epsilon_{itl}
+\end{align}
+where the outcome, $y_{itl}$, is either monthly water consumption or booster pump use.  Outcomes are measured for household, $i$, in small area, $l$, at calendar month, $t$. After Pipe $\text{Replacement}_{tl} $ takes a value of one for months after pipe replacement and zero otherwise.  Since the data identify only the year that pipes were replaced, all months from the replacement year onwards are considered after pipe replacement. $p_{it}$ measures the average price faced by each household in each month. $\theta_t$ includes calendar month fixed effects while $\lambda_i$ includes household fixed effects.
 
-\section{Empirical Specification and Identification}
+When the outcome is monthly water consumption, the estimating equation maps directly onto the equation for optimal household consumption given by equation ($\ref{eq:demand}$).  $\beta_1$ captures the effect of pipe replacement on service quality, $\frac{dQ}{dR}$.  Likewise, $\beta_2$ captures the negative of household price sensitivity, $\alpha$.  Remaining fixed preferences for water and levels of service quality are absorbed in household and month fixed effects, $\lambda_i$ and $\theta_t$.  These fixed effects ensure that the effect of pipe replacements is identified from variation in water consumption for the same household before and after pipes are fixed while accounting for any temporal consumption patterns common to all households.  Likewise, price sensitivity is estimated from variation in price for the same household switching between regular and high prices.  Calendar month fixed effects absorb price variation affecting all households equally over time as the company updates water tariffs.  
 
-% ($\gamma, \alpha, \sigma_{\epsilon}$) ($\theta_2$)  ($\theta_1, \theta_3$) ($\sigma_{\upsilon}$)
-The estimation recovers preferences for water, preferences for water service quality, as well as booster pump effectiveness and cost variability.
+Identifying $\beta_1$ and $\beta_2$ requires assuming that pipe replacements and household-specific price changes are not correlated with any other factors that may also affect water demand at the same time.  One concern may be that pipe improvements are paired with other infrastructure investments that drive increases in local income, population, and water demand.  Alternatively, the water company may strategically target pipe improvements to either boost areas with declining demand or accelerate areas with growing demand.  Figure~\ref{figure:pipecons} traces a sharp break in average usage at the year of pipe replacement with little evidence of strong trends before or after replacement projects.  These patterns are consistent with company reports that pipe replacements were not explicitly linked to other infrastructure projects and were instead planned primarily to minimize engineering costs.
 
-Fixed preferences for water, $\gamma$, are allowed to vary according to six demographic characteristics: household size, number of employed household members, whether the head of household has high-skilled employment, whether the household is ever assigned a high water price, and whether the household ever receives pipe replacement, as well as indicators for calendar months.\footnote{Preferences do not depend on time because usage does not exhibit strong trends over time.}  Fixed preferences are identified primarily from average usage levels for each demographic group. Month indicators capture seasonality in water demand, and year indicators capture how water preferences evolve over time.  Monthly variation in water usage identifies variation in fixed preferences, $\sigma_{\epsilon}$.
+Another concern is that households may increase their water demand as they are switched to the high price because they often open roadside food-stands.  Conversely, households that close their roadside food-stands may decrease their consumption at the same time as they are switched to the low price.  Both cases suggest that the empirical approach would underestimate household price sensitivities.  Figure~\ref{figure:usagepricechanges} provides little evidence of strong pre-trends leading up to price changes.  While this evidence is suggestive that these events are uncorrelated with long-term trends in water demand, this approach is unable to exclude the possibility that other factors may influence water demand at the same time as these events.
 
-Since calendar month indicators absorb all of the time-series variation in price schedules, price sensitivity, $\alpha$, is identified primarily through household changes in usage as the company switches households between regular and high average prices.  This approach relies on the assumption that switching between prices is not correlated with other factors that may affect demand.  For example, households may increase their water demand as they open a roadside food-stand and switch to the high price.  Conversely, households that close their roadside food-stand may decrease their consumption at the same time as they are switched to the low price.  Both cases suggest that this approach would underestimate household price sensitivities.  
+When the outcome is booster pump use, the estimating equation captures the effect of pipe replacements on booster pump use.  This approach assumes that demand for booster pumps can be linearly approximated by the estimating equation such that $\beta_1$ reflects $\frac{dB}{dR}$.  Since booster pump use is a binary outcome, this approach represents a linear probability model.  Time fixed effects account for variation in booster pump usage over time common to all households while household fixed effects account for differences in booster pump use across households.  $\beta_1$ reflects the effect of pipe replacements on booster pump use under the assumption that no other factors independently affect booster pump use at the same time.  One concern may be that the prices for booster pumps change in response to pipe replacement projects.  Pipe replacements occur in small geographic areas while markets for booster pumps are likely to cover much wider areas.\footnote{Online markets span the entire city.}  Therefore, individual pipe replacement projects are unlikely to influence prices for booster pumps.
 
-Both cases would also likely predict strong pre-trends in usage for the years leading up to price changes.  Figure~\ref{figure:usagepricechanges} plots usage pre-trends providing little evidence of salient trends before price changes.  Appendix Table~\ref{table:usageregs} further finds that the correlation between price and household usage remains stable after controlling for household demographics, small-area fixed effects, or household fixed effects.  This approach also assumes that price sensitivities identified for households that switch prices are representative of the full population of households.  Table~\ref{table:pricechangestatistics} provides some support for this assumption by finding broadly similar demographics across households exposed to different prices.  
-
-Preference for water service quality from pipe replacements, $\theta_2$, is identified by the change in usage observed before and after pipe replacements.  Identification of $\theta_2$ requires assuming that this change in consumption can be entirely attributed to pipe replacements and not to changes in other factors that may affect household demand for water at the same time.  One concern may be that pipe improvements are paired with other infrastructure investments that drive increases in local income, population, and water demand.  Alternatively, the water company may strategically target pipe improvements to either boost areas with declining demand or accelerate areas with growing demand.  Figure~\ref{figure:pipecons} traces a sharp break in average usage at the year of pipe replacement with little evidence of strong trends before or after replacement projects.  These patterns are consistent with company reports that pipe replacements were not explicitly linked to other infrastructure projects and were instead planned primarily to minimize engineering costs.
-
-Preferences for booster pumps before pipe replacement, $\theta_1$, and after pipe replacement, $(\theta_1+\theta_3)$, are identified both from cross-sectional differences in usage for households with and without booster pumps as well as from changes in booster pump usage before and after pipe replacement projects.  Identification requires assuming that booster pump use accounts for all of the average differences in usage between households with and without booster pumps after conditioning on households' observable characteristics and pipe replacement status.  This assumption may not hold if households choose to use booster pumps to cope with unobserved variation in water service quality specific to their neighborhoods.  To partially test this assumption, Appendix Table~\ref{table:boosterregs} finds that the positive correlation between water use and booster pump use remains stable even after controlling for calendar month fixed effects as well as small-area fixed effects, which may both capture local variation in water service quality.
-
-Identification of booster pump preferences also requires assuming that changes in booster pump use before and after pipe replacement projects are driven entirely by these projects and not by any other factors such as shifts in water preferences that may also be correlated with these projects.  Appendix Table~\ref{table:boosterregs} finds that the negative correlation between booster pump use and pipe replacement projects remains stable after accounting for household demographics and small-area fixed effects.  
-
-This approach also assumes that booster pumps do not impose substantial negative externalities on local water service quality.  A recent engineering literature has raised the possibility that booster pumps interfere with water flow in pipe mainlines, reducing pressure along the entire pipe (\cite{taylor2014reducing}).  However, this problem may not be as salient in the context of Manila.  The water company has not raised booster pumps as a policy problem in any of their internal documents.\footnote{Booster pumps are sometimes mentioned in water company investigations of consumer complaints as an explanation for household water pressure and never as problem to be addressed.}  Moreover, externalities would predict large water usage gaps between those with and without booster pumps in the same neighborhood.  By contrast, Table~\ref{table:usageregs} finds a similar association of booster pump use and water usage with and without small-area fixed effects.   % Taken together, the empirical evidence is supportive of the relatively strong assumptions necessary to identify booster pump preferences.
-
-While fixed monthly costs of booster pumps, $F$, are calibrated to equal the expected monthly cost of operating a booster pump, the estimation strategy recovers the distribution of these costs, $\sigma_{\upsilon}$, that best matches the observed shares of households using booster pumps.  Identification of $\sigma_{\upsilon}$ requires the assumption that cost variation, $\upsilon$, is uncorrelated with taste variation, $\epsilon$.  This assumption implies that after accounting for observed demographic and other factors, differences in booster pump use are entirely driven by unobserved costs rather than unobserved preferences.
-
+% This approach also assumes that booster pumps do not impose substantial negative externalities on local water service quality.  A recent engineering literature has raised the possibility that booster pumps interfere with water flow in pipe mainlines, reducing pressure along the entire pipe (\cite{taylor2014reducing}).  However, this problem may not be as salient in the context of Manila.  The water company has not raised booster pumps as a policy problem in any of their internal documents.\footnote{Booster pumps are sometimes mentioned in water company investigations of consumer complaints as an explanation for household water pressure and never as problem to be addressed.}  Moreover, externalities would predict large water usage gaps between those with and without booster pumps in the same neighborhood.  By contrast, Table~\ref{table:usageregs} finds a similar association of booster pump use and water usage with and without small-area fixed effects.   % Taken together, the empirical evidence is supportive of the relatively strong assumptions necessary to identify booster pump preferences.
 
 
 \section{Results}
+
+Table~\ref{table:mainregs} includes results of the effect of price and pipe replacements.  Column (1) provides results on household water use finding an increase of 1.79 m3 per household per month after pipe replacement.  The estimate is statistically significant at the 1\% and economically large representing an 8\% increase in average consumption.  The estimated increase is smaller than the descriptive increase in Figure~\ref{figure:pipecons} likely because the regression approach controls for increasing trends in water use over the sample period.  
+
+Column (1) also provides an estimated price sensitivity of 0.17, which is statistically significant at the 1\% level.  Given an average price of 21.5 PhP/m3, this estimate also implies a price elasticity of 0.17.  This elasticity estimate is on the lower end of similar studies in the developing world, which find elasticities ranging from 0.01 to 0.98.\footnote{See \cite{szabo2015value}, \cite{diakite2009proposal}, and \cite{strand2005water}.}  
+
+Column (2) finds that pipe replacement projects are associated with a 20\% decrease in booster pump use, which is statistically significant at the 5\% level.  This decline is smaller than the descriptive decline in Table~\ref{table:descriptives} likely since the regression approach accounts for decreasing booster pump use over the sample period.
+
+% While previous studies largely focus on cities in low-income countries (\cite{diakite2009proposal} ) or low-income neighborhoods within larger cities, this estimate  which may explain 
+
+% dQ/Q / dP/P  =  (.17/22.14) /  (1/21.5)
+% This estimate is in range of the 0.98 estimate from \cite{szabo2015value} as well as similar studies in the developing world that find elasticities between 0.01 and 0.81 (\cite{diakite2009proposal}, \cite{strand2005water}). 
+
+\begin{table}[h!] 
+\centering
+\caption{Household Water and Booster Pump Use Estimates}\label{table:mainregs}
+\vspace{-2mm}
+\begin{threeparttable}
+\begin{tabular}{@{}l*{1}{CC}@{}}
+\toprule
+  & (1)       & (2)              \\
+  & Water Use & Booster Pump Use \\
+\midrule
+\input{tables/reg}
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item Weighting, discussion of different samples, clustering, controls (especially rate classes).  This table predicts usage per household with pipe replacement and price with different fixed effects.  
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
+
+
+\begin{table}[h!] 
+\centering
+\caption{Change in Consumer Surplus}\label{table:mainregs}
+\vspace{-2mm}
+\begin{threeparttable}
+\begin{tabular}{@{}l*{1}{CCC}@{}}
+\toprule
+            & Service Quality              & Booster Pump Use & Total             \\
+\midrule
+Expression  & $\frac{w^{*}}{\alpha} \frac{dQ}{dR}$ &   $- F \frac{dB^{*}}{dR}$  & $\frac{dV}{dR}$ \\[1em]
+Estimates   &  \input{tables/est_welfare} \\
+            &  \input{tables/sd_welfare}  \\
+% Evaluated Estimates \\
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item Weighting, discussion of different samples, clustering, controls (especially rate classes).  This table predicts usage per household with pipe replacement and price with different fixed effects.  
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+
 
 
 
@@ -381,30 +473,10 @@ After pipe-replacement, usage per connection decreases by 21 m3 per month.  Give
 ((73 + 105 + 80)*12)/24000
 
 
-\begin{table}[h!] 
-\centering
-\caption{Water and Booster Pump Use per Household Estimates}\label{table:mainregs}
-\vspace{-2mm}
-\begin{threeparttable}
-\begin{tabular}{@{}l*{1}{CCC}@{}}
-\toprule
-  & (1)   & (2)   & (3)  \\
-  & Water Use & Water Use & Booster Pump Use \\
-\midrule
-\input{tables/reg}
-\bottomrule
-\end{tabular}
-\begin{tablenotes}
-\footnotesize
-\item Weighting, discussion of different samples, clustering, controls (especially rate classes).  This table predicts usage per household with pipe replacement and price with different fixed effects.   \regtext 45 PhP = 1 USD \,\,
-\end{tablenotes}
-\end{threeparttable}
-\end{table}
-
 
 \begin{table}[h!] 
 \centering
-\caption{Usage per Household Regression Estimates}\label{table:nrwregs}
+\caption{Total Water Supplied and Billed Estimates}\label{table:nrwregs}
 \vspace{-2mm}
 \begin{threeparttable}
 \begin{tabular}{@{}l*{1}{CCCCC}@{}}
@@ -603,6 +675,29 @@ Robustness:
 \includegraphics[scale=1]{tables/consumption_histogram.pdf}
 \end{center}
 \end{figure}
+
+
+
+\begin{table}[h!] 
+\centering
+\caption{Water and Booster Pump Use per Household Estimates}\label{table:mainregshet}
+\vspace{-2mm}
+\begin{threeparttable}
+\begin{tabular}{@{}l*{1}{CCCC}@{}}
+\toprule
+  & (1)       & (2)  & (3) & (4)            \\
+  & Water Use & Water Use  & Booster Pump Use & Booster Pump Use \\
+\midrule
+\input{tables/reghet}
+\bottomrule
+\end{tabular}
+\begin{tablenotes}
+\footnotesize
+\item Weighting, discussion of different samples, clustering, controls (especially rate classes).  This table predicts usage per household with pipe replacement and price with different fixed effects.   \regtext 45 PhP = 1 USD \,\,
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
 
 
 {

@@ -12,13 +12,14 @@ Repeated entry---line 607 of file library.bib
  : @book{mcintosh2003asian
  :                        ,
 I'm skipping whatever remains of this entry
+Warning--I didn't find a database entry for "wjv"
 Warning--empty journal in keener2010provision
 Warning--empty journal in komives2006distributional
 Warning--empty journal in nauges2006water
 Warning--empty note in wsup
 You've used 39 entries,
             2773 wiz_defined-function locations,
-            821 strings with 11208 characters,
+            822 strings with 11211 characters,
 and the built_in function-call counts, 16241 in all, are:
 = -- 1490
 > -- 774

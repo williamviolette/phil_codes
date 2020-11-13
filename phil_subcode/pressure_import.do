@@ -3,6 +3,39 @@
 
 
 
+
+use "${data}backup_cbms/2011/pasay_final2011_hh.dta", clear
+	g barangay_id = prov*100000 + mun*1000 + brgy
+	keep barangay_id totin
+	replace totin = totin/12
+	replace totin = . if totin>200000
+	* g year = 2011
+	gegen inc_2011=mean(totin), by(barangay_id)
+	gegen bt=tag(barangay_id)
+	keep if bt==1
+	keep barangay_id inc_2011
+save "${temp}cbms_inc_2011.dta", replace
+
+use "${data}backup_cbms/2008/pasay_hhfinal08.dta", clear
+	g barangay_id = prov*100000 + mun*1000 + brgy
+	keep barangay_id totin
+	replace totin = totin/12
+	replace totin = . if totin>200000
+	* g year = 2008
+	gegen inc_2008=mean(totin), by(barangay_id)
+	gegen bt=tag(barangay_id)
+	keep if bt==1
+	keep barangay_id inc_2008
+save "${temp}cbms_inc_2008.dta", replace
+
+
+use "${temp}cbms_inc_2011.dta", clear
+	merge 1:1 barangay_id using  "${temp}cbms_inc_2008.dta", keep(3) nogen
+save "${temp}cbms_inc.dta", replace
+
+
+
+
 local bill_query ""
 forvalues r = 1/12 {
 	local bill_query "`bill_query' 	SELECT A.c, A.conacct, A.date FROM billing_`r' AS A JOIN (SELECT DISTINCT conacct FROM paws) AS B ON A.conacct = B.conacct"
