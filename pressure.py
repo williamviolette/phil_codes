@@ -5,7 +5,7 @@ import os, subprocess, shutil, multiprocessing, re, glob
 from functools import partial
 from itertools import product
 import numpy  as np
-import pandas as pd
+# import pandas as pd
 #from phil_subcode.spatial2sql import add_meter
 
 
@@ -35,6 +35,12 @@ if _1_IMPORT == 1:
 	def add_pipes(gis_folder,db):
 		cmd = ['ogr2ogr -f "SQLite" -update','-a_srs http://spatialreference.org/ref/epsg/25393/',
 		db, gis_folder+'PIPES.shp','-nln pipes', '-overwrite -skipfailures']
+		subprocess.call(' '.join(cmd),shell=True)
+		return 0
+	
+	def add_decom_pipes(gis_folder,db):
+		cmd = ['ogr2ogr -f "SQLite" -update','-a_srs http://spatialreference.org/ref/epsg/25393/',
+		db, gis_folder+'DECOM_PIPES.shp','-nln decom_pipes', '-overwrite -skipfailures']
 		subprocess.call(' '.join(cmd),shell=True)
 		return 0
 
@@ -81,7 +87,7 @@ if _1_IMPORT == 1:
 	# add_pipe_tertiary(gis_folder,db)
 	# add_pmp(gis_folder,db)
 	# add_chain_pipes(gis_folder,db)
-
+	add_decom_pipes(gis_folder,db)
 
 
 
@@ -401,6 +407,48 @@ if _2_DIST == 1:
 			return
 	
 	# int_pipes_mru(db)
+
+
+	def int_decom_pipes_mru(db):
+
+			print 'start this'
+			name = 'decom_pipes_mru_int'
+
+		    # connect to DB
+			con = sql.connect(db)
+			con.enable_load_extension(True)
+			con.execute("SELECT load_extension('mod_spatialite');")
+			cur = con.cursor()
+
+			cur.execute('DROP TABLE IF EXISTS {};'.format(name))   
+
+			print 'running ... '
+
+			make_qry = '''
+		                	CREATE TABLE {} AS 
+	                		SELECT G.OGC_FID AS OGC_FID_mru,
+	                		G.mru_no AS mru,
+	                		A.OGC_FID AS OGC_FID_pipes,
+	                		A.pipe_class,
+	                		A.year_inst,
+	                		A.year_decom,
+	                		A.status,
+	                		A.material,
+	                		ST_LENGTH(ST_INTERSECTION(A.GEOMETRY,G.GEOMETRY)) AS int_length
+	                FROM mru as G, decom_pipes as A
+	                WHERE  A.ROWID IN (SELECT ROWID FROM SpatialIndex 
+	                WHERE f_table_name='decom_pipes' AND search_frame=ST_MAKEVALID(G.GEOMETRY))
+	                AND st_intersects(A.GEOMETRY,ST_MAKEVALID(G.GEOMETRY))
+		                    ;
+				              '''.format(name)
+			cur.execute(make_qry)
+			
+			# cur.execute('''CREATE INDEX {}_cp_ind ON {} (bar);'''.format(name,name))
+			# cur.execute('''CREATE INDEX {}_c_ind ON {} (dma_id);'''.format(name,name))
+
+			return
+	
+	int_decom_pipes_mru(db)
 
 	def int_barangay_mru(db):
 

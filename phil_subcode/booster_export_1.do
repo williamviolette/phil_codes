@@ -1,5 +1,12 @@
 * pressure.do
 
+* WHEN TO REPLACE PIPES?  
+* 		DO NRW IDEA
+* counterfactuals: straight monopoly, monopoly with fixed price, quality standards (ie. target NRW?) ?
+
+
+
+
 
 
 
@@ -79,7 +86,11 @@ use "${temp}pipe_year_old_dma.dta", clear
 
 gegen dtag=tag(dma)
 
-g scaling_term = (270*5043)/1324
+* 275 connections per MRU
+* 5043 MRUs, 1324 DMAs
+* 1.41 HHs per connection
+
+g scaling_term = 1.41*(275*5043)/1324
 
 g post = year>=year_inst & year_inst<.
 gegen minpost=min(post), by(dma)
@@ -100,6 +111,7 @@ g ln_supp = log(supp)
 
 g nrw=1-(bill/supp)
 
+g supp5=supp*5
 
 areg bill post_treated i.date, a(dma) cluster(dma) r
 	est sto nrw1
@@ -113,6 +125,16 @@ areg supp post_treated i.date, a(dma) cluster(dma) r
 		estadd scalar varmean = `r(mean)'
 		estadd local  ctrl_time1 "\checkmark"
 		estadd local  ctrl_place "\checkmark"
+* est save "${temp}nrw_supp", replace
+
+areg supp5 post_treated i.date, a(dma) cluster(dma) r
+	est sto nrw2
+		sum supp, detail
+		estadd scalar varmean = `r(mean)'
+		estadd local  ctrl_time1 "\checkmark"
+		estadd local  ctrl_place "\checkmark"
+est save "${temp}nrw_supp", replace
+
 * areg ln_bill post_treated i.date, a(dma) cluster(dma) r
 * 	est sto nrw3
 * 		sum ln_bill, detail
@@ -400,7 +422,6 @@ save "${temp}final_analysis.dta", replace
 
 
 
-* IV IDEA
 
 
 
@@ -440,6 +461,13 @@ foreach var of varlist hhsize hhemp good_job sub single {
 	g treated_`var' = `var'*treated
 }
 g inc__post_treated = inc*post_treated
+
+* g yp = year-year_inst
+* tab yp if post_treated==1
+* forvalues r=1/6 {
+* g pt_`r' = yp==`r' & post_treated==1
+* }
+* reghdfe cv pt_*, a(conacct date) cluster(mru)
 	
 	lab var post_treated "After Pipe Replacement"
 	lab var B "Use Booster Pump"
@@ -504,71 +532,47 @@ g Tsr_post = Tsr if Tsr>0
 replace Tsr_post = 0 if Tsr_post==. 
 
 
-g TrsD=Trs+100
+		* ivreghdfe B post_treated  Trs_pre Trs_post (pa_adj = rs_post ) [pweight = SHO] if paws==1, absorb(conacct date)  cluster(mru) 		
+		* ivreghdfe B post_treated  Trs_pre Trs_post (pa_adj = rs_post ) [pweight = SHO] if paws==1, absorb(mru date)  cluster(mru) 
+
+
+
+* g TrsD=Trs+100
+* areg cv i.TrsD i.date if Trs!=., a(conacct)
+* 	coefplot, vertical keep(*TrsD*)
+
+
+* ivreghdfe cv post_treated (pa_adj = rs_post ) [pweight = SHO] , absorb(conacct date)  cluster(mru)
+* ivreghdfe cv post_treated  Trs_pre Trs_post (pa_adj = rs_post ) , absorb(conacct date)  cluster(mru) 
+* ivreghdfe cv post_treated  Trs_pre Trs_post  Trs_pre2 Trs_post2 (pa_adj = rs_post ) , absorb(conacct date)   cluster(mru)
+
+* ivreghdfe B post_treated  Trs_pre Trs_post (pa_adj = rs_post ) if paws==1, absorb(conacct date)  cluster(mru) 
+
+
+* areg cv rs_post i.date if Trs!=., a(conacct)
+* areg cv rs_post Trs_pre Trs_post  i.date if Trs!=., a(conacct)
+* areg cv rs_post Trs_pre Trs_post  Trs_pre2 Trs_post2 i.date if Trs!=., a(conacct)
+* areg cv rs_post Trs_pre Trs_post  Trs_pre2 Trs_post2 Trs_pre3 Trs_post3 i.date if Trs!=., a(conacct)
+* ivreghdfe cv post_treated (pa_adj = rs_post ) if Trs!=., absorb(conacct date) 
+* ivreghdfe cv post_treated Trs_pre Trs_post (pa_adj = rs_post ) if Trs!=., absorb(conacct date) 
+* ivreghdfe cv post_treated Trs_pre Trs_post  Trs_pre2 Trs_post2 (pa_adj = rs_post ) if Trs!=., absorb(conacct date) 
 
 
 
 
-areg cv i.TrsD i.date if Trs!=., a(conacct)
-	coefplot, vertical keep(*TrsD*)
-
-
-
-areg cv rs_post i.date if Trs!=., a(conacct)
-
-areg cv rs_post Trs_pre Trs_post  i.date if Trs!=., a(conacct)
-
-areg cv rs_post Trs_pre Trs_post  Trs_pre2 Trs_post2 i.date if Trs!=., a(conacct)
-
-areg cv rs_post Trs_pre Trs_post  Trs_pre2 Trs_post2 Trs_pre3 Trs_post3 i.date if Trs!=., a(conacct)
-
-
-ivreghdfe cv post_treated (pa_adj = rs_post ) if Trs!=., absorb(conacct date) 
-ivreghdfe cv post_treated Trs_pre Trs_post (pa_adj = rs_post ) if Trs!=., absorb(conacct date) 
-ivreghdfe cv post_treated Trs_pre Trs_post  Trs_pre2 Trs_post2 (pa_adj = rs_post ) if Trs!=., absorb(conacct date) 
-
-
-
-ivreghdfe cv post_treated (pa_adj = rs_post ) [pweight = SHO] , absorb(conacct date)  cluster(mru)
-
-ivreghdfe cv post_treated  Trs_pre Trs_post (pa_adj = rs_post ) , absorb(conacct date)  cluster(mru) 
-
-ivreghdfe cv post_treated  Trs_pre Trs_post  Trs_pre2 Trs_post2 (pa_adj = rs_post ) , absorb(conacct date)   cluster(mru)
-
-
-
-ivreghdfe cv  Trs_pre Trs_post i.date (pa_adj = rs_post ) if Trs!=., absorb(conacct)
-
-ivreghdfe cv  Trs_pre Trs_post i.date (pa_adj = rs_post ) if Trs!=. | Tsr!=., absorb(conacct)
-
-
-	areg cv pa_adj Trs_pre Trs_post if Trs!=., a(conacct) cluster(conacct)
-
-
-
-areg cv rs_post Trs_pre Trs_post if Trs!=., a(conacct) cluster(mru)
-
-areg cv sem Trs_pre Trs_post if Trs!=., a(conacct) cluster(mru)
-
-
-areg pa_adj rs_post Trs_pre Trs_post Trs_pre2 Trs_post2 if Trs!=., a(conacct) cluster(mru)
-
-
-
-
-
-
-areg cv sem Trs_pre Trs_post if Trs!=. & Trs>=-24 & Trs<=24, a(conacct)
-	areg cv pa_adj Trs_pre Trs_post if Trs!=. & Trs>=-24 & Trs<=24, a(conacct)
-
-
-
-		areg cv post_treated pa_adj  i.date [pweight = SHO] , a(conacct) 
-		areg cv post_treated pa_adj Trs_* Tsr_*  i.date [pweight = SHO] , a(conacct) 
-
-gegen rs_sum = sum(r_to_s_id), by(conacct)
-gegen sr_sum = sum(s_to_r_id), by(conacct)
-tab sr_sum rs_sum if ctag==1
+* ivreghdfe cv  Trs_pre Trs_post i.date (pa_adj = rs_post ) if Trs!=., absorb(conacct)
+* ivreghdfe cv  Trs_pre Trs_post i.date (pa_adj = rs_post ) if Trs!=. | Tsr!=., absorb(conacct)
+* 	areg cv pa_adj Trs_pre Trs_post if Trs!=., a(conacct) cluster(conacct)
+* areg cv rs_post Trs_pre Trs_post if Trs!=., a(conacct) cluster(mru)
+* areg cv sem Trs_pre Trs_post if Trs!=., a(conacct) cluster(mru)
+* areg pa_adj rs_post Trs_pre Trs_post Trs_pre2 Trs_post2 if Trs!=., a(conacct) cluster(mru)
+* areg cv sem Trs_pre Trs_post if Trs!=. & Trs>=-24 & Trs<=24, a(conacct)
+* 	areg cv pa_adj Trs_pre Trs_post if Trs!=. & Trs>=-24 & Trs<=24, a(conacct)
+* 		areg cv post_treated pa_adj  i.date [pweight = SHO] , a(conacct) 
+* 		areg cv post_treated pa_adj Trs_* Tsr_*  i.date [pweight = SHO] , a(conacct) 
+* gegen rs_sum = sum(r_to_s_id), by(conacct)
+* gegen sr_sum = sum(s_to_r_id), by(conacct)
+* tab sr_sum rs_sum if ctag==1
 
 *** DOESN'T REALLY WORK...
 * g Trs_pre = Trs if Trs<0
@@ -612,7 +616,8 @@ forvalues r = 1/$bno {
 
 		gegen conacct1=group(conacct dn)
 
-		areg cv post_treated pa_adj i.date [pweight = SHO] , a(conacct1) 
+		ivreghdfe cv post_treated  Trs_pre Trs_post (pa_adj = rs_post )  [pweight = SHO], absorb(conacct1 date)  cluster(mru) 
+		* areg cv post_treated pa_adj i.date [pweight = SHO] , a(conacct1) 
 		est save "${temp}cv_b`r'", replace
 		* est sto cv_b`r'
 		qui mean cv [pweight = SHO ] 
@@ -620,7 +625,8 @@ forvalues r = 1/$bno {
   *   	mat j=e(b)
 		* estadd scalar varmean = `=j[1,1]'
 
-		areg B post_treated pa_adj i.date [pweight = SHO] if paws==1, a(conacct1)
+		ivreghdfe B post_treated  Trs_pre Trs_post (pa_adj = rs_post ) [pweight = SHO] if paws==1  , absorb(mru date)  cluster(mru) 
+		* areg B post_treated pa_adj i.date [pweight = SHO] if paws==1, a(conacct1)
 		est save "${temp}bb_b`r'", replace
 
 	restore
@@ -632,12 +638,12 @@ global F = 486
 forvalues r=1/$bno {
 est use "${temp}cv_b`r'"
 	mat def bb=e(b)
-	global dqdr = bb[1,1]
-	global alpha = bb[1,2]
+	global dqdr = bb[1,2]
+	global alpha = bb[1,1]
 
 est use "${temp}bb_b`r'"
 	mat def bb=e(b)
-	global dbdr = bb[1,1]
+	global dbdr = bb[1,2]
 est use "${temp}mm_b`r'"
 	mat def bb=e(b)
 	global wstar = bb[1,1]
@@ -665,14 +671,21 @@ restore
 
 
 	if $do_est == 1 {
-		areg cv post_treated pa_adj  ///
-		 i.date [pweight = SHO] , a(conacct) cluster(mru) r
+		ivreghdfe cv post_treated  Trs_pre Trs_post (pa_adj = rs_post ) [pweight = SHO], absorb(conacct date)  cluster(mru) 
+		* areg cv post_treated pa_adj  ///
+		*  i.date [pweight = SHO] , a(conacct) cluster(mru) r
 			est save "${temp}cv1", replace
 
-		areg B post_treated pa_adj  ///
-		 i.date [pweight = SHO] if paws==1, a(conacct) cluster(mru) r
+		ivreghdfe B post_treated  Trs_pre Trs_post (pa_adj = rs_post ) [pweight = SHO] if paws==1, absorb(mru date)  cluster(mru) 
+		* areg B post_treated pa_adj  ///
+		*  i.date [pweight = SHO] if paws==1, a(conacct) cluster(mru) r
 			est save "${temp}cv2", replace
 	}
+
+
+areg B pa_adj post_treated Trs_pre Trs_post i.date if paws==1, a(mru)
+
+ivreghdfe  B pa_adj post_treated Trs_pre Trs_post i.date if paws==1, a(mru)
 
 
 	qui mean cv [pweight = SHO ] 
@@ -685,12 +698,12 @@ restore
 		    file open newfile using "${output}cm.tex", write replace
     		file write newfile " $cm_st  "
     		file close newfile 
-    	global dqdrm = `=ee[1,1]'
+    	global dqdrm = `=ee[1,2]'
 			global dqdr_st = string(`=ee[1,1]',"%12.2fc")
 		    file open newfile using "${output}dqdrm.tex", write replace
     		file write newfile " $dqdr_st  "
     		file close newfile 
-    	global alpham = `=ee[1,2]'
+    	global alpham = `=ee[1,1]'
 			global alpha_st = string(`=ee[1,2]',"%12.2fc")
 		    file open newfile using "${output}alpham.tex", write replace
     		file write newfile " $alpha_st  "
@@ -711,8 +724,8 @@ restore
     		file write newfile " $bm_st "
     		file close newfile 
 
-    		global dbdrm = `=ee[1,1]'
-			global dbdr_st = string(`=ee[1,1]',"%12.2fc")
+    		global dbdrm = `=ee[1,2]'
+			global dbdr_st = string(`=ee[1,2]',"%12.2fc")
 		    file open newfile using "${output}dbdrm.tex", write replace
     		file write newfile " $dbdr_st  "
     		file close newfile 
@@ -741,27 +754,41 @@ estout cv1s cv2s using "${output}reg.tex", replace  style(tex) ///
 	 keep(  post_treated pa_adj  ) ///
 	order(  post_treated pa_adj  ) ///
 		  label noomitted ///
+		  varlabels(, el( post_treated "[0.5em]" pa_adj "[0.5em]" )) ///
 		  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
 		  stats( varmean  r2 N dataset , ///
 		  labels( "Mean" "$\text{R}^{2}$"  "N" "Dataset" )  ///
 		    fmt( %12.2fc  %12.3fc %12.0fc %12s  )   ) ///
 		  starlevels(  "\textsuperscript{c}" 0.10    "\textsuperscript{b}" 0.05  "\textsuperscript{a}" 0.01) 
 
+estout cv1s cv2s using "${output}reg_stars.tex", replace  style(tex) ///
+	 keep(  post_treated pa_adj  ) ///
+	order(  post_treated pa_adj  ) ///
+		  label noomitted ///
+		  varlabels(, el( post_treated "[0.5em]" pa_adj "[0.5em]" )) ///
+		  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
+		  stats( varmean  r2 N dataset , ///
+		  labels( "Mean" "$\text{R}^{2}$"  "N" "Dataset" )  ///
+		    fmt( %12.2fc  %12.3fc %12.0fc %12s  )   ) 
 
 
 
 	if $do_est == 1 {
-		areg cv post_treated pa_adj post_treated_* hhsize hhemp good_job sub single ///
-		 i.date [pweight = SHO] , a(conacct) cluster(mru) r
+		ivreghdfe cv post_treated post_treated_* hhsize hhemp good_job sub single Trs_pre Trs_post (pa_adj = rs_post ) [pweight = SHO], absorb(conacct date)  cluster(mru) 
+		* areg cv post_treated pa_adj post_treated_* hhsize hhemp good_job sub single ///
+		*  i.date [pweight = SHO] , a(conacct) cluster(mru) r	
 		 est save "${temp}cv1h", replace
-		 areg cv post_treated pa_adj inc__post_treated inc  ///
-		 i.date [pweight = SHO] , a(conacct) cluster(mru) r
+		ivreghdfe cv post_treated inc__post_treated inc Trs_pre Trs_post (pa_adj = rs_post ) [pweight = SHO], absorb(conacct date)  cluster(mru) 
+		* areg cv post_treated pa_adj inc__post_treated inc  ///
+		*  i.date [pweight = SHO] , a(conacct) cluster(mru) r
 		 est save "${temp}cv2h", replace
-		areg B post_treated pa_adj post_treated_*  hhsize hhemp good_job sub single ///
-		 i.date [pweight = SHO]  if  paws==1, a(mru) cluster(mru) r
+		ivreghdfe B post_treated post_treated_* hhsize hhemp good_job sub single Trs_pre Trs_post (pa_adj = rs_post ) [pweight = SHO] if paws==1, absorb(mru date)  cluster(mru) 
+		* areg B post_treated pa_adj post_treated_*  hhsize hhemp good_job sub single ///
+		*  i.date [pweight = SHO]  if  paws==1, a(mru) cluster(mru) r
 		 est save "${temp}cv3h", replace
-		areg B post_treated pa_adj inc__post_treated inc  ///
-		 i.date [pweight = SHO] if paws==1, a(mru) cluster(mru) r
+		ivreghdfe B post_treated inc__post_treated inc Trs_pre Trs_post (pa_adj = rs_post ) [pweight = SHO] if paws==1, absorb(mru date)  cluster(mru) 
+		* areg B post_treated pa_adj inc__post_treated inc  ///
+		*  i.date [pweight = SHO] if paws==1, a(mru) cluster(mru) r
 		 est save "${temp}cv4h", replace
 	}
 
@@ -828,6 +855,34 @@ estout cv1hs cv2hs cv3hs cv4hs using "${output}reghet.tex", replace  style(tex) 
 		  labels( "Mean" "Household FE" "Small Area FE" "$\text{R}^{2}$"  "N" "Dataset" )  ///
 		    fmt( %12.2fc  %12s %12s %12.3fc %12.0fc %12s  )   ) ///
 		  starlevels(  "\textsuperscript{c}" 0.10    "\textsuperscript{b}" 0.05  "\textsuperscript{a}" 0.01) 
+
+
+estout cv1hs cv2hs cv3hs cv4hs using "${output}reghet_stars.tex", replace  style(tex) ///
+	 keep(  post_treated   ///
+	 		post_treated_hhsize post_treated_hhemp post_treated_good_job post_treated_sub post_treated_single inc__post_treated  ///
+	 		hhsize hhemp good_job sub single inc  ) ///
+	order(  post_treated  ///
+			post_treated_hhsize post_treated_hhemp post_treated_good_job post_treated_sub post_treated_single inc__post_treated  ///
+	 		hhsize hhemp good_job sub single inc ) ///
+		  label noomitted ///
+		  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
+		  stats( varmean ctrl_ind ctrl_place r2 N dataset , ///
+		  labels( "Mean" "Household FE" "Small Area FE" "$\text{R}^{2}$"  "N" "Dataset" )  ///
+		    fmt( %12.2fc  %12s %12s %12.3fc %12.0fc %12s  )   ) 
+
+
+estout cv1hs cv3hs using "${output}reghet_stars_int.tex", replace  style(tex) ///
+	 keep(  post_treated   ///
+	 		post_treated_hhsize post_treated_hhemp post_treated_good_job post_treated_sub post_treated_single  ) ///
+	order(  post_treated  ///
+			post_treated_hhsize post_treated_hhemp post_treated_good_job post_treated_sub post_treated_single   ) ///
+		  label noomitted ///
+		  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
+		  stats( varmean ctrl_ind ctrl_place r2 N dataset , ///
+		  labels( "Mean" "Household FE" "Small Area FE" "$\text{R}^{2}$"  "N" "Dataset" )  ///
+		    fmt( %12.2fc  %12s %12s %12.3fc %12.0fc %12s  )   ) 
+
+
 
 
 sum pa_adj, detail
@@ -925,9 +980,17 @@ restore
 
 
 g class_ch=class_max!=class_min
-g cch = class
-replace cch=3 if class_ch==1
 
+
+sort conacct date
+by conacct: g r_to_s_id = class[_n-1]==1 & class[_n]==2
+g date_rs_id = date if r_to_s_id==1
+replace date_rs_id=. if date_rs_id==577
+gegen date_rs = min(date_rs_id), by(conacct)
+
+g cch = 1 if class_max==class_min & class==1
+replace cch=2 if class_max==class_min & class==2
+replace cch=3 if date_rs!=.
 
 cap prog drop print_mean2s
 program print_mean2s
@@ -1097,7 +1160,7 @@ asgen cv_sr =cv, by(Tsr) w(SHO)
 gegen rstag=tag(Trs)
 gegen srtag=tag(Tsr)
 
-lab var cv_rs "Regular Price to High Price"
+lab var cv_rs "Usage (m3) per Household-Month"
 lab var cv_sr "High Price to Regular Price"
 
 lab var Trs "Months to Price Change"
@@ -1106,8 +1169,17 @@ lab var Tsr "Months to Price Change"
 sum pa_adj if sem==1
 sum pa_adj if sem==0
 
+gegen pa_adjm=mean(pa_adj), by(Trs)
+lab var pa_adjm "PhP per m3"
 
-twoway scatter cv_rs Trs if rstag==1 & Trs>=-24 & Trs<=24
+twoway scatter cv_rs Trs if rstag==1 & Trs>=-24 & Trs<=24 || ///
+	 scatter pa_adjm Trs if rstag==1 & Trs>=-24 & Trs<=24 , yaxis(2) ms(diamond)  ///
+	legend(order(1 "Usage" 2 "Price") symx(6) col(1) ///
+    ring(0) position(3) bm(medium) rowgap(small)  ///
+    colgap(small) size(*.95) region(lwidth(none)))
+
+
+graph export "${output}r_to_s_only_graph.pdf", as(pdf) replace
 
 
 
@@ -1118,8 +1190,6 @@ twoway 	scatter cv_sr Tsr if srtag==1 & Tsr>=-36 & Tsr<=36,  msymbol(triangle) m
 		legend(order(2 "Regular Price to High Price" 1 "High Price to Regular Price") symx(6) col(1) ///
     ring(0) position(2) bm(medium) rowgap(small)  ///
     colgap(small) size(*.95) region(lwidth(none)))
-
-
 
 graph export "${output}r_to_s_graph.pdf", as(pdf) replace
 
@@ -1183,10 +1253,13 @@ use "${temp}final_analysis.dta", clear
 
 	replace amount = . if amount<0 | amount>60*200
 
+	replace c = c/SHO
+	replace amount = amount/SHO
+
 	if $do_est == 1 {
-	areg c post_treated i.date , a(conacct) cluster(mru) r
+	reghdfe c post_treated [pweight=SHO], a(conacct date) cluster(mru)
 	estimates save "${temp}c1", replace
-	areg amount post_treated i.date , a(conacct) cluster(mru) r
+	reghdfe amount post_treated [pweight=SHO], a(conacct date) cluster(mru)
 	estimates save "${temp}c2", replace
 	}
 
@@ -1205,6 +1278,24 @@ use "${temp}final_analysis.dta", clear
 		estadd local  ctrl_place "\checkmark"
 		estadd local  ctrl_dataset "Residential"
 	estimates save "${temp}c2s", replace
+
+
+est use "${temp}nrw_supp"
+est sto supp
+
+est use "${temp}c2s"
+est sto bill
+
+lab var post_treated "After Pipe Replacement"
+
+	estout bill supp  using "${output}savings.tex", replace  style(tex) ///
+	 keep(  post_treated  ) ///
+	order(  post_treated  ) ///
+		  label noomitted ///
+		  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
+		  stats( varmean  r2 N  , ///
+		  labels( "Mean"  "$\text{R}^{2}$"  "N"  )  ///
+		    fmt( %12.2fc   %12.3fc %12.0fc  )   ) 
 
 
 

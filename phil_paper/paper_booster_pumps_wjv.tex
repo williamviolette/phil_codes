@@ -278,6 +278,7 @@ The absence of strong pre-trends in usage suggests that replacement projects are
 
 Mapping these increases in consumption into household welfare requires measuring how households trade off water usage and price.  Prices are determined by the government regulator who imposes an increasing tariff schedule according to monthly usage, which is standard among public utilities (\cite{hoque2013state}).  Despite steep increases in marginal price at specific levels of usage, households do not appear to be sensitive to these price changes because households are not observed adjusting their consumption strategically to avoid higher prices (cite appendix).  The regulator also increases prices gradually over time to ensure that the company continues to cover operating costs.  Since households also gradually increase their average usage over this interval, it is unclear whether households are responsive to these price increases (cite appendix).
 
+[ RE-WRITE WITH NEW DEFINITION! ]
 The government regulator also gives the water company discretion to assign households to a high-price tariff schedule if they have any business activity at their residence, which provides a novel source of price variation in the context of public utilities.  In the vast majority of cases, the high price tariff is applied to households that operate small food stands (or ``Sari-Sari'' stores).  For a household with average monthly usage, the high-price tariff results in an average price of \input{tables/p_s}PhP/m3 while the regular tariff results in an average price of \input{tables/p_r}PhP/m3 (cite appendix for tariff).  The water company periodically visits consumers and updates prices according to the activities observed at each consumer's residence.  In some cases, consumers request price changes, which prompts the company to investigate the household and determine the appropriate price.  Table~\ref{table:pricechangestatistics} provides average characteristics of households that are always observed with the regular price (in column (1)), that are always observed with the high price (in column (2)), and that are observed changing prices during the sample (in column (3)).  While the 2,442 households that experience price changes use more water than other households, they share similar demographic characteristics, which suggests that they may also share similar price-sensitivities.  
 
 Figure~\ref{figure:usagepricechanges} plots average usage 4 years before and after households are switched from the regular price to the high price (in red) as well as before and after households are switched from the high price to the regular price (in blue).  Before the price change, average usage for both groups follows relatively constant trends.  The price change is associated with a usage jump for households switched to the regular price and a corresponding usage slide for households switched to the high price.  The changes in consumption appear relatively persistent up to 4 four years after the price changes.  These patterns indicate that household water usage is sensitive to large, discrete price changes.  
@@ -290,7 +291,7 @@ Figure~\ref{figure:usagepricechanges} plots average usage 4 years before and aft
 \begin{threeparttable}
 \begin{tabular}{@{}l*{1}{KKK}@{}}
 \toprule
-  & Always Reg. Price & Always High Price  & Change Price \\
+  & Always Reg. Price & Always High Price  & Change Reg. to High Price \\
 \midrule
 Usage per Household (m3)& \input{tables/cv_rs} \\
 Household size & \input{tables/hhsize_rs} \\
@@ -407,7 +408,7 @@ Column (2) finds that pipe replacement projects are associated with a 20\% decre
 \begin{table}[h!] 
 \centering
 \caption{Household Water and Booster Pump Use Estimates}\label{table:mainregs}
-\vspace{-2mm}
+\vspace{-2mm} 
 \begin{threeparttable}
 \begin{tabular}{@{}l*{1}{CC}@{}}
 \toprule
@@ -458,6 +459,9 @@ Estimates   &  \input{tables/est_welfare} \\
 Fixed costs:
 
 On average, pipe replacement projects replace 25.3 km of pipes at a cost of 166 million PhP.  The average cost per pipe length is 9 million PhP per kilometer.  Since around 0.73 km of pipes are replaced per small area, total project costs per small area are around 6.6 million PhP.  With 275 connections per small area, project costs average 24,000 PhP per connection.   
+
+6.6 million PhP/(275*1.41)
+
 
 New Revenues:
 
@@ -521,11 +525,132 @@ After pipe-replacement, usage per connection decreases by 21 m3 per month.  Give
 
 
 
+%%% leave out booster pumps?
+\section{Counterfactuals}
+
+% We're focusing on a part of the natural monopoly where the costs are easy to measure (you replace pipes), but the benefits are less well understood.  Different from the standard Laffont and Tirole model; closer to the Spence model which is a real contribution!  (luckily high cost areas also have high benefit)
+
+% Set aside all other aspects of regulation to focus on quality!  Usually, capital is thought of as an input to deliver a certain quantity of the product.  Here we're focusing on a particular 
+
+The following counterfactuals identify the welfare effects of optimal pipe replacements under five different information environments.  The \textit{full-information} counterfactual provides an optimal benchmark where the regulator chooses when to replace pipes to maximize total welfare given full information on demand and costs.  In the \textit{regular-replacement} counterfactual, the regulator simply replaces all pipes at a fixed interval.  In the \textit{quality-standards} counterfactual, the regulator establishes a minimum water pressure threshold and replaces pipes when pressure falls below the threshold.  In the \textit{cost-recovery} counterfactual, the regulator schedules replacements to balance savings from lower pumping costs against upfront costs of the pipe replacements.  In the \textit{firm-level} counterfactual, the regulator lets the firm decide when to replace pipes under the assumption that the firm has full demand and cost information.
+
+% - hold price fixed!
+% - decide replacements independently for each area
+% - 
+
+% - Not permitted expenses, similar to a price-cap [that's fair] (under invest)
+% - Rate of return (allow for overlapping loans...?) --> no, don't ; make the point that the firm will want to replace pipes as soon as loans come due because the projects generate more than enough revenue to meet reasonable rates of return.  
+
+% - permitted expenses or not? hard to know..
+% - rate of return when we don't know the production function; 
+% - high power --> redistribute little but keep costs down
+% - low power --> redistribute a lot but high costs
+% --- where are we?
+
+% --> low power: all the surplus goes to consumers, but decisions are based on limited information
+% --> high power: firm can get the surplus, but decisions are based on detailed consumer information; provides a strong incentive for the firm to figure out exactly the benefits of the investments
+%%% in practice, it's somewhere between
+%%% note that with the high power incentive, the prices are high, and the wedges get smaller if the prices are lower!
+%%% footnote explaining distinction with standard high versus low-powered incentives.
+
+% Since these projects generate streams of revenues in excess of their costs, then rate-of-return regulation would likely lead firms to very frequently replace pipes.\footnote{We do not explicitly model rate of return regulation here because the constraint would depend on whether the company could take out multiple loans, and the cost of capital for those loans.}
+
+
+The \textit{full-information} counterfactual simulates how often a regulator would optimally replace pipes in order to maximize welfare under full information.  For each section of the service area, the regulator maximizes present-discounted welfare indefinitely given by the following expression
+% doublecheck the tau's and t's
+\begin{align*}
+max_{R_t\in\{0,1\}} \,\, &\sum_{\tau = t}^{\infty} (1+\delta)^{t-\tau} [CS(k_{t}) + V(k_{t})]  \\
+V(k_{t}) &= W(k_{t}) - E(k_{t}) - L(k_{t})\\ 
+k_{t+1} &=  (1 + k_t) \, (1-R_t \mathbbm{1} \{ k_{t}> l\}) \\
+L(k_t) &= \frac{r(1+r)^{l} }{(1+r)^{l} -1 }\overline{L} \, \mathbbm{1} \{ k_{t}\leq l \}
+\end{align*}
+where $t$ indexes month, $\delta(>0)$ is the discount factor, and $k_t$ is the age of the pipes.  $CS(k_{t})$ is consumer surplus and $V(k_t)$ is net revenue, which depends on revenue from water sales, $W(k_{t})$, costs of water leakage, $E(k_{t})$, and payments on any loans to fund pipe replacements, $L(k_t)$.  Due to pipe deterioration, consumer surplus and water revenue are both assumed to be decreasing in pipe age while water leakage is assumed to increase with pipe page.  $L(k_{t})$ is the payment on the loan needed to fund a pipe replacement.  Each month, the regulator chooses whether to replace pipes ($R_t = 1$) or not ($R_t = 0$).  Replacing pipes sets the pipe age, $k_t$, back to zero and is only possible if the regulator has paid off any debt from a previous pipe replacement where $l$ indexes the duration of the debt.  The regulator is assumed to fund a pipe replacement with a loan of total size, $\overline{L}$, at monthly interest rate, $r$, over duration, $l$.  The expression for $L(k_t)$ calculates the size of the monthly loan payments.  In this framework, the optimal schedule of pipe replacements balances net revenue against consumer surplus from new pipes.
+
+In this framework, net revenues for a section of the service area can be positive, negative, or zero.  In practice, the regulator is likely to stagger pipe replacements across different sections of the service area so that total net revenues across all service areas are close to zero.  However, in some periods, total net revenues may still be negative or positive.  In these cases, the model implicitly assumes that the regulator adjusts fixed monthly service charges 
+
+is able to maintain revenue neutrality by adjusting fixed monthly service charges paid by consumers.  
+
+
+
+% Since this framework does not assume a revenue constraint at zero, 
+
+% While in practice, regulators may adjust both marginal prices and fixed monthly service charges, the model focuses only on fixed monthly service charges  
+% The model implicitly assumes that the regulator is able to implement fixed transfers to and from consumers without distorting their water consumption.  For example, the regulator may offer all consumers fixed rebates in months with budget surpluses and higher fixed water charges in months with budget deficits.  
+% Allowing negative net revenues in the model provides an approximation for this scheduling optimization.
+
+% While the model does not explicitly capture scheduling optimization, it 
+This framework also holds the water tariff fixed.  
+
+
+
+In the \textit{regular-replacement} counterfactual, the regulator is uninformed about consumer surplus and revenues.  Instead, the regulator only knows the age of the pipes and chooses to replace pipes as soon as they reach a certain age, $\overline{K}$.  In the \textit{quality-standards} counterfactual, the regulator observes not only the age of the pipes, but also the water pressure reaching consumers, $P(k_t)$.  The regulator then chooses to replace pipes once the water pressure falls below a certain threshold, $\overline{P}$.  In the \textit{cost-recovery} counterfactual, the regulator does not observe water pressure, but instead observes the part of producer surplus attributable to leakage costs, $E(k_t)$.  The regulator then replaces pipes to minimize leakage costs and pipe replacement costs.  
+
+
+
+The marginal price is enough to cover the other fixed costs, and the firm gets to keep the leftovers!
+
+
+In the \textit{firm-level} counterfactual, the regulated firm is assumed to be fully aware of producer surplus, $PS(k)$, and the regulator allows the firm to maximize producer surplus, $PS(k) - L(k_{t})$.
+
+Total welfare versus producer/consumer divide?
+
+
+% Mermelstein et al. (2012) for dynamic merger analysis
+%%% in some months, it may be negative..
+
+In the empirical set-up, ...
+
+
+Discuss the empirical set up!  Discuss the limitations in the empirical set-up. Roughly correspond to natural divisions of the service area.
+
+Consumer surplus and producer surplus are assumed to linearly decline in pipe age, $k_t$.  This assumption is consistent with civil engineering research documenting a roughly linear relationship between pipe failure and age.\footnote{See \cite{ward2017deterioration}, \cite{kleiner2001comprehensive}, and \cite{aydogdu2015estimation}.}  
+
+Since the majority of pipes are replaced 
+
+Appendix on decom.
 
 
 
 
+Results are discussed below in Table [x].
 
+ then the regulator maximization problem has an interior solution where the regulator choses whether to .  In practice, simulations solve the maximization problem recursively using 
+
+% This approach abstracts away from many other features (price, independent decisions, maintenance, expectations about the future)
+
+% where $t$ indexes month, $\delta>0$ is the discount factor, and $k_t$ is the age of the pipes.  $CS(k_{t})$ is consumer surplus and $PS(k_{t})$ is producer surplus, which are both assumed to be decreasing in pipe age as pipes deteriorate.  $L(k_{t})$ is the payment on the loans needed to fund upfront pipe replacements.  Each month, the regulator chooses whether to replace pipes ($R_t = 1$) or not ($R_t = 0$).  Replacing pipes sets the pipe age, $k_t$, back to zero and is only possible if the regulator has paid off any debt from a previous pipe replacement where $l$ indexes the duration of the debt.  The regulator is assumed to fund pipe replacements with a loan of total size, $\overline{L}$, at monthly interest rate, $r$, over duration, $l$.  The expression for $L(k_t)$ calculates the monthly loan payment for the duration of the loan.  In this framework, the optimal schedule of pipe replacements balances the (decreasing) consumer and producer surplus from new pipes against the upfront cost of replacing pipes.  
+
+% In the \textit{regular-replacement} counterfactual, the regulator is uninformed about consumer and producer surplus.  Instead, the regulator only knows the age of the pipes and chooses to replace pipes as soon as they reach a certain age, $\overline{K}$.  In the \textit{quality-standards} counterfactual, the regulator observes not only the age of the pipes, but also the water pressure reaching consumers, $P(k_t)$.  The regulator then chooses to replace pipes once the water pressure falls below a certain threshold, $\overline{P}$.  In the \textit{cost-recovery} counterfactual, the regulator does not observe water pressure, but instead observes the part of producer surplus attributable to leakage costs, $E(k_t)$.  The regulator then replaces pipes to minimize leakage costs and pipe replacement costs.  
+
+% In the \textit{firm-level} counterfactual, the regulated firm is assumed to be fully aware of producer surplus, $PS(k)$, and the regulator allows the firm to maximize producer surplus, $PS(k) - L(k_{t})$.
+
+% Total welfare versus producer/consumer divide?
+
+
+% k_{t+1} &= \begin{cases}
+% k_t + 1 &\text{ if } R_t=0 \\
+% 0 &\text{ if } R_t=1 \text{ and } k_{t}> l
+% \end{cases}\\
+% \begin{align*}
+% L(k_t) = \begin{cases}
+% \overline{L}\frac{r(1+r)^{l} }{(1+r)^{l} -1 } &\text{ if } k_{t}\leq l \\
+% 0 &\text{ if } k_{t}> l
+% \end{cases}
+% \end{align*}
+% d = (((1+r)^(12*loan_term))-1)/(r*(1+r)^(12*loan_term));
+% F  = total_loan/d;
+
+
+
+
+The fourth counterfactual imagines an uninformed regulator and a fully informed firm where the firm decides when to replace pipes.  The regulator does not adjust prices to compensate the firm for pipe replacements, which leaves the firm to maximize its own surplus from replacing pipes.\footnote{Strong incentive to reduce costs: This may occur when the regulator can't credibly commit to price increases or when the firm has a strong incentive to inflate costs which the regulator cannot verify.}
+
+
+
+
+according to advice from water engineers who measure costs of replacements as well as pumping cost savings.  The regulator then replaces pipes to optimize upfront replacement costs against marginal savings in pumping costs.
+
+without knowing the replacement costs or how replacements would affect water demand.  However, the regulator is able to measure water pressure either through consumer surveys, consumer complaints, or pressure gauges.  The regulator then establishes a minimum pressure threshold and replaces pipes when the pressure drops below the threshold.
 
 
 Section Welfare:

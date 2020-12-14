@@ -1,4 +1,4 @@
-\begin{thebibliography}{39}
+\begin{thebibliography}{43}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -9,6 +9,13 @@
 A.~J. Auerbach and A.~J. Pellechio.
 \newblock The two-part tariff and voluntary market participation.
 \newblock \emph{The Quarterly Journal of Economics}, pages 571--587, 1978.
+
+\bibitem[Aydogdu and Firat(2015)]{aydogdu2015estimation}
+M.~Aydogdu and M.~Firat.
+\newblock Estimation of failure rate in water distribution network using fuzzy
+  clustering and ls-svm methods.
+\newblock \emph{Water resources management}, 29\penalty0 (5):\penalty0
+  1575--1590, 2015.
 
 \bibitem[Bennett(2012)]{bennett2012does}
 D.~Bennett.
@@ -48,6 +55,14 @@ D.~Cutler and G.~Miller.
 \newblock The role of public health improvements in health advances: the
   twentieth-century united states.
 \newblock \emph{Demography}, 42\penalty0 (1):\penalty0 1--22, 2005.
+
+\bibitem[Dawood et~al.(2020)Dawood, Elwakil, Novoa, and
+  G{\'a}rate~Delgado]{dawood2020water}
+T.~Dawood, E.~Elwakil, H.~M. Novoa, and J.~F. G{\'a}rate~Delgado.
+\newblock Water pipe failure prediction and risk models: state-of-the-art
+  review.
+\newblock \emph{Canadian Journal of Civil Engineering}, 47\penalty0
+  (10):\penalty0 1117--1127, 2020.
 
 \bibitem[Devoto et~al.(2012)Devoto, Duflo, Dupas, Parient{\'e}, and
   Pons]{devoto2012happiness}
@@ -130,6 +145,12 @@ S.~Keener, M.~Luengo, and S.~G. Banerjee.
 \newblock Provision of water to the poor in africa: Experience with water
   standposts and the informal water sector.
 \newblock 2010.
+
+\bibitem[Kleiner and Rajani(2001)]{kleiner2001comprehensive}
+Y.~Kleiner and B.~Rajani.
+\newblock Comprehensive review of structural deterioration of water mains:
+  statistical models.
+\newblock \emph{Urban water}, 3\penalty0 (3):\penalty0 131--150, 2001.
 
 \bibitem[Komives(2005)]{komives2005water}
 K.~Komives.
@@ -227,6 +248,12 @@ C.~Timmins.
 \newblock Measuring the dynamic efficiency costs of regulators' preferences:
   Municipal water utilities in the arid west.
 \newblock \emph{Econometrica}, 70\penalty0 (2):\penalty0 603--629, 2002.
+
+\bibitem[Ward et~al.(2017)Ward, Selby, Gee, and Savic]{ward2017deterioration}
+B.~Ward, A.~Selby, S.~Gee, and D.~Savic.
+\newblock Deterioration modelling of small-diameter water pipes under limited
+  data availability.
+\newblock \emph{Urban Water Journal}, 14\penalty0 (7):\penalty0 743--749, 2017.
 
 \bibitem[{Water and Sanitation for the Urban Poor}(2013)]{wsup}
 {Water and Sanitation for the Urban Poor}.

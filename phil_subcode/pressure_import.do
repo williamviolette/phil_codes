@@ -2,6 +2,11 @@
 
 
 
+use "${data}backup_cbms/2011/pasay_final2011_hh.dta", clear
+
+
+
+
 
 
 use "${data}backup_cbms/2011/pasay_final2011_hh.dta", clear
@@ -9,7 +14,7 @@ use "${data}backup_cbms/2011/pasay_final2011_hh.dta", clear
 	keep barangay_id totin
 	replace totin = totin/12
 	replace totin = . if totin>200000
-	* g year = 2011
+	* g year = 2011 
 	gegen inc_2011=mean(totin), by(barangay_id)
 	gegen bt=tag(barangay_id)
 	keep if bt==1
@@ -239,6 +244,29 @@ save "${temp}bill_paws_full_ts.dta", replace
 	save "${temp}pipe_year_old.dta", replace
 	
 
+	odbc load, exec("SELECT * FROM decom_pipes_mru_int")  dsn("phil") clear  
+		egen length_tot=sum(int_length), by(mru year_inst)
+		keep if pipe_class=="TERTIARY"
+		destring year_inst mru, replace force
+
+		drop if year_inst<5
+
+		ren int_length length
+		egen ly=sum(length), by(mru year_inst)
+		egen max_l=max(ly), by(mru)
+		egen total_mru=sum(length), by(mru)
+		keep if ly==max_l
+		g shr=max_l/total_mru
+	*	keep if year_inst>=2008
+		drop length
+		ren ly length
+		keep length length_tot year_inst mru shr
+		duplicates drop mru, force
+		ren * *_decom
+		ren mru mru
+	save "${temp}pipe_year_decom_nold.dta", replace
+
+
 
 	odbc load, exec("SELECT * FROM pipes_mru_int")  dsn("phil") clear  
 		egen length_tot=sum(int_length), by(mru year_inst)
@@ -265,6 +293,8 @@ save "${temp}bill_paws_full_ts.dta", replace
 		keep if pipe_class=="TERTIARY"
 		destring year_inst, replace force
 		ren int_length length
+		* g year_inst1 = year_inst if year_inst>1900 & year_inst<2020
+		* asgen year_mean = year_inst1, by(dma_id) w(length)
 		egen ly=sum(length), by(dma_id year_inst)
 		egen max_l=max(ly), by(dma_id)
 		egen total_mru=sum(length), by(dma_id)
@@ -315,7 +345,89 @@ save "${temp}bill_paws_full_ts.dta", replace
 		duplicates drop mru, force
 		ren mru mru
 	save "${temp}pipe_year_old_latest.dta", replace
+
 	
+
+
+		use ${database}clean/mcf/2015/full_2015.dta, clear
+				drop if Col3=="Row Count"
+		ren Col4 ba
+		ren Col5 ba_name
+		destring ba, replace force
+		duplicates drop ba, force
+		keep if ba!=.
+		keep ba ba_name
+		save "${temp}ba_name.dta", replace
+
+
+		use ${database}clean/mcf/2015/full_2015.dta, clear
+				drop if Col3=="Row Count"
+		ren Col12 conacct
+		ren Col10 mru
+		ren Col4 ba
+		ren Col5 ba_name
+		g year=substr(Col19,1,4)
+		g month=substr(Col19,6,2)
+		destring year month mru ba , replace force
+		g datec = ym(year,month)
+		keep conacct datec mru ba ba_name
+		drop if conacct==.
+		duplicates drop conacct, force
+
+		g after = datec<=545
+		gegen asum=sum(after), by(mru)
+		duplicates drop mru, force
+
+		g kg = asum>10 & asum<.
+
+		tab ba_name kg 
+
+		keep mru
+		destring mru, replace force
+		save "${temp}old_mru.dta", replace
+
+
+		use ${database}clean/mcf/2015/full_2015.dta, clear
+				drop if Col3=="Row Count"
+				keep if Col39==""
+			ren Col12 conacct
+			ren Col10 mru
+			drop if conacct==.
+			duplicates drop conacct, force
+			g o=1
+			gegen accts=sum(o), by(mru)
+			gegen mtag=tag(mru)
+			keep if mtag==1
+			drop mtag o
+			keep mru accts
+			destring mru, replace force
+		save "${temp}accts_per_mru.dta", replace
+
+
+		use ${database}clean/mcf/2015/full_2015.dta, clear
+				drop if Col3=="Row Count"
+		ren Col12 conacct
+		ren Col10 mru
+		ren Col4 ba
+		ren Col5 ba_name
+		g year=substr(Col19,1,4)
+		g month=substr(Col19,6,2)
+		destring year month mru ba , replace force
+		g datec = ym(year,month)
+		keep conacct datec mru ba ba_name
+		drop if conacct==.
+		duplicates drop conacct, force
+
+		merge 1:1 conacct using "${temp}conacct_dma_link.dta", keep(3) nogen
+		g after = datec<=545
+		gegen asum=sum(after), by(dma)
+		duplicates drop dma, force
+
+		keep if asum>20 & asum<.
+
+		keep dma
+		save "${temp}old_dma.dta", replace
+		
 
 
 		use ${database}clean/mcf/2015/full_2015.dta, clear
@@ -354,7 +466,11 @@ save "${temp}bill_paws_full_ts.dta", replace
 				duplicates drop conacct, force
 		save "${temp}conacct_rate.dta", replace
 
-
+		use "${temp}conacct_rate.dta", clear
+			keep mru zone_code
+			duplicates drop mru, force
+			drop if mru==. | zone_code==.
+		save "${temp}mru_zone_code.dta", replace
 
 
 	local bill_query ""
@@ -426,15 +542,39 @@ save "${temp}bill_paws_full_ts.dta", replace
 		
 		
 
-	odbc load, exec("SELECT * FROM mru_dma_int")  dsn("phil") clear  
+	odbc load, exec("SELECT A.*, B.area as area_mru FROM mru_dma_int AS A JOIN mru AS B ON A.mru = B.mru_no")  dsn("phil") clear  
+	* odbc load, exec("SELECT * FROM mru_dma_int")  dsn("phil") clear  
 		destring mru, replace force
 		gegen marea=max(area), by(mru)
 		keep if marea==area
 		duplicates drop mru, force
 		g str10 dma = dma_id
 			drop dma_id
+		g shr = area/area_mru
+		keep if shr>.50
 		keep dma mru
 	save "${temp}mru_dma_link.dta", replace
+
+
+
+	odbc load, exec("SELECT * FROM mru_dma_int")  dsn("phil") clear  
+		destring mru, replace force
+		merge m:1 mru using "${temp}mru_zone_code.dta", keep(3) nogen
+
+		egen area_dma = sum(area), by(dma_id)
+		egen area_zone = sum(area), by(zone_code)
+		egen area_int = sum(area), by(dma_id zone_code)
+		keep dma_id zone_code area_dma area_zone area_int
+		duplicates drop dma_id zone_code, force
+
+		egen m_area_int=max(area_int), by(dma_id)
+		g shr=m_area_int/area_dma
+		keep if m_area_int == area_int
+		keep dma_id zone_code
+				g str10 dma = dma_id
+			drop dma_id
+	save "${temp}zone_dma_link.dta", replace
+
 
 
 	use "${temp}capex_raw.dta", clear
