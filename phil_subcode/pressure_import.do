@@ -287,6 +287,16 @@ save "${temp}bill_paws_full_ts.dta", replace
 	save "${temp}pipe_year_nold.dta", replace
 
 
+*** PIPE LENGTH FIGURE FOR PAPER
+	odbc load, exec("SELECT * FROM pipes_dma_int")  dsn("phil") clear  
+		gegen total_length=sum(int_length)
+		tab total_length
+	destring year_inst, replace
+	g post = year_inst>=2005 & year_inst<=2015
+
+gegen total_length_post=sum(int_length), by(post)
+tab  total_length_post if post==1
+
 
 	odbc load, exec("SELECT * FROM pipes_dma_int")  dsn("phil") clear  
 

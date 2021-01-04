@@ -22,6 +22,8 @@ grstyle init
 grstyle set imesh, horizontal
 
 
+* census stat:
+* use "${temp}c15_demo_hh.dta", clear
 
 
 
@@ -39,6 +41,15 @@ merge m:1 mru using "${temp}mru_zone_code.dta", keep(3) nogen
 
 g paws_pre = paws==1 & treated==1 & post==0
 g paws_post = paws==1 & treated==1 & post==1
+
+
+* gegen mtag=tag(mru)
+* count if mtag==1 & treated==1
+* drop mtag
+
+* gegen paws_pre_s  = sum(paws_pre), by(mru)
+* gegen paws_post_s = sum(paws_post), by(mru)
+* keep if treated==1 
 
 keep paws_pre paws_post mru zone_code
 
@@ -66,6 +77,8 @@ cap drop ppost
 drop paws_pre paws_post
 sum zm
 replace zm=`=r(max)'-1 if zm==`=r(max)'
+
+tab zm
 
 duplicates drop mru, force
 
