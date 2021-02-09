@@ -1,12 +1,13 @@
-function [h,v,v_PS,v_CS]=sim_reps_pa(welfare,Q0_PS,Q0_CS,pipe_age,total_loan,r,loan_term,nA,Aprime,A,beta,wm,we,wbar,t,NRW)
+function [h,v,v_PS,v_CS]=sim_reps_pa_noint(welfare,Q0_PS,Q0_CS,pipe_age,total_loan,r,loan_term,nA,Aprime,A,beta,wm,we,wbar,t,NRW)
  
 sim_length= nA;
 
 Q1_CS = Q0_CS/pipe_age;
 Q1_PS = Q0_PS/pipe_age;
-NRW0  = 0;
-Q0_CS = 0;
-Q0_PS = 0;
+
+NRW0 = 0;
+Q0_CS= 0;
+Q0_PS= 0;
 
 d = (((1+r)^(12*loan_term))-1)/(r*(1+r)^(12*loan_term));
 F  = total_loan/d;

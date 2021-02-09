@@ -26,7 +26,7 @@ PSt=PSc+PSt;
 %%% simulate every 30!
 
 
-beta_up = .04/12;
+beta_up = .03/12;
 beta = 1/( 1 + beta_up );
 
 N = 500;
@@ -60,25 +60,18 @@ v(1,1)/1000
 v_PS(1,1)/1000
 v_CS(1,1)/1000
 
-% [h_ni,v_ni,v_PS_ni,v_CS_ni] = sim_reps_pa_noint(welfare,Q0_PS,Q0_CS,pipe_age,total_loan,r,loan_term,nA,Aprime,A,beta,wm,we,wbar,t, NRW(1) );
-% [v_ni(1) v_PS(1)]
-
-
 %%%% FULL WELFARE %%%%
 
 welfare=1;
 
 results = zeros(size(CSt,1),4);
 results_alt = zeros(size(CSt,1),4);
-results_noint = zeros(size(CSt,1),4);
 
 for i=1:size(CSt,1)
     [ht,vt,v_PSt,v_CSt]=sim_reps_pa(welfare,  PSt(i)  ,  CSt(i)  ,  pipe_age,  TLt(i)  ,r,loan_term,nA,Aprime,A,beta,wm,we,wbar,t, NRW(i) );
     results(i,:) = [ht vt(1) v_PSt(1) v_CSt(1) ];
     results_alt(i,:) = [ht vt(alt) v_PSt(alt) v_CSt(alt) ];
     
-    [ht_ni,vt_ni,v_PSt_ni,v_CSt_ni]=sim_reps_pa_noint(welfare,  PSt(i)  ,  CSt(i)  ,  pipe_age,  TLt(i)  ,r,loan_term,nA,Aprime,A,beta,wm,we,wbar,t, NRW(i) );
-    results_noint(i,:) = [ht_ni vt_ni(1) v_PSt_ni(1) v_CSt_ni(1) ];
 end
 
 [results(:,1)  results(:,2:4)/1000]
@@ -99,7 +92,6 @@ we=-.17;
 
 results_qual = zeros(size(CSt,1),4);
 results_qual_alt = zeros(size(CSt,1),4);
-results_qual_noint = zeros(size(CSt,1),4);
 
 for i=1:size(CSt,1)
     
@@ -107,22 +99,11 @@ for i=1:size(CSt,1)
     results_qual(i,:) = [ht vt(1) v_PSt(1) v_CSt(1) ];
     results_qual_alt(i,:) = [ht vt(alt) v_PSt(alt) v_CSt(alt) ];
     
-    [ht_ni,vt_ni,v_PSt_ni,v_CSt_ni]=sim_reps_pa_noint(welfare,  PSt(i)  ,  CSt(i)  ,  pipe_age,  TLt(i)  ,r,loan_term,nA,Aprime,A,beta,  Wm(i)  ,  We(i)  ,wbar,t,  NRW(i)  );
-    results_qual_noint(i,:) = [ht_ni vt_ni(1) v_PSt_ni(1) v_CSt_ni(1) ];
 end
 
 results_qual(:,1)
 
 [ results(:,2) results_qual(:,2)]./1000
-
-mean(results)-mean(results_qual)
-
-mean(results_noint)-mean(results_qual_noint)
-
-results(:,1)-results_qual(:,1)
-results_noint(:,1)-results_qual_noint(:,1)
-
-[ (results(:,2)-results_qual(:,2)) (results_noint(:,2)-results_qual_noint(:,2)) ]
 
 wbar=.1;
 
@@ -217,7 +198,27 @@ r1p=round(mean([ results(:,2) results_high_qual(:,2) results_qual(:,2) (results_
 r1p(2:end)./r1p(1)
 
 
-r1(2:end)./r1(1)
+r1alt
 
-r1cs=round(mean([ results(:,4) results_high_qual(:,4) results_qual(:,4) (results_prod(:,4)) (results_age(:,4))  ])./1000,1)
-r1cs(2:end)./r1cs(1)
+r1(2:end) - r1(1)
+
+r1alt(2:end) - r1alt(1)
+
+
+%%% non-zero
+% ans =  -23.1000  -34.4000   -3.8000  -10.4000
+% ans =  -29.2000  -45.1000   -4.7000  -13.6000
+%%% with-zero (BASICALLY THE SAME!)
+% ans =  -22.6000  -33.8000   -3.8000  -10.4000
+% ans =  -28.7000  -44.6000   -4.7000  -13.6000
+
+
+
+% r2(2:end) - r2(1)
+% 
+% 
+% 
+% r1(2:end)./r1(1)
+% 
+% r1cs=round(mean([ results(:,4) results_high_qual(:,4) results_qual(:,4) (results_prod(:,4)) (results_age(:,4))  ])./1000,1)
+% r1cs(2:end)./r1cs(1)

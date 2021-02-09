@@ -33,10 +33,23 @@ do "${subcode}be_prog.do"
 global F = 486
 
 
+
 use "${temp}final_analysis.dta", clear
 
 
 label_set 
+
+
+
+
+
+**** DYNAMIC EFFECTS  ****
+spec_time
+time_post
+time_export
+
+main_export_time
+
 
 
 ***** MAIN ESTIMATION RESULTS *****
@@ -59,6 +72,7 @@ spec_B_robust
 main_export_robust
 
 
+
 ***** FIRST STAGE AND REDUCED FORM RESULTS *****
 spec_cv_1st_stage
 	est save "${temp}e1", replace
@@ -68,22 +82,30 @@ spec_B_1st_stage
 	est save "${temp}e3", replace
 spec_B_red_form
 	est save "${temp}e4", replace
+tab rs_post if e(sample)==1  // observe only 208 connections after the price change
 
 stage_export
 
 
 ***** HETEROGENEOUS EFFECTS *****
-ivreghdfe cv post_treated post_treated_* hhsize hhemp good_job sub single Trs_pre Trs_post (pa_adj = rs_post ) [pweight = SHO], absorb(conacct date)  cluster(mru) 
-	est save "${temp}cv1h", replace
-ivreghdfe cv post_treated inc__post_treated inc Trs_pre Trs_post (pa_adj = rs_post ) [pweight = SHO], absorb(conacct date)  cluster(mru) 
-	est save "${temp}cv2h", replace
-ivreghdfe B post_treated post_treated_* hhsize hhemp good_job sub single Trs_pre Trs_post (pa_adj = rs_post ) [pweight = SHO] if paws==1, absorb(mru date)  cluster(mru) 
-	est save "${temp}cv3h", replace
-ivreghdfe B post_treated inc__post_treated inc Trs_pre Trs_post (pa_adj = rs_post ) [pweight = SHO] if paws==1, absorb(mru date)  cluster(mru) 
-	est save "${temp}cv4h", replace
 
-het_post
-het_export
+g ln_cv = log(cv+1)
+	ivreghdfe cv post_treated post_treated_* hhsize hhemp good_job sub single Trs_pre Trs_post (pa_adj = rs_post ) [pweight = SHO], absorb(conacct date)  cluster(mru) 
+		est save "${temp}cv1h", replace
+	ivreghdfe cv post_treated inc__post_treated inc Trs_pre Trs_post (pa_adj = rs_post ) [pweight = SHO], absorb(conacct date)  cluster(mru) 
+		est save "${temp}cv2h", replace
+	ivreghdfe ln_cv post_treated post_treated_* hhsize hhemp good_job sub single Trs_pre Trs_post (pa_adj = rs_post ) [pweight = SHO], absorb(conacct date)  cluster(mru) 
+		est save "${temp}cv3h", replace
+	ivreghdfe ln_cv post_treated inc__post_treated inc Trs_pre Trs_post (pa_adj = rs_post ) [pweight = SHO], absorb(conacct date)  cluster(mru) 
+		est save "${temp}cv4h", replace
+	ivreghdfe B post_treated post_treated_* hhsize hhemp good_job sub single Trs_pre Trs_post (pa_adj = rs_post ) [pweight = SHO] if paws==1, absorb(mru date)  cluster(mru) 
+		est save "${temp}cv5h", replace
+	ivreghdfe B post_treated inc__post_treated inc Trs_pre Trs_post (pa_adj = rs_post ) [pweight = SHO] if paws==1, absorb(mru date)  cluster(mru) 
+		est save "${temp}cv6h", replace
+
+	het_post
+	het_export
+drop ln_cv
 
 **** ADDITIONAL RESULTS 
 main_nrw

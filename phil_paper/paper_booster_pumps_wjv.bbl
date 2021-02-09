@@ -1,14 +1,22 @@
-\begin{thebibliography}{45}
+\begin{thebibliography}{38}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
   \providecommand{\doi}[1]{doi: #1}\else
   \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
 
-\bibitem[Auerbach and Pellechio(1978)]{auerbach1978two}
-A.~J. Auerbach and A.~J. Pellechio.
-\newblock The two-part tariff and voluntary market participation.
-\newblock \emph{The Quarterly Journal of Economics}, pages 571--587, 1978.
+\bibitem[Allcott et~al.(2016)Allcott, Collard-Wexler, and
+  O'Connell]{allcott2016electricity}
+H.~Allcott, A.~Collard-Wexler, and S.~D. O'Connell.
+\newblock How do electricity shortages affect industry? evidence from india.
+\newblock \emph{American Economic Review}, 106\penalty0 (3):\penalty0 587--624,
+  2016.
+
+\bibitem[Ashraf et~al.(2017)Ashraf, Glaeser, Holland, and
+  Steinberg]{ashraf2017water}
+N.~Ashraf, E.~Glaeser, A.~Holland, and B.~M. Steinberg.
+\newblock Water, health and wealth.
+\newblock Technical report, National Bureau of Economic Research, 2017.
 
 \bibitem[Aydogdu and Firat(2015)]{aydogdu2015estimation}
 M.~Aydogdu and M.~Firat.
@@ -17,6 +25,12 @@ M.~Aydogdu and M.~Firat.
 \newblock \emph{Water resources management}, 29\penalty0 (5):\penalty0
   1575--1590, 2015.
 
+\bibitem[Baisa et~al.(2010)Baisa, Davis, Salant, and Wilcox]{baisa2010welfare}
+B.~Baisa, L.~W. Davis, S.~W. Salant, and W.~Wilcox.
+\newblock The welfare costs of unreliable water service.
+\newblock \emph{Journal of Development Economics}, 92\penalty0 (1):\penalty0
+  1--12, 2010.
+
 \bibitem[Bennett(2012)]{bennett2012does}
 D.~Bennett.
 \newblock Does clean water make you dirty? water supply and sanitation in the
@@ -24,31 +38,13 @@ D.~Bennett.
 \newblock \emph{Journal of Human Resources}, 47\penalty0 (1):\penalty0
   146--173, 2012.
 
-\bibitem[Boland and Whittington(2000)]{boland2000political}
-J.~J. Boland and D.~Whittington.
-\newblock The political economy of water tariff design in developing countries:
-  increasing block tariffs versus uniform price with rebate.
-\newblock \emph{The political economy of water pricing reforms}, 215235, 2000.
-
-\bibitem[Borenstein(2012)]{borenstein2012redistributional}
-S.~Borenstein.
-\newblock The redistributional impact of nonlinear electricity pricing.
-\newblock \emph{American Economic Journal: Economic Policy}, 4\penalty0
-  (3):\penalty0 56--90, 2012.
-
-\bibitem[Burtless and Hausman(1978)]{burtless1978effect}
-G.~Burtless and J.~A. Hausman.
-\newblock The effect of taxation on labor supply: Evaluating the gary negative
-  income tax experiment.
-\newblock \emph{Journal of political Economy}, 86\penalty0 (6):\penalty0
-  1103--1130, 1978.
-
-\bibitem[Calandro et~al.(2012)Calandro, Gillwald, Deen-Swarray, Stork, and
-  Esselaar]{calandro2012mobile}
-E.~Calandro, A.~Gillwald, M.~Deen-Swarray, C.~Stork, and S.~Esselaar.
-\newblock Mobile usage at the base of the pyramid in south africa.
-\newblock \emph{International Bank for Reconstruction and Development/The World
-  Bank}, pages 1--74, 2012.
+\bibitem[Bhalotra et~al.(2017)Bhalotra, Diaz-Cayeros, Miller, Miranda, and
+  Venkataramani]{bhalotra2017urban}
+S.~R. Bhalotra, A.~Diaz-Cayeros, G.~Miller, A.~Miranda, and A.~S.
+  Venkataramani.
+\newblock Urban water disinfection and mortality decline in developing
+  countries.
+\newblock Technical report, National Bureau of Economic Research, 2017.
 
 \bibitem[Cutler and Miller(2005)]{cutler2005role}
 D.~Cutler and G.~Miller.
@@ -84,18 +80,10 @@ M.~Dumol.
   of the world's largest water privatization}.
 \newblock The World Bank, 2000.
 
-\bibitem[Einav et~al.(2013)Einav, Finkelstein, Ryan, Schrimpf, and
-  Cullen]{einav2013selection}
-L.~Einav, A.~Finkelstein, S.~P. Ryan, P.~Schrimpf, and M.~R. Cullen.
-\newblock Selection on moral hazard in health insurance.
-\newblock \emph{American Economic Review}, 103\penalty0 (1):\penalty0 178--219,
-  2013.
-
-\bibitem[Feldstein(1972)]{feldstein1972equity}
-M.~S. Feldstein.
-\newblock Equity and efficiency in public sector pricing: the optimal two-part
-  tariff.
-\newblock \emph{The Quarterly Journal of Economics}, pages 176--187, 1972.
+\bibitem[Frauendorfer and Liemberger(2010)]{frauendorfer2010issues}
+R.~Frauendorfer and R.~Liemberger.
+\newblock \emph{The issues and challenges of reducing non-revenue water}.
+\newblock Asian Development Bank, 2010.
 
 \bibitem[Galiani et~al.(2005)Galiani, Gertler, and
   Schargrodsky]{galiani2005water}
@@ -113,18 +101,22 @@ S.~Gamper-Rabindran, S.~Khan, and C.~Timmins.
 \newblock \emph{Journal of Development Economics}, 92\penalty0 (2):\penalty0
   188--200, 2010.
 
+\bibitem[Hardy and McCasland(2019)]{hardy}
+M.~Hardy and J.~McCasland.
+\newblock {Lights Off, Lights On: The Effects of Electricity Shortages on Small
+  Firms}.
+\newblock \emph{The World Bank Economic Review}, 35\penalty0 (1):\penalty0
+  19--33, 11 2019.
+\newblock ISSN 0258-6770.
+\newblock \doi{10.1093/wber/lhz028}.
+\newblock URL \url{https://doi.org/10.1093/wber/lhz028}.
+
 \bibitem[Hoque and Wichelns(2013)]{hoque2013state}
 S.~F. Hoque and D.~Wichelns.
 \newblock State-of-the-art review: designing urban water tariffs to recover
   costs and promote wise use.
 \newblock \emph{International journal of water resources development},
   29\penalty0 (3):\penalty0 472--491, 2013.
-
-\bibitem[Horton and Zeckhauser(2016)]{horton2016owning}
-J.~J. Horton and R.~J. Zeckhauser.
-\newblock Owning, using and renting: Some simple economics of the" sharing
-  economy".
-\newblock Technical report, National Bureau of Economic Research, 2016.
 
 \bibitem[Ito(2014)]{ito2014consumers}
 K.~Ito.
@@ -144,18 +136,6 @@ R.~Jimenez-Redal, A.~Parker, and P.~Jeffrey.
 P.~L. Joskow.
 \newblock Regulation of natural monopoly.
 \newblock \emph{Handbook of law and economics}, 2:\penalty0 1227--1348, 2007.
-
-\bibitem[Kayaga and Franceys(2007)]{kayaga2007costs}
-S.~Kayaga and R.~Franceys.
-\newblock Costs of urban utility water connections: Excessive burden to the
-  poor.
-\newblock \emph{Utilities Policy}, 15\penalty0 (4):\penalty0 270--277, 2007.
-
-\bibitem[Keener et~al.(2010)Keener, Luengo, and Banerjee]{keener2010provision}
-S.~Keener, M.~Luengo, and S.~G. Banerjee.
-\newblock Provision of water to the poor in africa: Experience with water
-  standposts and the informal water sector.
-\newblock 2010.
 
 \bibitem[Kleiner and Rajani(2001)]{kleiner2001comprehensive}
 Y.~Kleiner and B.~Rajani.
@@ -192,42 +172,37 @@ J.-J. Laffont and J.~Tirole.
 \newblock \emph{A theory of incentives in procurement and regulation}.
 \newblock MIT press, 1993.
 
+\bibitem[Liemberger et~al.(2006)Liemberger, Marin,
+  et~al.]{liemberger2006challenge}
+R.~Liemberger, P.~Marin, et~al.
+\newblock The challenge of reducing non-revenue water in developing
+  countries--how the private sector can help: A look at performance-based
+  service contracting.
+\newblock 2006.
+
+\bibitem[Lim and Yurukoglu(2018)]{lim2018dynamic}
+C.~S. Lim and A.~Yurukoglu.
+\newblock Dynamic natural monopoly regulation: Time inconsistency, moral
+  hazard, and political environments.
+\newblock \emph{Journal of Political Economy}, 126\penalty0 (1):\penalty0
+  263--312, 2018.
+
 \bibitem[McIntosh(2003)]{mcintosh2003asian}
 A.~McIntosh.
 \newblock \emph{Asian water supplies: reaching the urban poor}.
 \newblock Asian Development Bank, 2003.
 
-\bibitem[McRae(2014)]{mcrae2014infrastructure}
+\bibitem[McKenzie and Ray(2009)]{mckenzie2009urban}
+D.~McKenzie and I.~Ray.
+\newblock Urban water supply in india: status, reform options and possible
+  lessons.
+\newblock \emph{Water Policy}, 11\penalty0 (4):\penalty0 442--460, 2009.
+
+\bibitem[McRae(2015)]{mcrae2015infrastructure}
 S.~McRae.
 \newblock Infrastructure quality and the subsidy trap.
-\newblock \emph{The American Economic Review}, 105\penalty0 (1):\penalty0
-  35--66, 2014.
-
-\bibitem[Moffitt(1986)]{moffitt1986econometrics}
-R.~Moffitt.
-\newblock The econometrics of piecewise-linear budget constraints: a survey and
-  exposition of the maximum likelihood method.
-\newblock \emph{Journal of Business \& Economic Statistics}, 4\penalty0
-  (3):\penalty0 317--328, 1986.
-
-\bibitem[Mustefa and Lika(2016)]{mustefa2016energy}
-A.~Mustefa and T.~Lika.
-\newblock The energy-gender nexus: A case study among urban and peri-urban
-  female headed households in arba-minch town, southern ethiopia.
-\newblock \emph{Ethiopian Journal of the Social Sciences and Humanities},
-  12\penalty0 (1):\penalty0 1--38, 2016.
-
-\bibitem[Nauges and Van~den Berg(2006)]{nauges2006water}
-C.~Nauges and C.~Van~den Berg.
-\newblock Water markets, demand, and cost recovery for piped water supply
-  services: evidence from southwest sri lanka.
-\newblock 2006.
-
-\bibitem[Oi(1971)]{oi1971disneyland}
-W.~Y. Oi.
-\newblock A disneyland dilemma: Two-part tariffs for a mickey mouse monopoly.
-\newblock \emph{The Quarterly Journal of Economics}, 85\penalty0 (1):\penalty0
-  77--96, 1971.
+\newblock \emph{American Economic Review}, 105\penalty0 (1):\penalty0 35--66,
+  2015.
 
 \bibitem[Olmstead(2009)]{olmstead2009reduced}
 S.~M. Olmstead.
@@ -235,6 +210,11 @@ S.~M. Olmstead.
   prices.
 \newblock \emph{Journal of Business \& Economic Statistics}, 27\penalty0
   (1):\penalty0 84--94, 2009.
+
+\bibitem[Spence(1975)]{spence1975monopoly}
+A.~M. Spence.
+\newblock Monopoly, quality, and regulation.
+\newblock \emph{The Bell Journal of Economics}, pages 417--429, 1975.
 
 \bibitem[Strand and Walker(2005)]{strand2005water}
 J.~Strand and I.~Walker.
@@ -254,35 +234,16 @@ D.~D.~J. Taylor.
   water systems with a self-actuated, back-pressure regulating valve}.
 \newblock PhD thesis, Massachusetts Institute of Technology, 2014.
 
-\bibitem[Timmins(2002)]{timmins2002measuring}
-C.~Timmins.
-\newblock Measuring the dynamic efficiency costs of regulators' preferences:
-  Municipal water utilities in the arid west.
-\newblock \emph{Econometrica}, 70\penalty0 (2):\penalty0 603--629, 2002.
+\bibitem[{US Environmental Protection Agency}(2015)]{epa2015}
+{US Environmental Protection Agency}.
+\newblock Drinking water infrastructure needs survey and assessment.
+\newblock \emph{Sixth Report to Congress}, 2015.
 
 \bibitem[Ward et~al.(2017)Ward, Selby, Gee, and Savic]{ward2017deterioration}
 B.~Ward, A.~Selby, S.~Gee, and D.~Savic.
 \newblock Deterioration modelling of small-diameter water pipes under limited
   data availability.
 \newblock \emph{Urban Water Journal}, 14\penalty0 (7):\penalty0 743--749, 2017.
-
-\bibitem[{Water and Sanitation for the Urban Poor}(2013)]{wsup}
-{Water and Sanitation for the Urban Poor}.
-\newblock Getting to scale in urban water supply.
-\newblock 2013.
-
-\bibitem[Whittington(1992)]{whittington1992possible}
-D.~Whittington.
-\newblock Possible adverse effects of increasing block water tariffs in
-  developing countries.
-\newblock \emph{Economic Development and Cultural Change}, 41\penalty0
-  (1):\penalty0 75--87, 1992.
-
-\bibitem[WHO/UNICEF(2015)]{WB:2015}
-WHO/UNICEF.
-\newblock Piped water coverage, 2015.
-\newblock data retrieved from World Development Indicators,
-  \url{https://data.worldbank.org/indicator/SH.H2O.BASW.UR.ZS}.
 
 \bibitem[Zhang and Xu(2016)]{zhang2016long}
 J.~Zhang and L.~C. Xu.

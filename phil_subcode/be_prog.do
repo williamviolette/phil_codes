@@ -40,7 +40,7 @@ prog def spec_B_1st_stage
 end
 cap prog drop spec_B_red_form
 prog def spec_B_red_form
-	reghdfe cv  post_treated  rs_post Trs_pre Trs_post [pweight = SHO] if paws==1, absorb(mru date)  cluster(mru) 
+	reghdfe B  post_treated  rs_post Trs_pre Trs_post [pweight = SHO] if paws==1, absorb(mru date)  cluster(mru) 
 end
 
 
@@ -94,7 +94,7 @@ prog def main_post
 		estadd local  ctrl_time1 "\checkmark"
 		estadd local  ctrl_place "\checkmark"
 		estadd local  ctrl_ind ""
-		estadd local  dataset "Household Survey"
+		estadd local  dataset "Connection Survey"
 	est save "${temp}cv2s", replace
 
     local value1=string(`=$dqdrm*($cm/-$alpham)',"%12.1fc")
@@ -121,9 +121,9 @@ prog def main_export
 			  label noomitted ///
 			  varlabels(, el( post_treated "[0.5em]" pa_adj "[0.5em]" )) ///
 			  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
-			  stats( varmean  r2 N dataset , ///
-			  labels( "Mean" "$\text{R}^{2}$"  "N" "Dataset" )  ///
-			    fmt( %12.2fc  %12.3fc %12.0fc %12s  )   ) ///
+			  stats( varmean  r2 N ctrl_ind ctrl_place  dataset , ///
+			  labels( "Mean" "$\text{R}^{2}$"  "N"  "Connection FE" "Small Area FE"  "Dataset" )  ///
+			    fmt( %12.2fc  %12.3fc %12.0fc %12s  %12s  %12s  )   ) ///
 			  starlevels(  "\textsuperscript{c}" 0.10    "\textsuperscript{b}" 0.05  "\textsuperscript{a}" 0.01) 
 
 
@@ -152,8 +152,54 @@ end
 
 
 
+cap prog drop main_export_time
+prog def main_export_time
+	time_gen
+
+		forvalues r=1/2 {
+			est use "${temp}cv`r's"
+			est sto cv`r's
+		}
+			
+	est use "${temp}cv_times"
+		est sto cv_times
+	est use "${temp}B_times"
+		est sto B_times
+
+
+	estout cv1s cv_times cv2s B_times using "${output}reg_wtime.tex", replace  style(tex) ///
+		 keep(  post_treated PT_63_pre PT_2_pre PT_0 PT_1 PT_2 PT_3 PT_4 PT_56 pa_adj  ) ///
+		order(  post_treated PT_63_pre PT_2_pre PT_0 PT_1 PT_2 PT_3 PT_4 PT_56 pa_adj   ) ///
+			  label noomitted ///
+			  varlabels(, el( post_treated "[0.3em]" PT_63_pre "[0.3em]" PT_2_pre "[0.3em]" PT_0 "[0.3em]" PT_1 "[0.3em]" PT_2 "[0.3em]" PT_3 "[0.3em]"  PT_4 "[0.3em]" PT_56 "[0.5em]" pa_adj "[0.5em]" )) ///
+			  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
+			  stats( varmean  r2 N ctrl_ind ctrl_place  dataset , ///
+			  labels( "Mean" "$\text{R}^{2}$"  "N"  "Connection FE" "Small Area FE"  "Dataset" )  ///
+			    fmt( %12.2fc  %12.3fc %12.0fc %12s  %12s  %12s  )   ) ///
+			  starlevels(  "\textsuperscript{c}" 0.10    "\textsuperscript{b}" 0.05  "\textsuperscript{a}" 0.01) 
+
+
+	estout cv1s cv_times  cv2s B_times  using "${output}reg_full_wtime.tex", replace  style(tex) ///
+		 keep(  post_treated PT_63_pre PT_2_pre PT_0 PT_1 PT_2 PT_3 PT_4 PT_56 pa_adj Trs_pre Trs_post ) ///
+		order(  post_treated PT_63_pre PT_2_pre PT_0 PT_1 PT_2 PT_3 PT_4 PT_56 pa_adj Trs_pre Trs_post ) ///
+			  label noomitted ///
+			  varlabels(, el( post_treated "[0.3em]" PT_63_pre "[0.3em]" PT_2_pre "[0.3em]" PT_0 "[0.3em]" PT_1 "[0.3em]" PT_2 "[0.3em]" PT_3 "[0.3em]"  PT_4 "[0.3em]" PT_56 "[0.5em]"  pa_adj "[0.5em]" )) ///
+			  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
+			  stats( varmean  r2 N dataset , ///
+			  labels( "Mean" "$\text{R}^{2}$"  "N" "Dataset" )  ///
+			    fmt( %12.2fc  %12.3fc %12.0fc %12s  )   ) ///
+			  starlevels(  "\textsuperscript{c}" 0.10    "\textsuperscript{b}" 0.05  "\textsuperscript{a}" 0.01) 
+	time_drop
+end
+
+
+
+
+
+
 cap prog drop main_export_robust
 prog def main_export_robust
+
 		forvalues r=1/2 {
 			est use "${temp}cv`r'_robust"
 			est sto cv`r's_robust
@@ -174,22 +220,22 @@ end
 
 
 
+
+
 cap prog drop stage_export
 prog def stage_export
-
 		forvalues r=1/4 {
 			est use "${temp}e`r'"
 			est sto e`r'
 		}
-
 	estout e1 e2 e3 e4 using "${output}reg_stages.tex", replace  style(tex) ///
 		 keep(  post_treated rs_post Trs_pre Trs_post ) ///
 		order(  post_treated rs_post Trs_pre Trs_post  ) ///
 			  label noomitted ///
 			  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
-			  stats(  r2 N dataset , ///
-			  labels(  "$\text{R}^{2}$"  "N" "Dataset" )  ///
-			    fmt(  %12s %12s %12.3fc %12.0fc %12s  )   ) ///
+			  stats(  r2 N , ///
+			  labels(  "$\text{R}^{2}$"  "N"  )  ///
+			    fmt(  %12.3fc %12.0fc   )   ) ///
 			  starlevels(  "\textsuperscript{c}" 0.10    "\textsuperscript{b}" 0.05  "\textsuperscript{a}" 0.01) 
 end
 
@@ -199,7 +245,7 @@ end
 cap prog drop het_post
 prog def het_post
 
-		qui mean cv [pweight = SHO ] 
+	qui mean cv [pweight = SHO ] 
     	mat j=e(b)
 	est use "${temp}cv1h"
 		estadd scalar varmean = `=j[1,1]'
@@ -209,7 +255,7 @@ prog def het_post
 		estadd local dataset "Billing Panel"
 	est save "${temp}cv1hs", replace
 
-		qui mean cv [pweight = SHO ] 
+	qui mean cv [pweight = SHO ] 
     	mat j=e(b)
 	est use "${temp}cv2h"
 		estadd scalar varmean = `=j[1,1]'
@@ -219,25 +265,47 @@ prog def het_post
 		estadd local dataset "Billing Panel"
 	est save "${temp}cv2hs", replace
 
-		qui mean B [pweight = SHO ]  if paws==1
+
+	qui mean ln_cv [pweight = SHO ] 
     	mat j=e(b)
 	est use "${temp}cv3h"
 		estadd scalar varmean = `=j[1,1]'
 		estadd local  ctrl_time1 "\checkmark"
-		estadd local  ctrl_place "\checkmark"
-		estadd local  ctrl_ind ""
-		estadd local  dataset "Household Survey"
+		estadd local  ctrl_place ""
+		estadd local  ctrl_ind "\checkmark"
+		estadd local dataset "Billing Panel"
 	est save "${temp}cv3hs", replace
+
+	qui mean ln_cv [pweight = SHO ] 
+    	mat j=e(b)
+	est use "${temp}cv4h"
+		estadd scalar varmean = `=j[1,1]'
+		estadd local  ctrl_time1 "\checkmark"
+		estadd local  ctrl_place ""
+		estadd local  ctrl_ind "\checkmark"
+		estadd local dataset "Billing Panel"
+	est save "${temp}cv4hs", replace
+
 
 		qui mean B [pweight = SHO ]  if paws==1
     	mat j=e(b)
-	est use "${temp}cv4h"
+	est use "${temp}cv5h"
 		estadd scalar varmean = `=j[1,1]'
 		estadd local  ctrl_time1 "\checkmark"
 		estadd local  ctrl_place "\checkmark"
 		estadd local  ctrl_ind ""
 		estadd local  dataset "Household Survey"
-	est save "${temp}cv4hs", replace
+	est save "${temp}cv5hs", replace
+
+		qui mean B [pweight = SHO ]  if paws==1
+    	mat j=e(b)
+	est use "${temp}cv6h"
+		estadd scalar varmean = `=j[1,1]'
+		estadd local  ctrl_time1 "\checkmark"
+		estadd local  ctrl_place "\checkmark"
+		estadd local  ctrl_ind ""
+		estadd local  dataset "Household Survey"
+	est save "${temp}cv6hs", replace
 end
 
 
@@ -245,14 +313,14 @@ end
 cap prog drop het_export
 prog def het_export
 
-		forvalues r=1/4 {
+		forvalues r=1/6 {
 			est use "${temp}cv`r'hs"
 			est sto cv`r'hs
 		}
 
 	lab var post_treated "Post"
 
-	estout cv1hs cv2hs cv3hs cv4hs using "${output}reghet.tex", replace  style(tex) ///
+	estout cv1hs cv2hs cv3hs cv4hs cv5hs cv6hs using "${output}reghet.tex", replace  style(tex) ///
 		 keep(  post_treated pa_adj  ///
 		 		post_treated_hhsize post_treated_hhemp post_treated_good_job post_treated_sub post_treated_single inc__post_treated  ///
 		 		hhsize hhemp good_job sub single inc  ) ///
@@ -260,13 +328,13 @@ prog def het_export
 				post_treated_hhsize post_treated_hhemp post_treated_good_job post_treated_sub post_treated_single inc__post_treated  ///
 		 		hhsize hhemp good_job sub single inc ) ///
 			  label noomitted ///
-			  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
+			  mlabels(,none)   collabels(none)  cells( b(fmt(3) star ) se(par fmt(3)) ) ///
 			  stats( varmean ctrl_ind ctrl_place r2 N dataset , ///
 			  labels( "Mean" "Household FE" "Small Area FE" "$\text{R}^{2}$"  "N" "Dataset" )  ///
 			    fmt( %12.2fc  %12s %12s %12.3fc %12.0fc %12s  )   ) ///
 			  starlevels(  "\textsuperscript{c}" 0.10    "\textsuperscript{b}" 0.05  "\textsuperscript{a}" 0.01) 
 
-	estout cv1hs cv2hs cv3hs cv4hs using "${output}reghet_stars.tex", replace  style(tex) ///
+	estout cv1hs cv2hs cv3hs cv4hs cv5hs cv6hs using "${output}reghet_stars.tex", replace  style(tex) ///
 		 keep(  post_treated   ///
 		 		post_treated_hhsize post_treated_hhemp post_treated_good_job post_treated_sub post_treated_single inc__post_treated  ///
 		 		hhsize hhemp good_job sub single inc  ) ///
@@ -274,18 +342,18 @@ prog def het_export
 				post_treated_hhsize post_treated_hhemp post_treated_good_job post_treated_sub post_treated_single inc__post_treated  ///
 		 		hhsize hhemp good_job sub single inc ) ///
 			  label noomitted ///
-			  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
+			  mlabels(,none)   collabels(none)  cells( b(fmt(3) star ) se(par fmt(3)) ) ///
 			  stats( varmean ctrl_ind ctrl_place r2 N dataset , ///
 			  labels( "Mean" "Household FE" "Small Area FE" "$\text{R}^{2}$"  "N" "Dataset" )  ///
 			    fmt( %12.2fc  %12s %12s %12.3fc %12.0fc %12s  )   ) 
 
-	estout cv1hs cv3hs using "${output}reghet_stars_int.tex", replace  style(tex) ///
+	estout cv1hs cv2hs cv3hs cv4hs cv5hs cv6hs using "${output}reghet_stars_int.tex", replace  style(tex) ///
 		 keep(  post_treated   ///
 		 		post_treated_hhsize post_treated_hhemp post_treated_good_job post_treated_sub post_treated_single  ) ///
 		order(  post_treated  ///
 				post_treated_hhsize post_treated_hhemp post_treated_good_job post_treated_sub post_treated_single   ) ///
 			  label noomitted ///
-			  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
+			  mlabels(,none)   collabels(none)  cells( b(fmt(3) star ) se(par fmt(3)) ) ///
 			  stats( varmean ctrl_ind ctrl_place r2 N dataset , ///
 			  labels( "Mean" "Household FE" "Small Area FE" "$\text{R}^{2}$"  "N" "Dataset" )  ///
 			    fmt( %12.2fc  %12s %12s %12.3fc %12.0fc %12s  )   ) 
@@ -294,6 +362,122 @@ prog def het_export
 	lab var post_treated "After Pipe Replacement"
 
 end
+
+
+
+* cap prog drop time_gen
+* prog def time_gen
+* 	g T = year-year_inst if treated==1
+* 	g PT_0 = T==0
+* 	lab var PT_0 "Year of Pipe Rep"
+* 	forvalues r=1/4 {
+* 		g PT_`r' = T==`r'
+* 		lab var PT_`r' "`r' yr After Pipe Rep"
+* 	}
+* 	g PT_56 = T>=5 & T<=6
+* 	lab var PT_56 "5-6 yr After Pipe Rep"
+* 	drop T
+* end
+
+cap prog drop time_gen
+prog def time_gen
+	g T = year-year_inst if treated==1
+
+	* g PT_56_pre = T<=-5 & T>=-6
+	* lab var PT_56_pre "5-6 yr Before Pipe Rep"
+	* forvalues r=-4/-2 {
+	* 	g PT_`=abs(`r')'_pre = T==`r'
+	* 	lab var PT_`=abs(`r')'_pre "`=abs(`r')' yr Before Pipe Rep"
+	* }
+
+	g PT_63_pre = T>=-6 & T<=-3
+	lab var PT_63_pre "3-6 yr Before Pipe Rep"
+	g PT_2_pre = T==-2
+	lab var PT_2_pre "2 yr Before Pipe Rep"
+
+	g PT_0 = T==0
+	lab var PT_0 "Year of Pipe Rep"
+	forvalues r=1/4 {
+		g PT_`r' = T==`r'
+		lab var PT_`r' "`r' yr After Pipe Rep"
+	}
+	g PT_56 = T>=5 & T<=6
+	lab var PT_56 "5-6 yr After Pipe Rep"
+	drop T
+end
+
+
+cap prog drop time_drop
+prog def time_drop
+	drop PT_*
+end 
+
+
+cap prog drop spec_time
+prog def spec_time
+	time_gen
+		ivreghdfe cv PT_* Trs_pre Trs_post (pa_adj = rs_post )  [pweight = SHO], absorb(conacct date)  cluster(mru) 
+		est save "${temp}cv_time", replace
+		ivreghdfe B PT_63_pre PT_2_pre PT_0 PT_1 PT_2 Trs_pre Trs_post (pa_adj = rs_post )  [pweight = SHO] if paws==1, absorb(mru date)  cluster(mru) 
+		est save "${temp}B_time", replace
+	time_drop 
+end
+
+cap prog drop time_post
+prog def time_post
+	qui mean cv [pweight = SHO ] 
+    	mat j=e(b)
+	est use "${temp}cv_time"
+		mat ee=e(b)
+		estadd scalar varmean = `=j[1,1]'
+		estadd local  ctrl_time1 "\checkmark"
+		estadd local  ctrl_place ""
+		estadd local  ctrl_ind "\checkmark"
+		estadd local dataset "Billing Panel"
+	est save "${temp}cv_times", replace
+
+	qui mean B [pweight = SHO ]  if paws==1
+    	mat j=e(b)
+	est use "${temp}B_time"
+		mat ee=e(b)
+		estadd scalar varmean = `=j[1,1]'
+		estadd local  ctrl_time1 "\checkmark"
+		estadd local  ctrl_place "\checkmark"
+		estadd local  ctrl_ind ""
+		estadd local  dataset "Connection Survey"
+	est save "${temp}B_times", replace
+end
+
+
+
+
+
+cap prog drop time_export
+prog def time_export
+	time_gen
+
+			est use "${temp}cv_times"
+			est sto cv_times
+			est use "${temp}B_times"
+			est sto B_times
+
+	estout cv_times B_times using "${output}time_reg.tex", replace  style(tex) ///
+		 keep( PT_63_pre PT_2_pre PT_0 PT_1 PT_2 PT_3 PT_4 PT_56 pa_adj  ) ///
+		order( PT_63_pre PT_2_pre  PT_0 PT_1 PT_2 PT_3 PT_4 PT_56 pa_adj  ) ///
+			  label noomitted ///
+			  varlabels(, el( PT_63_pre "[0.5em]" PT_2_pre "[0.5em]" PT_0 "[0.5em]" PT_1 "[0.5em]" PT_2 "[0.5em]" PT_3 "[0.5em]"  PT_4 "[0.5em]" PT_56 "[0.5em]" pa_adj "[0.5em]" )) ///
+			  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
+			  stats( varmean  r2 N ctrl_ind ctrl_place  dataset , ///
+			  labels( "Mean" "$\text{R}^{2}$"  "N"  "Connection FE" "Small Area FE"  "Dataset" )  ///
+			    fmt( %12.2fc  %12.3fc %12.0fc %12s  %12s  %12s  )   ) ///
+			  starlevels(  "\textsuperscript{c}" 0.10    "\textsuperscript{b}" 0.05  "\textsuperscript{a}" 0.01) 
+
+	time_drop
+end
+
+
+
+
 
 
 
@@ -630,27 +814,40 @@ prog def main_nrw
 	preserve
 		use "${temp}final_nrw.dta", clear
 
-	reghdfe supp5 post_treated, a(dma date) cluster(dma)
+	time_gen
+
+		g post_treated_alt = post_treated==1 & PT_1!=1 & PT_2!=1 & PT_3!=1
+		g post_treated1 = post_treated==1 & (PT_1==1 | PT_2==1 | PT_3==1)
+
+		* g post_treated_alt_1 = post_treated==1 & PT_1!=1 & PT_2!=1 & PT_3!=1 & zm==.
+		* g post_treated_1 = post_treated==1 & (PT_1==1 | PT_2==1 | PT_3==1) & zm==.
+
+		drop post_treated
+		ren post_treated1 post_treated
+
+	reghdfe supp5 post_treated*, a(dma date) cluster(dma)
 		est sto nrw1
 		sum supp5
 		estadd scalar varmean = `=r(mean)'
 
-	reghdfe supp post_treated, a(dma date) cluster(dma)
+	reghdfe supp post_treated*, a(dma date) cluster(dma)
 		est sto nrw2
 		sum supp
 		estadd scalar varmean = `=r(mean)'
 
-	reghdfe bill post_treated, a(dma date) cluster(dma)
+	reghdfe bill post_treated*, a(dma date) cluster(dma)
 		est sto nrw3
 		sum bill
 		estadd scalar varmean = `=r(mean)'
 
-	reghdfe nrw post_treated, a(dma date) cluster(dma)
+	reghdfe nrw post_treated*, a(dma date) cluster(dma)
 		est sto nrw4
 		sum nrw
 		estadd scalar varmean = `=r(mean)'
 
 	lab var post_treated "After Pipe Replacement"
+
+	* estout nrw1 nrw2 nrw3 nrw4  using "${output}nrw.tex", replace  style(tex) ///
 
 	estout nrw1 nrw2 nrw3 nrw4  using "${output}nrw.tex", replace  style(tex) ///
 	 keep(  post_treated  ) ///
@@ -661,6 +858,17 @@ prog def main_nrw
 		  labels( "Mean"  "$\text{R}^{2}$"  "N"  )  ///
 		    fmt( %12.2fc   %12.3fc %12.0fc  )   ) ///
 		  starlevels(  "\textsuperscript{c}" 0.10    "\textsuperscript{b}" 0.05  "\textsuperscript{a}" 0.01) 
+
+	estout nrw2 using "${output}nrw_simple.tex", replace  style(tex) ///
+	 keep(  post_treated  ) ///
+	order(  post_treated  ) ///
+		  label noomitted ///
+		  mlabels(,none)   collabels(none)  cells( b(fmt(2) star ) se(par fmt(2)) ) ///
+		  stats( varmean  r2 N  , ///
+		  labels( "Mean"  "$\text{R}^{2}$"  "N"  )  ///
+		    fmt( %12.2fc   %12.3fc %12.0fc  )   ) ///
+		  starlevels(  "\textsuperscript{c}" 0.10    "\textsuperscript{b}" 0.05  "\textsuperscript{a}" 0.01) 
+
 	restore
 end
 
@@ -735,8 +943,10 @@ prog def main_geo
 
 		g o =1
 		gegen Wtemp = sum(o), by(zm)
+		g znm=zm!=.
+		gegen NN=sum(o), by(znm)
 		drop o
-		replace Wtemp=Wtemp/_N
+		replace Wtemp=Wtemp/NN
 
 		g CPe = .
 		g W = .
@@ -748,25 +958,39 @@ prog def main_geo
 			replace W = `=r(mean)' in `v'
 		}
 
+		* levelsof zm
+		* foreach v in `=r(levels)' {
+		* 	g ZM_`v'_post_treated=post_treated==1 & zm==`v'
+		* 	lab var ZM_`v'_post_treated " `v' "
+		* }
+		time_gen
+
 		levelsof zm
 		foreach v in `=r(levels)' {
-			g ZM_`v'_post_treated=post_treated==1 & zm==`v'
+			* g ZP_`v'_post_treated = post_treated==1 & PT_0==1 & zm==`v'
+			* g ZC_`v'_post_treated = post_treated==1 & PT_0!=1 & PT_1!=1 & PT_2!=1 & PT_3!=1 & zm==`v'
+			g ZC_`v'_post_treated = post_treated==1 & PT_1!=1 & PT_2!=1 & PT_3!=1 & zm==`v'
+			g ZM_`v'_post_treated = post_treated==1 & (PT_1==1 | PT_2==1 | PT_3==1) & zm==`v'
 			lab var ZM_`v'_post_treated " `v' "
 		}
+		* g post_treated_alt2 = post_treated==1 & PT_0==1 & zm==. 
+		* g post_treated_alt = post_treated==1 & PT_0!=1 & PT_1!=1 & PT_2!=1 & PT_3!=1 & zm==.
+		g post_treated_alt = post_treated==1 & PT_1!=1 & PT_2!=1 & PT_3!=1 & zm==.
+		g post_treated_alt1 = post_treated==1 & (PT_1==1 | PT_2==1 | PT_3==1) & zm==.
 
-		reghdfe B  ZM_*_post_treated [pweight=SHO] if paws==1, a(mru date) cluster(mru)
+		reghdfe B  ZM_*_post_treated ZC_*_post_treated post_treated_alt* [pweight=SHO] if paws==1, a(mru date) cluster(conacct)
 		est save "${temp}co_B", replace
 		mat def be = e(b)
 
-		reghdfe cv ZM_*_post_treated [pweight=SHO], a(conacct date) cluster(mru)
+		reghdfe cv ZM_*_post_treated ZC_*_post_treated post_treated_alt*  [pweight=SHO], a(conacct date) cluster(conacct)
 		est save "${temp}co_cv", replace	
 		mat def ce = e(b)
 
-		reghdfe AS ZM_*_post_treated [pweight=SHO], a(conacct date) cluster(mru)
+		reghdfe AS ZM_*_post_treated ZC_*_post_treated post_treated_alt post_treated_alt*  [pweight=SHO], a(conacct date) cluster(conacct)
 		est save "${temp}co_as", replace	
 		mat def ae = e(b)
 
-		reghdfe no_flow ZM_*_post_treated [pweight=SHO] if paws==1, a(mru date) cluster(mru)
+		reghdfe no_flow ZM_*_post_treated ZC_*_post_treated post_treated_alt post_treated_alt1  [pweight=SHO] if paws==1, a(mru date) cluster(mru)
 		est save "${temp}co_nf", replace
 		mat def ne = e(b)
 
@@ -782,7 +1006,6 @@ prog def main_geo
 			replace Ae = ae[1,`r'] in `r'
 			replace NFe = ne[1,`r'] in `r'
 		}
-
 
 		g CVe = .
 		g NFm  = .
@@ -816,18 +1039,30 @@ prog def main_geo
 
 	use "${temp}final_comm.dta", clear
 
-	levelsof zm
-	foreach v in `=r(levels)' {
-		g ZM_`v'_post_treated=post_treated==1 & zm==`v'
-		lab var ZM_`v'_post_treated " `v' "
-	}
+	keep if amount>=0 & amount<=10000
+
+	sum cshr if zm!=.
+
+	time_gen
+		levelsof zm
+		foreach v in `=r(levels)' {
+			* g ZP_`v'_post_treated = post_treated==1 & PT_0==1 & zm==`v'
+			* g ZC_`v'_post_treated = post_treated==1 & PT_0!=1 & PT_1!=1 & PT_2!=1 & PT_3!=1 & zm==`v'
+			g ZC_`v'_post_treated = post_treated==1 & PT_1!=1 & PT_2!=1 & PT_3!=1 & zm==`v'
+			g ZM_`v'_post_treated = post_treated==1 & (PT_1==1 | PT_2==1 | PT_3==1) & zm==`v'
+			lab var ZM_`v'_post_treated " `v' "
+		}
+
+		g post_treated_alt = post_treated==1 & PT_1!=1 & PT_2!=1 & PT_3!=1 & zm==.
+		g post_treated_alt1 = post_treated==1 & (PT_1==1 | PT_2==1 | PT_3==1) & zm==.
 
 	levelsof zm
 	foreach v in `=r(levels)' {
 		sum cshr if zm==`v'
 	}
 
-	reghdfe amount ZM_*_post_treated , a(conacct date) cluster(mru)
+	
+	reghdfe amount  ZM_*_post_treated ZC_*_post_treated post_treated_alt*, a(conacct date) cluster(mru)
 	mat def mca = e(b)
 	est save "${temp}co_asc", replace
 
@@ -849,6 +1084,7 @@ prog def main_geo
 		g id=_n
 		save "${temp}geo_comm.dta", replace
 	restore
+
 end
 
 
@@ -860,6 +1096,8 @@ prog def export_geo
 		est use "${temp}`v'"
 		est sto `v'
 	}
+
+		* time_gen
 
 	estout co_B co_cv co_as co_asc co_nf  using "${output}reg_geo.tex", replace  style(tex) ///
 	 keep(  ZM_*_post_treated  ) ///
@@ -876,7 +1114,7 @@ prog def export_geo
 		merge 1:1 id using "${temp}geo_comm.dta", keep(3) nogen
 		g CS = CSe + BSe
 		g PS = Ae + CSHR*CAMT
-		g E  = 116
+		g E  = 188
 		g Lbar = CPe
 
 		file open newfile using "${output}geo_inputs.tex", write replace
@@ -886,7 +1124,7 @@ prog def export_geo
 				local value2=string(PS[`r'],"%12.0fc")
 				local value3=string(E[`r'],"%12.0fc")
 				local value4=string(Lbar[`r'],"%12.0fc")
-				file write newfile " `r' & `valuew' & `value1' & `value2' & `value3' \\" _n
+				file write newfile " `r' & `valuew' & `value1' & `value2' & `value3' & `value4' \\" _n
 			}
 		file close newfile
 	restore
@@ -894,6 +1132,13 @@ prog def export_geo
 end
 
 
+
+* cap prog drop export_geo_regs
+* prog def export_geo_regs
+
+* co_B co_cv co_as co_nf  
+
+* end
 
 
 *** PRINT PROGRAMS ***

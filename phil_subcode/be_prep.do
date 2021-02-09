@@ -91,7 +91,7 @@ use "${data}paws/clean/full_sample_b_1.dta", clear
 			destring job, replace force
 			ren class sclass
 
-		keep date year me conacct  SHO drink_freq filter fl_* hhsize drink boil wrs wrs_type no_flow yes_flow flow_hrs barangay B S wave balde drum gallon sub single hhemp hho job age  sclass
+		keep date year me conacct SHO drink_freq filter fl_* hhsize drink boil wrs wrs_type no_flow yes_flow flow_hrs barangay B S wave balde drum gallon sub single hhemp hho job age sclass
 
 		merge 1:1 conacct wave using "${temp}paws_prefs_b.dta", keep(1 3) nogen
 
@@ -278,8 +278,6 @@ g Trs_post3=Trs_post^3
 
 g AS=amount/SHO
 
-
-	merge m:1 mru using "${temp}id_set.dta", keep(3) nogen
 	merge m:1 mru using "${temp}accts_per_mru.dta", keep(3) nogen
 	merge m:1 mru using "${temp}mru_dma_link.dta", keep(1 3) nogen
 	merge m:1 dma using "${temp}capex_dma_full.dta", keep(1 3) nogen
@@ -296,52 +294,83 @@ gegen sho_m    = mean(SHO),    by(zm)
 g fc = cper_m*length_m/(accts_m*sho_m)
 
 
-save "${temp}final_analysis.dta", replace
+save "${temp}final_analysis_pre.dta", replace
 
 
 
 
 
-use "${temp}final_analysis.dta", clear
+use "${temp}final_analysis_pre.dta", clear
 
 merge m:1 mru using "${temp}accts_per_mru.dta", keep(3) nogen
 merge m:1 mru using "${temp}mru_zone_code.dta", keep(3) nogen
 
 g paws_pre = paws==1 & treated==1 & post==0
-g paws_post = paws==1 & treated==1 & post==1
+g paws_post = paws==1 & treated==1 & post==1 & year>year_inst & year<=year_inst+3
 
 keep paws_pre paws_post mru zone_code
 
 levelsof zone_code
 
-g zm =.
-global tt = 1
-foreach v in `=r(levels)' {
-replace zm = $tt if zone_code==`v'
-gegen ppre =sum(paws_pre), by(zm)
-gegen ppost=sum(paws_post), by(zm)
+gegen psum = sum(paws_pre), by(zone_code)
+gegen ppsum = sum(paws_post), by(zone_code)
+gegen zt=tag(zone_code)
 
-sum ppre if zm==$tt
-global premean=`=r(mean)'
-sum ppost if zm==$tt
-global postmean=`=r(mean)'
+sum psum if zt==1, detail
+sum ppsum if zt==1, detail
 
-if $premean>100 & $postmean>100 {
-	global tt = $tt + 1
-}
-cap drop ppre
-cap drop ppost
-}
+global tnum = 50
 
-drop paws_pre paws_post
-sum zm
-replace zm=`=r(max)'-1 if zm==`=r(max)'
+count if zt==1
+count if zt==1 & psum>$tnum
+count if zt==1 & ppsum>$tnum
+count if zt==1 & psum>$tnum & ppsum>$tnum & psum<. & ppsum<.
+
+* total pop * 
+count if psum>$tnum
+count if ppsum>$tnum
+count if psum>$tnum & ppsum>$tnum & psum<. & ppsum<.
 
 tab zm
 
+keep if psum>$tnum & ppsum>$tnum & psum<. & ppsum<.
+gegen zm=group(zone_code)
+keep zm mru
 duplicates drop mru, force
 
 save "${temp}id_set.dta", replace
+
+	
+use "${temp}final_analysis_pre.dta", clear
+	merge m:1 mru using "${temp}id_set.dta", keep(1 3) nogen
+save "${temp}final_analysis.dta", replace
+
+
+* g zm =.
+* global tt = 1
+* foreach v in `=r(levels)' {
+* replace zm = $tt if zone_code==`v'
+* gegen ppre =sum(paws_pre), by(zm)
+* gegen ppost=sum(paws_post), by(zm)
+* sum ppre if zm==$tt
+* global premean=`=r(mean)'
+* sum ppost if zm==$tt
+* global postmean=`=r(mean)'
+
+* if $premean>100 & $postmean>100 {
+* 	global tt = $tt + 1
+* }
+* cap drop ppre
+* cap drop ppost
+* }
+
+* drop paws_pre paws_post
+* sum zm
+* replace zm=`=r(max)'-1 if zm==`=r(max)'
+* tab zm
+* duplicates drop mru, force
+* save "${temp}id_set.dta", replace
+
 
 
 
@@ -360,7 +389,7 @@ use "${temp}mru_dma_link.dta", clear
 		gegen acct_dma=sum(accts), by(dma)
 		g dma_pop=acct_dma*$SHOm
 
-		merge m:1 mru using "${temp}id_set.dta", keep(3) nogen
+		merge m:1 mru using "${temp}id_set.dta", keep(1 3) nogen
 
 		duplicates drop dma, force
 		keep  dma  dma_pop zm
@@ -427,7 +456,7 @@ use "${temp}comm_amountm.dta", clear
 	fmerge m:1 conacct date using "${temp}comm_billm.dta", keep(3) nogen
 	fmerge m:1 mru using "${temp}pipe_year_nold.dta", keep(3) nogen
 	fmerge m:1 mru using "${temp}mru_hh_per.dta", keep(3) nogen
-	fmerge m:1 mru using "${temp}id_set.dta", keep(3) nogen
+	fmerge m:1 mru using "${temp}id_set.dta", keep(1 3) nogen
 
 	g dated=dofm(date)
 	g year=year(dated)
@@ -442,18 +471,22 @@ replace post_treated=0 if shr<.8
 
 	drop if date==653
 
-sum c, detail
-keep if c<`=r(p95)'
-replace amount = . if amount<=0 | amount>=`=r(p95)*80'
+* sum c, detail
+* keep if c<`=r(p95)'
+* replace amount = . if amount<=0 | amount>=`=r(p95)*80'
+
+* replace amount = . if amount<=0 | amount>=`=r(p95)*80'
+
+
 
 gegen ctag=tag(conacct)
 gegen ctot=sum(ctag), by(mru)
 g cshr = ctot/hh_per
 drop ctot ctag
 
-gegen cshr_zone = mean(cshr), by(zone_code)
+gegen cshr_zone = mean(cshr), by(zm)
 
-keep conacct zone_code zm mru c post_treated date cshr cshr_zone amount
+keep conacct zm mru c post_treated date cshr cshr_zone amount year year_inst treated post
 
 save "${temp}final_comm.dta", replace
 

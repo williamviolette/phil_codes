@@ -2,59 +2,48 @@ This is BibTeX, Version 0.99d (TeX Live 2015)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: paper_booster_pumps_wjv.aux
 The style file: abbrvnat.bst
-Database file #1: library.bib
-You're missing a field name---line 348 of file library.bib
- :   
- :   %month  = "",
-(Error may have been on previous line)
-I'm skipping whatever remains of this entry
-Repeated entry---line 681 of file library.bib
- : @book{mcintosh2003asian
- :                        ,
-I'm skipping whatever remains of this entry
-Warning--empty journal in keener2010provision
+Database file #1: library_booster.bib
 Warning--empty journal in komives2006distributional
-Warning--empty journal in nauges2006water
-Warning--empty note in wsup
-You've used 45 entries,
+Warning--empty journal in liemberger2006challenge
+You've used 38 entries,
             2773 wiz_defined-function locations,
-            856 strings with 12310 characters,
-and the built_in function-call counts, 18997 in all, are:
-= -- 1742
-> -- 914
-< -- 37
-+ -- 318
-- -- 273
-* -- 1463
-:= -- 2931
-add.period$ -- 135
-call.type$ -- 45
-change.case$ -- 221
-chr.to.int$ -- 45
-cite$ -- 94
-duplicate$ -- 909
-empty$ -- 1656
-format.name$ -- 346
-if$ -- 3953
+            818 strings with 11085 characters,
+and the built_in function-call counts, 16332 in all, are:
+= -- 1478
+> -- 850
+< -- 26
++ -- 293
+- -- 255
+* -- 1303
+:= -- 2548
+add.period$ -- 117
+call.type$ -- 38
+change.case$ -- 193
+chr.to.int$ -- 38
+cite$ -- 78
+duplicate$ -- 765
+empty$ -- 1389
+format.name$ -- 315
+if$ -- 3377
 int.to.chr$ -- 1
 int.to.str$ -- 1
-missing$ -- 46
-newline$ -- 233
-num.names$ -- 180
-pop$ -- 427
+missing$ -- 41
+newline$ -- 201
+num.names$ -- 152
+pop$ -- 370
 preamble$ -- 1
-purify$ -- 181
+purify$ -- 160
 quote$ -- 0
-skip$ -- 681
+skip$ -- 564
 stack$ -- 0
-substring$ -- 844
-swap$ -- 63
-text.length$ -- 3
+substring$ -- 681
+swap$ -- 44
+text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 470
-warning$ -- 4
-while$ -- 202
+type$ -- 388
+warning$ -- 2
+while$ -- 166
 width$ -- 0
-write$ -- 578
-(There were 2 error messages)
+write$ -- 496
+(There were 2 warnings)
